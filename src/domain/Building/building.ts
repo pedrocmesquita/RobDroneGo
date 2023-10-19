@@ -15,6 +15,36 @@ interface BuildingProps {
   rooms: Room[];
 }
 
+export class Building extends AggregateRoot<BuildingProps> {
+  get buildingId(): BuildingId {
+    return this.props.buildingId;
+  }
+
+  get levels(): Level[] {
+    return this.props.levels;
+  }
+
+  get rooms(): Room[] {
+    return this.props.rooms;
+  }
+
+  private constructor(props: BuildingProps, id?: UniqueEntityID) {
+    super(props, id);
+  }
+
+  public static create(props: BuildingProps, id?: UniqueEntityID): Result<Building> {
+    
+    if (!props.buildingId) {
+      return Result.fail<Building>("Building ID is required.");
+    }
+
+    return Result.ok<Building>(new Building(props, id));
+
+  }
+}
+
+
+
 
 
 

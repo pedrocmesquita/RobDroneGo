@@ -71,7 +71,7 @@
     "@types/lodash": "^4.14.118",
     "@types/mocha": "^10.0.0",
     "@types/mongoose": "^5.3.17",
-    "@types/node": "^16.11.12",
+    "@types/node": "^16.18.59",
     "@typescript-eslint/eslint-plugin": "^6.7.2",
     "@typescript-eslint/parser": "^6.7.2",
     "eslint": "^8.0.0",

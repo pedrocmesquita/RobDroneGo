@@ -16,12 +16,7 @@ export default (app: Router) => {
     route.post("",
         celebrate({
         body: Joi.object({
-            name: Joi.string().required(),
-            address: Joi.string().required(),
-            city: Joi.string().required(),
-            state: Joi.string().required(),
-            zip: Joi.string().required(),
-            campusId: Joi.string().required()
+            buildingId: Joi.string().required()
         })
         }),
         (req, res, next) => ctrl.createBuilding(req, res, next) );
@@ -50,11 +45,5 @@ export default (app: Router) => {
 
     route.get("", (req, res, next) => ctrl.getBuildings(req, res, next) );
     
-    route.delete("/:id",
-        celebrate({
-        params: Joi.object({
-            id: Joi.string().required()
-        })
-        }),
-        (req, res, next) => ctrl.deleteBuilding(req, res, next) );
+    route.delete("/:id", (req, res, next) => ctrl.deleteBuilding(req, res, next) );
     };

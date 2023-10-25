@@ -38,6 +38,8 @@ export default class BuildingService implements IBuildingService {
             }
 
             const buildingResult = buildingOrError.getValue();
+            
+            console.log("1 - ", buildingResult);
 
             await this.buildingRepo.save(buildingResult);
 

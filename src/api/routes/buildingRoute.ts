@@ -16,7 +16,9 @@ export default (app: Router) => {
     route.post("",
         celebrate({
         body: Joi.object({
-            buildingId: Joi.string().required()
+            buildingId: Joi.string().required(),
+            buildingName: Joi.string().required(),
+            buildingNumberOfFloors: Joi.number().required(),
         })
         }),
         (req, res, next) => ctrl.createBuilding(req, res, next) );
@@ -24,26 +26,22 @@ export default (app: Router) => {
     route.put("",
         celebrate({
         body: Joi.object({
-            id: Joi.string().required(),
-            name: Joi.string().required(),
-            address: Joi.string().required(),
-            city: Joi.string().required(),
-            state: Joi.string().required(),
-            zip: Joi.string().required(),
-            campusId: Joi.string().required()
+            buildingId: Joi.string().required(),
+            buildingName: Joi.string().required(),
+            buildingNumberOfFloors: Joi.number().required(),
         }),
         }),
         (req, res, next) => ctrl.updateBuilding(req, res, next) );
     
-    route.get("/:id",
+    route.get("/:buildingId",
         celebrate({
         params: Joi.object({
-            id: Joi.string().required()
+            buildingId: Joi.string().required()
         })
         }),
         (req, res, next) => ctrl.getBuilding(req, res, next) );
 
     route.get("", (req, res, next) => ctrl.getBuildings(req, res, next) );
     
-    route.delete("/:id", (req, res, next) => ctrl.deleteBuilding(req, res, next) );
+    route.delete("/:buildingId", (req, res, next) => ctrl.deleteBuilding(req, res, next) );
     };

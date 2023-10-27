@@ -11,7 +11,7 @@ export class FloorMap implements Mapper<Floor> {
             buildingId: floor.buildingId,
             floorId: floor.floorId,
             floorNumber: floor.floorNumber.floorNumber,
-            floorDescription: floor.floorDescription.floorDescription
+            floorDescription: floor.floorDescription.floorDescription,
         } as IFloorDTO;
     } 
 

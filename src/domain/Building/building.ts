@@ -63,6 +63,17 @@ export class Building extends AggregateRoot<BuildingProps> {
     this.props.floors = value;
   }
 
+  // Add floor to building
+  public addFloor(floor: Floor): void {
+    // Check if the floors array already exists, and if not, initialize it as an empty array.
+    if (!this.props.floors) {
+      this.props.floors = [];
+    }
+
+    // Add the new floor to the array.
+    this.props.floors.push(floor);
+  }
+
   private constructor(props: BuildingProps, id?: UniqueEntityID) {
     super(props, id);
   }

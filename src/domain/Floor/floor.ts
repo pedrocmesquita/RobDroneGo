@@ -12,17 +12,14 @@ import { AggregateRoot } from "../../core/domain/AggregateRoot";
 
 interface FloorProps {
     //floorId is a value object that is unique, and the first parts equals the building name and the second the floor number.
-    buildingId: string;
-    floorNumber: FloorNumber;
-    floorId: string;
+    buildingId?: string;
+    floorNumber?: FloorNumber;
+    floorId?: string;
     floorDescription?: FloorDescription;
 }
 
-export class Floor extends AggregateRoot<FloorProps> {
+export class Floor extends ValueObject<FloorProps> {
 
-    get id (): UniqueEntityID {
-        return this._id;
-    }
     get buildingId (): string {
         return this.props.buildingId;
     }
@@ -55,8 +52,8 @@ export class Floor extends AggregateRoot<FloorProps> {
         this.props.floorDescription = value;
     }
 
-    private constructor (props: FloorProps, id?: UniqueEntityID) {
-        super(props, id);
+    private constructor (props: FloorProps) {
+        super(props);
     }
 
     public static create(floorDTO: IFloorDTO, id?: UniqueEntityID): Result<Floor> {
@@ -80,8 +77,7 @@ export class Floor extends AggregateRoot<FloorProps> {
               floorNumber: FloorNumber.create({ floorNumber }).getValue(),
               floorId: floorId,
               floorDescription: FloorDescription.create({ floorDescription }).getValue()
-          },
-          id
+          }
         );
         return Result.ok<Floor>(floor);
     }

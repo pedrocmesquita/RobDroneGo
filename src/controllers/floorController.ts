@@ -38,6 +38,7 @@ export default class FloorController implements IFloorController{
 
             const floorOrError = (await this.floorServiceInstance.createFloor(
                 req.params.floorId as string,
+                req.params.buildingId as string,
                 req.body as IFloorDTO,
             )) as Result<IFloorDTO>;
 

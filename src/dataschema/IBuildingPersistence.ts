@@ -5,5 +5,5 @@ export interface IBuildingPersistence {
     buildingName: string;
     buildingDescription: string;
     buildingNumberOfFloors: number;
-    floors: Floor[];
+    floors?: Floor[];
 }

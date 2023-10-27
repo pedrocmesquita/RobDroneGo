@@ -19,6 +19,7 @@ export default (app: Router) => {
             buildingId: Joi.string().required(),
             buildingName: Joi.string().required(),
             buildingNumberOfFloors: Joi.number().required(),
+            buildingDescription: Joi.string().required(),
         })
         }),
         (req, res, next) => ctrl.createBuilding(req, res, next) );
@@ -29,6 +30,7 @@ export default (app: Router) => {
             buildingId: Joi.string().required(),
             buildingName: Joi.string().required(),
             buildingNumberOfFloors: Joi.number().required(),
+            buildingDescription: Joi.string().required(),
         }),
         }),
         (req, res, next) => ctrl.updateBuilding(req, res, next) );

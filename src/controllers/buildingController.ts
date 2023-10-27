@@ -1,4 +1,4 @@
-import { Response, Request } from "express";
+import { Response, Request, NextFunction } from "express";
 import { Container, Inject, Service } from "typedi";
 import config from "../../config";
 import IBuildingRepo from "../services/IRepos/IBuildingRepo";
@@ -6,14 +6,15 @@ import { BuildingMap } from "../mappers/BuildingMap";
 import IBuildingDTO from "../dto/IBuildingDTO";
 import IBuildingController from "./IControllers/IBuildingController";
 import IBuildingService from "../services/IServices/IBuildingService";
+import { Result } from "../core/logic/Result";
 
 @Service()
 export default class BuildingController implements IBuildingController {
     constructor(@Inject(config.services.building.name) private buildingServiceInstance : IBuildingService) {}
 
-    public async getBuilding(req: Request, res: Response): Promise<Response> {
+    public async getBuilding(req: Request, res: Response, next: NextFunction){
         try {
-            const building = await this.buildingServiceInstance.getBuilding(req.params.id);
+            const building = await this.buildingServiceInstance.getBuilding(req.params.id as string);
 
             if (building.isFailure) {
                 return res.status(404).send();
@@ -21,13 +22,17 @@ export default class BuildingController implements IBuildingController {
 
             return res.status(200).json(building.getValue());
         } catch (e) {
-            throw e;
+            return next(e);
         }
-    }
+    };
 
-    public async createBuilding(req: Request, res: Response): Promise<Response> {
+    public async createBuilding(req: Request, res: Response, next: NextFunction) {
         try {
-            const buildingOrError = await this.buildingServiceInstance.createBuilding(req.body);
+            const buildingOrError = (await this.buildingServiceInstance.createBuilding(
+              req.params.buildingId as string,
+              req.body as IBuildingDTO,
+              )) as Result<IBuildingDTO>;
+
 
             if (buildingOrError.isFailure) {
                 return res.status(404).send();
@@ -35,13 +40,13 @@ export default class BuildingController implements IBuildingController {
 
             return res.status(201).json(buildingOrError.getValue());
         } catch (e) {
-            throw e;
+            return next(e);
         }
     }
 
-    public async updateBuilding(req: Request, res: Response): Promise<Response> {
+    public async updateBuilding(req: Request, res: Response, next: NextFunction) {
         try {
-            const buildingOrError = await this.buildingServiceInstance.updateBuilding(req.params.id, req.body);
+            const buildingOrError = (await this.buildingServiceInstance.updateBuilding(req.body as IBuildingDTO)) as Result<IBuildingDTO>;
 
             if (buildingOrError.isFailure) {
                 return res.status(404).send();
@@ -49,13 +54,13 @@ export default class BuildingController implements IBuildingController {
 
             return res.status(200).json(buildingOrError.getValue());
         } catch (e) {
-            throw e;
+            return next(e);
         }
     }
 
-    public async deleteBuilding(req: Request, res: Response): Promise<Response> {
+    public async deleteBuilding({params: {buildingId}}: Request, res: Response, next: NextFunction) {
         try {
-            const buildingOrError = await this.buildingServiceInstance.deleteBuilding(req.params.id);
+            const buildingOrError = await this.buildingServiceInstance.deleteBuilding(buildingId as string);
 
             if (buildingOrError.isFailure) {
                 return res.status(404).send();
@@ -63,11 +68,11 @@ export default class BuildingController implements IBuildingController {
 
             return res.status(204).send();
         } catch (e) {
-            throw e;
+            return next(e);
         }
     }
 
-    public async getBuildings(req: Request, res: Response): Promise<Response> {
+    public async getBuildings(req: Request, res: Response, next: NextFunction) {
         try {
             const buildings = await this.buildingServiceInstance.getBuildings();
 
@@ -77,7 +82,7 @@ export default class BuildingController implements IBuildingController {
 
             return res.status(200).json(buildings.getValue());
         } catch (e) {
-            throw e;
+            return next(e);
         }
     }
 }

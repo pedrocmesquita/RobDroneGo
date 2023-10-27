@@ -5,7 +5,7 @@ import IFloorService from './IServices/IFloorService';
 import IFloorRepo from '../services/IRepos/IFloorRepo';
 import IFloorDTO from '../dto/IFloorDTO';
 import { FloorMap } from "../mappers/FloorMap";
-import { Floor } from '../domain/Building/floor';
+import { Floor } from '../domain/Floor/floor';
 
 @Service()
 export default class FloorService implements IFloorService {
@@ -29,50 +29,58 @@ export default class FloorService implements IFloorService {
         }
     }
 
-    public async createFloor(floorDTO: IFloorDTO): Promise<Result<IFloorDTO>> {
+    public async createFloor(floorId: string, floorDTO:IFloorDTO): Promise<Result<IFloorDTO>> {
         try {
-            const floorOrError = await Floor.create( floorDTO );
+            const floorId = await this.floorRepo.findByFloorId(floorDTO.floorId);
 
+            // Check if floor already exists
+            if (floorId != null) {
+                return Result.fail<IFloorDTO>('Floor already exists: ' + floorDTO.floorId);
+            }
+
+            console.log("\nFloor DTO \n");
+            console.log(floorDTO);
+            console.log("\nBefore creating \n");
+            console.log(floorId);
+
+            // Create floor entity
+            const floorOrError = await Floor.create(floorDTO);
+
+            console.log("\nAfter creating \n");
+            console.log(floorOrError);
+
+            // Check if floor entity was created successfully
             if (floorOrError.isFailure) {
                 return Result.fail<IFloorDTO>(floorOrError.errorValue());
             }
 
+            // Save floor entity
             const floorResult = floorOrError.getValue();
-            
-            console.log("1 - ", floorResult);
 
+            console.log("\nFloor Result \n");
+            console.log(floorResult.floorId);
             await this.floorRepo.save(floorResult);
 
-            const floorDTOResult = FloorMap.toDTO( floorResult ) as IFloorDTO;
-            return Result.ok<IFloorDTO>( floorDTOResult )
+            // Return floor entity
+            const floorDTOResult = FloorMap.toDTO(floorResult) as IFloorDTO;
+            return Result.ok<IFloorDTO>(floorDTOResult);
         } catch (e) {
             throw e;
         }
     }
 
-    public async updateFloor(floorId: string, floorDTO: IFloorDTO): Promise<Result<IFloorDTO>> {
+    public async updateFloor(floorDTO: IFloorDTO): Promise<Result<IFloorDTO>> {
         try {
-            const floor = await this.floorRepo.findByFloorId(floorId);
+            const exists = await this.floorRepo.findByFloorId(floorDTO.floorId);
 
-            if (floor === null) {
+            if (exists === null) {
                 return Result.fail<IFloorDTO>("Floor not found");
             }
-            else {
-                const floorOrError = await Floor.create( floorDTO );
 
-                if (floorOrError.isFailure) {
-                    return Result.fail<IFloorDTO>(floorOrError.errorValue());
-                }
+            const updatedFloor = await this.floorRepo.update(FloorMap.toDomain(floorDTO));
+            const floorDTOResult = FloorMap.toDTO( updatedFloor ) as IFloorDTO;
+            return Result.ok<IFloorDTO>( floorDTOResult );
 
-                const floorResult = floorOrError.getValue();
-
-                floorResult.floorId = floor.floorId;
-
-                await this.floorRepo.update(floorResult);
-
-                const floorDTOResult = FloorMap.toDTO( floorResult ) as IFloorDTO;
-                return Result.ok<IFloorDTO>( floorDTOResult )
-            }
         } catch (e) {
             throw e;
         }
@@ -85,11 +93,9 @@ export default class FloorService implements IFloorService {
             if (floor === null) {
                 return Result.fail<boolean>("Floor not found");
             }
-            else {
-                await this.floorRepo.delete(floor);
 
-                return Result.ok<boolean>( true )
-            }
+            await this.floorRepo.delete(floorId);
+            return Result.ok<boolean>(true);
         } catch (e) {
             throw e;
         }

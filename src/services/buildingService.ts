@@ -29,41 +29,56 @@ export default class BuildingService implements IBuildingService {
         }
     }
 
-    public async createBuilding(buildingDTO: IBuildingDTO): Promise<Result<IBuildingDTO>> {
+    public async createBuilding(buildingId: string, buildingDTO: IBuildingDTO): Promise<Result<IBuildingDTO>> {
         try {
-            const buildingOrError = await Building.create( buildingDTO );
+            const buildingId = await this.buildingRepo.findByBuildingId(buildingDTO.buildingId);
 
+            // Check if building already exists
+            if (buildingId != null) {
+                return Result.fail<IBuildingDTO>('Building already exists: ' + buildingDTO.buildingId);
+            }
+
+            console.log("\nBuilding DTO \n");
+            console.log(buildingDTO);
+            console.log("\nBefore creating \n");
+            console.log(buildingId);
+            // Create building entity
+            const buildingOrError = await Building.create(buildingDTO);
+
+            console.log("\nAfter creating \n");
+            console.log(buildingOrError);
+
+            // Check if building entity was created successfully
             if (buildingOrError.isFailure) {
                 return Result.fail<IBuildingDTO>(buildingOrError.errorValue());
             }
 
+            // Save building entity
             const buildingResult = buildingOrError.getValue();
-            
-            console.log("1 - ", buildingResult);
 
+            console.log("\nBuilding Result \n");
+            console.log(buildingResult.buildingId.buildingId);
             await this.buildingRepo.save(buildingResult);
 
-            const buildingDTOResult = BuildingMap.toDTO( buildingResult ) as IBuildingDTO;
-            return Result.ok<IBuildingDTO>( buildingDTOResult )
+            // Return building entity
+            const buildingDTOResult = BuildingMap.toDTO(buildingResult) as IBuildingDTO;
+            return Result.ok<IBuildingDTO>(buildingDTOResult);
         } catch (e) {
             throw e;
         }
     }
 
-    public async updateBuilding(buildingId: string, buildingDTO: IBuildingDTO): Promise<Result<IBuildingDTO>> {
+    public async updateBuilding(buildingDTO: IBuildingDTO): Promise<Result<IBuildingDTO>> {
         try {
-            const building = await this.buildingRepo.findByBuildingId(buildingId);
+            const exists = await this.buildingRepo.findByBuildingId(buildingDTO.buildingId);
 
-            if (building === null) {
+            if (exists === null) {
                 return Result.fail<IBuildingDTO>("Building not found");
             }
-            else {
-                building.buildingId = buildingDTO.buildingId;
-                await this.buildingRepo.save(building);
 
-                const buildingDTOResult = BuildingMap.toDTO( building ) as IBuildingDTO;
-                return Result.ok<IBuildingDTO>( buildingDTOResult )
-            }
+            const updatedBuilding = await this.buildingRepo.update(BuildingMap.toDomain(buildingDTO));
+            const buildingDTOResult = BuildingMap.toDTO(updatedBuilding) as IBuildingDTO;
+            return Result.ok<IBuildingDTO>(buildingDTOResult);
         } catch (e) {
             throw e;
         }
@@ -89,7 +104,7 @@ export default class BuildingService implements IBuildingService {
                 return Result.fail<boolean>("Building not found");
             }
             else {
-                await this.buildingRepo.delete(building);
+                await this.buildingRepo.delete(buildingId);
 
                 return Result.ok<boolean>(true);
             }

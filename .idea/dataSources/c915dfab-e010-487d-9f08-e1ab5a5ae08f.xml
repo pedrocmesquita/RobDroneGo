@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataSource name="@cluster0.v4ikssj.mongodb.net">
+  <database-model serializer="dbm" dbms="MONGO" family-id="MONGO" format-version="4.49">
+    <root id="1">
+      <ServerVersion>6.0.11</ServerVersion>
+    </root>
+    <schema id="2" parent="1" name="admin"/>
+    <schema id="3" parent="1" name="local"/>
+    <schema id="4" parent="1" name="test">
+      <Current>1</Current>
+      <LocalIntrospectionTimestamp>2023-10-26.21:07:33</LocalIntrospectionTimestamp>
+    </schema>
+    <table id="5" parent="4" name="buildings"/>
+    <table id="6" parent="4" name="elevators"/>
+    <table id="7" parent="4" name="floors"/>
+    <table id="8" parent="4" name="roles"/>
+    <table id="9" parent="4" name="users"/>
+  </database-model>
+</dataSource>

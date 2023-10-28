@@ -4,18 +4,18 @@
     <root id="1">
       <ServerVersion>6.0.11</ServerVersion>
     </root>
-    <schema id="2" parent="1" name="admin"/>
-    <schema id="3" parent="1" name="local"/>
-    <schema id="4" parent="1" name="test">
+    <schema id="2" parent="1" name="test">
       <Current>1</Current>
       <LocalIntrospectionTimestamp>2023-10-27.01:52:06</LocalIntrospectionTimestamp>
     </schema>
-    <table id="5" parent="4" name="buildings"/>
-    <table id="6" parent="4" name="connections"/>
-    <table id="7" parent="4" name="elevators"/>
-    <table id="8" parent="4" name="floors"/>
-    <table id="9" parent="4" name="roles"/>
-    <table id="10" parent="4" name="users"/>
+    <schema id="3" parent="1" name="admin"/>
+    <schema id="4" parent="1" name="local"/>
+    <table id="5" parent="2" name="buildings"/>
+    <table id="6" parent="2" name="connections"/>
+    <table id="7" parent="2" name="elevators"/>
+    <table id="8" parent="2" name="floors"/>
+    <table id="9" parent="2" name="roles"/>
+    <table id="10" parent="2" name="users"/>
     <column id="11" parent="5" name="_id">
       <DasType>ObjectId|12s</DasType>
       <Position>1</Position>

@@ -46,4 +46,9 @@ export default (app: Router) => {
     route.get("", (req, res, next) => ctrl.getBuildings(req, res, next) );
     
     route.delete("/:buildingId", (req, res, next) => ctrl.deleteBuilding(req, res, next) );
+
+    // Get buildings that have a number of floors between min and max
+    route.get("/floors/:min/:max", (req, res, next) => ctrl.getBuildingsByFloors(req, res, next) );
     };
+
+

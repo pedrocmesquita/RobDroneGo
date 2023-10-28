@@ -87,4 +87,16 @@ export default class BuildingRepo implements IBuildingRepo {
       throw e;
     }
   }
+
+  public async getBuildingsByFloors(min: string, max: string): Promise<Building[]> {
+    try {
+      const buildings = await this.buildingSchema.find({ buildingNumberOfFloors: { $gte: min, $lte: max } });
+
+      const buildingDTOResult = buildings.map(building => BuildingMap.toDomain(building));
+
+      return buildingDTOResult;
+    } catch (e) {
+      throw e;
+    }
+  }
 }

@@ -1,4 +1,4 @@
-import { Response, Request, NextFunction } from "express";
+import e, { Response, Request, NextFunction } from "express";
 import { Container, Inject, Service } from "typedi";
 import config from "../../config";
 import IBuildingRepo from "../services/IRepos/IBuildingRepo";
@@ -75,6 +75,20 @@ export default class BuildingController implements IBuildingController {
     public async getBuildings(req: Request, res: Response, next: NextFunction) {
         try {
             const buildings = await this.buildingServiceInstance.getBuildings();
+
+            if (buildings.isFailure) {
+                return res.status(404).send();
+            }
+
+            return res.status(200).json(buildings.getValue());
+        } catch (e) {
+            return next(e);
+        }
+    }
+
+    public async getBuildingsByFloors(req: Request, res: Response, next: NextFunction) {
+        try {
+            const buildings = await this.buildingServiceInstance.getBuildingsByFloors(req.params.min as string, req.params.max as string);
 
             if (buildings.isFailure) {
                 return res.status(404).send();

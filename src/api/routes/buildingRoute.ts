@@ -35,13 +35,7 @@ export default (app: Router) => {
         }),
         (req, res, next) => ctrl.updateBuilding(req, res, next) );
     
-    route.get("/:buildingId",
-        celebrate({
-        params: Joi.object({
-            buildingId: Joi.string().required()
-        })
-        }),
-        (req, res, next) => ctrl.getBuilding(req, res, next) );
+    route.get("/:buildingId", (req, res, next) => ctrl.getBuilding(req, res, next) );
 
     route.get("", (req, res, next) => ctrl.getBuildings(req, res, next) );
     

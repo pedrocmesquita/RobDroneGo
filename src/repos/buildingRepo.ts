@@ -10,7 +10,8 @@ import { BuildingId } from "../domain/Building/buildingId";
 export default class BuildingRepo implements IBuildingRepo {
 
     constructor(
-        @Inject("buildingSchema") private buildingSchema: Model<IBuildingPersistence & Document>
+        @Inject("buildingSchema") private buildingSchema: Model<IBuildingPersistence & Document>,
+        @Inject("floorSchema") private floorSchema: Model<IBuildingPersistence & Document>
     ) {}
 
     // @ts-ignore
@@ -52,15 +53,17 @@ export default class BuildingRepo implements IBuildingRepo {
         }
     }
 
-    public async findByBuildingId(buildingId: string): Promise<Building> {
-        const query = { buildingId: buildingId };
-        const buildingRecord = await this.buildingSchema.findOne(
-            query as FilterQuery<IBuildingPersistence & Document>
-        );
+    public async findByBuildingId(buildingId: BuildingId | string): Promise<Building> {
+        const idX = buildingId instanceof BuildingId ? (<BuildingId>buildingId).buildingId : buildingId;
+
+        const query = { buildingId: idX };
+        const buildingRecord = await this.buildingSchema.findOne(query);
 
         if (buildingRecord != null) {
             return BuildingMap.toDomain(buildingRecord);
-        } else return null;
+        }
+
+        return null;
     }
 
     public async update(building: Building): Promise<Building> {
@@ -71,9 +74,23 @@ export default class BuildingRepo implements IBuildingRepo {
         return BuildingMap.toDomain(updatedBuilding);
     }
 
-    public async delete(buildingId: BuildingId | string) {
-        const query = { buildingId: buildingId };
-        await this.buildingSchema.deleteOne(query as FilterQuery<IBuildingPersistence & Document>);
+    // Before deleting the building, delete all floors associated with the building
+    public async delete(buildingId: string): Promise<void> {
+
+      const query = { buildingId: buildingId };
+      const buildingRecord = await this.buildingSchema.findOne(query);
+
+      if (buildingRecord != null) {
+        const floors = buildingRecord.floors;
+        for (var i = 0; i < floors.length; i++) {
+          const floorId = floors[i].floorId;
+          await this.floorSchema.deleteOne({ floorId: floorId });
+        }
+      } else{
+        throw new Error("Building not found");
+      }
+
+      await this.buildingSchema.deleteOne({ buildingId: buildingId });
     }
 
   public async getBuildings(): Promise<Building[]> {

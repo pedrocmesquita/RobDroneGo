@@ -14,17 +14,18 @@ export default class BuildingController implements IBuildingController {
 
     public async getBuilding(req: Request, res: Response, next: NextFunction){
         try {
-            const building = await this.buildingServiceInstance.getBuilding(req.params.id as string);
+            const building = await this.buildingServiceInstance.getBuilding(req.params.buildingId as string);
 
             if (building.isFailure) {
                 return res.status(404).send();
             }
 
             return res.status(200).json(building.getValue());
-        } catch (e) {
+        }
+        catch (e) {
             return next(e);
         }
-    };
+    }
 
     public async createBuilding(req: Request, res: Response, next: NextFunction) {
         try {
@@ -58,15 +59,15 @@ export default class BuildingController implements IBuildingController {
         }
     }
 
-    public async deleteBuilding({params: {buildingId}}: Request, res: Response, next: NextFunction) {
+    public async deleteBuilding(req: Request, res: Response, next: NextFunction) {
         try {
-            const buildingOrError = await this.buildingServiceInstance.deleteBuilding(buildingId as string);
+            const building = await this.buildingServiceInstance.deleteBuilding(req.params.buildingId as string);
 
-            if (buildingOrError.isFailure) {
+            if (building.isFailure) {
                 return res.status(404).send();
             }
 
-            return res.status(204).send();
+            return res.status(200).json(building.getValue());
         } catch (e) {
             return next(e);
         }

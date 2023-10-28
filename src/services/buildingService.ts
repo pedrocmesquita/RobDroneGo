@@ -110,16 +110,15 @@ export default class BuildingService implements IBuildingService {
 
     public async deleteBuilding(buildingId: string): Promise<Result<boolean>> {
         try {
-            const building = await this.buildingRepo.findByBuildingId(buildingId);
+            const exists = await this.buildingRepo.findByBuildingId(buildingId);
 
-            if (building === null) {
+            if (exists === null) {
                 return Result.fail<boolean>("Building not found");
             }
-            else {
-                await this.buildingRepo.delete(buildingId);
 
-                return Result.ok<boolean>(true);
-            }
+            await this.buildingRepo.delete(buildingId);
+
+            return Result.ok<boolean>(true);
         } catch (e) {
             throw e;
         }

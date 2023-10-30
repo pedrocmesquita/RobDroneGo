@@ -23,7 +23,8 @@ export default (app: Router) => {
         })
         }),
         (req, res, next) => ctrl.createBuilding(req, res, next) );
-    
+
+    // BuildingId cannot be changed
     route.put("",
         celebrate({
         body: Joi.object({

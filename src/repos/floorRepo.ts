@@ -53,23 +53,24 @@ export default class FloorRepo implements IFloorRepo {
     }
 
     public async findByFloorId(floorId: string): Promise<Floor> {
-        const query = { floorId: floorId };
-        const floorRecord = await this.floorSchema.findOne(
-            query as FilterQuery<IFloorPersistence & Document>
-        );
+        const idX = floorId;
+
+        const query = { floorId: idX };
+        const floorRecord = await this.floorSchema.findOne(query);
 
         if (floorRecord != null) {
-            return FloorMap.toDomain(floorRecord);
+            const floor = FloorMap.toDomain(floorRecord);
+            return floor;
         }
         else {
             return null;
         }
     }
 
-    public async update(floor: Floor): Promise<Floor> {
-        await this.floorSchema.updateOne({ floorId: floor.floorId }, FloorMap.toDTO(floor));
+    public async update(floor: Floor, floorId: string): Promise<Floor> {
+        await this.floorSchema.updateOne({ floorId: floorId }, FloorMap.toDTO(floor));
 
-        const updatedFloor = await this.floorSchema.findOne({ floorId: floor.floorId });
+        const updatedFloor = await this.floorSchema.findOne({ floorId: floorId });
 
         return FloorMap.toDomain(updatedFloor);
     }

@@ -54,7 +54,15 @@ export default class FloorController implements IFloorController{
 
     public async updateFloor(req: Request, res: Response, next: NextFunction) {
         try {
-            const floorOrError = await this.floorServiceInstance.updateFloor(req.body as IFloorDTO) as Result<IFloorDTO>;
+
+            req.body.buildingId = req.body.floorId.split("-")[0];
+
+            const oldFloorId = req.body.floorId;
+
+            // FloorId is the concatenation of buildingId and floorNumber
+            req.body.floorId = req.body.buildingId+"-"+req.body.floorNumber;
+
+            const floorOrError = await this.floorServiceInstance.updateFloor(req.body as IFloorDTO, oldFloorId) as Result<IFloorDTO>;
 
             if (floorOrError.isFailure) {
                 return res.status(404).send();

@@ -62,6 +62,9 @@ export class Floor extends ValueObject<FloorProps> {
         const floorId = floorDTO.floorId;
         const floorDescription = floorDTO.floorDescription;
 
+        // Floor id is the concatenation of buildingId and floorNumber
+
+
         // Check if buildingId and floorId are defined and not empty
         if (buildingId === undefined || buildingId.length === 0) {
             return Result.fail<Floor>('BuildingID is required');
@@ -69,6 +72,11 @@ export class Floor extends ValueObject<FloorProps> {
 
         if (floorId === undefined || floorId.length === 0) {
             return Result.fail<Floor>('FloorID is required');
+        }
+
+        // Check if floorNumber is the concatenation of buildingId and floorNumber
+        if (floorId !== buildingId+"-"+floorNumber) {
+            return Result.fail<Floor>('FloorID must be the concatenation of buildingId and floorNumber');
         }
 
         const floor = new Floor(

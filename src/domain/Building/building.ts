@@ -8,6 +8,7 @@ import { BuildingName } from "./buildingName";
 import { BuildingDescription } from "./buildingDescription";
 import { BuildingNumberOfFloors } from "./buildingNumberOfFloors";
 import IBuildingDTO from "../../dto/IBuildingDTO";
+import List = Mocha.reporters.List;
 
 interface BuildingProps {
   buildingId: BuildingId;
@@ -59,23 +60,27 @@ export class Building extends AggregateRoot<BuildingProps> {
     this.props.buildingNumberOfFloors = value;
   }
 
-  set floors (value: Floor[]) {
-    this.props.floors = value;
-  }
-
   // Add floor to building
   public addFloor(floor: Floor): void {
-    // Check if the floors array already exists, and if not, initialize it as an empty array.
-    if (!this.props.floors) {
-      this.props.floors = [];
-    }
 
-    // Add the new floor to the array.
     this.props.floors.push(floor);
+  }
+
+  // Remove floor from building
+  public removeFloor(floor: Floor): void {
+
+    const index = this.props.floors.indexOf(floor);
+    if (index !== -1) {
+      this.props.floors.splice(index, 1);
+    }
   }
 
   private constructor(props: BuildingProps, id?: UniqueEntityID) {
     super(props, id);
+
+    if (!this.props.floors) {
+      this.props.floors = [];
+    }
   }
 
 

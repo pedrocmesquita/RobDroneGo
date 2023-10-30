@@ -26,10 +26,8 @@ export default (app: Router) => {
     route.put("",
         celebrate({
         body: Joi.object({
-            //floorId: Joi.string().required(),
+            floorId: Joi.string().required(),
             floorNumber: Joi.number().required(),
-            //floorMap: Joi.string().required(),
-            buildingId: Joi.string().required(),
             floorDescription: Joi.string().required(),
         }),
         }),

@@ -84,15 +84,30 @@ export default class FloorService implements IFloorService {
         }
     }
 
-    public async updateFloor(floorDTO: IFloorDTO): Promise<Result<IFloorDTO>> {
+    public async updateFloor(floorDTO: IFloorDTO, oldFloorId: string): Promise<Result<IFloorDTO>> {
         try {
-            const exists = await this.floorRepo.findByFloorId(floorDTO.floorId);
+            const floor = await this.floorRepo.findByFloorId(oldFloorId);
 
-            if (exists === null) {
+            if (floor === null) {
                 return Result.fail<IFloorDTO>("Floor not found");
             }
 
-            const updatedFloor = await this.floorRepo.update(FloorMap.toDomain(floorDTO));
+            // Verify if the new floor number is already in use
+            const floorNumberExists = await this.floorRepo.findByFloorId(floorDTO.floorId);
+
+            if (floorNumberExists != null) {
+                return Result.fail<IFloorDTO>("Floor number already in use for this building");
+            }
+
+            const buildingId = await this.buildingRepo.findByBuildingId(floorDTO.buildingId);
+
+            // Remove and add floor to building
+            buildingId.removeFloor(floor);
+            buildingId.addFloor(FloorMap.toDomain(floorDTO));
+
+            await this.buildingRepo.update(buildingId);
+
+            const updatedFloor = await this.floorRepo.update(FloorMap.toDomain(floorDTO), oldFloorId);
             const floorDTOResult = FloorMap.toDTO( updatedFloor ) as IFloorDTO;
             return Result.ok<IFloorDTO>( floorDTOResult );
 

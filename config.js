@@ -57,6 +57,10 @@ export default {
       name: "ElevatorController",
       path: "../controllers/elevatorController"
     },
+    connection: {
+      name: "ConnectionController",
+      path: "../controllers/connectionController"
+    },
   },
 
   repos: {
@@ -80,6 +84,10 @@ export default {
       name: "ElevatorRepo",
       path: "../repos/elevatorRepo"
     },
+    connection: {
+      name: "ConnectionRepo",
+      path: "../repos/connectionRepo"
+    },
   },
 
   services: {
@@ -98,6 +106,10 @@ export default {
     elevator: {
       name: "ElevatorService",
       path: "../services/elevatorService"
+    },
+    connection: {
+      name: "ConnectionService",
+      path: "../services/connectionService"
     },
   },
 };

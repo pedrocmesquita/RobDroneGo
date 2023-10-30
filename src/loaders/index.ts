@@ -37,7 +37,13 @@ export default async ({ expressApp }) => {
     // compare with the approach followed in repos and services
     name: 'elevatorSchema',
     schema: '../persistence/schemas/elevatorSchema',
-  };
+  }
+
+  const connectionSchema = {
+    // compare with the approach followed in repos and services
+    name: 'connectionSchema',
+    schema: '../persistence/schemas/connectionSchema',
+  }
 
   const roleController = {
     name: config.controllers.role.name,
@@ -57,6 +63,11 @@ export default async ({ expressApp }) => {
   const elevatorController = {
     name: config.controllers.elevator.name,
     path: config.controllers.elevator.path
+  }
+
+  const connectionController = {
+    name: config.controllers.connection.name,
+    path: config.controllers.connection.path
   }
 
   const roleRepo = {
@@ -84,6 +95,11 @@ export default async ({ expressApp }) => {
     path: config.repos.elevator.path
   }
 
+  const connectionRepo = {
+    name: config.repos.connection.name,
+    path: config.repos.connection.path
+  }
+
   const roleService = {
     name: config.services.role.name,
     path: config.services.role.path
@@ -104,6 +120,11 @@ export default async ({ expressApp }) => {
     path: config.services.elevator.path
   }
 
+  const connectionService = {
+    name: config.services.connection.name,
+    path: config.services.connection.path
+  }
+
   await dependencyInjectorLoader({
     mongoConnection,
     schemas: [
@@ -111,26 +132,30 @@ export default async ({ expressApp }) => {
       roleSchema,
       buildingSchema,
       floorSchema,
-      elevatorSchema
+      elevatorSchema,
+      connectionSchema
     ],
     controllers: [
       roleController,
       buildingController,
       floorController,
-      elevatorController
+      elevatorController,
+      connectionController
     ],
     repos: [
       roleRepo,
       userRepo,
       buildingRepo,
       floorRepo,
-      elevatorRepo
+      elevatorRepo,
+      connectionRepo
     ],
     services: [
       roleService,
       buildingService,
       floorService,
-      elevatorService
+      elevatorService,
+      connectionService
     ]
   });
   Logger.info('✌️ Schemas, Controllers, Repositories, Services, etc. loaded');

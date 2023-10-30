@@ -6,6 +6,8 @@ import IConnectionRepo from '../services/IRepos/IConnectionRepo';
 import IConnectionDTO from '../dto/IConnectionDTO';
 import { ConnectionMap } from "../mappers/ConnectionMap";
 import { Connection } from '../domain/Connection/connection';
+import { BuildingMap } from "../mappers/BuildingMap";
+import IBuildingDTO from "../dto/IBuildingDTO";
 
 @Service()
 export default class ConnectionService implements IConnectionService {
@@ -50,20 +52,17 @@ export default class ConnectionService implements IConnectionService {
     }
   }
 
-  public async updateConnection(connectionId: string, connectionDTO: IConnectionDTO): Promise<Result<IConnectionDTO>> {
+  public async updateConnection(connectionDTO: IConnectionDTO): Promise<Result<IConnectionDTO>> {
     try {
-      const connection = await this.connectionRepo.findByConnectionId(connectionId);
+      const exists = await this.connectionRepo.findByConnectionId(connectionDTO.connectionId);
 
-      if (connection === null) {
+      if (exists === null) {
         return Result.fail<IConnectionDTO>("Connection not found");
       }
-      else {
-        connection.connectionId = connectionDTO.connectionId;
-        await this.connectionRepo.save(connection);
 
-        const connectionDTOResult = ConnectionMap.toDTO( connection ) as IConnectionDTO;
-        return Result.ok<IConnectionDTO>( connectionDTOResult )
-      }
+      const updatedConnection = await this.connectionRepo.update(ConnectionMap.toDomain(connectionDTO));
+      const connectionDTOResult = ConnectionMap.toDTO(updatedConnection) as IConnectionDTO;
+      return Result.ok<IConnectionDTO>(connectionDTOResult);
     } catch (e) {
       throw e;
     }

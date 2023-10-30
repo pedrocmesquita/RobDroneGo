@@ -35,6 +35,8 @@ export default (app: Router) => {
         buildingtoId: Joi.string().required(),
         floorfromId: Joi.string().required(),
         floortoId: Joi.string().required(),
+        locationX: Joi.number().required(),
+        locationY: Joi.number().required(),
       }),
     }),
     (req, res, next) => ctrl.updateConnection(req, res, next) );

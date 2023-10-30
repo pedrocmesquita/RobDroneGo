@@ -4,6 +4,7 @@ import { IConnectionPersistence } from "../dataschema/IConnectionPersistence";
 import IConnectionRepo from "../services/IRepos/IConnectionRepo";
 import { Connection } from "../domain/Connection/connection";
 import { ConnectionMap } from "../mappers/ConnectionMap";
+import { BuildingMap } from "../mappers/BuildingMap";
 
 @Service()
 export default class ConnectionRepo implements IConnectionRepo {
@@ -43,7 +44,7 @@ export default class ConnectionRepo implements IConnectionRepo {
 
         return ConnectionMap.toDomain(connectionCreated);
       } else {
-        roleDocument.connectionId = connection.connectionId;
+        roleDocument.connectionId = connection.connectionId.connectionId;
         await roleDocument.save();
 
         return connection;
@@ -67,26 +68,11 @@ export default class ConnectionRepo implements IConnectionRepo {
   }
 
   public async update(connection: Connection): Promise<Connection> {
-    const query = { connectionId: connection.connectionId };
+    await this.connectionSchema.updateOne( { connectionId: connection.connectionId.connectionId }, ConnectionMap.toDTO(connection));
 
-    const connectionDocument = await this.connectionSchema.findOne(query);
+    const updatedConnection = await this.connectionSchema.findOne({ connectionId: connection.connectionId.connectionId });
 
-    try {
-      if (connectionDocument === null) {
-        const rawConnection: any = ConnectionMap.toPersistence(connection);
-
-        const connectionCreated = await this.connectionSchema.create(rawConnection);
-
-        return ConnectionMap.toDomain(connectionCreated);
-      } else {
-        connectionDocument.connectionId = connection.connectionId;
-        await connectionDocument.save();
-
-        return connection;
-      }
-    } catch (err) {
-      throw err;
-    }
+    return ConnectionMap.toDomain(updatedConnection);
   }
 
   public async delete(connection: Connection): Promise<Connection> {
@@ -102,7 +88,7 @@ export default class ConnectionRepo implements IConnectionRepo {
 
         return ConnectionMap.toDomain(connectionCreated);
       } else {
-        connectionDocument.connectionId = connection.connectionId;
+        connectionDocument.connectionId = connection.connectionId.connectionId;
         await connectionDocument.save();
 
         return connection;

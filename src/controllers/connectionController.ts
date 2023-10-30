@@ -6,6 +6,8 @@ import { ConnectionMap } from "../mappers/ConnectionMap";
 import IConnectionDTO from "../dto/IConnectionDTO";
 import IConnectionController from "./IControllers/IConnectionController";
 import IConnectionService from "../services/IServices/IConnectionService";
+import IBuildingDTO from "../dto/IBuildingDTO";
+import { Result } from "../core/logic/Result";
 
 @Service()
 export default class ConnectionController implements IConnectionController {
@@ -41,12 +43,12 @@ export default class ConnectionController implements IConnectionController {
 
   public async updateConnection(req: Request, res: Response): Promise<Response> {
     try {
-      const connectionOrError = await this.connectionServiceInstance.updateConnection(req.params.id, req.body);
-
+      const connectionOrError = (await this.connectionServiceInstance.updateConnection(req.body as IConnectionDTO)) as Result<IConnectionDTO>;
+      console.log("1");
       if (connectionOrError.isFailure) {
         return res.status(404).send();
       }
-
+      console.log("2");
       return res.status(200).json(connectionOrError.getValue());
     } catch (e) {
       throw e;

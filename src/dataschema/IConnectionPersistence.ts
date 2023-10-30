@@ -1,4 +1,4 @@
-export interface IConnectiongPersistence {
+export interface IConnectionPersistence {
   connectionId: string;
   buildingfromId: string;
   buildingtoId: string;

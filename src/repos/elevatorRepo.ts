@@ -1,120 +1,108 @@
-import {Service, Inject} from "typedi";
-import {Document, FilterQuery, Model} from "mongoose";
-import {IElevatorPersistence} from "../dataschema/IElevatorPersistence";
+import { Service, Inject } from "typedi";
+import { Document, FilterQuery, Model } from "mongoose";
+import { IElevatorPersistence } from "../dataschema/IElevatorPersistence";
 import IElevatorRepo from "../services/IRepos/IElevatorRepo";
-import {Elevator} from "../domain/Building/elevator";
-import {ElevatorMap} from "../mappers/ElevatorMap";
-import e from "express";
+import { Elevator } from "../domain/Elevator/elevator";
+import { ElevatorMap } from "../mappers/ElevatorMap";
+import { ElevatorId } from "../domain/Elevator/elevatorId";
+import { IFloorPersistence } from "../dataschema/IFloorPersistence";
 
 @Service()
-export default class ElevaatorRepo implements IElevatorRepo {
-    private models: any;
+export default class ElevatorRepo implements IElevatorRepo {
 
     constructor(
-        @Inject("elevatorSchema") private elevatorSchema: Model<IElevatorPersistence & Document>
+      @Inject("elevatorSchema") private elevatorSchema: Model<IElevatorPersistence & Document>,
+      @Inject("floorSchema") private floorSchema: Model<IElevatorPersistence & Document>
     ) {}
 
-    private createBaseQuery(): any {
-        return {
-            where: {}
-        };
-    }
+    // @ts-ignore
+    public async exists(elevatorId: ElevatorId | string): Promise<boolean> {
+        const idX = elevatorId instanceof ElevatorId ? (<ElevatorId>elevatorId).elevatorId : elevatorId;
 
-    public async exists(elevator: Elevator): Promise<boolean> {
-        const idX = elevator.elevatorId;
-
-        const query = { elevatorId: idX };
-        const elevatorDocument = await this.elevatorSchema.findOne(
-            query as FilterQuery<IElevatorPersistence & Document>
-        );
+        const query = { domainId: idX };
+        const elevatorDocument = await this.elevatorSchema.findOne(query);
 
         return !!elevatorDocument === true;
     }
 
     public async save(elevator: Elevator): Promise<Elevator> {
-        const query = { elevatorId: elevator.elevatorId };
+        const query = { elevatorId: elevator.elevatorId.elevatorId };
 
-        const roleDocument = await this.elevatorSchema.findOne(query);
+        const elevatorDocument = await this.elevatorSchema.findOne(query);
 
-        try{
-            if (roleDocument === null) {
+        try {
+            if (elevatorDocument === null) {
                 const rawElevator: any = ElevatorMap.toPersistence(elevator);
+                console.log(rawElevator);
 
                 const elevatorCreated = await this.elevatorSchema.create(rawElevator);
 
                 return ElevatorMap.toDomain(elevatorCreated);
             } else {
-                roleDocument.elevatorId = elevator.elevatorId;
-                await roleDocument.save();
+                elevatorDocument.elevatorId = elevator.elevatorId.elevatorId;
+                elevatorDocument.elevatorBrand = elevator.elevatorBrand.elevatorBrand;
+                elevatorDocument.elevatorModel = elevator.elevatorModel.elevatorModel;
+                elevatorDocument.elevatorSerNum = elevator.elevatorSerNum.elevatorSerNum;
+                elevatorDocument.elevatorDesc = elevator.elevatorDesc.elevatorDesc;
+                await elevatorDocument.save();
 
                 return elevator;
             }
-        }
-        catch(err){
+        } catch (err) {
+            console.log(err)
             throw err;
         }
     }
 
-    public async findByElevatorId(elevatorId: string): Promise<Elevator> {
-        const query = { elevatorId: elevatorId };
-        const elevatorRecord = await this.elevatorSchema.findOne(
-            query as FilterQuery<IElevatorPersistence & Document>
-        );
+    public async findByElevatorId(elevatorId: ElevatorId | string): Promise<Elevator> {
+        const idX = elevatorId instanceof ElevatorId ? (<ElevatorId>elevatorId).elevatorId : elevatorId;
+
+        const query = { elevatorId: idX };
+        const elevatorRecord = await this.elevatorSchema.findOne(query);
 
         if (elevatorRecord != null) {
             return ElevatorMap.toDomain(elevatorRecord);
         }
-        else {
-            return null;
-        }
+
+        return null;
     }
 
     public async update(elevator: Elevator): Promise<Elevator> {
-        const query = { elevatorId: elevator.elevatorId };
+        await this.elevatorSchema.updateOne( { elevatorId: elevator.elevatorId.elevatorId }, ElevatorMap.toDTO(elevator));
 
-        const elevatorDocument = await this.elevatorSchema.findOne(query);
+        const updatedElevator = await this.elevatorSchema.findOne({ elevatorId: elevator.elevatorId.elevatorId });
 
-        if (elevatorDocument != null) {
-            const update = { currentFloor: elevator.currentFloor };
-            await this.elevatorSchema.updateOne(query, update);
-            return elevator;
-        }
-        else {
-            return null;
-        }
+        return ElevatorMap.toDomain(updatedElevator);
     }
 
-    public async delete(elevator: Elevator): Promise<Elevator> {
-        const query = { elevatorId: elevator.elevatorId };
+    // Before deleting the elevator, delete all floors associated with the elevator
+    public async delete(elevatorId: string): Promise<void> {
 
-        const elevatorDocument = await this.elevatorSchema.findOne(query);
-
-        if (elevatorDocument != null) {
-            await this.elevatorSchema.deleteOne(query);
-            return elevator;
-        }
-        else {
-            return null;
-        }
+        const query = { elevatorId: elevatorId };
+        await this.elevatorSchema.deleteOne(query as FilterQuery<IElevatorPersistence & Document>);
     }
 
     public async getElevators(): Promise<Elevator[]> {
-        const elevators = await this.elevatorSchema.find();
+        try {
+            const elevators = await this.elevatorSchema.find();
 
-        const elevatorDTOResult = elevators.map( elevator => ElevatorMap.toDomain( elevator ) as Elevator );
+            const elevatorDTOResult = elevators.map(elevator => ElevatorMap.toDomain(elevator));
 
-        return elevatorDTOResult;
+            return elevatorDTOResult;
+        } catch (e) {
+            throw e;
+        }
     }
 
-    public async getElevatorsByBuildingId(buildingId: string): Promise<Elevator[]> {
-        const query = { buildingId: buildingId };
-        const elevators = await this.elevatorSchema.find(
-            query as FilterQuery<IElevatorPersistence & Document>
-        );
+    public async getElevatorsByFloors(min: string, max: string): Promise<Elevator[]> {
+        try {
+            const elevators = await this.elevatorSchema.find({ elevatorNumberOfFloors: { $gte: min, $lte: max } });
 
-        const elevatorDTOResult = elevators.map( elevator => ElevatorMap.toDomain( elevator ) as Elevator );
+            const elevatorDTOResult = elevators.map(elevator => ElevatorMap.toDomain(elevator));
 
-        return elevatorDTOResult;
+            return elevatorDTOResult;
+        } catch (e) {
+            throw e;
+        }
     }
 }
-    

@@ -1,12 +1,48 @@
-import { IElevatorPersistence } from "../../dataschema/IElevatorPersistence"
-import { Schema, model } from 'mongoose';
+import { IBuildingPersistence } from "../../dataschema/IBuildingPersistence";
+import mongoose from 'mongoose';
 
-const ElevatorSchema = new Schema({
-  buildingId: String,
-  elevatorId: String,
-  currentFloor: Number,
-  locationX: Number,
-  locationY: Number
+const ElevatorSchema = new mongoose.Schema({
+  buildingId: {
+    type: String,
+    unique: true,
+  },
+  elevatorId: {
+    type: String,
+    unique: true,
+  },
+  elevatorBrand: {
+    type: String,
+    index: true,
+  },
+  elevatorModel: {
+    type: String,
+    index: true,
+  },
+  elevatorType: {
+    type: String,
+    index: true,
+  },
+  elevatorSerNum: {
+    type: String,
+    index: true,
+  },
+  elevatorDesc: {
+    type: String,
+    index: true,
+  },
+  currentFloor: {
+    type: Number,
+    required: [true, 'Please enter current elevator floor.'],
+    index: true,
+  },
+  locationX: {
+    type: Number,
+    index: true,
+  },
+  locationY: {
+    type: Number,
+    index: true,
+  }
 });
 
-export default model<IElevatorPersistence & Document>('Elevator', ElevatorSchema);
+export default mongoose.model<IBuildingPersistence & mongoose.Document>('Elevator', ElevatorSchema);

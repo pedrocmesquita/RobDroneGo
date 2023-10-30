@@ -1,26 +1,29 @@
 import { Mapper } from "../core/infra/Mapper";
-import { Elevator } from "../domain/Building/elevator";
-import IElevatorDTO from "../dto/iElevatorDTO";
+import { Elevator } from "../domain/Elevator/elevator";
+import IElevatorDTO from "../dto/IElevatorDTO";
+import { Floor } from "../domain/Floor/floor";
+import { UniqueEntityID } from "../core/domain/UniqueEntityID";
+import { Model } from "mongoose";
+import { IFloorPersistence } from "../dataschema/IFloorPersistence";
+import { IElevatorPersistence } from "../dataschema/IElevatorPersistence";
 
 export class ElevatorMap implements Mapper<Elevator> {
     public static toDTO (elevator: Elevator): any {
         return {
             buildingId: elevator.buildingId,
-            elevatorId: elevator.elevatorId,
-            currentFloor: elevator.currentFloor,
-            locationX: elevator.locationX,
-            locationY: elevator.locationY
+            elevatorId: elevator.elevatorId.elevatorId,
+            elevatorBrand: elevator.elevatorBrand.elevatorBrand,
+            elevatorModel: elevator.elevatorModel.elevatorModel,
+            elevatorSerNum: elevator.elevatorSerNum.elevatorSerNum,
+            elevatorDesc: elevator.elevatorDesc.elevatorDesc,
+            currentFloor: elevator.currentFloor.currentFloor,
+            locationX: elevator.locationX.locationX,
+            locationY: elevator.locationY.locationY
         } as IElevatorDTO;
     } 
 
-    public static toDomain (raw: any): Elevator {
-        const elevatorOrError = Elevator.create({
-            buildingId: raw.buildingId,
-            elevatorId: raw.elevatorId,
-            currentFloor: raw.currentFloor,
-            locationX: raw.locationX,
-            locationY: raw.locationY
-        });
+    public static toDomain (elevator: any | Model<IElevatorPersistence & Document>): Elevator {
+        const elevatorOrError = Elevator.create(elevator, new UniqueEntityID(elevator.domainId));
 
         elevatorOrError.isFailure ? console.log(elevatorOrError.error) : '';
 
@@ -30,10 +33,14 @@ export class ElevatorMap implements Mapper<Elevator> {
     public static toPersistence (elevator: Elevator): any {
         return {
             buildingId: elevator.buildingId,
-            elevatorId: elevator.elevatorId,
-            currentFloor: elevator.currentFloor,
-            locationX: elevator.locationX,
-            locationY: elevator.locationY
+            elevatorId: elevator.elevatorId.elevatorId,
+            elevatorBrand: elevator.elevatorBrand.elevatorBrand,
+            elevatorModel: elevator.elevatorModel.elevatorModel,
+            elevatorSerNum: elevator.elevatorSerNum.elevatorSerNum,
+            elevatorDesc: elevator.elevatorDesc.elevatorDesc,
+            currentFloor: elevator.currentFloor.currentFloor,
+            locationX: elevator.locationX.locationX,
+            locationY: elevator.locationY.locationY
         };
     }
 }

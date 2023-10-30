@@ -1,39 +1,39 @@
-import {Response, Request} from 'express';
-import {Container, Inject, Service} from 'typedi';
-import IElevatorController from './IControllers/IElevatorController';
-import IElevatorService from '../services/IServices/IElevatorService';
-import config from '../../config';
-import IElevatorDTO from '../dto/iElevatorDTO';
-import {ElevatorMap} from '../mappers/ElevatorMap';
-import IElevatorRepo from '../services/IRepos/IElevatorRepo';
-import {Elevator} from '../domain/Building/elevator';
-import { Building } from '../domain/Building/building';
+import e, { Response, Request, NextFunction } from "express";
+import { Container, Inject, Service } from "typedi";
+import config from "../../config";
+import IElevatorRepo from "../services/IRepos/IElevatorRepo";
+import { ElevatorMap } from "../mappers/ElevatorMap";
+import IElevatorDTO from "../dto/IElevatorDTO";
+import IElevatorController from "./IControllers/IElevatorController";
+import IElevatorService from "../services/IServices/IElevatorService";
+import { Result } from "../core/logic/Result";
 
 @Service()
-export default class ElevatorController implements IElevatorController{
+export default class ElevatorController implements IElevatorController {
+    constructor(@Inject(config.services.elevator.name) private elevatorServiceInstance : IElevatorService) {}
 
-    constructor(
-        @Inject(config.services.elevator.name) private elevatorServiceInstance: IElevatorService
-    ) {
-    }
-
-    public async getElevator(req: Request, res: Response): Promise<Response> {
+    public async getElevator(req: Request, res: Response, next: NextFunction){
         try {
-            const elevator = await this.elevatorServiceInstance.getElevator(req.params.id);
+            const elevator = await this.elevatorServiceInstance.getElevator(req.params.elevatorId as string);
 
             if (elevator.isFailure) {
                 return res.status(404).send();
             }
 
             return res.status(200).json(elevator.getValue());
-        } catch (e) {
-            throw e;
+        }
+        catch (e) {
+            return next(e);
         }
     }
 
-    public async createElevator(req: Request, res: Response): Promise<Response> {
+    public async createElevator(req: Request, res: Response, next: NextFunction) {
         try {
-            const elevatorOrError = await this.elevatorServiceInstance.createElevator(req.body);
+            const elevatorOrError = (await this.elevatorServiceInstance.createElevator(
+              req.params.elevatorId as string,
+              req.body as IElevatorDTO,
+            )) as Result<IElevatorDTO>;
+
 
             if (elevatorOrError.isFailure) {
                 return res.status(404).send();
@@ -41,13 +41,13 @@ export default class ElevatorController implements IElevatorController{
 
             return res.status(201).json(elevatorOrError.getValue());
         } catch (e) {
-            throw e;
+            return next(e);
         }
     }
 
-    public async updateElevator(req: Request, res: Response): Promise<Response> {
+    public async updateElevator(req: Request, res: Response, next: NextFunction) {
         try {
-            const elevatorOrError = await this.elevatorServiceInstance.updateElevator(req.params.id, req.body);
+            const elevatorOrError = (await this.elevatorServiceInstance.updateElevator(req.body as IElevatorDTO)) as Result<IElevatorDTO>;
 
             if (elevatorOrError.isFailure) {
                 return res.status(404).send();
@@ -55,25 +55,25 @@ export default class ElevatorController implements IElevatorController{
 
             return res.status(200).json(elevatorOrError.getValue());
         } catch (e) {
-            throw e;
+            return next(e);
         }
     }
 
-    public async deleteElevator(req: Request, res: Response): Promise<Response> {
+    public async deleteElevator(req: Request, res: Response, next: NextFunction) {
         try {
-            const elevatorOrError = await this.elevatorServiceInstance.deleteElevator(req.params.id);
+            const elevator = await this.elevatorServiceInstance.deleteElevator(req.params.elevatorId as string);
 
-            if (elevatorOrError.isFailure) {
+            if (elevator.isFailure) {
                 return res.status(404).send();
             }
 
-            return res.status(200).json(elevatorOrError.getValue());
+            return res.status(200).json(elevator.getValue());
         } catch (e) {
-            throw e;
+            return next(e);
         }
     }
 
-    public async getElevators(req: Request, res: Response): Promise<Response> {
+    public async getElevators(req: Request, res: Response, next: NextFunction) {
         try {
             const elevators = await this.elevatorServiceInstance.getElevators();
 
@@ -83,7 +83,7 @@ export default class ElevatorController implements IElevatorController{
 
             return res.status(200).json(elevators.getValue());
         } catch (e) {
-            throw e;
+            return next(e);
         }
     }
 }

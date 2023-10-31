@@ -82,4 +82,17 @@ export default class ConnectionController implements IConnectionController {
       throw e;
     }
   }
+  public async getConnectionsBetween(req: Request, res: Response): Promise<Response> {
+    try {
+      const connection = await this.connectionServiceInstance.getConnectionsBetween(req.params.buildingidFrom as string, req.params.buildingidTo as string);
+
+      if (connection.isFailure) {
+        return res.status(404).send();
+      }
+
+      return res.status(200).json(connection.getValue());
+    } catch (e) {
+      throw e;
+    }
+  }
 }

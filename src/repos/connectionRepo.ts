@@ -5,6 +5,7 @@ import IConnectionRepo from "../services/IRepos/IConnectionRepo";
 import { Connection } from "../domain/Connection/connection";
 import { ConnectionMap } from "../mappers/ConnectionMap";
 import { BuildingMap } from "../mappers/BuildingMap";
+import { Building } from "../domain/Building/building";
 
 @Service()
 export default class ConnectionRepo implements IConnectionRepo {
@@ -102,6 +103,21 @@ export default class ConnectionRepo implements IConnectionRepo {
     try {
       const connections = await this.connectionSchema.find();
 
+      const connectionDTOResult = connections.map(connection => ConnectionMap.toDomain(connection));
+
+      return connectionDTOResult;
+    } catch (e) {
+      throw e;
+    }
+  }
+  public async getConnectionsBetween(buildingidFrom: string, buildingidTo: string): Promise<Connection[]> {
+    try {
+      const connections = await this.connectionSchema.find({
+        $or: [
+          { buildingfromId: { $eq: buildingidFrom }, buildingtoId: { $eq: buildingidTo } },
+          { buildingfromId: { $eq: buildingidTo }, buildingtoId: { $eq: buildingidFrom } }
+        ]
+      });
       const connectionDTOResult = connections.map(connection => ConnectionMap.toDomain(connection));
 
       return connectionDTOResult;

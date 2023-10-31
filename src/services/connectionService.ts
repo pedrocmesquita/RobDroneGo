@@ -96,4 +96,15 @@ export default class ConnectionService implements IConnectionService {
       throw e;
     }
   }
+  public async getConnectionsBetween(buildingidFrom: string, buildingidTo: string): Promise<Result<IConnectionDTO[]>> {
+    try {
+      const connections = await this.connectionRepo.getConnectionsBetween(buildingidFrom, buildingidTo);
+
+      const connectionDTOResult = connections.map( connection => ConnectionMap.toDTO( connection ) as IConnectionDTO );
+
+      return Result.ok<IConnectionDTO[]>( connectionDTOResult );
+    } catch (e) {
+      throw e;
+    }
+  }
 }

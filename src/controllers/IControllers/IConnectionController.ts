@@ -6,4 +6,5 @@ export default interface IConnectionController {
   getConnection(req: Request, res: Response, next: NextFunction);
   getConnections(req: Request, res: Response, next: NextFunction);
   deleteConnection(req: Request, res: Response, next: NextFunction);
+  getConnectionsBetween(req: Request, res: Response, next: NextFunction);
 }

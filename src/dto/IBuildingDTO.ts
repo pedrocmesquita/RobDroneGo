@@ -6,5 +6,5 @@ export default interface IBuildingDTO {
     buildingName: string;
     buildingDescription?: string;
     buildingNumberOfFloors: number;
-    floors?: IFloorDTO[];
+    floors: IFloorDTO[];
 }

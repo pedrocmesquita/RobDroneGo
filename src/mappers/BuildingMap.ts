@@ -53,7 +53,14 @@ export class BuildingMap implements Mapper<Building> {
             buildingName: building.buildingName.buildingName,
             buildingNumberOfFloors: building.buildingNumberOfFloors.buildingNumberOfFloors,
             buildingDescription: building.buildingDescription.buildingDescription,
-            floors: building.floors
+            floors: building.floors.map(floor => {
+                return {
+                    buildingId: floor.buildingId,
+                    floorId: floor.floorId,
+                    floorNumber: floor.floorNumber.floorNumber,
+                    floorDescription: floor.floorDescription.floorDescription
+                };
+            })
         };
     }
 }

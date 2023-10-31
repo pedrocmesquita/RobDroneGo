@@ -44,6 +44,9 @@ export default (app: Router) => {
 
     // Get buildings that have a number of floors between min and max
     route.get("/floors/:min/:max", (req, res, next) => ctrl.getBuildingsByFloors(req, res, next) );
+
+    // Get floors of a building
+    route.get("/:buildingId/floors", (req, res, next) => ctrl.getBuildingFloors(req, res, next) );
     };
 
 

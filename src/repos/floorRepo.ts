@@ -5,12 +5,14 @@ import IFloorRepo from "../services/IRepos/IFloorRepo";
 import {Floor} from "../domain/Floor/floor";
 import {FloorMap} from "../mappers/FloorMap";
 import e from "express";
+import { BuildingMap } from "../mappers/BuildingMap";
 
 @Service()
 export default class FloorRepo implements IFloorRepo {
 
     constructor(
-        @Inject("floorSchema") private floorSchema: Model<IFloorPersistence & Document>
+        @Inject("floorSchema") private floorSchema: Model<IFloorPersistence & Document>,
+        @Inject("buildingSchema") private buildingSchema: Model<IFloorPersistence & Document>
     ) {}
 
     // @ts-ignore
@@ -68,7 +70,7 @@ export default class FloorRepo implements IFloorRepo {
     }
 
     public async update(floor: Floor, floorId: string): Promise<Floor> {
-        await this.floorSchema.updateOne({ floorId: floorId }, FloorMap.toDTO(floor));
+        await this.floorSchema.updateOne( { floorId: floorId }, FloorMap.toDTO(floor));
 
         const updatedFloor = await this.floorSchema.findOne({ floorId: floorId });
 
@@ -89,10 +91,9 @@ export default class FloorRepo implements IFloorRepo {
     }
 
     public async getFloorsByBuildingId(buildingId: string): Promise<Floor[]> {
+
         const query = { buildingId: buildingId };
-        const floors = await this.floorSchema.find(
-            query as FilterQuery<IFloorPersistence & Document>
-        );
+        const floors = await this.floorSchema.find(query);
 
         const floorDTOResult = floors.map( floor => FloorMap.toDomain( floor ) as Floor );
 

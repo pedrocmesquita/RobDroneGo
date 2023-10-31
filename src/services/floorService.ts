@@ -36,29 +36,26 @@ export default class FloorService implements IFloorService {
     public async createFloor(floorId: string, buildingId: string, floorDTO:IFloorDTO): Promise<Result<IFloorDTO>> {
         try {
 
-            const buildingId = await this.buildingRepo.findByBuildingId(floorDTO.buildingId);
+            const building = await this.buildingRepo.findByBuildingId(floorDTO.buildingId);
 
-            if (buildingId === null) {
+            if (building === null) {
                 return Result.fail<IFloorDTO>("Building not found");
             }
 
-            const floorId = await this.floorRepo.findByFloorId(floorDTO.floorId);
+            const floor = await this.floorRepo.findByFloorId(floorDTO.floorId);
 
             // Check if floor already exists
-            if (floorId != null) {
+            if (floor != null) {
                 return Result.fail<IFloorDTO>('Floor already exists: ' + floorDTO.floorId);
             }
 
-            console.log("\nFloor DTO \n");
-            console.log(floorDTO);
-            console.log("\nBefore creating \n");
-            console.log(floorId);
+            // Check if the the max number of floors has been reached
+            if (building.floors.length >= building.buildingNumberOfFloors.buildingNumberOfFloors) {
+                return Result.fail<IFloorDTO>("Max number of floors reached for this building");
+            }
 
             // Create floor entity
             const floorOrError = await Floor.create(floorDTO);
-
-            console.log("\nAfter creating \n");
-            console.log(floorOrError);
 
             // Check if floor entity was created successfully
             if (floorOrError.isFailure) {
@@ -66,17 +63,16 @@ export default class FloorService implements IFloorService {
             }
 
             // Save floor entity
-            const floorResult = floorOrError.getValue();
+            const newFloor = floorOrError.getValue();
 
-            console.log("\nFloor Result \n");
-            console.log(floorResult.floorId);
-            await this.floorRepo.save(floorResult);
+            await this.floorRepo.save(newFloor);
+
+            building.addFloor(newFloor);
+
+            await this.buildingRepo.update(building);
 
             // Return floor entity
-            const floorDTOResult = FloorMap.toDTO(floorResult) as IFloorDTO;
-
-            buildingId.addFloor(floorResult);
-            await this.buildingRepo.update(buildingId)
+            const floorDTOResult = FloorMap.toDTO(newFloor) as IFloorDTO;
 
             return Result.ok<IFloorDTO>(floorDTOResult);
         } catch (e) {
@@ -92,6 +88,12 @@ export default class FloorService implements IFloorService {
                 return Result.fail<IFloorDTO>("Floor not found");
             }
 
+            const buildingId = await this.buildingRepo.findByBuildingId(floorDTO.buildingId);
+
+            if (buildingId === null) {
+                return Result.fail<IFloorDTO>("Building not found");
+            }
+
             // Verify if the new floor number is already in use
             const floorNumberExists = await this.floorRepo.findByFloorId(floorDTO.floorId);
 
@@ -99,18 +101,15 @@ export default class FloorService implements IFloorService {
                 return Result.fail<IFloorDTO>("Floor number already in use for this building");
             }
 
-            const buildingId = await this.buildingRepo.findByBuildingId(floorDTO.buildingId);
+            const updatedFloor = await this.floorRepo.update(FloorMap.toDomain(floorDTO), oldFloorId);
 
             // Remove and add floor to building
-            buildingId.removeFloor(floor);
-            buildingId.addFloor(FloorMap.toDomain(floorDTO));
-
+            buildingId.floors = buildingId.floors.filter(floor => floor.floorId != oldFloorId );
+            buildingId.floors.push(updatedFloor);
             await this.buildingRepo.update(buildingId);
 
-            const updatedFloor = await this.floorRepo.update(FloorMap.toDomain(floorDTO), oldFloorId);
-            const floorDTOResult = FloorMap.toDTO( updatedFloor ) as IFloorDTO;
-            return Result.ok<IFloorDTO>( floorDTOResult );
-
+            const floorDTOResult = FloorMap.toDTO(updatedFloor) as IFloorDTO;
+            return Result.ok<IFloorDTO>(floorDTOResult);
         } catch (e) {
             throw e;
         }

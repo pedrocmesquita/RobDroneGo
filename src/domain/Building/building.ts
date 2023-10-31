@@ -15,7 +15,7 @@ interface BuildingProps {
   buildingName: BuildingName;
   buildingDescription?: BuildingDescription;
   buildingNumberOfFloors: BuildingNumberOfFloors;
-  floors?: Floor[];
+  floors: Floor[];
 }
 
 
@@ -32,16 +32,16 @@ export class Building extends AggregateRoot<BuildingProps> {
     return this.props.buildingName;
   }
 
+  get floors (): Floor[] {
+    return this.props.floors;
+  }
+
   get buildingDescription (): BuildingDescription {
     return this.props.buildingDescription;
   }
 
   get buildingNumberOfFloors (): BuildingNumberOfFloors {
     return this.props.buildingNumberOfFloors;
-  }
-
-  get floors (): Floor[] {
-    return this.props.floors;
   }
 
   set buildingId (value: BuildingId) {
@@ -60,29 +60,25 @@ export class Building extends AggregateRoot<BuildingProps> {
     this.props.buildingNumberOfFloors = value;
   }
 
+  set floors (value: Floor[]) {
+    this.props.floors = value;
+  }
+
   // Add floor to building
   public addFloor(floor: Floor): void {
-
-    this.props.floors.push(floor);
+    this.props.floors = [...this.props.floors, floor];
   }
 
   // Remove floor from building
   public removeFloor(floor: Floor): void {
-
-    const index = this.props.floors.indexOf(floor);
-    if (index !== -1) {
-      this.props.floors.splice(index, 1);
-    }
+    this.props.floors = this.props.floors.filter(existingFloor => existingFloor !== floor);
   }
+
 
   private constructor(props: BuildingProps, id?: UniqueEntityID) {
     super(props, id);
 
-    if (!this.props.floors) {
-      this.props.floors = [];
-    }
   }
-
 
   public static create (buildingDTO: IBuildingDTO, id?: UniqueEntityID): Result<Building> {
     const buildingId = buildingDTO.buildingId;
@@ -95,7 +91,8 @@ export class Building extends AggregateRoot<BuildingProps> {
         buildingId: BuildingId.create({buildingId}).getValue(),
         buildingName: BuildingName.create({ buildingName }).getValue(),
         buildingDescription: BuildingDescription.create({ buildingDescription }).getValue(),
-        buildingNumberOfFloors: BuildingNumberOfFloors.create({buildingNumberOfFloors}).getValue()
+        buildingNumberOfFloors: BuildingNumberOfFloors.create({buildingNumberOfFloors}).getValue(),
+        floors: buildingDTO.floors.map(floor => Floor.create(floor).getValue())
       },
       id
     );

@@ -7,4 +7,5 @@ export default interface IBuildingController {
     getBuildings(req: Request, res: Response, next: NextFunction);
     deleteBuilding(req: Request, res: Response, next: NextFunction);
     getBuildingsByFloors(req: Request, res: Response, next: NextFunction);
+    getBuildingFloors(req: Request, res: Response, next: NextFunction);
     }

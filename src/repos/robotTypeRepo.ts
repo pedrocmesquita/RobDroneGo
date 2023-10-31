@@ -16,7 +16,7 @@ export default class robotTypeRepo implements IRobotRepo {
 
 
     public async save(robot: Robot): Promise<Robot> {
-        const query = { TypeID: robot.typeId.typeId };
+        const query = { typeId: robot.typeId.typeId };
 
         const RobotDocument = await this.robotSchema.findOne(query);
 
@@ -68,15 +68,16 @@ export default class robotTypeRepo implements IRobotRepo {
     }
 
 
-    public async findByrobotTypeID(typedi: string | TypeID): Promise<Robot> {
-        const query = { typedi: typedi };
+    public async findByrobotTypeID(typeId: string | TypeID): Promise<Robot> {
+        const query = { typeId: typeId };
         const RobotRecord = await this.robotSchema.findOne(
             query as FilterQuery<IRobotPersistence & Document>
         );
 
         if (RobotRecord != null) {
             return RobotTypeMap.toDomain(RobotRecord);
-        } else return null;
+        }
+        return null;
     }
 
     // @ts-ignore

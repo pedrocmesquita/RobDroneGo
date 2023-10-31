@@ -15,19 +15,22 @@ export default class robotTypeService implements IRobotTypeService {
         @Inject(config.repos.robot.name) private robotTypeRepo : IRobotTypeRepo
     ) {}
 
-    public async createRobotType(typedi:string ,robotTypeDTO: IRobotTypeDTO ): Promise<Result<IRobotTypeDTO>> {
+    public async createRobotType(typeId:string ,robotTypeDTO: IRobotTypeDTO ): Promise<Result<IRobotTypeDTO>> {
         try {
-            const id = await this.robotTypeRepo.findByrobotTypeID(robotTypeDTO.typeId);
+            console.log("erro aqui");
+            const typeId = await this.robotTypeRepo.findByrobotTypeID(robotTypeDTO.typeId);
+            console.log("erro aqui 2");
 
             // Check if robot already exists
-            if (typedi != null) {
+            if (typeId != null) {
+                console.log("erro aqui 3");
                 return Result.fail<IRobotTypeDTO>('Robot already exists: ' + robotTypeDTO.typeId);
             }
 
             console.log("\nRobot DTO \n");
             console.log(robotTypeDTO);
             console.log("\nBefore creating \n");
-            console.log(typedi);
+            console.log(typeId);
             // Create robot entity
             const robotOrError = await Robot.create(robotTypeDTO);
 
@@ -70,9 +73,9 @@ export default class robotTypeService implements IRobotTypeService {
         }
     }
   
-    public async getRobotType(typedi: string): Promise<Result<IRobotTypeDTO>> {
+    public async getRobotType(typeID: string): Promise<Result<IRobotTypeDTO>> {
         try {
-            const robot = await this.robotTypeRepo.findByrobotTypeID(typedi);
+            const robot = await this.robotTypeRepo.findByrobotTypeID(typeID);
             if (robot === null) {
                 return Result.fail<IRobotTypeDTO>("Robot not found");
             }else {
@@ -94,13 +97,13 @@ export default class robotTypeService implements IRobotTypeService {
         }
     }
 
-    public async deleteRobotType(typedi: string): Promise<Result<boolean>> {
+    public async deleteRobotType(typeID: string): Promise<Result<boolean>> {
         try {
-            const robot = await this.robotTypeRepo.findByrobotTypeID(typedi);
+            const robot = await this.robotTypeRepo.findByrobotTypeID(typeID);
             if (robot === null) {
                 return Result.fail<boolean>("Robot not found");
             }else {
-                await this.robotTypeRepo.delete(typedi);
+                await this.robotTypeRepo.delete(typeID);
                 return Result.ok<boolean>(true)
             }
         } catch (e) {

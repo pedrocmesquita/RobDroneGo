@@ -31,7 +31,6 @@ export class RobotTypeMap implements Mapper<Robot> {
             brand: robot.brand.brand,
             model: robot.model.model,
             task: robot.tasks,
-
         }
     }
 }

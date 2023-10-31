@@ -61,6 +61,10 @@ export default {
       name: "ConnectionController",
       path: "../controllers/connectionController"
     },
+    robot: {
+      name: "RobotTypeController",
+      path: "../controllers/robotTypeController"
+    },
   },
 
   repos: {
@@ -88,6 +92,10 @@ export default {
       name: "ConnectionRepo",
       path: "../repos/connectionRepo"
     },
+    robot: {
+      name: "RobotTypeRepo",
+      path: "../repos/robotTypeRepo"
+    },
   },
 
   services: {
@@ -110,6 +118,10 @@ export default {
     connection: {
       name: "ConnectionService",
       path: "../services/connectionService"
+    },
+    robot: {
+      name: "RobotTypeService",
+      path: "../services/robotTypeService"
     },
   },
 };

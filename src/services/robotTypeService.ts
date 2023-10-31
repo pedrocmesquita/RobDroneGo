@@ -15,7 +15,7 @@ export default class robotTypeService implements IRobotTypeService {
         @Inject(config.repos.robot.name) private robotTypeRepo : IRobotTypeRepo
     ) {}
 
-    public async createRobotType(typedi: string, robotTypeDTO: IRobotTypeDTO ): Promise<Result<IRobotTypeDTO>> {
+    public async createRobotType(typedi:string ,robotTypeDTO: IRobotTypeDTO ): Promise<Result<IRobotTypeDTO>> {
         try {
             const id = await this.robotTypeRepo.findByrobotTypeID(robotTypeDTO.typeId);
 
@@ -28,7 +28,7 @@ export default class robotTypeService implements IRobotTypeService {
             console.log(robotTypeDTO);
             console.log("\nBefore creating \n");
             console.log(typedi);
-            // Create building entity
+            // Create robot entity
             const robotOrError = await Robot.create(robotTypeDTO);
 
             console.log("\nAfter creating \n");

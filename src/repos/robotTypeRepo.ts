@@ -32,6 +32,7 @@ export default class robotTypeRepo implements IRobotRepo {
                 RobotDocument.typeId = robot.typeId.typeId;
                 RobotDocument.brand = robot.brand.brand;
                 RobotDocument.model = robot.model.model;
+            
                 await RobotDocument.save();
 
                 return robot;

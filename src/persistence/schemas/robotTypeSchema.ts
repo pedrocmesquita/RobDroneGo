@@ -1,9 +1,7 @@
-
 import mongoose from 'mongoose';
-import { Task } from '../../domain/RobotType/task';
-import { List } from 'immutable';
+import {IRobotPersistence} from "../../dataschema/IRobotTypePersistence";
 
-const robot = new mongoose.Schema(
+const robotSchema = new mongoose.Schema(
   {
     typeId: { 
       type: String,
@@ -18,18 +16,17 @@ const robot = new mongoose.Schema(
 
     model: {
       type: String,
-      required: [true, 'Please entermodel'],
+      required: [true, 'Please enter model'],
       index: true,
     },
 
     tasks: {
-      type: List<Task>,
-      lowercase: true,  
-      unique: true,
-      index: true,
+      type: [String],
+      required: [true, 'Please enter tasks'],
     },
 
   },
   { timestamps: true },
 );
+export default mongoose.model<IRobotPersistence & mongoose.Document>('Robot', robotSchema);
 

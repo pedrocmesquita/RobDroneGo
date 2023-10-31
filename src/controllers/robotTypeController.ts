@@ -5,6 +5,7 @@ import { Inject, Service } from "typedi";
 import { Result } from "../core/logic/Result";
 import IRobotTypeService from "../services/IServices/IRobotTypeService";
 import IRobotTypeDTO from "../dto/IRobotTypeDTO";
+import {RobotTypeMap} from "../mappers/RobotTypeMap";
 
 @Service()
 
@@ -27,6 +28,7 @@ export default class robotTypeController implements IRobotTypeController {
             return next(e);
         }
     }
+
 
 
     public async updateRobotType(req: Request, res: Response, next: NextFunction) {

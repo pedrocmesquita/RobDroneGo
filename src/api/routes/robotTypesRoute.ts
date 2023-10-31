@@ -13,17 +13,17 @@ export default (app: Router) => {
     
     const ctrl = Container.get(config.controllers.robot.name) as IRobotTypeController;
     
-    route.post("",
+    route.post("/create",
         celebrate({
         body: Joi.object({
             typeID: Joi.string().required(),
             brand: Joi.string().required(),
             model: Joi.number().required(),
-            taskSystem: Joi.string().required(),        })
+            taskSystem: Joi.array().required()})
         }),
         (req, res, next) => ctrl.createRobotType(req, res, next) );
     
-    route.put("",
+    route.put("/:RobotId",
         celebrate({
         body: Joi.object({
             typeID: Joi.string().required(),

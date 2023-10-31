@@ -6,6 +6,9 @@ import IRobotDTO from "../../dto/IRobotTypeDTO";
 import { TypeID } from "./typeId";
 import { Brand } from "./Brand";
 import { Model } from "./Model";
+import { List } from "lodash";
+import _ from "lodash";
+
 
 
 
@@ -13,7 +16,7 @@ interface robotProps {
     typeId: TypeID;
     brand: Brand;
     model: Model;
-    tasks: Task[];
+    tasks: List<String>;
 }
 
 export class Robot extends AggregateRoot<robotProps> {
@@ -33,8 +36,8 @@ export class Robot extends AggregateRoot<robotProps> {
         get model (): Model {
           return this.props.model;
         }
-      
-        get tasks (): Task[] {
+
+        get tasks (): List<String> {
           return this.props.tasks;
         }
       
@@ -49,23 +52,6 @@ export class Robot extends AggregateRoot<robotProps> {
         set model (value: Model) {
           this.props.model = value;
         }
-      
-        set tasks (value: Task[]) {
-          this.props.tasks = value;
-        }
-      
-        // Add task
-        public addTask(task: Task): void {
-          // Check if the tasks array already exists, and if not, initialize it as an empty array.
-          if (!this.props.tasks) {
-            this.props.tasks = [];
-          }
-      
-          // Add the new task to the array.
-          this.props.tasks.push(task);
-        }
-
-
       
       private constructor(props: robotProps, id?: UniqueEntityID) {
           super(props, id);
@@ -85,9 +71,8 @@ export class Robot extends AggregateRoot<robotProps> {
               typeId: TypeID.create({typeId}).getValue(),
               brand: Brand.create({ brand }).getValue(),
               model: Model.create({ model }).getValue(),
-              tasks: []
-            },
-            id
+              tasks : _.map(tasks, task => task.toString()),               },
+                id
           );
           return Result.ok<Robot>(robot);
         }

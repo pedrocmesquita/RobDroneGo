@@ -3,7 +3,7 @@ import IRobotTypeDTO from "../../dto/IRobotTypeDTO";
 import IRobotDTO from "../../dto/IRoleDTO";
 
 export default interface IRobotTypeService  {
-    createRobotType(typedi: string, robotTypeDTO: IRobotTypeDTO): Promise<Result<IRobotTypeDTO>>;
+    createRobotType(typeId: string, robotTypeDTO: IRobotTypeDTO): Promise<Result<IRobotTypeDTO>>;
     updateRobotType(robotTypeDTO: IRobotTypeDTO): Promise<Result<IRobotTypeDTO>>;
     getRobotType(typedi: string): Promise<Result<IRobotTypeDTO>>;
     getRobotsTypes( ): Promise<Result<IRobotTypeDTO[]>>;

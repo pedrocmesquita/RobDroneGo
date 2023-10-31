@@ -44,6 +44,11 @@ export default async ({ expressApp }) => {
     name: 'connectionSchema',
     schema: '../persistence/schemas/connectionSchema',
   }
+  const robotTypeSchema = {
+    // compare with the approach followed in repos and services
+    name: 'robotTypeSchema',
+    schema: '../persistence/schemas/robotTypeSchema',
+  }
 
   const roleController = {
     name: config.controllers.role.name,
@@ -68,6 +73,10 @@ export default async ({ expressApp }) => {
   const connectionController = {
     name: config.controllers.connection.name,
     path: config.controllers.connection.path
+  }
+  const robotTypeController = {
+    name: config.controllers.robot.name,
+    path: config.controllers.robot.path
   }
 
   const roleRepo = {
@@ -99,6 +108,10 @@ export default async ({ expressApp }) => {
     name: config.repos.connection.name,
     path: config.repos.connection.path
   }
+  const robotTypeRepo = {
+    name: config.repos.robot.name,
+    path: config.repos.robot.path
+  }
 
   const roleService = {
     name: config.services.role.name,
@@ -124,6 +137,10 @@ export default async ({ expressApp }) => {
     name: config.services.connection.name,
     path: config.services.connection.path
   }
+  const robotTypeService = {
+    name: config.services.robot.name,
+    path: config.services.robot.path
+  }
 
   await dependencyInjectorLoader({
     mongoConnection,
@@ -133,14 +150,16 @@ export default async ({ expressApp }) => {
       buildingSchema,
       floorSchema,
       elevatorSchema,
-      connectionSchema
+      connectionSchema,
+      robotTypeSchema
     ],
     controllers: [
       roleController,
       buildingController,
       floorController,
       elevatorController,
-      connectionController
+      connectionController,
+      robotTypeController
     ],
     repos: [
       roleRepo,
@@ -148,14 +167,16 @@ export default async ({ expressApp }) => {
       buildingRepo,
       floorRepo,
       elevatorRepo,
-      connectionRepo
+      connectionRepo,
+      robotTypeRepo
     ],
     services: [
       roleService,
       buildingService,
       floorService,
       elevatorService,
-      connectionService
+      connectionService,
+      robotTypeService
     ]
   });
   Logger.info('✌️ Schemas, Controllers, Repositories, Services, etc. loaded');

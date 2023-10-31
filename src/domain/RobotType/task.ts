@@ -1,3 +1,4 @@
+import { List } from "lodash";
 import { AggregateRoot } from "../../core/domain/AggregateRoot";
 import { UniqueEntityID } from "../../core/domain/UniqueEntityID";
 import { Guard } from "../../core/logic/Guard";
@@ -12,6 +13,9 @@ interface TasksProps{
 }
 
 export class Task extends AggregateRoot<TasksProps>{
+    static createList(tasks: List<String>) {
+      throw new Error("Method not implemented.");
+    }
 
     public get taskId(): string{
         return this.props.taskId;

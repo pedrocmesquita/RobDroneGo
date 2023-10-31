@@ -6,7 +6,7 @@ export default interface IConnectionRepo extends Repo<Connection> {
   save(connection: Connection): Promise<Connection>;
   findByConnectionId(connectionId: ConnectionId | string): Promise<Connection>;
   update(connection: Connection): Promise<Connection>;
-  delete(connection: Connection): Promise<Connection>;
+  delete(connectionId: string): void;
   getConnections(): Promise<Connection[]>;
   getConnectionsBetween(buildingidFrom: string, buildingidTo: string): Promise<Connection[]>;
 

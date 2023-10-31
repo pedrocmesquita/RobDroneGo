@@ -1,4 +1,4 @@
-import { Response, Request } from "express";
+import { Response, Request, NextFunction } from "express";
 import { Container, Inject, Service } from "typedi";
 import config from "../../config";
 import IConnectionRepo from "../services/IRepos/IConnectionRepo";
@@ -6,7 +6,6 @@ import { ConnectionMap } from "../mappers/ConnectionMap";
 import IConnectionDTO from "../dto/IConnectionDTO";
 import IConnectionController from "./IControllers/IConnectionController";
 import IConnectionService from "../services/IServices/IConnectionService";
-import IBuildingDTO from "../dto/IBuildingDTO";
 import { Result } from "../core/logic/Result";
 
 @Service()
@@ -55,17 +54,17 @@ export default class ConnectionController implements IConnectionController {
     }
   }
 
-  public async deleteConnection(req: Request, res: Response): Promise<Response> {
+  public async deleteConnection(req: Request, res: Response, next: NextFunction) {
     try {
-      const connectionOrError = await this.connectionServiceInstance.deleteConnection(req.params.id);
+      const connection = await this.connectionServiceInstance.deleteConnection(req.params.connectionId as string);
 
-      if (connectionOrError.isFailure) {
+      if (connection.isFailure) {
         return res.status(404).send();
       }
 
-      return res.status(204).send();
+      return res.status(200).json(connection.getValue());
     } catch (e) {
-      throw e;
+      return next(e);
     }
   }
 

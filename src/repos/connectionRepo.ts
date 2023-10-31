@@ -6,6 +6,7 @@ import { Connection } from "../domain/Connection/connection";
 import { ConnectionMap } from "../mappers/ConnectionMap";
 import { BuildingMap } from "../mappers/BuildingMap";
 import { Building } from "../domain/Building/building";
+import { IFloorPersistence } from "../dataschema/IFloorPersistence";
 
 @Service()
 export default class ConnectionRepo implements IConnectionRepo {
@@ -76,27 +77,9 @@ export default class ConnectionRepo implements IConnectionRepo {
     return ConnectionMap.toDomain(updatedConnection);
   }
 
-  public async delete(connection: Connection): Promise<Connection> {
-    const query = { connectionId: connection.connectionId };
-
-    const connectionDocument = await this.connectionSchema.findOne(query);
-
-    try {
-      if (connectionDocument === null) {
-        const rawConnection: any = ConnectionMap.toPersistence(connection);
-
-        const connectionCreated = await this.connectionSchema.create(rawConnection);
-
-        return ConnectionMap.toDomain(connectionCreated);
-      } else {
-        connectionDocument.connectionId = connection.connectionId.connectionId;
-        await connectionDocument.save();
-
-        return connection;
-      }
-    } catch (err) {
-      throw err;
-    }
+  public async delete(connectionId: string){
+    const query = { connectionId: connectionId };
+    await this.connectionSchema.deleteOne(query as FilterQuery<IConnectionPersistence & Document>);
   }
 
   public async getConnections(): Promise<Connection[]> {

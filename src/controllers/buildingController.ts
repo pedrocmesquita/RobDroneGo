@@ -103,18 +103,4 @@ export default class BuildingController implements IBuildingController {
             return next(e);
         }
     }
-
-    public async getBuildingFloors(req: Request, res: Response, next: NextFunction) {
-        try {
-            const floors = await this.buildingServiceInstance.getBuildingFloors(req.params.buildingId as string);
-
-            if (floors.isFailure) {
-                return res.status(404).send();
-            }
-
-            return res.status(200).json(floors.getValue());
-        } catch (e) {
-            return next(e);
-        }
-    }
 }

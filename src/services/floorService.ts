@@ -49,7 +49,7 @@ export default class FloorService implements IFloorService {
                 return Result.fail<IFloorDTO>('Floor already exists: ' + floorDTO.floorId);
             }
 
-            // Check if the the max number of floors has been reached
+            // Check if the max number of floors has been reached
             if (building.floors.length >= building.buildingNumberOfFloors.buildingNumberOfFloors) {
                 return Result.fail<IFloorDTO>("Max number of floors reached for this building");
             }
@@ -82,32 +82,47 @@ export default class FloorService implements IFloorService {
 
     public async updateFloor(floorDTO: IFloorDTO, oldFloorId: string): Promise<Result<IFloorDTO>> {
         try {
+
+            // Check if floor exists
             const floor = await this.floorRepo.findByFloorId(oldFloorId);
 
             if (floor === null) {
                 return Result.fail<IFloorDTO>("Floor not found");
             }
 
-            const buildingId = await this.buildingRepo.findByBuildingId(floorDTO.buildingId);
+            // Check if the new floorId is already taken
+            const floorId = await this.floorRepo.findByFloorId(floorDTO.floorId);
 
-            if (buildingId === null) {
+            if (floorId != null) {
+                return Result.fail<IFloorDTO>("FloorId already taken");
+            }
+
+            // Update floor entity
+            const floorOrError = await Floor.create(floorDTO);
+
+            // Check if floor entity was updated successfully
+            if (floorOrError.isFailure) {
+                return Result.fail<IFloorDTO>(floorOrError.errorValue());
+            }
+
+            // Save floor entity
+            const updatedFloor = floorOrError.getValue();
+
+            await this.floorRepo.update(updatedFloor, oldFloorId);
+
+            // Add new floor to building and delete old floor
+            const building = await this.buildingRepo.findByBuildingId(floorDTO.buildingId);
+
+            if (building === null) {
                 return Result.fail<IFloorDTO>("Building not found");
             }
 
-            // Verify if the new floor number is already in use
-            const floorNumberExists = await this.floorRepo.findByFloorId(floorDTO.floorId);
+            building.floors.push(updatedFloor);
+            building.floors = building.floors.filter(existingFloor => existingFloor.floorId !== floor.floorId);
 
-            if (floorNumberExists != null) {
-                return Result.fail<IFloorDTO>("Floor number already in use for this building");
-            }
+            await this.buildingRepo.update(building);
 
-            const updatedFloor = await this.floorRepo.update(FloorMap.toDomain(floorDTO), oldFloorId);
-
-            // Remove and add floor to building
-            buildingId.floors = buildingId.floors.filter(floor => floor.floorId != oldFloorId );
-            buildingId.floors.push(updatedFloor);
-            await this.buildingRepo.update(buildingId);
-
+            // Return floor entity
             const floorDTOResult = FloorMap.toDTO(updatedFloor) as IFloorDTO;
             return Result.ok<IFloorDTO>(floorDTOResult);
         } catch (e) {
@@ -142,16 +157,5 @@ export default class FloorService implements IFloorService {
         }
     }
 
-    public async getFloorsByBuildingId(buildingId: string): Promise<Result<IFloorDTO[]>> {
-        try {
-            const floors = await this.floorRepo.getFloorsByBuildingId(buildingId);
-
-            const floorDTOResult = floors.map( floor => FloorMap.toDTO( floor ) as IFloorDTO );
-
-            return Result.ok<IFloorDTO[]>( floorDTOResult );
-        } catch (e) {
-            throw e;
-        }
-    }
 
 }

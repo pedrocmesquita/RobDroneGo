@@ -69,12 +69,23 @@ export default class FloorRepo implements IFloorRepo {
         }
     }
 
-    public async update(floor: Floor, floorId: string): Promise<Floor> {
-        await this.floorSchema.updateOne( { floorId: floorId }, FloorMap.toDTO(floor));
+    public async update(floor: Floor, oldFloorId: string): Promise<Floor> {
+        const query = { floorId: oldFloorId };
 
-        const updatedFloor = await this.floorSchema.findOne({ floorId: floorId });
+        const floorDocument = await this.floorSchema.findOne(query);
 
-        return FloorMap.toDomain(updatedFloor);
+        if (floorDocument != null) {
+            floorDocument.floorId = floor.floorId;
+            floorDocument.buildingId = floor.buildingId;
+            floorDocument.floorNumber = floor.floorNumber.floorNumber;
+            floorDocument.floorDescription = floor.floorDescription.floorDescription;
+            await floorDocument.save();
+
+            return floor;
+        }
+        else {
+            return null;
+        }
     }
 
     public async delete(floorId: string){
@@ -90,14 +101,5 @@ export default class FloorRepo implements IFloorRepo {
         return floorDTOResult;
     }
 
-    public async getFloorsByBuildingId(buildingId: string): Promise<Floor[]> {
-
-        const query = { buildingId: buildingId };
-        const floors = await this.floorSchema.find(query);
-
-        const floorDTOResult = floors.map( floor => FloorMap.toDomain( floor ) as Floor );
-
-        return floorDTOResult;
-    }
 }
     

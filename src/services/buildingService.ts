@@ -87,6 +87,16 @@ export default class BuildingService implements IBuildingService {
         return Result.fail<IBuildingDTO>("Building not found");
       }
 
+      const sizeOfFloors = exists.floors.length;
+
+      // Check if the max number of floors has been reached
+      if (sizeOfFloors > buildingDTO.buildingNumberOfFloors) {
+        return Result.fail<IBuildingDTO>("Max number of floors reached for this building");
+      }
+
+      // Making sure the floors are not overwritten
+      buildingDTO.floors = exists.floors.map(floor => FloorMap.toDTO(floor) as IFloorDTO);
+
       const updatedBuilding = await this.buildingRepo.update(BuildingMap.toDomain(buildingDTO));
       const buildingDTOResult = BuildingMap.toDTO(updatedBuilding) as IBuildingDTO;
       return Result.ok<IBuildingDTO>(buildingDTOResult);
@@ -123,27 +133,4 @@ export default class BuildingService implements IBuildingService {
     }
   }
 
-  public async getBuildingFloors(buildingId: string): Promise<Result<IFloorDTO[]>> {
-    try {
-      const building = await this.buildingRepo.findByBuildingId(buildingId);
-
-      if (building === null) {
-        return Result.fail<IFloorDTO[]>("Building not found");
-      } else {
-
-        const floors =await this.floorRepo.getFloorsByBuildingId(buildingId);
-
-        if (floors.length === 0) {
-          return Result.fail<IFloorDTO[]>("Floors of building" + buildingId + " not found");
-        }
-
-        const floorDTOResult = floors.map(floor => FloorMap.toDTO(floor) as IFloorDTO);
-
-        return Result.ok<IFloorDTO[]>(floorDTOResult);
-      }
-      }
-    catch (e) {
-      throw e;
-    }
-  }
 }

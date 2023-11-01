@@ -11,21 +11,21 @@ import { TypeID } from "../domain/RobotType/typeId";
 export default class robotTypeRepo implements IRobotRepo {
 
     constructor(
-        @Inject("robotTypeSchema") private robotSchema: Model<IRobotPersistence & Document>
+        @Inject("robotTypeSchema") private robotTypeSchema: Model<IRobotPersistence & Document>
     ) {}
 
 
     public async save(robot: Robot): Promise<Robot> {
         const query = { typeId: robot.typeId.typeId };
 
-        const RobotDocument = await this.robotSchema.findOne(query);
+        const RobotDocument = await this.robotTypeSchema.findOne(query);
 
         try {
             if (RobotDocument === null) {
                 const rawRobot: any = RobotTypeMap.toPersistence(robot);
                 console.log(rawRobot);
 
-                const RobotCreated = await this.robotSchema.create(rawRobot);
+                const RobotCreated = await this.robotTypeSchema.create(rawRobot);
 
                 return RobotTypeMap.toDomain(RobotCreated);
             } else {
@@ -44,7 +44,7 @@ export default class robotTypeRepo implements IRobotRepo {
     }
     public async getRobotsTypes(): Promise<Robot[]> {
         try {
-            const robot = await this.robotSchema.find();
+            const robot = await this.robotTypeSchema.find();
       
             const RobotDTOResult = robot.map(robot => RobotTypeMap.toDomain(robot));
       
@@ -54,9 +54,9 @@ export default class robotTypeRepo implements IRobotRepo {
           }
     }
     public async update(robot: Robot): Promise<Robot> {
-        await this.robotSchema.updateOne( { typeId: robot.typeId.typeId }, RobotTypeMap.toDTO(robot));
+        await this.robotTypeSchema.updateOne( { typeId: robot.typeId.typeId }, RobotTypeMap.toDTO(robot));
 
-        const updatedRobot = await this.robotSchema.findOne({ typeId: robot.typeId.typeId });
+        const updatedRobot = await this.robotTypeSchema.findOne({ typeId: robot.typeId.typeId });
 
         return RobotTypeMap.toDomain(updatedRobot);
     }
@@ -64,13 +64,13 @@ export default class robotTypeRepo implements IRobotRepo {
 
     public async delete(typeid: string | TypeID): Promise<void> {
         const query = { typeid: typeid   };
-        await this.robotSchema.deleteOne(query as FilterQuery<IRobotPersistence & Document>);
+        await this.robotTypeSchema.deleteOne(query as FilterQuery<IRobotPersistence & Document>);
     }
 
 
     public async findByrobotTypeID(typeId: string | TypeID): Promise<Robot> {
         const query = { typeId: typeId };
-        const RobotRecord = await this.robotSchema.findOne(
+        const RobotRecord = await this.robotTypeSchema.findOne(
             query as FilterQuery<IRobotPersistence & Document>
         );
 
@@ -85,7 +85,7 @@ export default class robotTypeRepo implements IRobotRepo {
         const idX = typedi instanceof TypeID ? (<TypeID>typedi).typeId : typedi;
 
         const query = { domainId: idX };
-        const RobotDocument = await this.robotSchema.findOne(query);
+        const RobotDocument = await this.robotTypeSchema.findOne(query);
 
         return !!RobotDocument === true;
     }

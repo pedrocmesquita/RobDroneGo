@@ -10,7 +10,7 @@ import {RobotTypeMap} from "../mappers/RobotTypeMap";
 @Service()
 
 export default class robotTypeController implements IRobotTypeController {
-    constructor(@Inject(config.services.robot.name) private RobotServiceInstance : IRobotTypeService) {}
+    constructor(@Inject(config.services.robotType.name) private RobotServiceInstance : IRobotTypeService) {}
 
     public async createRobotType(req: Request, res: Response, next: NextFunction) {
         try {

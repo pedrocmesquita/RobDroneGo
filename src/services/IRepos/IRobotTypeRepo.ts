@@ -6,8 +6,8 @@ import { TypeID } from "../../domain/RobotType/typeId";
 export default interface IRobotRepo extends Repo<Robot> {
 	save(robot: Robot): Promise<Robot>;
 	getRobotsTypes(): Promise<Robot[]>;
-  update(robot: Robot): Promise<Robot>;
-  delete(typeid: TypeID | string): void;
-  findByrobotTypeID(typeId: TypeID | string): Promise<Robot>;
+    update(robot: Robot): Promise<Robot>;
+      delete(typeid: TypeID | string): void;
+    findByrobotTypeID(typeId: TypeID | string): Promise<Robot>;
 
 }

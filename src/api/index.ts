@@ -6,7 +6,8 @@ import building from './routes/buildingRoute';
 import floor from './routes/floorRoute';
 import elevator from './routes/elevatorRoute';
 import connection from './routes/connectionRoute';
-import robot from './routes/robotTypesRoute';
+import robotType from './routes/robotTypesRoute';
+import robot from './routes/robotRoute';
 
 export default () => {
 	const app = Router();
@@ -18,6 +19,7 @@ export default () => {
 	floor(app);
 	elevator(app);
 	connection(app);
+	robotType(app);
 	robot(app);
 	
 	return app

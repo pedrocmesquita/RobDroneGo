@@ -12,18 +12,15 @@ import { Robot } from '../domain/RobotType/robotType';
 @Service()
 export default class robotTypeService implements IRobotTypeService {
     constructor(
-        @Inject(config.repos.robot.name) private robotTypeRepo : IRobotTypeRepo
+        @Inject(config.repos.robotType.name) private robotTypeRepo : IRobotTypeRepo
     ) {}
 
     public async createRobotType(typeId:string ,robotTypeDTO: IRobotTypeDTO ): Promise<Result<IRobotTypeDTO>> {
         try {
-            console.log("erro aqui");
             const typeId = await this.robotTypeRepo.findByrobotTypeID(robotTypeDTO.typeId);
-            console.log("erro aqui 2");
 
             // Check if robot already exists
             if (typeId != null) {
-                console.log("erro aqui 3");
                 return Result.fail<IRobotTypeDTO>('Robot already exists: ' + robotTypeDTO.typeId);
             }
 

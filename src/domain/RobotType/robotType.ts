@@ -2,7 +2,7 @@ import { AggregateRoot } from "../../core/domain/AggregateRoot";
 import { UniqueEntityID } from "../../core/domain/UniqueEntityID";
 import { Task } from "./task";
 import { Result } from "../../core/logic/Result";
-import IRobotDTO from "../../dto/IRobotTypeDTO";
+import IRobotTypeDTO from "../../dto/IRobotTypeDTO";
 import { TypeID } from "./typeId";
 import { Brand } from "./Brand";
 import { Model } from "./Model";
@@ -20,7 +20,6 @@ interface robotProps {
 }
 
 export class Robot extends AggregateRoot<robotProps> {
-
 
   get id (): UniqueEntityID {
           return this._id;
@@ -58,7 +57,7 @@ export class Robot extends AggregateRoot<robotProps> {
       }
       
       
-      public static create (robotDTO: IRobotDTO, id?: UniqueEntityID): Result<Robot> {
+      public static create (robotDTO: IRobotTypeDTO, id?: UniqueEntityID): Result<Robot> {
           
 
           const typeId = robotDTO.typeId;

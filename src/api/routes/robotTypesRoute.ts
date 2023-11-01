@@ -9,9 +9,9 @@ import config from "../../../config";
 const route = Router();
 
 export default (app: Router) => {
-    app.use("/robotsType", route);
+    app.use("/robotTypes", route);
     
-    const ctrl = Container.get(config.controllers.robot.name) as IRobotTypeController;
+    const ctrl = Container.get(config.controllers.robotType.name) as IRobotTypeController;
     
     route.post("",
         celebrate({

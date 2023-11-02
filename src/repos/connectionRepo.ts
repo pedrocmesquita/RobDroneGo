@@ -23,7 +23,7 @@ export default class ConnectionRepo implements IConnectionRepo {
   }
 
   public async exists(connection: Connection): Promise<boolean> {
-    const idX = connection.id.toValue();
+    const idX = connection.connectionId;
 
     const query = { connectionId: idX };
     const connectionDocument = await this.connectionSchema.findOne(
@@ -34,19 +34,28 @@ export default class ConnectionRepo implements IConnectionRepo {
   }
 
   public async save(connection: Connection): Promise<Connection> {
-    const query = { connectionId: connection.id.toValue() };
+    const query = { connectionId: connection.connectionId };
 
     const roleDocument = await this.connectionSchema.findOne(query);
 
     try{
       if (roleDocument === null) {
         const rawConnection: any = ConnectionMap.toPersistence(connection);
+        console.log(rawConnection);
 
         const connectionCreated = await this.connectionSchema.create(rawConnection);
 
         return ConnectionMap.toDomain(connectionCreated);
       } else {
-        roleDocument.connectionId = connection.connectionId.connectionId;
+        roleDocument.connectionId = connection.connectionId;
+        roleDocument.buildingfromId = connection.buildingfromId;
+        roleDocument.buildingtoId = connection.buildingtoId;
+        roleDocument.floorfromId = connection.floorfromId;
+        roleDocument.floortoId = connection.floortoId;
+        roleDocument.locationX = connection.locationX.locationX;
+        roleDocument.locationY = connection.locationY.locationY;
+        roleDocument.locationToX = connection.locationToX.locationToX;
+        roleDocument.locationToY = connection.locationToY.locationToY;
         await roleDocument.save();
 
         return connection;
@@ -70,9 +79,9 @@ export default class ConnectionRepo implements IConnectionRepo {
   }
 
   public async update(connection: Connection): Promise<Connection> {
-    await this.connectionSchema.updateOne( { connectionId: connection.connectionId.connectionId }, ConnectionMap.toDTO(connection));
+    await this.connectionSchema.updateOne( { connectionId: connection.connectionId }, ConnectionMap.toDTO(connection));
 
-    const updatedConnection = await this.connectionSchema.findOne({ connectionId: connection.connectionId.connectionId });
+    const updatedConnection = await this.connectionSchema.findOne({ connectionId: connection.connectionId });
 
     return ConnectionMap.toDomain(updatedConnection);
   }

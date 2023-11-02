@@ -16,6 +16,7 @@ interface FloorProps {
     floorNumber?: FloorNumber;
     floorId?: string;
     floorDescription?: FloorDescription;
+    connections?: string[];
 }
 
 export class Floor extends ValueObject<FloorProps> {
@@ -36,6 +37,10 @@ export class Floor extends ValueObject<FloorProps> {
         return this.props.floorDescription;
     }
 
+    get connections (): string[] {
+        return this.props.connections;
+    }
+
     set buildingId (value: string) {
         this.props.buildingId = value;
     }
@@ -50,6 +55,14 @@ export class Floor extends ValueObject<FloorProps> {
 
     set floorDescription (value: FloorDescription) {
         this.props.floorDescription = value;
+    }
+
+    set connections (value: string[]) {
+        this.props.connections = value;
+    }
+
+    public addConnection(connectionId: string): void {
+        this.props.connections = [...this.props.connections, connectionId];
     }
 
     private constructor (props: FloorProps) {

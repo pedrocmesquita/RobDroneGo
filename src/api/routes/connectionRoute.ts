@@ -23,6 +23,8 @@ export default (app: Router) => {
         floortoId: Joi.string().required(),
         locationX: Joi.number().required(),
         locationY: Joi.number().required(),
+        locationToX: Joi.number().required(),
+        locationToY: Joi.number().required(),
       })
     }),
     (req, res, next) => ctrl.createConnection(req, res, next) );
@@ -37,6 +39,8 @@ export default (app: Router) => {
         floortoId: Joi.string().required(),
         locationX: Joi.number().required(),
         locationY: Joi.number().required(),
+        locationToX: Joi.number().required(),
+        locationToY: Joi.number().required(),
       }),
     }),
     (req, res, next) => ctrl.updateConnection(req, res, next) );

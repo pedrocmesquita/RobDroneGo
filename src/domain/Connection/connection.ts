@@ -5,32 +5,27 @@ import { shallowEqual } from "shallow-equal-object";
 import { ConnectionId } from "./connectionId";
 import { LocationX } from "../Elevator/locationX";
 import { LocationY } from "../Elevator/locationY";
-import { AggregateRoot } from "../../core/domain/AggregateRoot";
 import { UniqueEntityID } from "../../core/domain/UniqueEntityID";
-import IBuildingDTO from "../../dto/IBuildingDTO";
-import { BuildingId } from "../Building/buildingId";
-import { BuildingName } from "../Building/buildingName";
-import { BuildingDescription } from "../Building/buildingDescription";
-import { BuildingNumberOfFloors } from "../Building/buildingNumberOfFloors";
 import IConnectionDTO from "../../dto/IConnectionDTO";
+import { LocationToY } from "./locationToY";
+import { LocationToX } from "./locationToX";
 
 
 interface ConnectionProps {
-  connectionId: ConnectionId;
+  connectionId: string;
   buildingfromId: string;
   buildingtoId: string;
   floorfromId: string;
   floortoId: string;
   locationX: LocationX;
   locationY: LocationY;
+  locationToX: LocationToX;
+  locationToY: LocationToY;
 }
 
-export class Connection extends AggregateRoot<ConnectionProps>{
+export class Connection extends ValueObject<ConnectionProps>{
 
-  get id (): UniqueEntityID {
-    return this._id;
-  }
-  get connectionId (): ConnectionId {
+  get connectionId (): string {
     return this.props.connectionId;
   }
   get buildingfromId (): string {
@@ -51,7 +46,13 @@ export class Connection extends AggregateRoot<ConnectionProps>{
   get locationY (): LocationY {
     return this.props.locationY;
   }
-  set connectionId (value: ConnectionId) {
+  get locationToX (): LocationToX {
+    return this.props.locationToX;
+  }
+  get locationToY (): LocationToY {
+    return this.props.locationToY;
+  }
+  set connectionId (value: string) {
     this.props.connectionId = value;
   }
   set buildingfromId (value: string) {
@@ -72,9 +73,15 @@ export class Connection extends AggregateRoot<ConnectionProps>{
   set locationY (value: LocationY) {
     this.props.locationY = value;
   }
+  set locationToX (value: LocationToX) {
+    this.props.locationToX = value;
+  }
+  set locationToY (value: LocationToY) {
+    this.props.locationToY = value;
+  }
 
-  private constructor(props: ConnectionProps, id?: UniqueEntityID) {
-    super(props, id);
+  private constructor(props: ConnectionProps) {
+    super(props);
   }
 
   public static create (connectionDTO: IConnectionDTO, id?: UniqueEntityID): Result<Connection> {
@@ -85,18 +92,21 @@ export class Connection extends AggregateRoot<ConnectionProps>{
     const floortoId = connectionDTO.floortoId;
     const locationX = connectionDTO.locationX;
     const locationY = connectionDTO.locationY;
+    const locationToX = connectionDTO.locationToX;
+    const locationToY = connectionDTO.locationToY;
 
     const connection = new Connection(
       {
-        connectionId: ConnectionId.create({connectionId}).getValue(),
+        connectionId: connectionId,
         buildingfromId: buildingfromId,
         buildingtoId: buildingtoId,
         floorfromId: floorfromId,
         floortoId: floortoId,
         locationX: LocationX.create({locationX}).getValue(),
-        locationY: LocationY.create({locationY}).getValue()
+        locationY: LocationY.create({locationY}).getValue(),
+        locationToX: LocationToX.create({locationToX}).getValue(),
+        locationToY: LocationToY.create({locationToY}).getValue(),
       },
-      id
     );
     return Result.ok<Connection>(connection);
   }

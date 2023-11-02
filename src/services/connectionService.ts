@@ -8,11 +8,13 @@ import { ConnectionMap } from "../mappers/ConnectionMap";
 import { Connection } from '../domain/Connection/connection';
 import { BuildingMap } from "../mappers/BuildingMap";
 import IBuildingDTO from "../dto/IBuildingDTO";
+import IFloorRepo from "./IRepos/IFloorRepo";
 
 @Service()
 export default class ConnectionService implements IConnectionService {
   constructor(
-    @Inject(config.repos.connection.name) private connectionRepo : IConnectionRepo
+    @Inject(config.repos.connection.name) private connectionRepo : IConnectionRepo,
+    @Inject(config.repos.floor.name) private floorRepo : IFloorRepo
   ) {}
 
   public async getConnection(connectionId: string): Promise<Result<IConnectionDTO>> {
@@ -33,6 +35,19 @@ export default class ConnectionService implements IConnectionService {
 
   public async createConnection(connectionDTO: IConnectionDTO): Promise<Result<IConnectionDTO>> {
     try {
+      const floorFrom = await this.floorRepo.findByFloorId(connectionDTO.floorfromId);
+      const floorTo = await this.floorRepo.findByFloorId(connectionDTO.floortoId);
+
+      if (floorFrom === null) {
+        return Result.fail<IConnectionDTO>("Floor not found.");
+      }
+
+      const connection = await this.connectionRepo.findByConnectionId(connectionDTO.connectionId);
+
+      if (connection != null) {
+        return Result.fail<IConnectionDTO>("Connection already exists.");
+      }
+
       const connectionOrError = await Connection.create( connectionDTO );
 
       if (connectionOrError.isFailure) {
@@ -44,6 +59,12 @@ export default class ConnectionService implements IConnectionService {
       console.log("1 - ", connectionResult);
 
       await this.connectionRepo.save(connectionResult);
+
+      floorFrom.addConnection(connectionResult.connectionId);
+      floorTo.addConnection(connectionResult.connectionId);
+
+      await this.floorRepo.save(floorFrom);
+      await this.floorRepo.save(floorTo);
 
       const connectionDTOResult = ConnectionMap.toDTO( connectionResult ) as IConnectionDTO;
       return Result.ok<IConnectionDTO>( connectionDTOResult )

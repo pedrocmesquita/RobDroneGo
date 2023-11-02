@@ -6,4 +6,6 @@ export default interface IConnectionDTO {
   floortoId: string;
   locationX: number;
   locationY: number;
+  locationToX: number;
+  locationToY: number;
 }

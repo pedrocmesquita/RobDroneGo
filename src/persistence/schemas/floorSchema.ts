@@ -18,7 +18,18 @@ const FloorSchema = new Schema({
     floorDescription: {
         type: String,
         index: true,
-    }
+    },
+    connections: [{
+        connectionId: String,
+        buildingfromId: String,
+        buildingtoId: String,
+        floorfromId: String,
+        floortoId: String,
+        locationX: Number,
+        locationY: Number,
+        locationToX: Number,
+        locationToY: Number,
+    }],
 });
 
 export default model<IFloorPersistence & Document>('Floor', FloorSchema);

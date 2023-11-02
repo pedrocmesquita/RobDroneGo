@@ -30,6 +30,14 @@ const ConnectionSchema = new mongoose.Schema({
   locationY: {
     type: Number,
     required: true
+  },
+  locationToX: {
+    type: Number,
+    required: true
+  },
+  locationToY: {
+    type: Number,
+    required: true
   }
 });
 

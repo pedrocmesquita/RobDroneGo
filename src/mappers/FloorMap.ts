@@ -12,6 +12,7 @@ export class FloorMap implements Mapper<Floor> {
             floorId: floor.floorId,
             floorNumber: floor.floorNumber.floorNumber,
             floorDescription: floor.floorDescription.floorDescription,
+            connections: floor.connections
         } as IFloorDTO;
     } 
 
@@ -28,7 +29,8 @@ export class FloorMap implements Mapper<Floor> {
             buildingId: floor.buildingId,
             floorId: floor.floorId,
             floorNumber: floor.floorNumber.floorNumber,
-            floorDescription: floor.floorDescription.floorDescription
+            floorDescription: floor.floorDescription.floorDescription,
+            connections: floor.connections
         };
     }
 }

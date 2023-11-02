@@ -11,13 +11,15 @@ import { IConnectionPersistence } from "../dataschema/IConnectionPersistence";
 export class ConnectionMap implements Mapper<Connection> {
   public static toDTO (connection: Connection): any {
     return {
-      connectionId: connection.connectionId.connectionId,
+      connectionId: connection.connectionId,
       buildingfromId: connection.buildingfromId,
       buildingtoId: connection.buildingtoId,
       floorfromId: connection.floorfromId,
       floortoId: connection.floortoId,
       locationX: connection.locationX.locationX,
-      locationY: connection.locationY.locationY
+      locationY: connection.locationY.locationY,
+      locationToX: connection.locationToX.locationToX,
+      locationToY: connection.locationToY.locationToY
     } as IConnectionDTO;
   }
 
@@ -31,13 +33,15 @@ export class ConnectionMap implements Mapper<Connection> {
 
   public static toPersistence (connection: Connection): any {
     return {
-      connectionId: connection.connectionId.connectionId,
+      connectionId: connection.connectionId,
       buildingfromId: connection.buildingfromId,
       buildingtoId: connection.buildingtoId,
       floorfromId: connection.floorfromId,
       floortoId: connection.floortoId,
       locationX: connection.locationX.locationX,
-      locationY: connection.locationY.locationY
+      locationY: connection.locationY.locationY,
+      locationToX: connection.locationToX.locationToX,
+      locationToY: connection.locationToY.locationToY
     };
   }
 }

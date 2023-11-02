@@ -1,14 +1,14 @@
 
 import { Model } from "mongoose";
 import { Mapper } from "../core/infra/Mapper";
-import { IRobotPersistence } from "../dataschema/IRobotTypePersistence";
-import { Robot } from "../domain/RobotType/robotType";
+import { IRobotTypePersistence } from "../dataschema/IRobotTypePersistence";
+import { RobotType } from "../domain/RobotType/RobotType";
 import IRobotTypeDTO from "../dto/IRobotTypeDTO";
 import { UniqueEntityID } from "../core/domain/UniqueEntityID";
 import { Document } from "mongoose";
 
-export class RobotTypeMap implements Mapper<Robot> {
-    public static toDTO(robot: Robot): any {
+export class RobotTypeMap implements Mapper<RobotType> {
+    public static toDTO(robot: RobotType): any {
         return {
             typeId: robot.typeId.typeId,
             brand: robot.brand.brand,
@@ -18,14 +18,14 @@ export class RobotTypeMap implements Mapper<Robot> {
     }
 
 
-    public static toDomain(robot: any | Model<IRobotPersistence & Document>): Robot {
-        const robotOrError = Robot.create(robot, new UniqueEntityID(robot.domainId));
+    public static toDomain(robot: any | Model<IRobotTypePersistence & Document>): RobotType {
+        const robotOrError = RobotType.create(robot, new UniqueEntityID(robot.domainId));
         robotOrError.isFailure ? console.log(robotOrError.error) : '';
 
         return robotOrError.isSuccess ? robotOrError.getValue() : null;
     }
 
-    public static toPersistence(robot: Robot): any {
+    public static toPersistence(robot: RobotType): any {
         return {
             typeId: robot.typeId.typeId,
             brand: robot.brand.brand,

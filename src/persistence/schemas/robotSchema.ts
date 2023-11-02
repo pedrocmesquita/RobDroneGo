@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 import {IRobotPersistence} from "../../dataschema/IRobotPersistence";
 
-const robotsSchema = new mongoose.Schema(
+const robotSchema = new mongoose.Schema(
     {
         idRobot: {
             type: String,
@@ -43,5 +43,5 @@ const robotsSchema = new mongoose.Schema(
     },
     { timestamps: true },
 );
-export default mongoose.model<IRobotPersistence & mongoose.Document>('Robots', robotsSchema);
+export default mongoose.model<IRobotPersistence & mongoose.Document>('Robots', robotSchema);
 

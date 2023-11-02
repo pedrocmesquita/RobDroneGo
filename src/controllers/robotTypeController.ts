@@ -5,7 +5,6 @@ import { Inject, Service } from "typedi";
 import { Result } from "../core/logic/Result";
 import IRobotTypeService from "../services/IServices/IRobotTypeService";
 import IRobotTypeDTO from "../dto/IRobotTypeDTO";
-import {RobotTypeMap} from "../mappers/RobotTypeMap";
 
 @Service()
 

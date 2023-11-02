@@ -19,7 +19,7 @@ interface robotProps {
     tasks: List<String>;
 }
 
-export class Robot extends AggregateRoot<robotProps> {
+export class RobotType extends AggregateRoot<robotProps> {
 
   get id (): UniqueEntityID {
           return this._id;
@@ -57,7 +57,7 @@ export class Robot extends AggregateRoot<robotProps> {
       }
       
       
-      public static create (robotDTO: IRobotTypeDTO, id?: UniqueEntityID): Result<Robot> {
+      public static create (robotDTO: IRobotTypeDTO, id?: UniqueEntityID): Result<RobotType> {
           
 
           const typeId = robotDTO.typeId;
@@ -65,7 +65,7 @@ export class Robot extends AggregateRoot<robotProps> {
           const model = robotDTO.model;
           const tasks = robotDTO.tasks;
 
-          const robot = new Robot (
+          const robot = new RobotType (
             {
               typeId: TypeID.create({typeId}).getValue(),
               brand: Brand.create({ brand }).getValue(),
@@ -73,7 +73,7 @@ export class Robot extends AggregateRoot<robotProps> {
               tasks : _.map(tasks, task => task.toString()),               },
                 id
           );
-          return Result.ok<Robot>(robot);
+          return Result.ok<RobotType>(robot);
         }
       }
       

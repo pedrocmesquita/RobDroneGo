@@ -1,7 +1,7 @@
 import { List } from "lodash";
 import { Task } from "../domain/RobotType/task";
 
-export interface  IRobotPersistence{
+export interface  IRobotTypePersistence{
     typeId: string;
     brand: string;
     model: string;

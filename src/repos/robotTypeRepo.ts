@@ -1,21 +1,21 @@
 import { Service, Inject } from "typedi";
-import { Document, FilterQuery, Model } from "mongoose";
-import IRobotRepo from "../services/IRepos/IRobotTypeRepo";
-import  { IRobotPersistence }  from  "../dataschema/IRobotTypePersistence";
-import { Robot } from "../domain/RobotType/robotType";
+import {Document, FilterQuery, Model} from "mongoose";
+import IRobotTypeRepo from "../services/IRepos/IRobotTypeRepo";
+import  { IRobotTypePersistence }  from  "../dataschema/IRobotTypePersistence";
+import { RobotType } from "../domain/RobotType/RobotType";
 import { RobotTypeMap } from "../mappers/RobotTypeMap";
 import { TypeID } from "../domain/RobotType/typeId";
 
 
 @Service()
-export default class robotTypeRepo implements IRobotRepo {
+export default class robotTypeRepo implements IRobotTypeRepo {
 
     constructor(
-        @Inject("robotTypeSchema") private robotTypeSchema: Model<IRobotPersistence & Document>
+        @Inject("robotTypeSchema") private robotTypeSchema: Model<IRobotTypePersistence & Document>
     ) {}
 
 
-    public async save(robot: Robot): Promise<Robot> {
+    public async save(robot: RobotType): Promise<RobotType> {
         const query = { typeId: robot.typeId.typeId };
 
         const RobotDocument = await this.robotTypeSchema.findOne(query);
@@ -32,6 +32,7 @@ export default class robotTypeRepo implements IRobotRepo {
                 RobotDocument.typeId = robot.typeId.typeId;
                 RobotDocument.brand = robot.brand.brand;
                 RobotDocument.model = robot.model.model;
+                RobotDocument.tasks = robot.tasks;
             
                 await RobotDocument.save();
 
@@ -42,7 +43,7 @@ export default class robotTypeRepo implements IRobotRepo {
             throw err;
         }
     }
-    public async getRobotsTypes(): Promise<Robot[]> {
+    public async getRobotsTypes(): Promise<RobotType[]> {
         try {
             const robot = await this.robotTypeSchema.find();
       
@@ -53,7 +54,7 @@ export default class robotTypeRepo implements IRobotRepo {
             throw e;
           }
     }
-    public async update(robot: Robot): Promise<Robot> {
+    public async update(robot: RobotType): Promise<RobotType> {
         await this.robotTypeSchema.updateOne( { typeId: robot.typeId.typeId }, RobotTypeMap.toDTO(robot));
 
         const updatedRobot = await this.robotTypeSchema.findOne({ typeId: robot.typeId.typeId });
@@ -64,14 +65,14 @@ export default class robotTypeRepo implements IRobotRepo {
 
     public async delete(typeid: string | TypeID): Promise<void> {
         const query = { typeid: typeid   };
-        await this.robotTypeSchema.deleteOne(query as FilterQuery<IRobotPersistence & Document>);
+        await this.robotTypeSchema.deleteOne(query as FilterQuery<IRobotTypePersistence & Document>);
     }
 
 
-    public async findByrobotTypeID(typeId: string | TypeID): Promise<Robot> {
+    public async findByrobotTypeID(typeId: string | TypeID): Promise<RobotType> {
         const query = { typeId: typeId };
         const RobotRecord = await this.robotTypeSchema.findOne(
-            query as FilterQuery<IRobotPersistence & Document>
+            query as FilterQuery<IRobotTypePersistence & Document>
         );
 
         if (RobotRecord != null) {

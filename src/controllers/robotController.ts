@@ -4,7 +4,6 @@ import e, { Response, Request, NextFunction } from "express";
 import { Inject, Service } from "typedi";
 import { Result } from "../core/logic/Result";
 import IRobotService from "../services/IServices/IRobotService";
-import IRobotTypeDTO from "../dto/IRobotTypeDTO";
 import IRobotDTO from "../dto/IRobotDTO";
 
 @Service()

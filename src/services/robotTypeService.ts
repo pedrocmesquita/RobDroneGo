@@ -6,7 +6,7 @@ import IRobotTypeDTO from '../dto/IRobotTypeDTO';
 import IRoleDTO from '../dto/IRoleDTO';
 import IRobotTypeRepo from './IRepos/IRobotTypeRepo';
 import { RobotTypeMap } from '../mappers/RobotTypeMap';
-import { Robot } from '../domain/RobotType/robotType';
+import { RobotType } from '../domain/RobotType/RobotType';
 
 
 @Service()
@@ -29,7 +29,7 @@ export default class robotTypeService implements IRobotTypeService {
             console.log("\nBefore creating \n");
             console.log(typeId);
             // Create robot entity
-            const robotOrError = await Robot.create(robotTypeDTO);
+            const robotOrError = await RobotType.create(robotTypeDTO);
 
             console.log("\nAfter creating \n");
             console.log(robotOrError);

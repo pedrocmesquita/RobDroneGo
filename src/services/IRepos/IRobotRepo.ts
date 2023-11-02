@@ -1,5 +1,5 @@
 import { Repo } from "../../core/infra/Repo";
-import { Robots } from "../../domain/Robot/robots";
+import { Robots } from "../../domain/Robot/Robots";
 import {IdRobots} from "../../domain/Robot/IdRobots";
 
 

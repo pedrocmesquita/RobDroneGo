@@ -4,8 +4,8 @@ import IRobotService from "./IServices/IRobotService";
 import IRobotDTO from "../dto/IRobotDTO";
 import {Result} from "../core/logic/Result";
 import IRobotRepo from "./IRepos/IRobotRepo";
-import {Robots} from "../domain/Robot/robots";
-import { RobotTypeMap } from "../mappers/RobotMap";
+import {Robots} from "../domain/Robot/Robots";
+import { RobotMap } from "../mappers/RobotMap";
 
 
 @Service()
@@ -27,7 +27,7 @@ export default class robotService implements IRobotService {
             console.log("\nRobot DTO \n");
             console.log(robotDTO);
             console.log("\nBefore creating \n");
-            console.log(id);
+            console.log(idRobot);
             // Create robot entity
             const robotOrError = await Robots.create(robotDTO);
 
@@ -47,7 +47,7 @@ export default class robotService implements IRobotService {
             await this.robotRepo.save(RobotResult);
 
             // Return Robot entity
-            const RobotDTOResult = RobotTypeMap.toDTO(RobotResult) as IRobotDTO;
+            const RobotDTOResult = RobotMap.toDTO(RobotResult) as IRobotDTO;
             return Result.ok<IRobotDTO>(RobotDTOResult);
         } catch (e) {
             throw e;
@@ -62,7 +62,7 @@ export default class robotService implements IRobotService {
             if (robot === null) {
                 return Result.fail<IRobotDTO>("Robot not found");
             } else {
-                const robotDTOResult = RobotTypeMap.toDTO(robot) as IRobotDTO;
+                const robotDTOResult = RobotMap.toDTO(robot) as IRobotDTO;
                 return Result.ok<IRobotDTO>(robotDTOResult)
             }
         } catch (e) {

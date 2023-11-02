@@ -2,9 +2,9 @@ import {Inject, Service} from "typedi";
 import IRobotRepo from "../services/IRepos/IRobotRepo";
 import {FilterQuery, Model} from "mongoose";
 import {IRobotPersistence} from "../dataschema/IRobotPersistence";
-import {Robots} from "../domain/Robot/robots";
+import {Robots} from "../domain/Robot/Robots";
 import {IdRobots} from "../domain/Robot/IdRobots";
-import {RobotTypeMap} from "../mappers/RobotMap";
+import {RobotMap} from "../mappers/RobotMap";
 
 
 @Service()
@@ -22,12 +22,12 @@ export default class robotRepo implements IRobotRepo {
 
         try {
             if (RobotDocument === null) {
-                const rawRobot: any = RobotTypeMap.toPersistence(robot);
+                const rawRobot: any = RobotMap.toPersistence(robot);
                 console.log(rawRobot);
 
                 const RobotCreated = await this.robotSchema.create(rawRobot);
 
-                return RobotTypeMap.toDomain(RobotCreated);
+                return RobotMap.toDomain(RobotCreated);
             } else {
                 RobotDocument.idRobot = robot.idRobot.idRobot;
                 RobotDocument.robotName = robot.name.robotName;
@@ -48,7 +48,7 @@ export default class robotRepo implements IRobotRepo {
         try {
             const robot = await this.robotSchema.find();
 
-            const RobotDTOResult = robot.map(robot => RobotTypeMap.toDomain(robot));
+            const RobotDTOResult = robot.map(robot => RobotMap.toDomain(robot));
 
             return RobotDTOResult;
           } catch (e) {
@@ -64,7 +64,7 @@ export default class robotRepo implements IRobotRepo {
         );
 
         if (RobotRecord != null) {
-            return RobotTypeMap.toDomain(RobotRecord);
+            return RobotMap.toDomain(RobotRecord);
         }
         return null;
     }

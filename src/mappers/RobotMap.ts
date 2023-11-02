@@ -1,11 +1,11 @@
 import {Mapper} from "../core/infra/Mapper";
-import { Robots } from "../domain/Robot/robots";
+import { Robots } from "../domain/Robot/Robots";
 import IRobotDTO from "../dto/IRobotDTO";
 import {Model} from "mongoose";
 import { IRobotPersistence } from "../dataschema/IRobotPersistence";
 import {UniqueEntityID} from "../core/domain/UniqueEntityID";
 
-export class RobotTypeMap implements Mapper<Robots> {
+export class RobotMap implements Mapper<Robots> {
     public static toDTO(robot: Robots): any {
         return {
             idRobot: robot.idRobot.idRobot,

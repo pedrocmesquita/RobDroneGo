@@ -42,10 +42,6 @@ export default (app: Router) => {
         }),
         (req, res, next) => ctrl.getRobotType(req, res, next) );
 
-    route.get("", (req, res, next) => ctrl.getRobotsTypes(req, res, next) );
-    
-    route.delete("/:RobotID", (req, res, next) => ctrl.deleteRobotType(req, res, next) );
-
     };
 
 

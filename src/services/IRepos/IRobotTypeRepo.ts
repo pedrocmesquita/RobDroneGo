@@ -1,13 +1,13 @@
-import { Repo } from "../../core/infra/Repo";
-import { Robot } from "../../domain/RobotType/robotType";
+import { RobotType} from "../../domain/RobotType/RobotType";
 import { TypeID } from "../../domain/RobotType/typeId";
+import { Repo } from "../../core/infra/Repo";
 
 
-export default interface IRobotRepo extends Repo<Robot> {
-	save(robot: Robot): Promise<Robot>;
-	getRobotsTypes(): Promise<Robot[]>;
-    update(robot: Robot): Promise<Robot>;
-      delete(typeid: TypeID | string): void;
-    findByrobotTypeID(typeId: TypeID | string): Promise<Robot>;
+export default interface IRobotTypeRepo extends Repo<RobotType> {
+	save(robot: RobotType): Promise<RobotType>;
+    getRobotsTypes(): Promise<RobotType[]>;
+    update(robot: RobotType): Promise<RobotType>;
+    delete(typeid: TypeID | string): void;
+    findByrobotTypeID(typeId: TypeID | string): Promise<RobotType>;
 
 }

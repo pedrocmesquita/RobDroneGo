@@ -10,7 +10,7 @@ import IRobotDTO from "../../dto/IRobotDTO";
 
 
 
-interface robots {
+interface robotsProps {
     idRobot: IdRobots;
     robotName: NameRobots;
     typeOfRobot: TypeOfRobots;
@@ -19,7 +19,7 @@ interface robots {
     active?: boolean;
 }
 
-export class Robots extends AggregateRoot<robots> {
+export class Robots extends AggregateRoot<robotsProps> {
 
 
     get id (): UniqueEntityID {
@@ -49,7 +49,7 @@ export class Robots extends AggregateRoot<robots> {
         return this.props.active;
     }
 
-    private constructor(props: robots, id?: UniqueEntityID) {
+    private constructor(props: robotsProps, id?: UniqueEntityID) {
         super(props, id);
     }
 
@@ -69,7 +69,8 @@ export class Robots extends AggregateRoot<robots> {
                 robotName: NameRobots.create({robotName}).getValue(),
                 typeOfRobot: TypeOfRobots.create({ typeOfRobots }).getValue(),
                 serialNumber: SerialNumber.create({ serialNumber }).getValue(),
-                description: Description.create({ description }).getValue(), },
+                description: Description.create({ description }).getValue(),
+                active: active ? active : true },
                     id
         );
         return Result.ok<Robots>(robot);

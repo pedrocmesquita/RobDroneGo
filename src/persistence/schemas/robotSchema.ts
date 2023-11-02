@@ -5,7 +5,7 @@ const robotSchema = new mongoose.Schema(
     {
         idRobot: {
             type: String,
-            unique: true
+            unique: true,
         },
 
         robotName: {
@@ -32,6 +32,7 @@ const robotSchema = new mongoose.Schema(
         description: {
             type: String,
             required: [true, 'Please enter description'],
+            index: true,
         },
 
         active: {

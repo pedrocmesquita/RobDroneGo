@@ -5,7 +5,7 @@ const robotTypeSchema = new mongoose.Schema(
   {
     typeId: { 
       type: String,
-      unique: true
+      unique: true,
     },
 
     brand: {
@@ -28,5 +28,5 @@ const robotTypeSchema = new mongoose.Schema(
   },
   { timestamps: true },
 );
-export default mongoose.model<IRobotTypePersistence & mongoose.Document>('Robot', robotTypeSchema);
+export default mongoose.model<IRobotTypePersistence & mongoose.Document>('RobotType', robotTypeSchema);
 

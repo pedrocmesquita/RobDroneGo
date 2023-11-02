@@ -70,9 +70,9 @@ export default class robotTypeService implements IRobotTypeService {
         }
     }
   
-    public async getRobotType(typeID: string): Promise<Result<IRobotTypeDTO>> {
+    public async getRobotType(typeId: string): Promise<Result<IRobotTypeDTO>> {
         try {
-            const robot = await this.robotTypeRepo.findByrobotTypeID(typeID);
+            const robot = await this.robotTypeRepo.findByrobotTypeID(typeId);
             if (robot === null) {
                 return Result.fail<IRobotTypeDTO>("Robot not found");
             }else {

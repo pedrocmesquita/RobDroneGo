@@ -49,7 +49,7 @@ export default class robotTypeController implements IRobotTypeController {
 
     public async getRobotType(req: Request, res: Response, next: NextFunction){
         try {
-            const robot = await this.RobotServiceInstance.getRobotType(req.params.id as string);
+            const robot = await this.RobotServiceInstance.getRobotType(req.params.typeId as string);
 
             if (robot.isFailure) {
                 return res.status(404).send();

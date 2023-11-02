@@ -6,6 +6,7 @@ import {Result} from "../core/logic/Result";
 import IRobotRepo from "./IRepos/IRobotRepo";
 import {Robots} from "../domain/Robot/Robots";
 import { RobotMap } from "../mappers/RobotMap";
+import {IdRobots} from "../domain/Robot/IdRobots";
 
 
 @Service()
@@ -17,13 +18,12 @@ export default class robotService implements IRobotService {
 
     public async createRobot(idRobot: string, robotDTO: IRobotDTO) : Promise<Result<IRobotDTO>>{
         try {
-            const id = await this.robotRepo.findByrobotTypeID(robotDTO.idRobot);
+            const id = await this.robotRepo.findByRobotId(idRobot);
 
             // Check if robot already exists
             if (id != null) {
                 return Result.fail<IRobotDTO>('Robot already exists: ' + robotDTO.idRobot);
             }
-
             console.log("\nRobot DTO \n");
             console.log(robotDTO);
             console.log("\nBefore creating \n");
@@ -58,20 +58,32 @@ export default class robotService implements IRobotService {
 
     public async getRobot(idRobot: string): Promise<Result<IRobotDTO>> {
         try {
-            const robot = await this.robotRepo.findByrobotTypeID(idRobot);
+            const robot = await this.robotRepo.findByRobotId(idRobot);
             if (robot === null) {
                 return Result.fail<IRobotDTO>("Robot not found");
             } else {
                 const robotDTOResult = RobotMap.toDTO(robot) as IRobotDTO;
-                return Result.ok<IRobotDTO>(robotDTOResult)
+                return Result.ok<IRobotDTO>(robotDTOResult);
             }
-        } catch (e) {
+            }catch (e) {
             throw e;
         }
 
     }
 
-    inibirRobot(idRobot: string): Promise<Result<null>> {
-        return null
+    public async inibirRobot(idRobot: string): Promise<Result<IRobotDTO>> {
+        try {
+            const robot = await this.robotRepo.findByRobotId( idRobot );
+            if (robot === null) {
+                return Result.fail<IRobotDTO>("Robot not found");
+            } else {
+                robot.props.active = false;
+                await this.robotRepo.save(robot);
+                const robotDTOResult = RobotMap.toDTO(robot);
+                return Result.ok<IRobotDTO>(robotDTOResult);
+            }
+        } catch (e) {
+            throw e;
+        }
     }
 }

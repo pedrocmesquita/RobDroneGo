@@ -8,6 +8,6 @@ export default interface IRobotTypeRepo extends Repo<RobotType> {
     getRobotsTypes(): Promise<RobotType[]>;
     update(robot: RobotType): Promise<RobotType>;
     delete(typeid: TypeID | string): void;
-    findByrobotTypeID(typeId: TypeID | string): Promise<RobotType>;
+    findByrobotTypeID(typeId: string): Promise<RobotType>;
 
 }

@@ -26,14 +26,9 @@ export default (app: Router) => {
         }),
         (req, res, next) => ctrl.createRobot(req, res, next) );
 
-    route.get("/:",
-        celebrate({
-            params: Joi.object({
-                typeID: Joi.string().required()
-            })
-        }),
+    route.get("",
         (req, res, next) => ctrl.getRobot(req, res, next) );
-
+    route.patch("", (req, res, next) => ctrl.inibRobot(req, res, next));
 
 };
 

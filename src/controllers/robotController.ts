@@ -32,7 +32,7 @@ export default class robotController implements IRobotController {
 
     public async getRobot(req: Request, res: Response, next: NextFunction) {
         try {
-            const robot = await this.RobotServiceInstance.getRobot(req.params.id as string);
+            const robot = await this.RobotServiceInstance.getRobot(req.params.robotId as string);
 
             if (robot.isFailure) {
                 return res.status(404).send();
@@ -44,8 +44,23 @@ export default class robotController implements IRobotController {
         }
     }
 
-    InibRobot({params: {idRobot}}: e.Request, res: e.Response, next: e.NextFunction) {
-    }
+    public async inibRobot ( req: Request, res: Response, next: NextFunction) {
 
+        try {
+            console.log(req.body.idRobot);
+            const robotOrError = await this.RobotServiceInstance.inibirRobot(
+                req.params.idRobot as string,
+                ) as Result<IRobotDTO>;
+
+            if (robotOrError.isFailure) {
+                return res.status(404).send();
+            }
+            return res.status(201).json(robotOrError.getValue());
+            }catch(e)
+            {
+                return next(e);
+            }
+
+    }
 
 }

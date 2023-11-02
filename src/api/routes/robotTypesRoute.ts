@@ -34,12 +34,7 @@ export default (app: Router) => {
         }),
         (req, res, next) => ctrl.updateRobotType(req, res, next) );
     
-    route.get("/:RobotId",
-        celebrate({
-        params: Joi.object({
-            typeID: Joi.string().required()
-        })
-        }),
+    route.get("",
         (req, res, next) => ctrl.getRobotType(req, res, next) );
 
     };

@@ -101,37 +101,87 @@ export default class FloorService implements IFloorService {
                 return Result.fail<IFloorDTO>("FloorId already taken");
             }
 
-            // Making sure the connections are not overwritten
-            floorDTO.connections = floor.connections.map(connection => ConnectionMap.toDTO(connection) as IConnectionDTO);
+            // Check if oldFloorNumber and newFloorNumber are the same
+            if (floorDTO.floorNumber === floor.floorNumber.floorNumber) {
+                floorDTO.connections = floor.connections.map(connection => ConnectionMap.toDTO(connection) as IConnectionDTO);
 
-            // Update floor entity
-            const floorOrError = await Floor.create(floorDTO);
+                const floorOrError = await Floor.create(floorDTO);
 
-            // Check if floor entity was updated successfully
-            if (floorOrError.isFailure) {
-                return Result.fail<IFloorDTO>(floorOrError.errorValue());
+                if (floorOrError.isFailure) {
+                    return Result.fail<IFloorDTO>(floorOrError.errorValue());
+                }
+
+                const updatedFloor = floorOrError.getValue();
+
+                await this.floorRepo.update(updatedFloor);
+
+                // Add new floor to building and delete old floor
+                const building = await this.buildingRepo.findByBuildingId(floorDTO.buildingId);
+
+                if (building === null) {
+                    return Result.fail<IFloorDTO>("Building not found");
+                }
+
+                building.floors.push(updatedFloor);
+                building.floors = building.floors.filter(existingFloor => existingFloor.floorId !== floor.floorId);
+
+                await this.buildingRepo.update(building);
+
+                // Return floor entity
+                const floorDTOResult = FloorMap.toDTO(updatedFloor) as IFloorDTO;
+                return Result.ok<IFloorDTO>(floorDTOResult);
             }
+            else {
 
-            // Save floor entity
-            const updatedFloor = floorOrError.getValue();
+                const pairConnection = floor.connections.find(connection => connection.buildingtoId === floorDTO.buildingId || connection.buildingfromId === floorDTO.buildingId);
 
-            await this.floorRepo.update(updatedFloor, oldFloorId);
+                if (pairConnection.buildingtoId === floorDTO.buildingId) {
 
-            // Add new floor to building and delete old floor
-            const building = await this.buildingRepo.findByBuildingId(floorDTO.buildingId);
+                    const otherFloor = await this.floorRepo.findByFloorId(pairConnection.floortoId);
+                    const otherBuilding = await this.buildingRepo.findByBuildingId(otherFloor.buildingId);
 
-            if (building === null) {
-                return Result.fail<IFloorDTO>("Building not found");
+                    floorDTO.connections = [];
+                    const floorOrError = await Floor.create(floorDTO);
+
+                    if (floorOrError.isFailure) {
+                        return Result.fail<IFloorDTO>(floorOrError.errorValue());
+                    }
+
+                    const updatedFloor = floorOrError.getValue();
+
+                    await this.floorRepo.updateNewFloorWithOldFloor(updatedFloor, oldFloorId);
+
+                    // Remove this connection from the other floor
+                    otherFloor.connections = otherFloor.connections.filter(existingConnection => existingConnection.connectionId !== pairConnection.connectionId);
+                    await this.floorRepo.update(otherFloor);
+
+                    // Remove this connection from the other building
+                    otherBuilding.floors.push(otherFloor);
+                    otherBuilding.floors = otherBuilding.floors.filter(existingFloor => existingFloor.floorId !== otherFloor.floorId);
+                    await this.buildingRepo.update(otherBuilding);
+
+                    // Add new floor to building and delete old floor
+                    const building = await this.buildingRepo.findByBuildingId(floorDTO.buildingId);
+
+                    if (building === null) {
+                        return Result.fail<IFloorDTO>("Building not found");
+                    }
+
+                    building.floors.push(updatedFloor);
+                    building.floors = building.floors.filter(existingFloor => existingFloor.floorId !== floor.floorId);
+
+                    await this.buildingRepo.update(building);
+
+                    // Return floor entity
+                    const floorDTOResult = FloorMap.toDTO(updatedFloor) as IFloorDTO;
+                    return Result.ok<IFloorDTO>(floorDTOResult);
+                }
+                if (pairConnection.buildingfromId === floorDTO.buildingId){
+
+                }
+
+
             }
-
-            building.floors.push(updatedFloor);
-            building.floors = building.floors.filter(existingFloor => existingFloor.floorId !== floor.floorId);
-
-            await this.buildingRepo.update(building);
-
-            // Return floor entity
-            const floorDTOResult = FloorMap.toDTO(updatedFloor) as IFloorDTO;
-            return Result.ok<IFloorDTO>(floorDTOResult);
         } catch (e) {
             throw e;
         }

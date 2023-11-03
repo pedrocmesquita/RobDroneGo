@@ -76,8 +76,8 @@ export default class ConnectionService implements IConnectionService {
       floorFrom.addConnection(connectionResult);
       floorTo.addConnection(connectionResult);
 
-      await this.floorRepo.updateConnections(floorFrom);
-      await this.floorRepo.updateConnections(floorTo);
+      await this.floorRepo.update(floorFrom);
+      await this.floorRepo.update(floorTo);
 
       // Update building
       buildingFrom.addConnectionToFloor(floorFrom.floorId, connectionResult);
@@ -123,8 +123,8 @@ export default class ConnectionService implements IConnectionService {
       floorFrom.connections.filter(existingConnection => existingConnection.connectionId !== connectionResult.connectionId)
       floorTo.connections.filter(existingConnection => existingConnection.connectionId !== connectionResult.connectionId)
 
-      await this.floorRepo.updateConnections(floorFrom);
-      await this.floorRepo.updateConnections(floorTo);
+      await this.floorRepo.update(floorFrom);
+      await this.floorRepo.update(floorTo);
 
       // Update building
       const buildingFrom = await this.buildingRepo.findByBuildingId(floorFrom.buildingId);

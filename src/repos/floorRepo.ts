@@ -70,7 +70,7 @@ export default class FloorRepo implements IFloorRepo {
         }
     }
 
-    public async update(floor: Floor, oldFloorId: string): Promise<Floor> {
+    public async updateNewFloorWithOldFloor(floor: Floor, oldFloorId: string): Promise<Floor> {
         const query = { floorId: oldFloorId };
 
         const floorDocument = await this.floorSchema.findOne(query);
@@ -103,14 +103,14 @@ export default class FloorRepo implements IFloorRepo {
         return floorDTOResult;
     }
 
-    public async updateConnections(floor: Floor): Promise<Floor> {
+    public async update(floor: Floor): Promise<Floor> {
         await this.floorSchema.updateOne( { floorId: floor.floorId }, FloorMap.toDTO(floor));
 
         const updatedFloor = await this.floorSchema.findOne({ floorId: floor.floorId });
 
         return FloorMap.toDomain(updatedFloor);
-
     }
+
 
     public async getConnections(buildingId: string): Promise<Floor[]> {
         const building = await this.buildingSchema.findOne({ buildingId: buildingId });

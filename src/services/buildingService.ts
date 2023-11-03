@@ -97,8 +97,21 @@ export default class BuildingService implements IBuildingService {
       // Making sure the floors are not overwritten
       buildingDTO.floors = exists.floors.map(floor => FloorMap.toDTO(floor) as IFloorDTO);
 
-      const updatedBuilding = await this.buildingRepo.update(BuildingMap.toDomain(buildingDTO));
-      const buildingDTOResult = BuildingMap.toDTO(updatedBuilding) as IBuildingDTO;
+      // Update building entity
+      const buildingOrError = await Building.create(buildingDTO);
+
+      // Check if building entity was updated successfully
+      if (buildingOrError.isFailure) {
+        return Result.fail<IBuildingDTO>(buildingOrError.errorValue());
+      }
+
+      // Save building entity
+      const buildingResult = buildingOrError.getValue();
+
+      await this.buildingRepo.update(buildingResult);
+
+      // Return building entity
+      const buildingDTOResult = BuildingMap.toDTO(buildingResult) as IBuildingDTO;
       return Result.ok<IBuildingDTO>(buildingDTOResult);
     } catch (e) {
       throw e;

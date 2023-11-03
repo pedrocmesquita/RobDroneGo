@@ -9,6 +9,8 @@ import { Floor } from '../domain/Floor/floor';
 import { Building } from '../domain/Building/building';
 import { BuildingId } from '../domain/Building/buildingId';
 import IBuildingRepo from "./IRepos/IBuildingRepo";
+import IConnectionDTO from "../dto/IConnectionDTO";
+import { ConnectionMap } from "../mappers/ConnectionMap";
 
 @Service()
 export default class FloorService implements IFloorService {
@@ -98,6 +100,9 @@ export default class FloorService implements IFloorService {
             if (floorId != null) {
                 return Result.fail<IFloorDTO>("FloorId already taken");
             }
+
+            // Making sure the connections are not overwritten
+            floorDTO.connections = floor.connections.map(connection => ConnectionMap.toDTO(connection) as IConnectionDTO);
 
             // Update floor entity
             const floorOrError = await Floor.create(floorDTO);

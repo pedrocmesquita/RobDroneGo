@@ -101,8 +101,47 @@ export default class ConnectionService implements IConnectionService {
         return Result.fail<IConnectionDTO>("Connection not found");
       }
 
-      const updatedConnection = await this.connectionRepo.update(ConnectionMap.toDomain(connectionDTO));
-      const connectionDTOResult = ConnectionMap.toDTO(updatedConnection) as IConnectionDTO;
+      const connectionOrError = await Connection.create(connectionDTO);
+
+      if (connectionOrError.isFailure) {
+        return Result.fail<IConnectionDTO>(connectionOrError.errorValue());
+      }
+
+      const connectionResult = connectionOrError.getValue();
+
+      await this.connectionRepo.update(connectionResult);
+
+      // Update connection in floorFrom and floorTo
+      const floorFrom = await this.floorRepo.findByFloorId(connectionDTO.floorfromId);
+      const floorTo = await this.floorRepo.findByFloorId(connectionDTO.floortoId);
+
+      // Add connection to floorFrom and floorTo
+      floorFrom.connections.push(connectionResult)
+      floorTo.connections.push(connectionResult)
+
+      // Remove old connection from floorFrom and floorTo
+      floorFrom.connections.filter(existingConnection => existingConnection.connectionId !== connectionResult.connectionId)
+      floorTo.connections.filter(existingConnection => existingConnection.connectionId !== connectionResult.connectionId)
+
+      await this.floorRepo.updateConnections(floorFrom);
+      await this.floorRepo.updateConnections(floorTo);
+
+      // Update building
+      const buildingFrom = await this.buildingRepo.findByBuildingId(floorFrom.buildingId);
+      const buildingTo = await this.buildingRepo.findByBuildingId(floorTo.buildingId);
+
+      // Add connection to floorFrom and floorTo
+      buildingFrom.addConnectionToFloor(floorFrom.floorId, connectionResult);
+      buildingTo.addConnectionToFloor(floorTo.floorId, connectionResult);
+
+      // Remove old connection from floorFrom and floorTo
+      buildingFrom.floors.filter(existingFloor => existingFloor.floorId !== floorFrom.floorId);
+      buildingTo.floors.filter(existingFloor => existingFloor.floorId !== floorTo.floorId);
+
+      await this.buildingRepo.updateConnections(buildingFrom);
+      await this.buildingRepo.updateConnections(buildingTo);
+
+      const connectionDTOResult = ConnectionMap.toDTO(connectionResult) as IConnectionDTO;
       return Result.ok<IConnectionDTO>(connectionDTOResult);
     } catch (e) {
       throw e;

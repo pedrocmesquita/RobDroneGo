@@ -7,27 +7,46 @@ import IRobotRepo from "./IRepos/IRobotRepo";
 import {Robots} from "../domain/Robot/Robots";
 import { RobotMap } from "../mappers/RobotMap";
 import {IdRobots} from "../domain/Robot/IdRobots";
-
+import IFloorDTO from "../dto/IFloorDTO";
+import robotTypeRepo from "../repos/robotTypeRepo";
+import {TypeID} from "../domain/RobotType/typeId";
+import {RobotType} from "../domain/RobotType/RobotType";
+import {Document, FilterQuery, Model} from "mongoose";
+import {IRobotTypePersistence} from "../dataschema/IRobotTypePersistence";
+import {RobotTypeMap} from "../mappers/RobotTypeMap";
+import robotTypeSchema from "../persistence/schemas/robotTypeSchema";
+import robotTypeService from "./robotTypeService";
+import RobotTypeSchema from "../persistence/schemas/robotTypeSchema";
 
 @Service()
 export default class robotService implements IRobotService {
     constructor(
-        @Inject(config.repos.robot.name) private robotRepo: IRobotRepo
+        @Inject(config.repos.robot.name) private robotRepo: IRobotRepo,
+        @Inject("robotTypeSchema") private robotTypeSchema: Model<IRobotTypePersistence & Document>
     ) {
     }
 
+
     public async createRobot(idRobot: string, robotDTO: IRobotDTO) : Promise<Result<IRobotDTO>>{
         try {
-            const id = await this.robotRepo.findByRobotId(idRobot);
+            const id = await this.robotRepo.findByRobotId(robotDTO.idRobot);
 
-            // Check if robot already exists
             if (id != null) {
-                return Result.fail<IRobotDTO>('Robot already exists: ' + robotDTO.idRobot);
+                return Result.fail<IRobotDTO>(" ID already exists: " + robotDTO.idRobot);
             }
+
+
+            const robotType = await this.robotRepo.findByType(robotDTO.typeOfRobot);
+
+
+            if (robotType === false) {
+                return Result.fail<IRobotDTO>(" ID isn't valid: " + robotDTO.idRobot);
+            }
+
             console.log("\nRobot DTO \n");
             console.log(robotDTO);
             console.log("\nBefore creating \n");
-            console.log(idRobot);
+            console.log(robotDTO.idRobot);
             // Create robot entity
             const robotOrError = await Robots.create(robotDTO);
 
@@ -54,6 +73,19 @@ export default class robotService implements IRobotService {
         }
 
 
+    }
+
+
+    public async findByrobotTypeID(typeOfRobot: string ): Promise<boolean> {
+        const query = { typeOfRobot: typeOfRobot };
+        const RobotRecord = await this.robotTypeSchema.findById(
+            query as FilterQuery<IRobotTypePersistence & Document>
+        );
+
+        if (RobotRecord != null) {
+            return true;
+        }
+        return false;
     }
 
     public async getRobot(idRobot: string): Promise<Result<IRobotDTO>> {

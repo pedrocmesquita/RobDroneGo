@@ -5,8 +5,7 @@ const robotTypeSchema = new mongoose.Schema(
   {
     typeId: { 
       type: String,
-      unique: true,
-    },
+        required: [true, 'Please enter type id'],    },
 
     brand: {
       type: String,

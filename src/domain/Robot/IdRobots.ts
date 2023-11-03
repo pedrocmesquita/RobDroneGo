@@ -24,7 +24,7 @@ export class IdRobots extends ValueObject<robotsIdProps> {
             return Result.fail<IdRobots>(guardResult.message);
         }
 
-        // Check if the buildingId has a maximum of 5 alphanumeric characters and a space.
+        // Check if the robotId has a maximum of 5 alphanumeric characters and a space.
         if (!/^[a-zA-Z0-9 ]{1,30}$/.test(props.idRobot)) {
             return Result.fail<IdRobots>('idRobot must have a maximum of 5 alphanumeric characters and a space.');
         }

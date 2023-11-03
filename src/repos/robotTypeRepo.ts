@@ -5,6 +5,9 @@ import  { IRobotTypePersistence }  from  "../dataschema/IRobotTypePersistence";
 import { RobotType } from "../domain/RobotType/RobotType";
 import { RobotTypeMap } from "../mappers/RobotTypeMap";
 import { TypeID } from "../domain/RobotType/typeId";
+import {Floor} from "../domain/Floor/floor";
+import {FloorMap} from "../mappers/FloorMap";
+import {RobotMap} from "../mappers/RobotMap";
 
 
 @Service()
@@ -90,5 +93,6 @@ export default class robotTypeRepo implements IRobotTypeRepo {
 
         return !!RobotDocument === true;
     }
-    
-}  
+
+
+    }

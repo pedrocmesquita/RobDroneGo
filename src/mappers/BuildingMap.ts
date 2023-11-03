@@ -8,6 +8,7 @@ import IFloorDTO from "../dto/IFloorDTO";
 import IConnectionDTO from "../dto/IConnectionDTO";
 
 
+
 export class BuildingMap implements Mapper<Building> {
     public static toDTO(building: Building): any {
         const floors = building.floors;
@@ -18,19 +19,21 @@ export class BuildingMap implements Mapper<Building> {
                 buildingName: building.buildingName.buildingName,
                 buildingDescription: building.buildingDescription.buildingDescription,
                 buildingNumberOfFloors: building.buildingNumberOfFloors.buildingNumberOfFloors,
+                dimX: building.dimX,
+                dimY: building.dimY,
                 floors: floors.map(floor => {
                     return {
                         buildingId: floor.buildingId,
                         floorId: floor.floorId,
                         floorNumber: floor.floorNumber.floorNumber,
                         floorDescription: floor.floorDescription.floorDescription,
-                        floorConnections: floor.connections.map(connection => {
+                        connections: floor.connections.map(connection => {
                             return {
                                 connectionId: connection.connectionId,
-                                buildingFromId: connection.buildingfromId,
-                                buildingToId: connection.buildingtoId,
-                                floorFromId: connection.floorfromId,
-                                floorToId: connection.floortoId,
+                                buildingfromId: connection.buildingfromId,
+                                buildingtoId: connection.buildingtoId,
+                                floorfromId: connection.floorfromId,
+                                floortoId: connection.floortoId,
                                 locationX: connection.locationX,
                                 locationY: connection.locationY,
                                 locationToX: connection.locationToX,
@@ -69,13 +72,15 @@ export class BuildingMap implements Mapper<Building> {
             buildingName: building.buildingName.buildingName,
             buildingNumberOfFloors: building.buildingNumberOfFloors.buildingNumberOfFloors,
             buildingDescription: building.buildingDescription.buildingDescription,
+            dimX: building.dimX,
+            dimY: building.dimY,
             floors: building.floors.map(floor => {
                 return {
                     buildingId: floor.buildingId,
                     floorId: floor.floorId,
                     floorNumber: floor.floorNumber.floorNumber,
                     floorDescription: floor.floorDescription.floorDescription,
-                    floorConnections: floor.connections.map(connection => {
+                    connections: floor.connections.map(connection => {
                         return {
                             connectionId: connection.connectionId,
                             buildingFromId: connection.buildingfromId,

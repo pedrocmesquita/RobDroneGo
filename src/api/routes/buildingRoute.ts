@@ -20,6 +20,8 @@ export default (app: Router) => {
             buildingName: Joi.string().required(),
             buildingNumberOfFloors: Joi.number().required(),
             buildingDescription: Joi.string().required(),
+            dimX: Joi.number().required(),
+            dimY: Joi.number().required(),
         })
         }),
         (req, res, next) => ctrl.createBuilding(req, res, next) );

@@ -16,10 +16,11 @@ interface BuildingProps {
   buildingName: BuildingName;
   buildingDescription?: BuildingDescription;
   buildingNumberOfFloors: BuildingNumberOfFloors;
+  dimX: number;
+  dimY: number;
   floors: Floor[];
 
 }
-
 
 export class Building extends AggregateRoot<BuildingProps> {
 
@@ -38,8 +39,20 @@ export class Building extends AggregateRoot<BuildingProps> {
     return this.props.floors;
   }
 
+  get connections (): Connection[] {
+    return this.props.floors.flatMap(floor => floor.connections);
+  }
+
   get buildingDescription (): BuildingDescription {
     return this.props.buildingDescription;
+  }
+
+  get dimX (): number {
+    return this.props.dimX;
+  }
+
+  get dimY (): number {
+    return this.props.dimY;
   }
 
   get buildingNumberOfFloors (): BuildingNumberOfFloors {
@@ -60,6 +73,14 @@ export class Building extends AggregateRoot<BuildingProps> {
 
   set buildingNumberOfFloors (value: BuildingNumberOfFloors) {
     this.props.buildingNumberOfFloors = value;
+  }
+
+  set DimensonX (value: number) {
+    this.props.dimX = value;
+  }
+
+  set DimensonY (value: number) {
+    this.props.dimY = value;
   }
 
   set floors (value: Floor[]) {
@@ -92,10 +113,17 @@ export class Building extends AggregateRoot<BuildingProps> {
   }
 
   public static create (buildingDTO: IBuildingDTO, id?: UniqueEntityID): Result<Building> {
+
+    if (buildingDTO.dimX <= 0 || buildingDTO.dimY <= 0) {
+      return Result.fail<Building>("Dimension cannot be negative or zero");
+    }
+
     const buildingId = buildingDTO.buildingId;
     const buildingName = buildingDTO.buildingName;
     const buildingDescription = buildingDTO.buildingDescription;
     const buildingNumberOfFloors = buildingDTO.buildingNumberOfFloors;
+    const dimensionX = buildingDTO.dimX;
+    const dimensionY = buildingDTO.dimY;
 
     const building = new Building(
       {
@@ -103,6 +131,8 @@ export class Building extends AggregateRoot<BuildingProps> {
         buildingName: BuildingName.create({ buildingName }).getValue(),
         buildingDescription: BuildingDescription.create({ buildingDescription }).getValue(),
         buildingNumberOfFloors: BuildingNumberOfFloors.create({buildingNumberOfFloors}).getValue(),
+        dimX: dimensionX,
+        dimY: dimensionY,
         floors: buildingDTO.floors.map(floor => Floor.create(floor).getValue())
       },
       id

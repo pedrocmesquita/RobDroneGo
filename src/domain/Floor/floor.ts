@@ -43,9 +43,6 @@ export class Floor extends AggregateRoot<FloorProps> {
         return this.props.floorDescription;
     }
 
-    get connections (): Connection[] {
-        return this.props.connections;
-    }
 
     set buildingId (value: string) {
         this.props.buildingId = value;
@@ -65,6 +62,10 @@ export class Floor extends AggregateRoot<FloorProps> {
 
     set connections (value: Connection[]) {
         this.props.connections = value;
+    }
+
+    get connections (): Connection[] {
+        return this.props.connections;
     }
 
     // Add connection to floor

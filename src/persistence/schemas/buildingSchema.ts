@@ -20,6 +20,16 @@ const BuildingSchema = new mongoose.Schema({
         required: [true, 'Please enter number of floors'],
         index: true,
     },
+    dimX: {
+        type: Number,
+        required: [true, 'Please enter dimension X'],
+        index: true,
+    },
+    dimY: {
+        type: Number,
+        required: [true, 'Please enter dimension Y'],
+        index: true,
+    },
     floors: [{
         floorId: String,
         buildingId: String,

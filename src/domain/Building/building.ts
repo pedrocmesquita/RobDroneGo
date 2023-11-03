@@ -9,6 +9,7 @@ import { BuildingDescription } from "./buildingDescription";
 import { BuildingNumberOfFloors } from "./buildingNumberOfFloors";
 import IBuildingDTO from "../../dto/IBuildingDTO";
 import List = Mocha.reporters.List;
+import { Connection } from "../Connection/connection";
 
 interface BuildingProps {
   buildingId: BuildingId;
@@ -16,6 +17,7 @@ interface BuildingProps {
   buildingDescription?: BuildingDescription;
   buildingNumberOfFloors: BuildingNumberOfFloors;
   floors: Floor[];
+
 }
 
 
@@ -68,6 +70,15 @@ export class Building extends AggregateRoot<BuildingProps> {
   public addFloor(floor: Floor): void {
     this.props.floors = [...this.props.floors, floor];
   }
+
+  // Add connection to a floor that is already in the building
+  public addConnectionToFloor(floorId: string, connection: Connection): void {
+    if (this.props.floors.find(floor => floor.floorId === floorId)) {
+      this.props.floors.find(floor => floor.floorId === floorId).addConnection(connection);
+    } else
+      throw new Error("Floor not found");
+  }
+
 
   // Remove floor from building
   public removeFloor(floor: Floor): void {

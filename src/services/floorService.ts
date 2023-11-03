@@ -42,6 +42,8 @@ export default class FloorService implements IFloorService {
                 return Result.fail<IFloorDTO>("Building not found");
             }
 
+            floorDTO.connections = [];
+
             const floor = await this.floorRepo.findByFloorId(floorDTO.floorId);
 
             // Check if floor already exists

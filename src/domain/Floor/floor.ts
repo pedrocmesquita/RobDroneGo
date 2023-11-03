@@ -9,6 +9,8 @@ import { FloorDescription } from "./floorDescription";
 import { UniqueEntityID } from "../../core/domain/UniqueEntityID";
 import IFloorDTO from "../../dto/IFloorDTO";
 import { AggregateRoot } from "../../core/domain/AggregateRoot";
+import { Connection } from "../Connection/connection";
+import IConnectionDTO from "../../dto/IConnectionDTO";
 
 interface FloorProps {
     //floorId is a value object that is unique, and the first parts equals the building name and the second the floor number.
@@ -16,10 +18,14 @@ interface FloorProps {
     floorNumber?: FloorNumber;
     floorId?: string;
     floorDescription?: FloorDescription;
-    connections?: string[];
+    connections?: Connection[];
 }
 
-export class Floor extends ValueObject<FloorProps> {
+export class Floor extends AggregateRoot<FloorProps> {
+
+    get id (): UniqueEntityID {
+        return this._id;
+    }
 
     get buildingId (): string {
         return this.props.buildingId;
@@ -37,7 +43,7 @@ export class Floor extends ValueObject<FloorProps> {
         return this.props.floorDescription;
     }
 
-    get connections (): string[] {
+    get connections (): Connection[] {
         return this.props.connections;
     }
 
@@ -57,16 +63,18 @@ export class Floor extends ValueObject<FloorProps> {
         this.props.floorDescription = value;
     }
 
-    set connections (value: string[]) {
+    set connections (value: Connection[]) {
         this.props.connections = value;
     }
 
-    public addConnection(connectionId: string): void {
-        this.props.connections = [...this.props.connections, connectionId];
+    // Add connection to floor
+    // Add floor to building
+    public addConnection(connection: Connection): void {
+        this.props.connections = [...this.props.connections, connection];
     }
 
-    private constructor (props: FloorProps) {
-        super(props);
+    private constructor (props: FloorProps, id?: UniqueEntityID) {
+        super(props, id);
     }
 
     public static create(floorDTO: IFloorDTO, id?: UniqueEntityID): Result<Floor> {
@@ -74,8 +82,6 @@ export class Floor extends ValueObject<FloorProps> {
         const floorNumber = floorDTO.floorNumber;
         const floorId = floorDTO.floorId;
         const floorDescription = floorDTO.floorDescription;
-
-        // Floor id is the concatenation of buildingId and floorNumber
 
 
         // Check if buildingId and floorId are defined and not empty
@@ -97,8 +103,10 @@ export class Floor extends ValueObject<FloorProps> {
               buildingId: buildingId,
               floorNumber: FloorNumber.create({ floorNumber }).getValue(),
               floorId: floorId,
-              floorDescription: FloorDescription.create({ floorDescription }).getValue()
-          }
+              floorDescription: FloorDescription.create({ floorDescription }).getValue(),
+              connections: floorDTO.connections.map(connection => Connection.create(connection).getValue())
+          },
+            id
         );
         return Result.ok<Floor>(floor);
     }

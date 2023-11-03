@@ -28,6 +28,8 @@ export default class ConnectionController implements IConnectionController {
 
   public async createConnection(req: Request, res: Response): Promise<Response> {
     try {
+      req.body.connectionId = req.body.floorfromId+" TO "+req.body.floortoId;
+
       const connectionOrError = await this.connectionServiceInstance.createConnection(req.body);
 
       if (connectionOrError.isFailure) {

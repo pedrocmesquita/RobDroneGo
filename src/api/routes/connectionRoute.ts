@@ -16,7 +16,6 @@ export default (app: Router) => {
   route.post("",
     celebrate({
       body: Joi.object({
-        connectionId: Joi.string().required(),
         buildingfromId: Joi.string().required(),
         buildingtoId: Joi.string().required(),
         floorfromId: Joi.string().required(),
@@ -32,7 +31,6 @@ export default (app: Router) => {
   route.put("",
     celebrate({
       body: Joi.object({
-        connectionId: Joi.string().required(),
         buildingfromId: Joi.string().required(),
         buildingtoId: Joi.string().required(),
         floorfromId: Joi.string().required(),

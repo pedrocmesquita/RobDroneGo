@@ -4,17 +4,46 @@ import IFloorDTO from "../dto/IFloorDTO";
 import { IFloorPersistence } from "../dataschema/IFloorPersistence";
 import { Model } from "mongoose";
 import { UniqueEntityID } from "../core/domain/UniqueEntityID";
+import IConnectionDTO from "../dto/IConnectionDTO";
 
 export class FloorMap implements Mapper<Floor> {
     public static toDTO (floor: Floor): any {
+
+        const connections = floor.connections;
+
+        if (Array.isArray(connections)) {
         return {
             buildingId: floor.buildingId,
             floorId: floor.floorId,
             floorNumber: floor.floorNumber.floorNumber,
             floorDescription: floor.floorDescription.floorDescription,
-            connections: floor.connections
+            connections: connections.map(connection => {
+                return {
+                    connectionId: connection.connectionId,
+                    buildingfromId: connection.buildingfromId,
+                    buildingtoId: connection.buildingtoId,
+                    floorfromId: connection.floorfromId,
+                    floortoId: connection.floortoId,
+                    locationX: connection.locationX,
+                    locationY: connection.locationY,
+                    locationToX: connection.locationToX,
+                    locationToY: connection.locationToY
+                };
+            }
+            )
         } as IFloorDTO;
-    } 
+    } else {
+
+            return {
+                buildingId: floor.buildingId,
+                floorId: floor.floorId,
+                floorNumber: floor.floorNumber.floorNumber,
+                floorDescription: floor.floorDescription.floorDescription,
+                connections: [] // or another default value as needed
+            } as IFloorDTO;
+            }
+        }
+
 
     public static toDomain (floor: any | Model<IFloorPersistence & Document>): Floor {
         const floorOrError = Floor.create(floor, new UniqueEntityID(floor.domainId));
@@ -30,7 +59,19 @@ export class FloorMap implements Mapper<Floor> {
             floorId: floor.floorId,
             floorNumber: floor.floorNumber.floorNumber,
             floorDescription: floor.floorDescription.floorDescription,
-            connections: floor.connections
+            connections: floor.connections.map(connection => {
+                return {
+                    connectionId: connection.connectionId,
+                    buildingfromId: connection.buildingfromId,
+                    buildingtoId: connection.buildingtoId,
+                    floorfromId: connection.floorfromId,
+                    floortoId: connection.floortoId,
+                    locationX: connection.locationX,
+                    locationY: connection.locationY,
+                    locationToX: connection.locationToX,
+                    locationToY: connection.locationToY
+                };
+            })
         };
     }
 }

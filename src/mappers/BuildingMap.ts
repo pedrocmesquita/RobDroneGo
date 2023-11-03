@@ -5,6 +5,7 @@ import { IBuildingPersistence } from "../dataschema/IBuildingPersistence";
 import { Model } from "mongoose";
 import { UniqueEntityID } from "../core/domain/UniqueEntityID";
 import IFloorDTO from "../dto/IFloorDTO";
+import IConnectionDTO from "../dto/IConnectionDTO";
 
 
 export class BuildingMap implements Mapper<Building> {
@@ -22,9 +23,24 @@ export class BuildingMap implements Mapper<Building> {
                         buildingId: floor.buildingId,
                         floorId: floor.floorId,
                         floorNumber: floor.floorNumber.floorNumber,
-                        floorDescription: floor.floorDescription.floorDescription
+                        floorDescription: floor.floorDescription.floorDescription,
+                        floorConnections: floor.connections.map(connection => {
+                            return {
+                                connectionId: connection.connectionId,
+                                buildingFromId: connection.buildingfromId,
+                                buildingToId: connection.buildingtoId,
+                                floorFromId: connection.floorfromId,
+                                floorToId: connection.floortoId,
+                                locationX: connection.locationX,
+                                locationY: connection.locationY,
+                                locationToX: connection.locationToX,
+                                locationToY: connection.locationToY,
+                            };
+                        }
+                        )
                     };
-                })
+                }
+                )
             } as IBuildingDTO;
         } else {
             // Handle the case where 'floors' is not an array
@@ -58,7 +74,20 @@ export class BuildingMap implements Mapper<Building> {
                     buildingId: floor.buildingId,
                     floorId: floor.floorId,
                     floorNumber: floor.floorNumber.floorNumber,
-                    floorDescription: floor.floorDescription.floorDescription
+                    floorDescription: floor.floorDescription.floorDescription,
+                    floorConnections: floor.connections.map(connection => {
+                        return {
+                            connectionId: connection.connectionId,
+                            buildingFromId: connection.buildingfromId,
+                            buildingToId: connection.buildingtoId,
+                            floorFromId: connection.floorfromId,
+                            floorToId: connection.floortoId,
+                            locationX: connection.locationX,
+                            locationY: connection.locationY,
+                            locationToX: connection.locationToX,
+                            locationToY: connection.locationToY,
+                        };
+                    })
                 };
             })
         };

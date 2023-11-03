@@ -17,10 +17,10 @@ interface ConnectionProps {
   buildingtoId: string;
   floorfromId: string;
   floortoId: string;
-  locationX: LocationX;
-  locationY: LocationY;
-  locationToX: LocationToX;
-  locationToY: LocationToY;
+  locationX: number;
+  locationY: number;
+  locationToX: number;
+  locationToY: number;
 }
 
 export class Connection extends ValueObject<ConnectionProps>{
@@ -40,16 +40,16 @@ export class Connection extends ValueObject<ConnectionProps>{
   get floortoId (): string {
     return this.props.floortoId;
   }
-  get locationX (): LocationX {
+  get locationX (): number {
     return this.props.locationX;
   }
-  get locationY (): LocationY {
+  get locationY (): number {
     return this.props.locationY;
   }
-  get locationToX (): LocationToX {
+  get locationToX (): number {
     return this.props.locationToX;
   }
-  get locationToY (): LocationToY {
+  get locationToY (): number {
     return this.props.locationToY;
   }
   set connectionId (value: string) {
@@ -67,16 +67,16 @@ export class Connection extends ValueObject<ConnectionProps>{
   set floortoId (value: string) {
     this.props.floortoId = value;
   }
-  set locationX (value: LocationX) {
+  set locationX (value: number) {
     this.props.locationX = value;
   }
-  set locationY (value: LocationY) {
+  set locationY (value: number) {
     this.props.locationY = value;
   }
-  set locationToX (value: LocationToX) {
+  set locationToX (value: number) {
     this.props.locationToX = value;
   }
-  set locationToY (value: LocationToY) {
+  set locationToY (value: number) {
     this.props.locationToY = value;
   }
 
@@ -102,10 +102,10 @@ export class Connection extends ValueObject<ConnectionProps>{
         buildingtoId: buildingtoId,
         floorfromId: floorfromId,
         floortoId: floortoId,
-        locationX: LocationX.create({locationX}).getValue(),
-        locationY: LocationY.create({locationY}).getValue(),
-        locationToX: LocationToX.create({locationToX}).getValue(),
-        locationToY: LocationToY.create({locationToY}).getValue(),
+        locationX: locationX,
+        locationY: locationY,
+        locationToX: locationToX,
+        locationToY: locationToY
       },
     );
     return Result.ok<Connection>(connection);

@@ -52,10 +52,10 @@ export default class ConnectionRepo implements IConnectionRepo {
         roleDocument.buildingtoId = connection.buildingtoId;
         roleDocument.floorfromId = connection.floorfromId;
         roleDocument.floortoId = connection.floortoId;
-        roleDocument.locationX = connection.locationX.locationX;
-        roleDocument.locationY = connection.locationY.locationY;
-        roleDocument.locationToX = connection.locationToX.locationToX;
-        roleDocument.locationToY = connection.locationToY.locationToY;
+        roleDocument.locationX = connection.locationX
+        roleDocument.locationY = connection.locationY
+        roleDocument.locationToX = connection.locationToX
+        roleDocument.locationToY = connection.locationToY
         await roleDocument.save();
 
         return connection;

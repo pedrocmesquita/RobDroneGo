@@ -9,12 +9,14 @@ import { Connection } from '../domain/Connection/connection';
 import { BuildingMap } from "../mappers/BuildingMap";
 import IBuildingDTO from "../dto/IBuildingDTO";
 import IFloorRepo from "./IRepos/IFloorRepo";
+import IBuildingRepo from "./IRepos/IBuildingRepo";
 
 @Service()
 export default class ConnectionService implements IConnectionService {
   constructor(
     @Inject(config.repos.connection.name) private connectionRepo : IConnectionRepo,
-    @Inject(config.repos.floor.name) private floorRepo : IFloorRepo
+    @Inject(config.repos.floor.name) private floorRepo : IFloorRepo,
+    @Inject(config.repos.building.name) private buildingRepo : IBuildingRepo
   ) {}
 
   public async getConnection(connectionId: string): Promise<Result<IConnectionDTO>> {
@@ -38,9 +40,19 @@ export default class ConnectionService implements IConnectionService {
       const floorFrom = await this.floorRepo.findByFloorId(connectionDTO.floorfromId);
       const floorTo = await this.floorRepo.findByFloorId(connectionDTO.floortoId);
 
+      // Check if floorFrom exists and if floorTo exists
       if (floorFrom === null) {
-        return Result.fail<IConnectionDTO>("Floor not found.");
+        return Result.fail<IConnectionDTO>("FloorFrom not found");
       }
+
+      if (floorTo === null) {
+        return Result.fail<IConnectionDTO>("FloorTo not found");
+      }
+
+      // Retrieve buildings
+      const buildingFrom = await this.buildingRepo.findByBuildingId(floorFrom.buildingId);
+      const buildingTo = await this.buildingRepo.findByBuildingId(floorTo.buildingId);
+
 
       const connection = await this.connectionRepo.findByConnectionId(connectionDTO.connectionId);
 
@@ -60,11 +72,19 @@ export default class ConnectionService implements IConnectionService {
 
       await this.connectionRepo.save(connectionResult);
 
-      floorFrom.addConnection(connectionResult.connectionId);
-      floorTo.addConnection(connectionResult.connectionId);
+      // Add connection to floorFrom and floorTo
+      floorFrom.addConnection(connectionResult);
+      floorTo.addConnection(connectionResult);
 
-      await this.floorRepo.save(floorFrom);
-      await this.floorRepo.save(floorTo);
+      await this.floorRepo.updateConnections(floorFrom);
+      await this.floorRepo.updateConnections(floorTo);
+
+      // Update building
+      buildingFrom.addConnectionToFloor(floorFrom.floorId, connectionResult);
+      buildingTo.addConnectionToFloor(floorTo.floorId, connectionResult);
+
+      await this.buildingRepo.updateConnections(buildingFrom);
+      await this.buildingRepo.updateConnections(buildingTo);
 
       const connectionDTOResult = ConnectionMap.toDTO( connectionResult ) as IConnectionDTO;
       return Result.ok<IConnectionDTO>( connectionDTOResult )

@@ -24,7 +24,18 @@ const BuildingSchema = new mongoose.Schema({
         floorId: String,
         buildingId: String,
         floorNumber: Number,
-        floorDescription: String
+        floorDescription: String,
+        connections: [{
+            connectionId: String,
+            buildingfromId: String,
+            buildingtoId: String,
+            floorfromId: String,
+            floortoId: String,
+            locationX: Number,
+            locationY: Number,
+            locationToX: Number,
+            locationToY: Number,
+        }],
     }]
 });
 

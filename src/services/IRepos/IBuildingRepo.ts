@@ -9,4 +9,5 @@ export default interface IBuildingRepo extends Repo<Building> {
   update(building: Building): Promise<Building>;
   delete(buildingId: string): Promise<void>;
   getBuildingsByFloors(min: string, max: string): Promise<Building[]>;
+  updateConnections(building: Building): Promise<Building>;
 }

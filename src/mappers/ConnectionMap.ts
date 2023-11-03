@@ -16,10 +16,10 @@ export class ConnectionMap implements Mapper<Connection> {
       buildingtoId: connection.buildingtoId,
       floorfromId: connection.floorfromId,
       floortoId: connection.floortoId,
-      locationX: connection.locationX.locationX,
-      locationY: connection.locationY.locationY,
-      locationToX: connection.locationToX.locationToX,
-      locationToY: connection.locationToY.locationToY
+      locationX: connection.locationX,
+      locationY: connection.locationY,
+      locationToX: connection.locationToX,
+      locationToY: connection.locationToY
     } as IConnectionDTO;
   }
 
@@ -38,10 +38,10 @@ export class ConnectionMap implements Mapper<Connection> {
       buildingtoId: connection.buildingtoId,
       floorfromId: connection.floorfromId,
       floortoId: connection.floortoId,
-      locationX: connection.locationX.locationX,
-      locationY: connection.locationY.locationY,
-      locationToX: connection.locationToX.locationToX,
-      locationToY: connection.locationToY.locationToY
+      locationX: connection.locationX,
+      locationY: connection.locationY,
+      locationToX: connection.locationToX,
+      locationToY: connection.locationToY
     };
   }
 }

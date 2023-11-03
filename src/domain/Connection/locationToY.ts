@@ -16,7 +16,7 @@ export class LocationToY extends ValueObject<locationToYProps> {
   }
 
   public static create(props: locationToYProps): Result<LocationToY> {
-    const guardResult = Guard.againstNullOrUndefined(props.locationToY, "Y");
+    const guardResult = Guard.againstNullOrUndefined(props.locationToY, "locationToY");
 
     if (!guardResult.succeeded) {
       return Result.fail<LocationToY>(guardResult.message);

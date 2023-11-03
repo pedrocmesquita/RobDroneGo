@@ -44,4 +44,7 @@ export default (app: Router) => {
     route.get("", (req, res, next) => ctrl.getFloors(req, res, next) );
     
     route.delete("/:floorId", (req, res, next) => ctrl.deleteFloor(req, res, next) );
+
+    // Route that gets all the floors of a building that have connections to other buildings
+    route.get("/connections/:buildingId", (req, res, next) => ctrl.getConnections(req, res, next) );
     };

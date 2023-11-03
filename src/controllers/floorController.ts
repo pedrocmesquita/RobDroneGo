@@ -101,4 +101,18 @@ export default class FloorController implements IFloorController{
             return next(e);
         }
     }
+
+    public async getConnections(req: Request, res: Response, next:NextFunction) {
+        try {
+            const floors = await this.floorServiceInstance.getConnections(req.params.buildingId as string);
+
+            if (floors.isFailure) {
+                return res.status(404).send();
+            }
+
+            return res.status(200).json(floors.getValue());
+        } catch (e) {
+            return next(e);
+        }
+    }
 }

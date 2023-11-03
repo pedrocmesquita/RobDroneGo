@@ -8,4 +8,5 @@ export default interface IFloorRepo extends Repo<Floor> {
     updateConnections(floor: Floor): Promise<Floor>;
     delete(floorId: string): void;
     getFloors(): Promise<Floor[]>;
+    getConnections(buildingId: string): Promise<Floor[]>;
 }

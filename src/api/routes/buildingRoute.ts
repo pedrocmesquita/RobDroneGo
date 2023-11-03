@@ -45,6 +45,7 @@ export default (app: Router) => {
     route.delete("/:buildingId", (req, res, next) => ctrl.deleteBuilding(req, res, next) );
 
     route.get("/floors/:min/:max", (req, res, next) => ctrl.getBuildingsByFloors(req, res, next) );
+
     };
 
 

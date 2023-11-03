@@ -7,4 +7,5 @@ export default interface IFloorService {
     getFloors(): Promise<Result<IFloorDTO[]>>;
     deleteFloor(floorId: string): Promise<Result<boolean>>;
     updateFloor(floorDTO: IFloorDTO, oldFloorId: string): Promise<Result<IFloorDTO>>;
+    getConnections(buildingId: string): Promise<Result<IFloorDTO[]>>;
 }

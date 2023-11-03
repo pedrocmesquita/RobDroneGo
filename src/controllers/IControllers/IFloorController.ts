@@ -6,4 +6,5 @@ export default interface IFloorController {
     getFloor(req: Request, res: Response, next: NextFunction);
     getFloors(req: Request, res: Response, next: NextFunction);
     deleteFloor(req: Request, res: Response, next: NextFunction);
+    getConnections(req: Request, res: Response, next: NextFunction);
 }

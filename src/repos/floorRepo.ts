@@ -112,5 +112,19 @@ export default class FloorRepo implements IFloorRepo {
 
     }
 
+    public async getConnections(buildingId: string): Promise<Floor[]> {
+        const building = await this.buildingSchema.findOne({ buildingId: buildingId });
+
+        if (building === null) {
+            return null;
+        }
+
+        const floors = await this.floorSchema.find({ buildingId: buildingId, connections: { $exists: true, $ne: [] } });
+
+        const floorDTOResult = floors.map( floor => FloorMap.toDomain( floor ) as Floor );
+
+        return floorDTOResult;
+    }
+
 }
     

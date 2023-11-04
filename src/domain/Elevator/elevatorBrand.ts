@@ -1,6 +1,6 @@
 import { ValueObject} from "../../core/domain/ValueObject";
 import { Result } from "../../core/logic/Result";
-import { Guard } from "../../core/logic/Guard";
+import { Guard, IGuardResult } from "../../core/logic/Guard";
 
 interface ElevatorBrandProps {
   elevatorBrand: string;
@@ -16,7 +16,7 @@ export class ElevatorBrand extends ValueObject<ElevatorBrandProps> {
   }
 
   public static create(props: ElevatorBrandProps): Result<ElevatorBrand> {
-    const guardResult = Guard.againstNullOrUndefined(props.elevatorBrand, "brand");
+    const guardResult: IGuardResult = Guard.againstNullOrUndefined(props.elevatorBrand, 'elevatorBrand');
 
     if (!guardResult.succeeded) {
       return Result.fail<ElevatorBrand>(guardResult.message);

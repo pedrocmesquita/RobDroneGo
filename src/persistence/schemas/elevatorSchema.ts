@@ -18,10 +18,6 @@ const ElevatorSchema = new mongoose.Schema({
     type: String,
     index: true,
   },
-  elevatorType: {
-    type: String,
-    index: true,
-  },
   elevatorSerNum: {
     type: String,
     index: true,

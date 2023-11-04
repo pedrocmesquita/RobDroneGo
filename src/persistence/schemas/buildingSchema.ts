@@ -50,9 +50,11 @@ const BuildingSchema = new mongoose.Schema({
     elevators: [{
         elevatorId: String,
         buildingId: String,
-        floorId: String,
-        elevatorNumber: Number,
-        elevatorDescription: String,
+        elevatorBrand: String,
+        elevatorModel: String,
+        elevatorSerNum: String,
+        elevatorDesc: String,
+        currentFloor: Number,
         locationX: Number,
         locationY: Number,
     }]

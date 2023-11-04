@@ -30,6 +30,15 @@ const FloorSchema = new Schema({
         locationToX: Number,
         locationToY: Number,
     }],
+    rooms: [{
+        roomId: String,
+        floorId: String,
+        roomName: String,
+        roomDescription: String,
+        roomCategory: String,
+        doorX: Number,
+        doorY: Number,
+    }],
 });
 
 export default model<IFloorPersistence & Document>('Floor', FloorSchema);

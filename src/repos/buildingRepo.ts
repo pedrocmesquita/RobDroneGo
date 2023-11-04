@@ -86,6 +86,14 @@ export default class BuildingRepo implements IBuildingRepo {
         return BuildingMap.toDomain(updatedBuilding);
     }
 
+    public async updateRooms(building: Building): Promise<Building> {
+      await this.buildingSchema.findOneAndUpdate( { buildingId: building.buildingId.buildingId }, BuildingMap.toDTO(building));
+
+      const updatedBuilding = await this.buildingSchema.findOne({ buildingId: building.buildingId.buildingId });
+
+      return BuildingMap.toDomain(updatedBuilding);
+    }
+
     // Before deleting the building, delete all floors associated with the building
     public async delete(buildingId: string): Promise<void> {
 

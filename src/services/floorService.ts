@@ -45,6 +45,7 @@ export default class FloorService implements IFloorService {
             }
 
             floorDTO.connections = [];
+            floorDTO.rooms = [];
 
             const floor = await this.floorRepo.findByFloorId(floorDTO.floorId);
 
@@ -141,6 +142,7 @@ export default class FloorService implements IFloorService {
                     const otherBuilding = await this.buildingRepo.findByBuildingId(otherFloor.buildingId);
 
                     floorDTO.connections = [];
+                    floorDTO.rooms = [];
                     const floorOrError = await Floor.create(floorDTO);
 
                     if (floorOrError.isFailure) {

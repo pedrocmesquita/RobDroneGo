@@ -6,11 +6,13 @@ import IElevatorRepo from '../services/IRepos/IElevatorRepo';
 import IElevatorDTO from '../dto/IElevatorDTO';
 import { ElevatorMap } from "../mappers/ElevatorMap";
 import { Elevator } from '../domain/Elevator/elevator';
+import IBuildingRepo from "./IRepos/IBuildingRepo";
 
 @Service()
 export default class ElevatorService implements IElevatorService {
     constructor(
-      @Inject(config.repos.elevator.name) private elevatorRepo : IElevatorRepo
+      @Inject(config.repos.elevator.name) private elevatorRepo : IElevatorRepo,
+      @Inject(config.repos.building.name) private buildingRepo : IBuildingRepo
     ) {}
     public async getElevator(elevatorId: string): Promise<Result<IElevatorDTO>> {
         try {
@@ -28,24 +30,40 @@ export default class ElevatorService implements IElevatorService {
         }
     }
 
-    public async createElevator(elevatorId: string, elevatorDTO: IElevatorDTO): Promise<Result<IElevatorDTO>> {
+    public async createElevator(elevatorId: string, buildingId: string, elevatorDTO: IElevatorDTO): Promise<Result<IElevatorDTO>> {
         try {
-            const elevatorId = await this.elevatorRepo.findByElevatorId(elevatorDTO.elevatorId);
+            const elevator = await this.elevatorRepo.findByElevatorId(elevatorDTO.elevatorId);
 
             // Check if elevator already exists
-            if (elevatorId != null) {
+            if (elevator != null) {
                 return Result.fail<IElevatorDTO>('Elevator already exists: ' + elevatorDTO.elevatorId);
             }
+
+            const building = await this.buildingRepo.findByBuildingId(elevatorDTO.buildingId);
+
+            if (building === null) {
+                return Result.fail<IElevatorDTO>("Building not found");
+            }
+
+            console.log(elevatorDTO.elevatorId);
+            console.log(elevatorDTO.buildingId);
+            console.log(elevatorDTO.elevatorBrand);
+            console.log(elevatorDTO.elevatorModel);
+            console.log(elevatorDTO.elevatorSerNum);
+            console.log(elevatorDTO.elevatorDesc);
+            console.log(elevatorDTO.currentFloor);
+            console.log(elevatorDTO.locationX);
+            console.log(elevatorDTO.locationY);
+
 
             console.log("\nElevator DTO \n");
             console.log(elevatorDTO);
             console.log("\nBefore creating \n");
-            console.log(elevatorId);
+            console.log(elevator);
             // Create elevator entity
             const elevatorOrError = await Elevator.create(elevatorDTO);
 
             console.log("\nAfter creating \n");
-            console.log(elevatorOrError);
 
             // Check if elevator entity was created successfully
             if (elevatorOrError.isFailure) {
@@ -58,6 +76,10 @@ export default class ElevatorService implements IElevatorService {
             console.log("\nElevator Result \n");
             console.log(elevatorResult.elevatorId.elevatorId);
             await this.elevatorRepo.save(elevatorResult);
+
+            building.addElevator(elevatorResult);
+
+            await this.buildingRepo.update(building);
 
             // Return elevator entity
             const elevatorDTOResult = ElevatorMap.toDTO(elevatorResult) as IElevatorDTO;

@@ -11,7 +11,8 @@ export default class BuildingRepo implements IBuildingRepo {
 
     constructor(
         @Inject("buildingSchema") private buildingSchema: Model<IBuildingPersistence & Document>,
-        @Inject("floorSchema") private floorSchema: Model<IBuildingPersistence & Document>
+        @Inject("floorSchema") private floorSchema: Model<IBuildingPersistence & Document>,
+        @Inject ("elevatorSchema") private elevatorSchema: Model<IBuildingPersistence & Document>
     ) {}
 
     // @ts-ignore
@@ -45,6 +46,7 @@ export default class BuildingRepo implements IBuildingRepo {
                 buildingDocument.dimX = building.dimX;
                 buildingDocument.dimY = building.dimY;
                 buildingDocument.floors = building.floors;
+                buildingDocument.elevators = building.elevators;
                 await buildingDocument.save();
 
                 return building;

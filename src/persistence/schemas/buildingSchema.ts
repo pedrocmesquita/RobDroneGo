@@ -46,6 +46,15 @@ const BuildingSchema = new mongoose.Schema({
             locationToX: Number,
             locationToY: Number,
         }],
+    }],
+    elevators: [{
+        elevatorId: String,
+        buildingId: String,
+        floorId: String,
+        elevatorNumber: Number,
+        elevatorDescription: String,
+        locationX: Number,
+        locationY: Number,
     }]
 });
 

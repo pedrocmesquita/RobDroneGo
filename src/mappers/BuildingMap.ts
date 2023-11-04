@@ -12,6 +12,7 @@ import IConnectionDTO from "../dto/IConnectionDTO";
 export class BuildingMap implements Mapper<Building> {
     public static toDTO(building: Building): any {
         const floors = building.floors;
+        const elevators = building.elevators;
 
         if (Array.isArray(floors)) {
             return {
@@ -42,8 +43,21 @@ export class BuildingMap implements Mapper<Building> {
                         }
                         )
                     };
-                }
-                )
+                },
+                ),
+                elevators: elevators.map(elevator => {
+                    return {
+                        buildingId: elevator.buildingId,
+                        elevatorId: elevator.elevatorId.elevatorId,
+                        elevatorBrand: elevator.elevatorBrand.elevatorBrand,
+                        elevatorModel: elevator.elevatorModel.elevatorModel,
+                        elevatorSerNum: elevator.elevatorSerNum.elevatorSerNum,
+                        elevatorDesc: elevator.elevatorDesc.elevatorDesc,
+                        currentFloor: elevator.currentFloor.currentFloor,
+                        locationX: elevator.locationX.locationX,
+                        locationY: elevator.locationY.locationY
+                    }
+                })
             } as IBuildingDTO;
         } else {
             // Handle the case where 'floors' is not an array
@@ -52,7 +66,20 @@ export class BuildingMap implements Mapper<Building> {
                 buildingName: building.buildingName.buildingName,
                 buildingDescription: building.buildingDescription.buildingDescription,
                 buildingNumberOfFloors: building.buildingNumberOfFloors.buildingNumberOfFloors,
-                floors: [] // or another default value as needed
+                floors: [], // or another default value as needed
+                elevators: elevators.map(elevator => {
+                    return {
+                        buildingId: elevator.buildingId,
+                        elevatorId: elevator.elevatorId.elevatorId,
+                        elevatorBrand: elevator.elevatorBrand.elevatorBrand,
+                        elevatorModel: elevator.elevatorModel.elevatorModel,
+                        elevatorSerNum: elevator.elevatorSerNum.elevatorSerNum,
+                        elevatorDesc: elevator.elevatorDesc.elevatorDesc,
+                        currentFloor: elevator.currentFloor.currentFloor,
+                        locationX: elevator.locationX.locationX,
+                        locationY: elevator.locationY.locationY
+                    }
+                })
             } as IBuildingDTO;
         }
     }
@@ -94,6 +121,19 @@ export class BuildingMap implements Mapper<Building> {
                         };
                     })
                 };
+            }),
+            elevators: building.elevators.map(elevator => {
+                return{
+                    buildingId: elevator.buildingId,
+                    elevatorId: elevator.elevatorId.elevatorId,
+                    elevatorBrand: elevator.elevatorBrand.elevatorBrand,
+                    elevatorModel: elevator.elevatorModel.elevatorModel,
+                    elevatorSerNum: elevator.elevatorSerNum.elevatorSerNum,
+                    elevatorDesc: elevator.elevatorDesc.elevatorDesc,
+                    currentFloor: elevator.currentFloor.currentFloor,
+                    locationX: elevator.locationX.locationX,
+                    locationY: elevator.locationY.locationY
+                }
             })
         };
     }

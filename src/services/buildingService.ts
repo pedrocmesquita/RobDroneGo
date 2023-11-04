@@ -58,6 +58,8 @@ export default class BuildingService implements IBuildingService {
       // Initialize floors array
       buildingDTO.floors = [];
 
+      buildingDTO.elevators = [];
+
       // Create building entity
       const buildingOrError = await Building.create(buildingDTO);
 

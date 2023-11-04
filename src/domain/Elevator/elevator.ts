@@ -17,19 +17,17 @@ import { LocationY } from "./locationY";
 interface ElevatorProps {
     buildingId: string;
     elevatorId: ElevatorId;
-    elevatorBrand?: ElevatorBrand;
-    elevatorModel?: ElevatorModel;
-    elevatorSerNum?: ElevatorSerNum;
-    elevatorDesc?: ElevatorDesc;
+    elevatorBrand: ElevatorBrand;
+    elevatorModel: ElevatorModel;
+    elevatorSerNum: ElevatorSerNum;
+    elevatorDesc: ElevatorDesc;
     currentFloor: CurrentFloor;
     locationX: LocationX;
     locationY: LocationY;
 }
 
-export class Elevator extends AggregateRoot<ElevatorProps> {
-    get id (): UniqueEntityID {
-        return this._id;
-    }
+export class Elevator extends ValueObject<ElevatorProps> {
+
     get buildingId (): string {
         return this.props.buildingId;
     }
@@ -88,7 +86,7 @@ export class Elevator extends AggregateRoot<ElevatorProps> {
 
 
     private constructor(props: ElevatorProps, id?: UniqueEntityID) {
-        super(props, id);
+        super(props);
     }
 
     public static create (elevatorDTO: IElevatorDTO, id?: UniqueEntityID): Result<Elevator> {
@@ -104,7 +102,7 @@ export class Elevator extends AggregateRoot<ElevatorProps> {
 
         const elevator = new Elevator(
           {
-              buildingId,
+              buildingId: buildingId,
               elevatorId: ElevatorId.create({elevatorId}).getValue(),
               elevatorBrand: ElevatorBrand.create({elevatorBrand}).getValue(),
               elevatorModel: ElevatorModel.create({elevatorModel}).getValue(),
@@ -113,8 +111,7 @@ export class Elevator extends AggregateRoot<ElevatorProps> {
               currentFloor: CurrentFloor.create({currentFloor}).getValue(),
               locationX: LocationX.create({locationX}).getValue(),
               locationY: LocationY.create({locationY}).getValue(),
-          },
-          id
+          }
         );
         return Result.ok<Elevator>(elevator);
     }

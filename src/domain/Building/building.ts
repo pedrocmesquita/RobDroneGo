@@ -10,6 +10,7 @@ import { BuildingNumberOfFloors } from "./buildingNumberOfFloors";
 import IBuildingDTO from "../../dto/IBuildingDTO";
 import List = Mocha.reporters.List;
 import { Connection } from "../Connection/connection";
+import { Elevator } from "../Elevator/elevator";
 
 interface BuildingProps {
   buildingId: BuildingId;
@@ -19,7 +20,7 @@ interface BuildingProps {
   dimX: number;
   dimY: number;
   floors: Floor[];
-
+  elevators: Elevator[];
 }
 
 export class Building extends AggregateRoot<BuildingProps> {
@@ -41,6 +42,10 @@ export class Building extends AggregateRoot<BuildingProps> {
 
   get connections (): Connection[] {
     return this.props.floors.flatMap(floor => floor.connections);
+  }
+
+  get elevators (): Elevator[] {
+    return this.props.elevators;
   }
 
   get buildingDescription (): BuildingDescription {
@@ -87,6 +92,10 @@ export class Building extends AggregateRoot<BuildingProps> {
     this.props.floors = value;
   }
 
+  set elevators (value: Elevator[]) {
+    this.props.elevators = value;
+  }
+
   // Add floor to building
   public addFloor(floor: Floor): void {
     this.props.floors = [...this.props.floors, floor];
@@ -98,6 +107,10 @@ export class Building extends AggregateRoot<BuildingProps> {
       this.props.floors.find(floor => floor.floorId === floorId).addConnection(connection);
     } else
       throw new Error("Floor not found");
+  }
+
+  public addElevator(elevator: Elevator): void {
+    this.props.elevators = [...this.props.elevators, elevator];
   }
 
 
@@ -133,7 +146,8 @@ export class Building extends AggregateRoot<BuildingProps> {
         buildingNumberOfFloors: BuildingNumberOfFloors.create({buildingNumberOfFloors}).getValue(),
         dimX: dimensionX,
         dimY: dimensionY,
-        floors: buildingDTO.floors.map(floor => Floor.create(floor).getValue())
+        floors: buildingDTO.floors.map(floor => Floor.create(floor).getValue()),
+        elevators: buildingDTO.elevators.map(elevator => Elevator.create(elevator).getValue())
       },
       id
     );

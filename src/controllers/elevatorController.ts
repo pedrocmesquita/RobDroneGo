@@ -31,6 +31,7 @@ export default class ElevatorController implements IElevatorController {
         try {
             const elevatorOrError = (await this.elevatorServiceInstance.createElevator(
               req.params.elevatorId as string,
+              req.params.buildingId as string,
               req.body as IElevatorDTO,
             )) as Result<IElevatorDTO>;
 

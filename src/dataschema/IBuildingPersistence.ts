@@ -1,4 +1,5 @@
 import { Floor } from "../domain/Floor/floor";
+import { Elevator } from "../domain/Elevator/elevator";
 
 export interface IBuildingPersistence {
     buildingId: string;
@@ -8,4 +9,5 @@ export interface IBuildingPersistence {
     dimX: number;
     dimY: number;
     floors?: Floor[];
+    elevators?: Elevator[];
 }

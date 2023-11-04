@@ -54,6 +54,11 @@ export default async ({ expressApp }) => {
     name: 'robotSchema',
     schema: '../persistence/schemas/robotSchema',
   }
+  const roomSchema = {
+    // compare with the approach followed in repos and services
+    name: 'roomSchema',
+    schema: '../persistence/schemas/roomSchema',
+  };
 
   const roleController = {
     name: config.controllers.role.name,
@@ -87,6 +92,10 @@ export default async ({ expressApp }) => {
     name: config.controllers.robot.name,
     path: config.controllers.robot.path
   }
+  const roomController = {
+    name: config.controllers.room.name,
+    path: config.controllers.room.path
+  };
 
   const roleRepo = {
     name: config.repos.role.name,
@@ -125,6 +134,10 @@ export default async ({ expressApp }) => {
     name: config.repos.robot.name,
     path: config.repos.robot.path
   }
+  const roomRepo = {
+    name: config.repos.room.name,
+    path: config.repos.room.path
+  };
 
   const roleService = {
     name: config.services.role.name,
@@ -154,10 +167,14 @@ export default async ({ expressApp }) => {
     name: config.services.robotType.name,
     path: config.services.robotType.path
   }
-    const robotService = {
-        name: config.services.robot.name,
-        path: config.services.robot.path
-    }
+  const robotService = {
+    name: config.services.robot.name,
+    path: config.services.robot.path
+  }
+  const roomService = {
+    name: config.services.room.name,
+    path: config.services.room.path
+  };
 
   await dependencyInjectorLoader({
     mongoConnection,
@@ -169,7 +186,8 @@ export default async ({ expressApp }) => {
       elevatorSchema,
       connectionSchema,
       robotTypeSchema,
-      robotSchema
+      robotSchema,
+      roomSchema
     ],
     controllers: [
       roleController,
@@ -178,7 +196,8 @@ export default async ({ expressApp }) => {
       elevatorController,
       connectionController,
       robotTypeController,
-      robotController
+      robotController,
+      roomController
     ],
     repos: [
       roleRepo,
@@ -188,7 +207,8 @@ export default async ({ expressApp }) => {
       elevatorRepo,
       connectionRepo,
       robotTypeRepo,
-      robotRepo
+      robotRepo,
+      roomRepo
     ],
     services: [
       roleService,
@@ -197,7 +217,8 @@ export default async ({ expressApp }) => {
       elevatorService,
       connectionService,
       robotTypeService,
-      robotService
+      robotService,
+      roomService
     ]
   });
   Logger.info('✌️ Schemas, Controllers, Repositories, Services, etc. loaded');

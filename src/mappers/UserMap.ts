@@ -4,11 +4,11 @@ import { Mapper } from "../core/infra/Mapper";
 
 import {IUserDTO} from "../dto/IUserDTO";
 
-import { User } from "../domain/user";
+import { User } from "../domain/User/user";
 import { UniqueEntityID } from "../core/domain/UniqueEntityID";
 
-import { UserEmail } from "../domain/userEmail";
-import { UserPassword } from "../domain/userPassword";
+import { UserEmail } from "../domain/User/userEmail";
+import { UserPassword } from "../domain/User/userPassword";
 
 import RoleRepo from "../repos/roleRepo";
 

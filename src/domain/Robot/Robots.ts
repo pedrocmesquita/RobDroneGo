@@ -3,7 +3,7 @@ import { UniqueEntityID } from "../../core/domain/UniqueEntityID";
 import { Result } from "../../core/logic/Result";
 import { IdRobots } from "./IdRobots";
 import { NameRobots } from "./NameRobots";
-import { TypeOfRobots } from "./TypeOfRobot";
+
 import { SerialNumber } from "./SerialNumber";
 import { Description } from "./Description";
 import IRobotDTO from "../../dto/IRobotDTO";
@@ -13,7 +13,7 @@ import IRobotDTO from "../../dto/IRobotDTO";
 interface robotsProps {
     idRobot: IdRobots;
     robotName: NameRobots;
-    typeOfRobot: TypeOfRobots;
+    typeId: string;
     serialNumber: SerialNumber;
     description: Description;
     active?: boolean;
@@ -29,12 +29,12 @@ export class Robots extends AggregateRoot<robotsProps> {
         return this.props.idRobot;
     }
 
-    get name (): NameRobots {
+    get robotName (): NameRobots {
         return this.props.robotName;
     }
 
-    get typeOfRobot (): TypeOfRobots {
-        return this.props.typeOfRobot;
+    get typeId (): string {
+        return this.props.typeId;
     }
 
     get serialNumber (): SerialNumber {
@@ -58,7 +58,7 @@ export class Robots extends AggregateRoot<robotsProps> {
 
         const idRobot = robotDTO.idRobot;
         const robotName = robotDTO.robotName;
-        const typeOfRobots = robotDTO.typeOfRobot;
+        const typeId = robotDTO.typeId;
         const serialNumber = robotDTO.serialNumber;
         const description =robotDTO.description;
         const active = robotDTO.active;
@@ -67,7 +67,7 @@ export class Robots extends AggregateRoot<robotsProps> {
             {
                 idRobot: IdRobots.create({idRobot}).getValue(),
                 robotName: NameRobots.create({robotName}).getValue(),
-                typeOfRobot: TypeOfRobots.create({ typeOfRobots }).getValue(),
+                typeId: typeId,
                 serialNumber: SerialNumber.create({ serialNumber }).getValue(),
                 description: Description.create({ description }).getValue(),
                 active: active ? active : true },

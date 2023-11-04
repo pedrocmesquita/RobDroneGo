@@ -30,15 +30,15 @@ export default class robotController implements IRobotController {
         }
     }
 
-    public async getRobot(req: Request, res: Response, next: NextFunction) {
+    public async getRobots(req: Request, res: Response, next: NextFunction) {
         try {
-            const robot = await this.RobotServiceInstance.getRobot(req.params.robotId as string);
+            const robots = await this.RobotServiceInstance.getRobots();
 
-            if (robot.isFailure) {
+            if (robots.isFailure) {
                 return res.status(404).send();
             }
 
-            return res.status(200).json(robot.getValue());
+            return res.status(200).json(robots.getValue());
         } catch (e) {
             return next(e);
         }
@@ -60,7 +60,5 @@ export default class robotController implements IRobotController {
             {
                 return next(e);
             }
-
     }
-
 }

@@ -19,23 +19,13 @@ export default (app: Router) => {
             typeId: Joi.string().required(),
             brand: Joi.string().required(),
             model: Joi.number().required(),
-            taskSystem: Joi.array().required()})
+            taskCategory: Joi.string().required(),
+        }),
         }),
         (req, res, next) => ctrl.createRobotType(req, res, next) );
-    
-    route.put("/:RobotId",
-        celebrate({
-        body: Joi.object({
-            typeID: Joi.string().required(),
-            brand: Joi.string().required(),
-            model: Joi.number().required(),
-            taskSystem: Joi.string().required(),
-        }),
-        }),
-        (req, res, next) => ctrl.updateRobotType(req, res, next) );
-    
-    route.get("",
-        (req, res, next) => ctrl.getRobotType(req, res, next) );
+
+    // Get all robot types
+    route.get("", (req, res, next) => ctrl.getRobotsTypes(req, res, next) );
 
     };
 

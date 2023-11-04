@@ -18,7 +18,7 @@ export default (app: Router) => {
             body: Joi.object({
                 idRobot: Joi.string().required(),
                 robotName: Joi.string().required(),
-                typeOfRobot: Joi.string().required(),
+                typeId: Joi.string().required(),
                 serialNumber: Joi.string().required(),
                 description: Joi.string().required(),
                 active: Joi.boolean().required()
@@ -26,10 +26,11 @@ export default (app: Router) => {
         }),
         (req, res, next) => ctrl.createRobot(req, res, next) );
 
+    // Get all robots
     route.get("",
-        (req, res, next) => ctrl.getRobot(req, res, next) );
-    route.patch("", (req, res, next) => ctrl.inibRobot(req, res, next));
+        (req, res, next) => ctrl.getRobots(req, res, next) );
 
+    route.patch("", (req, res, next) => ctrl.inibRobot(req, res, next));
 };
 
 

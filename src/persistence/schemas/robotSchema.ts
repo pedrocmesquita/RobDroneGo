@@ -13,12 +13,11 @@ const robotSchema = new mongoose.Schema(
             required: [true, 'Please enter robot name'],
             index: true,
             unique: true
-
         },
 
-        typeOfRobot: {
+        typeId: {
             type: String,
-            required: [true, 'Please enter type of robot'],
+            required: [true, 'Please enter type id'],
             index: true,
         },
 
@@ -40,7 +39,6 @@ const robotSchema = new mongoose.Schema(
             required: [true, 'Please enter active'],
             index: true,
         }
-
     },
     { timestamps: true },
 );

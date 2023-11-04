@@ -1,22 +1,20 @@
 import { AggregateRoot } from "../../core/domain/AggregateRoot";
 import { UniqueEntityID } from "../../core/domain/UniqueEntityID";
-import { Task } from "./task";
+import { TaskCategory, TaskCategoryType } from "./TaskCategory";
 import { Result } from "../../core/logic/Result";
 import IRobotTypeDTO from "../../dto/IRobotTypeDTO";
-import { TypeID } from "./typeId";
+import { TypeId } from "./TypeId";
 import { Brand } from "./Brand";
 import { Model } from "./Model";
 import { List } from "lodash";
 import _ from "lodash";
 
 
-
-
 interface robotProps {
-    typeId: TypeID;
+    typeId: TypeId;
     brand: Brand;
     model: Model;
-    tasks: List<String>;
+    taskCategory: TaskCategory
 }
 
 export class RobotType extends AggregateRoot<robotProps> {
@@ -24,7 +22,7 @@ export class RobotType extends AggregateRoot<robotProps> {
   get id (): UniqueEntityID {
           return this._id;
         }
-        get typeId (): TypeID {
+        get typeId (): TypeId {
           return this.props.typeId;
         }
       
@@ -36,11 +34,11 @@ export class RobotType extends AggregateRoot<robotProps> {
           return this.props.model;
         }
 
-        get tasks (): List<String> {
-          return this.props.tasks;
+        get taskCategory (): TaskCategory {
+          return this.props.taskCategory;
         }
       
-        set typeId (value: TypeID) {
+        set typeId (value: TypeId) {
           this.props.typeId = value;
         }
       
@@ -63,15 +61,16 @@ export class RobotType extends AggregateRoot<robotProps> {
           const typeId = robotDTO.typeId;
           const brand = robotDTO.brand;
           const model = robotDTO.model;
-          const tasks = robotDTO.tasks;
+          const taskCategory = robotDTO.taskCategory;
 
           const robot = new RobotType (
             {
-              typeId: TypeID.create({typeId}).getValue(),
+              typeId: TypeId.create({typeId}).getValue(),
               brand: Brand.create({ brand }).getValue(),
               model: Model.create({ model }).getValue(),
-              tasks : _.map(tasks, task => task.toString()),               },
-                id
+              taskCategory: TaskCategory.create({ category: taskCategory as TaskCategoryType}).getValue(),
+            },
+            id
           );
           return Result.ok<RobotType>(robot);
         }

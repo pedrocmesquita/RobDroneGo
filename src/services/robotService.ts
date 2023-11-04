@@ -9,7 +9,7 @@ import { RobotMap } from "../mappers/RobotMap";
 import {IdRobots} from "../domain/Robot/IdRobots";
 import IFloorDTO from "../dto/IFloorDTO";
 import robotTypeRepo from "../repos/robotTypeRepo";
-import {TypeID} from "../domain/RobotType/typeId";
+import {TypeId} from "../domain/RobotType/TypeId";
 import {RobotType} from "../domain/RobotType/RobotType";
 import {Document, FilterQuery, Model} from "mongoose";
 import {IRobotTypePersistence} from "../dataschema/IRobotTypePersistence";
@@ -36,7 +36,7 @@ export default class robotService implements IRobotService {
             }
 
 
-            const robotType = await this.robotRepo.findByType(robotDTO.typeOfRobot);
+            const robotType = await this.robotRepo.findByType(robotDTO.typeId);
 
 
             if (robotType === false) {
@@ -75,32 +75,14 @@ export default class robotService implements IRobotService {
 
     }
 
-
-    public async findByrobotTypeID(typeOfRobot: string ): Promise<boolean> {
-        const query = { typeOfRobot: typeOfRobot };
-        const RobotRecord = await this.robotTypeSchema.findById(
-            query as FilterQuery<IRobotTypePersistence & Document>
-        );
-
-        if (RobotRecord != null) {
-            return true;
-        }
-        return false;
-    }
-
-    public async getRobot(idRobot: string): Promise<Result<IRobotDTO>> {
+    public async getRobots(): Promise<Result<Array<IRobotDTO>>> {
         try {
-            const robot = await this.robotRepo.findByRobotId(idRobot);
-            if (robot === null) {
-                return Result.fail<IRobotDTO>("Robot not found");
-            } else {
-                const robotDTOResult = RobotMap.toDTO(robot) as IRobotDTO;
-                return Result.ok<IRobotDTO>(robotDTOResult);
-            }
-            }catch (e) {
+            const robots = await this.robotRepo.getRobots();
+            const robotDTOList = robots.map(robot => RobotMap.toDTO(robot));
+            return Result.ok<Array<IRobotDTO>>(robotDTOList);
+        } catch (e) {
             throw e;
         }
-
     }
 
     public async inibirRobot(idRobot: string): Promise<Result<IRobotDTO>> {

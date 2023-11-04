@@ -9,8 +9,8 @@ export class RobotMap implements Mapper<Robots> {
     public static toDTO(robot: Robots): any {
         return {
             idRobot: robot.idRobot.idRobot,
-            robotName: robot.name.robotName,
-            typeOfRobot: robot.typeOfRobot.typeOfRobots,
+            robotName: robot.robotName.robotName,
+            typeId: robot.typeId,
             serialNumber: robot.serialNumber.serialNumber,
             description: robot.description.description,
             active: robot.active
@@ -28,8 +28,8 @@ export class RobotMap implements Mapper<Robots> {
     public static toPersistence(robot: Robots): any {
         return {
             idRobot: robot.idRobot.idRobot,
-            robotName: robot.name.robotName,
-            typeOfRobot: robot.typeOfRobot.typeOfRobots,
+            robotName: robot.robotName.robotName,
+            typeId: robot.typeId,
             serialNumber: robot.serialNumber.serialNumber,
             description: robot.description.description,
             active: robot.active

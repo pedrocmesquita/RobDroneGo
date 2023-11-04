@@ -13,7 +13,7 @@ export class RobotTypeMap implements Mapper<RobotType> {
             typeId: robot.typeId.typeId,
             brand: robot.brand.brand,
             model: robot.model.model,
-            tasks: robot.tasks,
+            taskCategory: robot.taskCategory.category,
         } as IRobotTypeDTO;
     }
 
@@ -30,7 +30,7 @@ export class RobotTypeMap implements Mapper<RobotType> {
             typeId: robot.typeId.typeId,
             brand: robot.brand.brand,
             model: robot.model.model,
-            task: robot.tasks,
+            taskCategory: robot.taskCategory.category,
         }
     }
 }

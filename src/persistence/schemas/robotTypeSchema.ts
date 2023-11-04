@@ -19,9 +19,10 @@ const robotTypeSchema = new mongoose.Schema(
       index: true,
     },
 
-    tasks: {
-      type: [String],
-      required: [true, 'Please enter tasks'],
+    taskCategory: {
+      type: String,
+      required: [true, 'Please enter task category'],
+      index: true,
     },
 
   },

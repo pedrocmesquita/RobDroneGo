@@ -4,7 +4,7 @@ import IRobotTypeRepo from "../services/IRepos/IRobotTypeRepo";
 import  { IRobotTypePersistence }  from  "../dataschema/IRobotTypePersistence";
 import { RobotType } from "../domain/RobotType/RobotType";
 import { RobotTypeMap } from "../mappers/RobotTypeMap";
-import { TypeID } from "../domain/RobotType/typeId";
+import { TypeId } from "../domain/RobotType/TypeId";
 import {Floor} from "../domain/Floor/floor";
 import {FloorMap} from "../mappers/FloorMap";
 import {RobotMap} from "../mappers/RobotMap";
@@ -35,7 +35,7 @@ export default class robotTypeRepo implements IRobotTypeRepo {
                 RobotDocument.typeId = robot.typeId.typeId;
                 RobotDocument.brand = robot.brand.brand;
                 RobotDocument.model = robot.model.model;
-                RobotDocument.tasks = robot.tasks;
+                RobotDocument.taskCategory = robot.taskCategory.category;
             
                 await RobotDocument.save();
 
@@ -66,13 +66,13 @@ export default class robotTypeRepo implements IRobotTypeRepo {
     }
     
 
-    public async delete(typeid: string | TypeID): Promise<void> {
+    public async delete(typeid: string | TypeId): Promise<void> {
         const query = { typeid: typeid   };
         await this.robotTypeSchema.deleteOne(query as FilterQuery<IRobotTypePersistence & Document>);
     }
 
 
-    public async findByrobotTypeID(typeId: string | TypeID): Promise<RobotType> {
+    public async findByrobotTypeID(typeId: string | TypeId): Promise<RobotType> {
         const query = { typeId: typeId };
         const RobotRecord = await this.robotTypeSchema.findOne(
             query as FilterQuery<IRobotTypePersistence & Document>
@@ -85,8 +85,8 @@ export default class robotTypeRepo implements IRobotTypeRepo {
     }
 
     // @ts-ignore
-    public async exists(typedi: TypeID | string): Promise<boolean> {
-        const idX = typedi instanceof TypeID ? (<TypeID>typedi).typeId : typedi;
+    public async exists(typedi: TypeId | string): Promise<boolean> {
+        const idX = typedi instanceof TypeId ? (<TypeId>typedi).typeId : typedi;
 
         const query = { domainId: idX };
         const RobotDocument = await this.robotTypeSchema.findOne(query);

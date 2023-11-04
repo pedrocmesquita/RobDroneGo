@@ -8,7 +8,7 @@ import {RobotMap} from "../mappers/RobotMap";
 import {FloorMap} from "../mappers/FloorMap";
 import {RobotType} from "../domain/RobotType/RobotType";
 import {IRobotTypePersistence} from "../dataschema/IRobotTypePersistence";
-import {TypeID} from "../domain/RobotType/typeId";
+import {TypeId} from "../domain/RobotType/TypeId";
 import {BuildingId} from "../domain/Building/buildingId";
 import {BuildingMap} from "../mappers/BuildingMap";
 
@@ -37,8 +37,8 @@ export default class robotRepo implements IRobotRepo {
                 return RobotMap.toDomain(RobotCreated);
             } else {
                 RobotDocument1.idRobot = robot.idRobot.idRobot;
-                RobotDocument1.robotName = robot.name.robotName;
-                RobotDocument1.typeOfRobot = robot.typeOfRobot.typeOfRobots;
+                RobotDocument1.robotName = robot.robotName.robotName;
+                RobotDocument1.typeId = robot.typeId;
                 RobotDocument1.serialNumber = robot.serialNumber.serialNumber;
                 RobotDocument1.description = robot.description.description;
                 RobotDocument1.active = robot.active;
@@ -52,30 +52,24 @@ export default class robotRepo implements IRobotRepo {
         }
     }
 
-    public async getRobots(): Promise<Robots[]> {
+    public async getRobots(): Promise<Array<Robots>> {
         try {
-            const robot = await this.robotSchema.find();
-
-            const RobotDTOResult = robot.map(robot => RobotMap.toDomain(robot));
-
-            return RobotDTOResult;
-        } catch (e) {
-            throw e;
+            const RobotRecord = await this.robotSchema.find({});
+            const RobotMapArray = RobotRecord.map(robot => RobotMap.toDomain(robot));
+            return RobotMapArray;
+        } catch (err) {
+            throw err;
         }
     }
 
-    public async findByType(typeOfRobot : string | TypeID ): Promise<boolean> {
+    public async findByType(typeId : string | TypeId ): Promise<boolean> {
 
-        const idX = typeOfRobot instanceof TypeID ? (<TypeID>typeOfRobot).typeId : typeOfRobot
+        const idX = typeId instanceof TypeId ? (<TypeId>typeId).typeId : typeId;
 
-        const query = { typeOfRobot: idX };
+        const query = {typeId: idX};
+        const RobotDocument = await this.robotTypeSchema.findOne(query);
 
-        const typeOfRobotRecord = await this.robotTypeSchema.findOne(query);
-
-        if (typeOfRobotRecord != null) {
-            return true
-        } else
-            return false;
+        return !!RobotDocument === true;
     }
     public async findByRobotId(idRobot: string | IdRobots): Promise<Robots> {
         const idX = idRobot instanceof  IdRobots ? (<IdRobots>idRobot).idRobot : idRobot;

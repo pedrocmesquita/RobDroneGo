@@ -23,7 +23,7 @@ export class Model extends ValueObject<RobotmodelProps> {
     }
 
     // Check if the name has a maximum of 50 alphanumeric characters and a space.
-    if (!/^[a-zA-Z0-9 ]{1,50}$/.test(props.model)) {
+    if (!/^[a-zA-Z0-9 ]{1,100}$/.test(props.model)) {
       return Result.fail<Model>("RobotModel must have a maximum of 50 characters.");
     }
 

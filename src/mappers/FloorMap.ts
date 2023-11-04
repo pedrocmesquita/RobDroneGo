@@ -10,7 +10,9 @@ export class FloorMap implements Mapper<Floor> {
     public static toDTO (floor: Floor): any {
 
         const connections = floor.connections;
+        const rooms = floor.rooms;
 
+        if (Array.isArray(rooms)) {
         if (Array.isArray(connections)) {
         return {
             buildingId: floor.buildingId,
@@ -30,19 +32,64 @@ export class FloorMap implements Mapper<Floor> {
                     locationToY: connection.locationToY
                 };
             }
-            )
+            ),
+            rooms: rooms.map(room => {
+                return {
+                    roomId: room.roomId,
+                    floorId: room.floorId,
+                    roomName: room.roomName.roomName,
+                    roomDescription: room.roomDescription.roomDescription,
+                    roomCategory: room.roomCategory.category,
+                    doorX: room.door.doorX,
+                    doorY: room.door.doorY,
+                };
+            })
         } as IFloorDTO;
     } else {
-
             return {
                 buildingId: floor.buildingId,
                 floorId: floor.floorId,
                 floorNumber: floor.floorNumber.floorNumber,
                 floorDescription: floor.floorDescription.floorDescription,
-                connections: [] // or another default value as needed
+                connections: [], // or another default value as needed
+                rooms: rooms.map(room => {
+                    return {
+                        roomId: room.roomId,
+                        floorId: room.floorId,
+                        roomName: room.roomName.roomName,
+                        roomDescription: room.roomDescription.roomDescription,
+                        roomCategory: room.roomCategory.category,
+                        doorX: room.door.doorX,
+                        doorY: room.door.doorY,
+                    };
+                })
             } as IFloorDTO;
             }
-        }
+        } else {
+            if (Array.isArray(connections)) {
+                return {
+                    buildingId: floor.buildingId,
+                    floorId: floor.floorId,
+                    floorNumber: floor.floorNumber.floorNumber,
+                    floorDescription: floor.floorDescription.floorDescription,
+                    connections: connections.map(connection => {
+                        return {
+                            connectionId: connection.connectionId,
+                            buildingfromId: connection.buildingfromId,
+                            buildingtoId: connection.buildingtoId,
+                            floorfromId: connection.floorfromId,
+                            floortoId: connection.floortoId,
+                            locationX: connection.locationX,
+                            locationY: connection.locationY,
+                            locationToX: connection.locationToX,
+                            locationToY: connection.locationToY
+                        };
+                    }),
+                    rooms: [] // or another default value as needed
+                } as IFloorDTO;
+            }
+}
+}
 
 
     public static toDomain (floor: any | Model<IFloorPersistence & Document>): Floor {
@@ -70,6 +117,17 @@ export class FloorMap implements Mapper<Floor> {
                     locationY: connection.locationY,
                     locationToX: connection.locationToX,
                     locationToY: connection.locationToY
+                };
+            }),
+            rooms: floor.rooms.map(room => {
+                return {
+                    roomId: room.roomId,
+                    floorId: room.floorId,
+                    roomName: room.roomName.roomName,
+                    roomDescription: room.roomDescription.roomDescription,
+                    roomCategory: room.roomCategory.category,
+                    doorX: room.door.doorX,
+                    doorY: room.door.doorY,
                 };
             })
         };

@@ -41,7 +41,18 @@ export class BuildingMap implements Mapper<Building> {
                                 locationToY: connection.locationToY,
                             };
                         }
-                        )
+                        ),
+                        rooms: floor.rooms.map(room => {
+                            return {
+                                roomId: room.roomId,
+                                floorId: room.floorId,
+                                roomName: room.roomName.roomName,
+                                roomDescription: room.roomDescription.roomDescription,
+                                roomCategory: room.roomCategory.category,
+                                doorX: room.door.doorX,
+                                doorY: room.door.doorY,
+                            }
+                        })
                     };
                 },
                 ),
@@ -119,7 +130,18 @@ export class BuildingMap implements Mapper<Building> {
                             locationToX: connection.locationToX,
                             locationToY: connection.locationToY,
                         };
-                    })
+                    }),
+                    rooms: floor.rooms.map(room => {{
+                        return {
+                            roomId: room.roomId,
+                            floorId: room.floorId,
+                            roomName: room.roomName.roomName,
+                            roomDescription: room.roomDescription.roomDescription,
+                            roomCategory: room.roomCategory.category,
+                            doorX: room.door.doorX,
+                            doorY: room.door.doorY,
+                        }
+                    }})
                 };
             }),
             elevators: building.elevators.map(elevator => {

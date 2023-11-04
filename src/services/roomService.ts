@@ -7,12 +7,14 @@ import IRoomDTO from '../dto/IRoomDTO';
 import { RoomMap } from "../mappers/RoomMap";
 import { Room } from '../domain/Room/room';
 import IFloorRepo from "./IRepos/IFloorRepo";
+import IBuildingRepo from "./IRepos/IBuildingRepo";
 
 @Service()
 export default class RoomService implements IRoomService {
   constructor(
     @Inject(config.repos.room.name) private roomRepo : IRoomRepo,
-    @Inject(config.repos.floor.name) private floorRepo : IFloorRepo
+    @Inject(config.repos.floor.name) private floorRepo : IFloorRepo,
+    @Inject(config.repos.building.name) private buildingRepo : IBuildingRepo
   ) {}
 
   public async getRoom(roomId: string): Promise<Result<IRoomDTO>> {
@@ -46,6 +48,12 @@ export default class RoomService implements IRoomService {
         return Result.fail<IRoomDTO>("Room already exists.");
       }
 
+      const building = await this.buildingRepo.findByBuildingId(floor.buildingId);
+
+      if (building === null) {
+        return Result.fail<IRoomDTO>("Building not found.");
+      }
+
       const roomOrError = await Room.create( roomDTO );
 
       if (roomOrError.isFailure) {
@@ -57,6 +65,14 @@ export default class RoomService implements IRoomService {
       console.log("1 - ", roomResult);
 
       await this.roomRepo.save(roomResult);
+
+      floor.addRoom(roomResult);
+
+      await this.floorRepo.update(floor);
+
+      building.addRoomToFloor(floor.floorId, roomResult);
+
+      await this.buildingRepo.updateRooms(building);
 
       const roomDTOResult = RoomMap.toDTO( roomResult ) as IRoomDTO;
       return Result.ok<IRoomDTO>( roomDTOResult )

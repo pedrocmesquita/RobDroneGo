@@ -11,6 +11,7 @@ import IBuildingDTO from "../../dto/IBuildingDTO";
 import List = Mocha.reporters.List;
 import { Connection } from "../Connection/connection";
 import { Elevator } from "../Elevator/elevator";
+import { Room } from "../Room/room";
 
 interface BuildingProps {
   buildingId: BuildingId;
@@ -105,6 +106,13 @@ export class Building extends AggregateRoot<BuildingProps> {
   public addConnectionToFloor(floorId: string, connection: Connection): void {
     if (this.props.floors.find(floor => floor.floorId === floorId)) {
       this.props.floors.find(floor => floor.floorId === floorId).addConnection(connection);
+    } else
+      throw new Error("Floor not found");
+  }
+
+  public addRoomToFloor(floorId: string, room: Room): void {
+    if (this.props.floors.find(floor => floor.floorId === floorId)) {
+      this.props.floors.find(floor => floor.floorId === floorId).addRoom(room);
     } else
       throw new Error("Floor not found");
   }

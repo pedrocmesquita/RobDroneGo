@@ -1,0 +1,485 @@
+{
+	"info": {
+		"_postman_id": "bbb8551e-a1d2-4380-af2a-52194c554805",
+		"name": "Postman-Test-1210816",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "29917040"
+	},
+	"item": [
+		{
+			"name": "Get",
+			"item": [
+				{
+					"name": "http://localhost:4000/api/buildings/",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"\r",
+									"\r",
+									"pm.test(\"Status code is 200 OK\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response is a JSON object\", function () {\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									"\r",
+									"pm.test(\"BuildingId is not null\", function () {\r",
+									"    const jsonData = pm.response.json();\r",
+									"    jsonData.forEach(building => {\r",
+									"        pm.expect(building.buildingId).to.not.be.null;\r",
+									"    });\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Building name is equal or less than 50 chars\", function () {\r",
+									"    const jsonData = pm.response.json();\r",
+									"    jsonData.forEach(building => {\r",
+									"        pm.expect(building.buildingName.length).to.be.at.most(50);\r",
+									"    });\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Description less than 256 chars\", function () {\r",
+									"    const jsonData = pm.response.json();\r",
+									"    jsonData.forEach(building => {\r",
+									"        pm.expect(building.buildingDescription.length).to.be.at.most(256);\r",
+									"    });\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Number of floors between -100 and 500\", function () {\r",
+									"    const jsonData = pm.response.json();\r",
+									"    jsonData.forEach(building => {\r",
+									"        pm.expect(building.buildingNumberOfFloors).to.be.within(-100, 500);\r",
+									"    });\r",
+									"});\r",
+									"\r",
+									"pm.test(\"DimX and DimY are not null\", function () {\r",
+									"    const jsonData = pm.response.json();\r",
+									"    jsonData.forEach(building => {\r",
+									"        pm.expect(building.dimX).to.not.be.null;\r",
+									"        pm.expect(building.dimY).to.not.be.null;\r",
+									"    });\r",
+									"});\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:4000/api/buildings/"
+					},
+					"response": []
+				},
+				{
+					"name": "http://localhost:4000/api/floors",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Connection success for floors\", function () {\r",
+									"    const jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.be.an('array').that.is.not.empty;\r",
+									"});\r",
+									"\r",
+									"pm.test(\"FloorId is the concatenation of buildingId and floorNumber\", function () {\r",
+									"    const jsonData = pm.response.json();\r",
+									"    jsonData.forEach(floor => {\r",
+									"        const expectedFloorId = floor.buildingId + \"-\" + floor.floorNumber;\r",
+									"        pm.expect(floor.floorId).to.equal(expectedFloorId);\r",
+									"    });\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Floor description is no more than 256 chars\", function () {\r",
+									"    const jsonData = pm.response.json();\r",
+									"    jsonData.forEach(floor => {\r",
+									"        pm.expect(floor.floorDescription.length).to.be.at.most(256);\r",
+									"    });\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "http://localhost:4000/api/floors"
+					},
+					"response": []
+				},
+				{
+					"name": "http://localhost:4000/api/buildings/floors/3/9",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Number of floors is within the defined range\", function () {\r",
+									"    const jsonData = pm.response.json();\r",
+									"    const building = jsonData[0]; // Assuming there's one building in the response\r",
+									"    const numberOfFloors = building.buildingNumberOfFloors;\r",
+									"    pm.expect(numberOfFloors).to.be.within(0, 100);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "",
+								"value": "",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "http://localhost:4000/api/buildings/floors/3/10",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "4000",
+							"path": [
+								"api",
+								"buildings",
+								"floors",
+								"3",
+								"10"
+							],
+							"query": [
+								{
+									"key": "minNumber",
+									"value": null,
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "http://localhost:4000/api/floors/connections/ARB",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"BuildingId is not null\", function () {\r",
+									"    const jsonData = pm.response.json();\r",
+									"    jsonData.forEach(item => {\r",
+									"        pm.expect(item.buildingId).to.not.be.null;\r",
+									"    });\r",
+									"});\r",
+									"\r",
+									"pm.test(\"FloorId is in the correct format\", function () {\r",
+									"    const jsonData = pm.response.json();\r",
+									"    jsonData.forEach(item => {\r",
+									"        const expectedFloorId = item.buildingId + \"-\" + item.floorNumber;\r",
+									"        pm.expect(item.floorId).to.equal(expectedFloorId);\r",
+									"    });\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Connection information exists and is valid\", function () {\r",
+									"    const jsonData = pm.response.json();\r",
+									"    jsonData.forEach(item => {\r",
+									"        pm.expect(item.connections).to.be.an('array').that.is.not.empty;\r",
+									"\r",
+									"        item.connections.forEach(connection => {\r",
+									"            pm.expect(connection.connectionId).to.not.be.null;\r",
+									"            pm.expect(connection.buildingfromId).to.not.be.null;\r",
+									"            pm.expect(connection.buildingtoId).to.not.be.null;\r",
+									"            // Add more validation as needed for other connection properties\r",
+									"        });\r",
+									"    });\r",
+									"});\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "http://localhost:4000/api/floors/connections/ARB"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Post",
+			"item": [
+				{
+					"name": "http://localhost:4000/api/buildings",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response status code should be 201 Created or 404\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([201, 404]);\r",
+									"});\r",
+									"\r",
+									"if (pm.response.code === 201) {\r",
+									"    // Parse the response JSON\r",
+									"    const responseJson = pm.response.json();\r",
+									"\r",
+									"    // Check if the response status code is 201 Created\r",
+									"    pm.test(\"Response status code should be 201 Created\", function () {\r",
+									"        pm.expect(pm.response.code).to.equal(201);\r",
+									"    });\r",
+									"\r",
+									"    // Check if the response JSON matches the request data\r",
+									"    pm.test(\"Response JSON matches the request\", function () {\r",
+									"        pm.expect(responseJson.buildingId).to.equal(pm.request.json().buildingId);\r",
+									"        pm.expect(responseJson.buildingName).to.equal(pm.request.json().buildingName);\r",
+									"        pm.expect(responseJson.buildingNumberOfFloors).to.equal(Number(pm.request.json().buildingNumberOfFloors));\r",
+									"        pm.expect(responseJson.buildingDescription).to.equal(pm.request.json().buildingDescription);\r",
+									"        pm.expect(responseJson.dimX).to.equal(Number(pm.request.json().dimX));\r",
+									"        pm.expect(responseJson.dimY).to.equal(Number(pm.request.json().dimY));\r",
+									"        pm.expect(responseJson.floors).to.be.an('array').that.is.empty;\r",
+									"        pm.expect(responseJson.elevators).to.be.an('array').that.is.empty;\r",
+									"    });\r",
+									"} else if (pm.response.code === 404) {\r",
+									"    // If the response is 404 Not Found, handle it as per your requirements\r",
+									"    // You can add assertions or take appropriate actions in this case\r",
+									"    pm.test(\"No resource should be found (404)\", function () {\r",
+									"        pm.expect(pm.response.text()).to.be.empty;\r",
+									"    });\r",
+									"}\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{   \r\n    \"buildingId\": \"ARQT\",\r\n    \"buildingName\": \"Updated Name\",\r\n    \"buildingNumberOfFloors\": \"20\",\r\n    \"buildingDescription\": \"Updated Desc\",\r\n    \"dimX\": \"3\",\r\n    \"dimY\": \"4\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:4000/api/buildings"
+					},
+					"response": []
+				},
+				{
+					"name": "http://localhost:4000/api/floors",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response status code should be 201 Created or 404\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([201, 404]);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"if (pm.response.code === 201) {\r",
+									"// Parse the response JSON\r",
+									"const responseJson = pm.response.json();\r",
+									"\r",
+									"// Check if the response status code is 201 Created\r",
+									"pm.test(\"Response status code should be 201 Created\", function () {\r",
+									"    pm.response.to.have.status(201);\r",
+									"});\r",
+									"\r",
+									"// Check if the response JSON matches the expected structure\r",
+									"pm.test(\"Response should have buildingId\", function () {\r",
+									"    pm.expect(responseJson).to.have.property(\"buildingId\", \"ARB\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response should have floorId\", function () {\r",
+									"    pm.expect(responseJson).to.have.property(\"floorId\", \"ARB-29\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response should have floorNumber as a number\", function () {\r",
+									"    pm.expect(responseJson).to.have.property(\"floorNumber\").to.be.a('number');\r",
+									"    pm.expect(responseJson.floorNumber).to.equal(29);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response should have floorDescription\", function () {\r",
+									"    pm.expect(responseJson).to.have.property(\"floorDescription\", \"Description21\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response should have an empty 'connections' array\", function () {\r",
+									"    pm.expect(responseJson).to.have.property(\"connections\").to.be.an('array').that.is.empty;\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response should have an empty 'rooms' array\", function () {\r",
+									"    pm.expect(responseJson).to.have.property(\"rooms\").to.be.an('array').that.is.empty;\r",
+									"});\r",
+									"}   else if (pm.response.code === 404) {\r",
+									"    // If the response is 404 Not Found, handle it as per your requirements\r",
+									"    // You can add assertions or take appropriate actions in this case\r",
+									"    pm.test(\"No resource should be found (404)\", function () {\r",
+									"        pm.expect(pm.response.text()).to.be.empty;\r",
+									"    });\r",
+									"}\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{   \r\n    \"buildingId\":\"ARB\",\r\n    \"floorNumber\":\"29\",\r\n    \"floorDescription\":\"Description21\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:4000/api/floors"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "PutOrPatch",
+			"item": [
+				{
+					"name": "http://localhost:4000/api/buildings/",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response status code should be 200 OK\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"if (pm.response.code === 200) {\r",
+									"    // Parse the response JSON\r",
+									"    const responseJson = pm.response.json();\r",
+									"\r",
+									"    // Test for specific data in the response\r",
+									"    pm.test(\"Building name is updated\", function () {\r",
+									"        pm.expect(responseJson.buildingName).to.equal(\"Updated Name\");\r",
+									"    });\r",
+									"\r",
+									"    pm.test(\"Building description is updated\", function () {\r",
+									"        pm.expect(responseJson.buildingDescription).to.equal(\"Updated Desc\");\r",
+									"    });\r",
+									"\r",
+									"    pm.test(\"Number of floors is updated\", function () {\r",
+									"        pm.expect(responseJson.buildingNumberOfFloors).to.equal(20);\r",
+									"    });\r",
+									"} else if (pm.response.code === 404) {\r",
+									"   \r",
+									"    pm.test(\"No resource should be found (404)\", function () {\r",
+									"        pm.expect(pm.response.text()).to.be.empty;\r",
+									"    });\r",
+									"}\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"buildingId\": \"ARB\",\r\n    \"buildingName\": \"Updated Name\",\r\n    \"buildingDescription\": \"Updated Desc\",\r\n    \"buildingNumberOfFloors\": 20\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:4000/api/buildings/"
+					},
+					"response": []
+				},
+				{
+					"name": "http://localhost:4000/api/floors/",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {\r",
+									"    // Parse the response JSON\r",
+									"    const responseJson = pm.response.json();\r",
+									"\r",
+									"    // Test for specific data in the response\r",
+									"    pm.test(\"Floor Number is updated\", function () {\r",
+									"        pm.expect(responseJson.floorNumber).to.equal(90);\r",
+									"    });\r",
+									"\r",
+									"    pm.test(\"Floor Description is updated\", function () {\r",
+									"        pm.expect(responseJson.floorDescription).to.equal(\"Updated Desc\");\r",
+									"    });\r",
+									"\r",
+									"} else if (pm.response.code === 404) {\r",
+									"   \r",
+									"    pm.test(\"No resource should be found (404)\", function () {\r",
+									"        pm.expect(pm.response.text()).to.be.empty;\r",
+									"    });\r",
+									"}\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{   \r\n    \"floorId\":\"ARB-13\",\r\n    \"floorNumber\":\"90\",\r\n    \"floorDescription\":\"Updated Desc\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:4000/api/floors/"
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

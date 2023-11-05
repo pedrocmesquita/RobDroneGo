@@ -1,0 +1,21 @@
+@startuml
+
+skinparam handwritten false
+skinparam monochrome false
+skinparam packageStyle rect
+skinparam defaultFontName FG Virgil
+skinparam shadowing true
+
+actor GestorDeFrota as GestorDeFrota
+activate GestorDeFrota
+GestorDeFrota -> UI: inibir robot
+activate UI
+UI -> MDR: inibRobot(data)
+activate MDR
+MDR --> MDR:
+MDR --> UI: 200 (Success)
+deactivate MDR
+UI -> GestorDeFrota: 200 (Success)
+deactivate UI
+
+@enduml

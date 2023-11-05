@@ -56,7 +56,6 @@ export class RobotType extends AggregateRoot<robotProps> {
       
       
       public static create (robotDTO: IRobotTypeDTO, id?: UniqueEntityID): Result<RobotType> {
-          
 
           const typeId = robotDTO.typeId;
           const brand = robotDTO.brand;

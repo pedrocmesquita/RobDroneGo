@@ -1,0 +1,20 @@
+@startuml
+package "Your JavaScript Project" {
+  [index.ts]
+  package "src" {
+    [main.ts]
+    [utils.ts]
+    [constants.ts]
+  }
+  package "test" {
+    [main.test.ts]
+    [utils.test.ts]
+  }
+  package "node_modules" {
+    [module1]
+    [module2]
+  }
+  [package.json]
+  [tsconfig.json]
+}
+@enduml

@@ -25,16 +25,29 @@ connectionRoute -> connectionController: createConnection(req, res)
 activate connectionController
 connectionController -> connectionService: createConnection(req, res)
 activate connectionService
+connectionService -> connectionRepo: findByConnectionId(connectionId)
+activate connectionRepo
+alt connection != null
+connectionRepo --> connectionService: connection
+connectionService -> connectionController: res.status(400).send({ message: "Connection already exists" })
+connectionController --> connectionRoute: res.status(400).send({ message: "Connection already exists" })
+connectionRoute --> "<<C4:Container>>\nMódulo de Gestão\nde Informação": res.status(400).send({ message: "Connection already exists" })
+"<<C4:Container>>\nMódulo de Gestão\nde Informação" --> "<<C4:Container>>\n:Visualização": res.status(400).send({ message: "Connection already exists" })
+"<<C4:Container>>\n:Visualização" --> "Gestor de Campus": Mostra mensagem de erro
+
+end
+connectionRepo --> connectionService: null
+deactivate connectionRepo
 connectionService -> "connection\n:Connection"**: create(req.body)
 connectionService -> connectionRepo: save(connection)
 activate connectionRepo
 deactivate connectionRepo
 deactivate connectionService
-connectionController --> connectionRoute : 200 OK connection
+connectionController --> connectionRoute : 201 OK connection
 deactivate connectionController
-connectionRoute --> "<<C4:Container>>\nMódulo de Gestão\nde Informação" : 200 OK connection
+connectionRoute --> "<<C4:Container>>\nMódulo de Gestão\nde Informação" : 201 OK connection
 deactivate connectionRoute
-"<<C4:Container>>\nMódulo de Gestão\nde Informação" --> "<<C4:Container>>\n:Visualização": 200 OK connection
+"<<C4:Container>>\nMódulo de Gestão\nde Informação" --> "<<C4:Container>>\n:Visualização": 201 OK connection
 deactivate "<<C4:Container>>\nMódulo de Gestão\nde Informação"
 "Gestor de Campus" <-- "<<C4:Container>>\n:Visualização": Mostra passagem que acaba de ser criada
 deactivate "<<C4:Container>>\n:Visualização"

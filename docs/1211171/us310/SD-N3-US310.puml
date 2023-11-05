@@ -1,0 +1,42 @@
+@startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+title Container Sequence Diagram (SD) - US310 (N3)
+
+autonumber
+
+actor "Gestor de Campus"
+
+"Gestor de Campus" -> "<<C4:Container>>\n:Visualização": Inicia operação de criar sala de piso
+activate "<<C4:Container>>\n:Visualização"
+"<<C4:Container>>\n:Visualização" --> "Gestor de Campus": Solicita dados necessários (floorId, roomId, roomName,\nroomDescription, roomCategory, door{doorX, doorY))
+deactivate "<<C4:Container>>\n:Visualização"
+
+"Gestor de Campus" -> "<<C4:Container>>\n:Visualização": Introduz dados solicitados
+activate "<<C4:Container>>\n:Visualização"
+"<<C4:Container>>\n:Visualização" -> "<<C4:Container>>\nMódulo de Gestão\nde Informação": POST /rooms/ {floorId, roomId, roomName,\nroomDescription, roomCategory, door{doorX, doorY)}
+
+activate "<<C4:Container>>\nMódulo de Gestão\nde Informação"
+"<<C4:Container>>\nMódulo de Gestão\nde Informação" -> roomRoute: POST /rooms/ {floorId, roomId, roomName,\nroomDescription, roomCategory, door{doorX, doorY)}
+activate roomRoute
+roomRoute -> roomController: createRoom(req, res)
+activate roomController
+roomController -> roomService: createRoom(req, res)
+activate roomService
+roomService -> "room\n:Room"**: create(req.body)
+roomService -> roomRepo: save(room)
+activate roomRepo
+deactivate roomRepo
+deactivate roomService
+roomController --> roomRoute : 200 OK room
+deactivate roomController
+roomRoute --> "<<C4:Container>>\nMódulo de Gestão\nde Informação" : 200 OK room
+deactivate roomRoute
+"<<C4:Container>>\nMódulo de Gestão\nde Informação" --> "<<C4:Container>>\n:Visualização": 200 OK room
+deactivate "<<C4:Container>>\nMódulo de Gestão\nde Informação"
+"Gestor de Campus" <-- "<<C4:Container>>\n:Visualização": Imprime mensagem de sucesso com a sala de piso criada
+deactivate "<<C4:Container>>\n:Visualização"
+
+@enduml

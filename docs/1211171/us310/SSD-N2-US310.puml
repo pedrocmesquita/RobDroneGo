@@ -1,0 +1,26 @@
+@startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+title Container Sequence Diagram (SSD) - US310 (N2)
+
+autonumber
+
+actor "Gestor de Campus"
+
+"Gestor de Campus" -> "<<C4:Container>>\n:Visualização": Inicia operação de criar uma sala de piso
+activate "<<C4:Container>>\n:Visualização"
+"<<C4:Container>>\n:Visualização" --> "Gestor de Campus": Solicita dados necessários (floorId, roomId, roomName,\nroomDescription, roomCategory, door{doorX, doorY))
+deactivate "<<C4:Container>>\n:Visualização"
+
+"Gestor de Campus" -> "<<C4:Container>>\n:Visualização": Introduz dados solicitados
+activate "<<C4:Container>>\n:Visualização"
+"<<C4:Container>>\n:Visualização" --> "<<C4:Container>>\nMódulo de Gestão\nde Informação": POST /rooms/ {floorId, roomId, roomName,\nroomDescription, roomCategory, door{doorX, doorY)}
+activate "<<C4:Container>>\nMódulo de Gestão\nde Informação"
+"<<C4:Container>>\nMódulo de Gestão\nde Informação" --> "<<C4:Container>>\n:Visualização": 200 OK room
+deactivate "<<C4:Container>>\nMódulo de Gestão\nde Informação"
+"Gestor de Campus" <-- "<<C4:Container>>\n:Visualização": Imprime sala de piso que acaba de ser criada
+deactivate "<<C4:Container>>\n:Visualização"
+
+@enduml

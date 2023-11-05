@@ -1,0 +1,42 @@
+@startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+title Container Sequence Diagram (SD) - US250 (N3)
+
+autonumber
+
+actor "Gestor de Campus"
+
+"Gestor de Campus" -> "<<C4:Container>>\n:Visualização": Inicia operação de editar passagem entre dois edificios
+activate "<<C4:Container>>\n:Visualização"
+"<<C4:Container>>\n:Visualização" --> "Gestor de Campus": Solicita dados necessários (connectionId,\nbuildingfromId, buildingtoId, floorfromId, floortoId,\n locationX, locationY)
+deactivate "<<C4:Container>>\n:Visualização"
+
+"Gestor de Campus" -> "<<C4:Container>>\n:Visualização": Introduz dados solicitados
+activate "<<C4:Container>>\n:Visualização"
+"<<C4:Container>>\n:Visualização" -> "<<C4:Container>>\nMódulo de Gestão\nde Informação": PUT /connections/ {connectionId,\nbuildingfromId, buildingtoId, floorfromId, floortoId,\n locationX, locationY}
+
+activate "<<C4:Container>>\nMódulo de Gestão\nde Informação"
+"<<C4:Container>>\nMódulo de Gestão\nde Informação" -> connectionRoute: PUT /connections/ {connectionId,\nbuildingfromId, buildingtoId, floorfromId, floortoId,\n locationX, locationY}
+activate connectionRoute
+connectionRoute -> connectionController: updateConnection(req, res)
+activate connectionController
+connectionController -> connectionService: updateConnection(req, res)
+activate connectionService
+connectionService -> "connection\n:Connection"**: create(req.body)
+connectionService -> connectionRepo: update(connection)
+activate connectionRepo
+deactivate connectionRepo
+deactivate connectionService
+connectionController --> connectionRoute : 200 OK connection
+deactivate connectionController
+connectionRoute --> "<<C4:Container>>\nMódulo de Gestão\nde Informação" : 200 OK connection
+deactivate connectionRoute
+"<<C4:Container>>\nMódulo de Gestão\nde Informação" --> "<<C4:Container>>\n:Visualização": 200 OK connection
+deactivate "<<C4:Container>>\nMódulo de Gestão\nde Informação"
+"Gestor de Campus" <-- "<<C4:Container>>\n:Visualização": Imprime passagem que acaba de ser editada
+deactivate "<<C4:Container>>\n:Visualização"
+
+@enduml

@@ -1,0 +1,22 @@
+@startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+title System Sequence Diagram (SSD) - US260
+
+autonumber
+
+actor "Gestor de Campus"
+
+"Gestor de Campus" -> "<<C4:System>>\n:RobDroneGo": Solicita lista de passagem entre dois edifícios
+activate "<<C4:System>>\n:RobDroneGo"
+"<<C4:System>>\n:RobDroneGo" --> "Gestor de Campus": Solicita dados necessários (buildingfromId, buildingtoId)
+deactivate "<<C4:System>>\n:RobDroneGo"
+
+"Gestor de Campus" -> "<<C4:System>>\n:RobDroneGo": Introduz dados solicitados
+activate "<<C4:System>>\n:RobDroneGo"
+"Gestor de Campus" <-- "<<C4:System>>\n:RobDroneGo": Lista de todas as passagens entre os dois edifícios \npedidos
+deactivate "<<C4:System>>\n:RobDroneGo"
+
+@enduml

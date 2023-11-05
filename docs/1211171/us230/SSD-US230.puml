@@ -1,0 +1,22 @@
+@startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+title System Sequence Diagram (SSD) - US230
+
+autonumber
+
+actor "Gestor de Campus"
+
+"Gestor de Campus" -> "<<C4:System>>\n:RobDroneGo": Inicia operação de carregar o mapa de piso
+activate "<<C4:System>>\n:RobDroneGo"
+"<<C4:System>>\n:RobDroneGo" --> "Gestor de Campus": Solicita ficheiro/texto do mapa de piso
+deactivate "<<C4:System>>\n:RobDroneGo"
+
+"Gestor de Campus" -> "<<C4:System>>\n:RobDroneGo": Introduz dados solicitados
+activate "<<C4:System>>\n:RobDroneGo"
+"Gestor de Campus" <-- "<<C4:System>>\n:RobDroneGo": Mensagem de sucesso da operação
+deactivate "<<C4:System>>\n:RobDroneGo"
+
+@enduml

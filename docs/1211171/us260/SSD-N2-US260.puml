@@ -1,0 +1,26 @@
+@startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+title System Sequence Diagram (SSD) - US260 (N2)
+
+autonumber
+
+actor "Gestor de Campus"
+
+"Gestor de Campus" -> "<<C4:Container>>\n:Visualização": Solicita lista de passagens entre dois edifícios
+activate "<<C4:Container>>\n:Visualização"
+"<<C4:Container>>\n:Visualização" --> "Gestor de Campus": Solicita dados necessários (buildingId1, buildingId2)
+deactivate "<<C4:Container>>\n:Visualização"
+
+"Gestor de Campus" -> "<<C4:Container>>\n:Visualização": Introduz dados solicitados
+activate "<<C4:Container>>\n:Visualização"
+"<<C4:Container>>\n:Visualização" -> "<<C4:Container>>\nMódulo de Gestão\nde Informação": GET /connections/{buildingId1}/{buildingId2}
+activate "<<C4:Container>>\nMódulo de Gestão\nde Informação"
+"<<C4:Container>>\nMódulo de Gestão\nde Informação" --> "<<C4:Container>>\n:Visualização": 200 OK connections
+deactivate "<<C4:Container>>\nMódulo de Gestão\nde Informação"
+"Gestor de Campus" <-- "<<C4:Container>>\n:Visualização": Imprime a lista de passagens entre os dois\nedifícios escolhidos
+deactivate "<<C4:Container>>\n:Visualização"
+
+@enduml

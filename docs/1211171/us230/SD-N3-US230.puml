@@ -1,0 +1,41 @@
+@startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+title Container Sequence Diagram (SD) - US230 (N3)
+
+autonumber
+
+actor "Gestor de Campus"
+
+"Gestor de Campus" -> "<<C4:Container>>\n:Visualização": Inicia operação de carregar mapa de piso
+activate "<<C4:Container>>\n:Visualização"
+"<<C4:Container>>\n:Visualização" --> "Gestor de Campus": Solicita dados necessários (ficheiro do mapa/mapa de piso)
+deactivate "<<C4:Container>>\n:Visualização"
+
+"Gestor de Campus" -> "<<C4:Container>>\n:Visualização": Introduz dados solicitados
+activate "<<C4:Container>>\n:Visualização"
+"<<C4:Container>>\n:Visualização" -> "<<C4:Container>>\nMódulo de Gestão\nde Informação": PATCH {floorId, rooms[{roomId,roomName, door,\nheight, width, locationX, locationY}], connections[{connectionId,\nlocationX, locationY}, elevator{elevatorId, locationX, locationY}]}
+activate "<<C4:Container>>\nMódulo de Gestão\nde Informação"
+"<<C4:Container>>\nMódulo de Gestão\nde Informação" -> floormapRoute: PATCH /floormaps/ {floorId, rooms[{roomId,roomName, door,\nheight, width, locationX, locationY}], connections[{connectionId,\nlocationX, locationY}, elevator{elevatorId, locationX, locationY}]}
+activate floormapRoute
+floormapRoute -> floormapController: createFloorMap(req, res)
+activate floormapController
+floormapController -> floormapService: createFloorMap(req, res)
+activate floormapService
+floormapService -> "floormap\n:FloorMap"**: create(req.body)
+floormapService -> floormapRepo: save(floormap)
+activate floormapRepo
+deactivate floormapRepo
+deactivate floormapService
+floormapController --> floormapRoute : 200 OK floormap
+deactivate floormapController
+floormapRoute --> "<<C4:Container>>\nMódulo de Gestão\nde Informação" : 200 OK floormap
+deactivate floormapRoute
+"<<C4:Container>>\nMódulo de Gestão\nde Informação" --> "<<C4:Container>>\n:Visualização": 200 OK floormap
+deactivate "<<C4:Container>>\nMódulo de Gestão\nde Informação"
+"Gestor de Campus" <-- "<<C4:Container>>\n:Visualização": Imprime mensagem de sucesso
+deactivate "<<C4:Container>>\n:Visualização"
+
+@enduml

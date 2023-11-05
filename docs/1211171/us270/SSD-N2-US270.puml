@@ -1,0 +1,26 @@
+@startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+title Container Sequence Diagram (SSD) - US270 (N2)
+
+autonumber
+
+actor "Gestor de Campus"
+
+"Gestor de Campus" -> "<<C4:Container>>\n:Visualização": Inicia operação de criar um elevador num edifício
+activate "<<C4:Container>>\n:Visualização"
+"<<C4:Container>>\n:Visualização" --> "Gestor de Campus": Solicita dados necessários (buildingId, elevatorId,\nelevatorBrand, elevatorModel, elevatorSerNum,\nlocationX, locationY)
+deactivate "<<C4:Container>>\n:Visualização"
+
+"Gestor de Campus" -> "<<C4:Container>>\n:Visualização": Introduz dados solicitados
+activate "<<C4:Container>>\n:Visualização"
+"<<C4:Container>>\n:Visualização" --> "<<C4:Container>>\nMódulo de Gestão\nde Informação": POST /elevators/ {buildingId, elevatorId,\nelevatorBrand, elevatorModel, elevatorSerNum,\nlocationX, locationY}
+activate "<<C4:Container>>\nMódulo de Gestão\nde Informação"
+"<<C4:Container>>\nMódulo de Gestão\nde Informação" --> "<<C4:Container>>\n:Visualização": 200 OK elevator
+deactivate "<<C4:Container>>\nMódulo de Gestão\nde Informação"
+"Gestor de Campus" <-- "<<C4:Container>>\n:Visualização": Imprime elevador que acaba de ser criado
+deactivate "<<C4:Container>>\n:Visualização"
+
+@enduml

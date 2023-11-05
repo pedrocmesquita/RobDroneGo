@@ -1,0 +1,48 @@
+@startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+title Container Sequence Diagram (SD) - US260 (N3)
+
+autonumber
+
+actor "Gestor de Campus"
+
+"Gestor de Campus" -> "<<C4:Container>>\n:Visualização": Pede lista de passagens entre dois edifícios
+activate "<<C4:Container>>\n:Visualização"
+"<<C4:Container>>\n:Visualização" --> "Gestor de Campus": Solicita dados necessários (buildingId1, buildingId2)
+deactivate "<<C4:Container>>\n:Visualização"
+
+"Gestor de Campus" -> "<<C4:Container>>\n:Visualização": Introduz dados solicitados
+activate "<<C4:Container>>\n:Visualização"
+"<<C4:Container>>\n:Visualização" -> "<<C4:Container>>\nMódulo de Gestão\nde Informação": GET /connections/{buildingId1}/{buildingId2}
+
+activate "<<C4:Container>>\nMódulo de Gestão\nde Informação"
+"<<C4:Container>>\nMódulo de Gestão\nde Informação" -> connectionRoute: GET /connections/{buildingId1}/{buildingId2}
+activate connectionRoute
+connectionRoute -> connectionController: getConnectionsBetween(req, res)
+activate connectionController
+connectionController -> connectionService: getConnectionsBetween(req, res)
+activate connectionService
+connectionService -> connectionRepo: getConnectionsBetween(req, res)
+activate connectionRepo
+connectionRepo -> connectionSchema: find($or: [ { buildingfromId: { $eq: buildingId1 }, buildingtoId: { $eq: buildingId2 } }\n,{ buildingfromId: { $eq: buildingId2 }, buildingtoId: { $eq: buildingId1 } } ])
+activate connectionSchema
+connectionSchema --> connectionRepo: connectionDTOresult
+deactivate connectionSchema
+connectionRepo --> connectionService: connectionDTOresult
+
+deactivate connectionRepo
+connectionService --> connectionController: connectionDTOresult
+deactivate connectionService
+connectionController --> connectionRoute : 200 OK connection
+deactivate connectionController
+connectionRoute --> "<<C4:Container>>\nMódulo de Gestão\nde Informação" : 200 OK connection
+deactivate connectionRoute
+"<<C4:Container>>\nMódulo de Gestão\nde Informação" --> "<<C4:Container>>\n:Visualização": 200 OK connection
+deactivate "<<C4:Container>>\nMódulo de Gestão\nde Informação"
+"Gestor de Campus" <-- "<<C4:Container>>\n:Visualização": Mostra lista de passagens entre os dois edifícios escolhidos
+deactivate "<<C4:Container>>\n:Visualização"
+
+@enduml

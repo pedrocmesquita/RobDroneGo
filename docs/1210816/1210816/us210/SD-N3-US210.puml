@@ -1,0 +1,45 @@
+@startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+title Container Sequence Diagram (SD) - US210 (N3)
+
+autonumber
+
+actor "Gestor de Campus"
+
+activate "Gestor de Campus"
+"Gestor de Campus" -> "<<C4:Container>>\n:Visualização": Pede a lista de todos os pisos de edifícios
+activate "<<C4:Container>>\n:Visualização"
+"<<C4:Container>>\n:Visualização" -> "<<C4:Container>>\nMódulo de Gestão\nde Informação": GET /floors/
+
+activate "<<C4:Container>>\nMódulo de Gestão\nde Informação"
+"<<C4:Container>>\nMódulo de Gestão\nde Informação" -> floorRoute: GET /floors/
+activate floorRoute
+floorRoute -> floorController: getFloors(req, res)
+activate floorController
+floorController -> floorService: getFloors(req, res)
+activate floorService
+floorService -> floorRepo: getFloors(req, res)
+activate floorRepo
+floorRepo -> floorSchema: find()
+activate floorSchema
+floorSchema --> floorRepo: floors
+deactivate floorSchema
+floorRepo --> floorService: floors
+deactivate floorRepo
+floorService -> floorController: res.status(201).send({ message: floors })
+deactivate floorService
+floorController --> floorRoute : 200 OK floors
+deactivate floorController
+floorRoute --> "<<C4:Container>>\nMódulo de Gestão\nde Informação" : 200 OK floors
+deactivate floorRoute
+"<<C4:Container>>\nMódulo de Gestão\nde Informação" --> "<<C4:Container>>\n:Visualização": 200 OK floors
+deactivate "<<C4:Container>>\nMódulo de Gestão\nde Informação"
+"Gestor de Campus" <-- "<<C4:Container>>\n:Visualização": Apresenta lista de pisos de edifícios\npresentes no sistema
+deactivate "<<C4:Container>>\n:Visualização"
+deactivate "Gestor de Campus"
+
+
+@enduml

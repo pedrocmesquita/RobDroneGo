@@ -1,0 +1,28 @@
+@startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+title Container Sequence Diagram (SSD) - US190 (N2)
+
+autonumber
+
+actor "Gestor de Campus"
+
+activate "Gestor de Campus"
+"Gestor de Campus" -> "<<C4:Container>>\n:Visualização": Inicia operação de criar piso de edifício
+activate "<<C4:Container>>\n:Visualização"
+"<<C4:Container>>\n:Visualização" --> "Gestor de Campus": Solicita dados necessários (buildingId, floorId, floorNumber,\nfloorId, floorDescription)
+deactivate "<<C4:Container>>\n:Visualização"
+
+"Gestor de Campus" -> "<<C4:Container>>\n:Visualização": Introduz dados solicitados
+activate "<<C4:Container>>\n:Visualização"
+"<<C4:Container>>\n:Visualização" --> "<<C4:Container>>\nMódulo de Gestão\nde Informação": POST /floors/ {buildingId, floorId, floorNumber,\nfloorId, floorDescription}
+activate "<<C4:Container>>\nMódulo de Gestão\nde Informação"
+"<<C4:Container>>\nMódulo de Gestão\nde Informação" --> "<<C4:Container>>\n:Visualização": 200 OK floor
+deactivate "<<C4:Container>>\nMódulo de Gestão\nde Informação"
+"Gestor de Campus" <-- "<<C4:Container>>\n:Visualização": Mostra piso de edifício que acaba de ser criado\ne os seus parametros
+deactivate "<<C4:Container>>\n:Visualização"
+deactivate "Gestor de Campus"
+
+@enduml

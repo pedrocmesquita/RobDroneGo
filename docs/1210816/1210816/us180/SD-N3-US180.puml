@@ -1,0 +1,49 @@
+@startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+title Container Sequence Diagram (SD) - US180 (N3)
+
+autonumber
+
+actor "Gestor de Campus"
+
+activate "Gestor de Campus"
+"Gestor de Campus" -> "<<C4:Container>>\n:Visualização": Solicita lista de edifícios com\nmínimo e máximo de pisos
+activate "<<C4:Container>>\n:Visualização"
+"<<C4:Container>>\n:Visualização" --> "Gestor de Campus": Solicita dados necessários (max, min)
+deactivate "<<C4:Container>>\n:Visualização"
+"Gestor de Campus" -> "<<C4:Container>>\n:Visualização": Apresenta informação necessária\npara a realização do pedido
+activate "<<C4:Container>>\n:Visualização"
+"<<C4:Container>>\n:Visualização" -> "<<C4:Container>>\nMódulo de Gestão\nde Informação": GET /buildings/max/min
+
+activate "<<C4:Container>>\nMódulo de Gestão\nde Informação"
+"<<C4:Container>>\nMódulo de Gestão\nde Informação" -> buildingRoute: GET /buildings/max/min
+activate buildingRoute
+buildingRoute -> buildingController: getBuildingsByFloors(req, res)
+activate buildingController
+buildingController -> buildingService: getBuildingsByFloors(req, res)
+activate buildingService
+buildingService -> buildingRepo: getBuildingsByFloors(req, res)
+activate buildingRepo
+buildingRepo -> buildingSchema: find({ buildingNumberOfFloors:\n{$gte: min, $lte: max}})
+activate buildingSchema
+buildingSchema --> buildingRepo: buildings
+deactivate buildingSchema
+buildingRepo --> buildingService: buildings
+deactivate buildingRepo
+buildingService -> buildingController: res.status(201).send({ message: buildings })
+deactivate buildingService
+buildingController --> buildingRoute : 200 OK buildings
+deactivate buildingController
+buildingRoute --> "<<C4:Container>>\nMódulo de Gestão\nde Informação" : 200 OK buildings
+deactivate buildingRoute
+"<<C4:Container>>\nMódulo de Gestão\nde Informação" --> "<<C4:Container>>\n:Visualização": 200 OK buildings
+deactivate "<<C4:Container>>\nMódulo de Gestão\nde Informação"
+"Gestor de Campus" <-- "<<C4:Container>>\n:Visualização": Apresenta lista de edifícios\ncom as características\npedidas presentes no sistema
+deactivate "<<C4:Container>>\n:Visualização"
+deactivate "Gestor de Campus"
+
+
+@enduml

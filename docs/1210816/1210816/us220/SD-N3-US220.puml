@@ -1,0 +1,49 @@
+@startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+title Container Sequence Diagram (SD) - US220 (N3)
+
+autonumber
+
+actor "Gestor de Campus"
+
+activate "Gestor de Campus"
+"Gestor de Campus" -> "<<C4:Container>>\n:Visualização": Pede a lista de pisos de um edifício\ncom passagens para outros edifícios
+activate "<<C4:Container>>\n:Visualização"
+"<<C4:Container>>\n:Visualização" --> "Gestor de Campus": Solicita id do edifício para o qual é\npretendida a lista
+deactivate "<<C4:Container>>\n:Visualização"
+"Gestor de Campus" -> "<<C4:Container>>\n:Visualização": Introduz id do edifício pretendido
+activate "<<C4:Container>>\n:Visualização"
+"<<C4:Container>>\n:Visualização" -> "<<C4:Container>>\nMódulo de Gestão\nde Informação": GET /floors/connections/:buildingId
+
+activate "<<C4:Container>>\nMódulo de Gestão\nde Informação"
+"<<C4:Container>>\nMódulo de Gestão\nde Informação" -> floorRoute: GET /floors/connetions/:buildingId
+activate floorRoute
+floorRoute -> floorController: getConnections(req, res)
+activate floorController
+floorController -> floorService: getConnections(req, res)
+activate floorService
+floorService -> floorRepo: getConnections(req, res)
+activate floorRepo
+floorRepo -> floorSchema: find({buildingId: buildingId, connections:{ $exists: true, $ne: []}})
+activate floorSchema
+floorSchema --> floorRepo: floors
+deactivate floorSchema
+floorRepo --> floorService: floors
+deactivate floorRepo
+floorService -> floorController: res.status(201).send({ message: floors })
+deactivate floorService
+floorController --> floorRoute : 200 OK floors
+deactivate floorController
+floorRoute --> "<<C4:Container>>\nMódulo de Gestão\nde Informação" : 200 OK floors
+deactivate floorRoute
+"<<C4:Container>>\nMódulo de Gestão\nde Informação" --> "<<C4:Container>>\n:Visualização": 200 OK floors
+deactivate "<<C4:Container>>\nMódulo de Gestão\nde Informação"
+"Gestor de Campus" <-- "<<C4:Container>>\n:Visualização": Apresenta lista de pisos do edifícios\ncom passagens outros edifícios\npresentes no sistema
+deactivate "<<C4:Container>>\n:Visualização"
+deactivate "Gestor de Campus"
+
+
+@enduml

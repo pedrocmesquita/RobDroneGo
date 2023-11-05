@@ -1,0 +1,27 @@
+@startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+title Container Sequence Diagram (SSD) - US220 (N2)
+
+autonumber
+
+actor "Gestor de Campus"
+
+activate "Gestor de Campus"
+"Gestor de Campus" -> "<<C4:Container>>\n:Visualização": Requesita a listagem de todos\nos pisos de um edifício com\npassagens para outros edifícios
+activate "<<C4:Container>>\n:Visualização"
+"<<C4:Container>>\n:Visualização" --> "Gestor de Campus": Solicita id do edifício para o qual\né pretendido a listagem
+deactivate "<<C4:Container>>\n:Visualização"
+"Gestor de Campus" -> "<<C4:Container>>\n:Visualização": Introduz id do edifício
+activate "<<C4:Container>>\n:Visualização"
+"<<C4:Container>>\n:Visualização" --> "<<C4:Container>>\nMódulo de Gestão\nde Informação": GET /floors/connections/buildingId
+activate "<<C4:Container>>\nMódulo de Gestão\nde Informação"
+"<<C4:Container>>\nMódulo de Gestão\nde Informação" --> "<<C4:Container>>\n:Visualização": 200 OK floors
+deactivate "<<C4:Container>>\nMódulo de Gestão\nde Informação"
+"Gestor de Campus" <-- "<<C4:Container>>\n:Visualização": Imprime lista de pisos do edifícios\nque se encontram no sistema
+deactivate "<<C4:Container>>\n:Visualização"
+deactivate "Gestor de Campus"
+
+@enduml

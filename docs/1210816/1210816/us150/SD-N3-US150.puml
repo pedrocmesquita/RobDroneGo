@@ -1,0 +1,59 @@
+@startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+title Container Sequence Diagram (SD) - US150 (N3)
+
+autonumber
+
+actor "Gestor de Campus"
+
+activate "Gestor de Campus"
+"Gestor de Campus" -> "<<C4:Container>>\n:Visualização": Inicia operação de criar edifício
+activate "<<C4:Container>>\n:Visualização"
+"<<C4:Container>>\n:Visualização" --> "Gestor de Campus": Solicita dados necessários (buildingId, buildingName,\nbuildingDescription, numberOfFloors, dimX, dimY)
+deactivate "<<C4:Container>>\n:Visualização"
+
+"Gestor de Campus" -> "<<C4:Container>>\n:Visualização": Introduz dados solicitados
+activate "<<C4:Container>>\n:Visualização"
+"<<C4:Container>>\n:Visualização" -> "<<C4:Container>>\nMódulo de Gestão\nde Informação": POST /buildings/ {buildingId, buildingName,\nbuildingDescription, numberOfFloors, dimX, dimY}
+
+activate "<<C4:Container>>\nMódulo de Gestão\nde Informação"
+"<<C4:Container>>\nMódulo de Gestão\nde Informação" -> buildingRoute: POST /buildings/ {buildingId, buildingName,\nbuildingDescription, numberOfFloors, dimX, dimY}
+activate buildingRoute
+buildingRoute -> buildingController: createBuilding(req, res)
+activate buildingController
+buildingController -> buildingService: createBuilding(req, res)
+activate buildingService
+buildingService -> buildingRepo: findByBuildingId(building)
+activate buildingRepo
+alt building != null
+buildingRepo --> buildingService: building
+buildingService -> buildingController: res.status(400).send({ message: "Building already exists" })
+buildingController --> buildingRoute: res.status(400).send({ message: "Building already exists" })
+buildingRoute --> "<<C4:Container>>\nMódulo de Gestão\nde Informação": res.status(400).send({ message: "Building already exists" })
+"<<C4:Container>>\nMódulo de Gestão\nde Informação" --> "<<C4:Container>>\n:Visualização": res.status(400).send({ message: "Building already exists" })
+"<<C4:Container>>\n:Visualização" --> "Gestor de Campus": Mostra mensagem de erro
+
+end
+buildingRepo --> buildingService: null
+deactivate buildingRepo
+buildingService -> "building\n:Building"**: create(req.body)
+buildingService -> buildingRepo: save(building)
+activate buildingRepo
+deactivate buildingRepo
+buildingService -> buildingController: res.status(201).send({ message: "Building created successfully" })
+deactivate buildingService
+buildingController --> buildingRoute : 200 OK building
+deactivate buildingController
+buildingRoute --> "<<C4:Container>>\nMódulo de Gestão\nde Informação" : 200 OK building
+deactivate buildingRoute
+"<<C4:Container>>\nMódulo de Gestão\nde Informação" --> "<<C4:Container>>\n:Visualização": 200 OK building
+deactivate "<<C4:Container>>\nMódulo de Gestão\nde Informação"
+"Gestor de Campus" <-- "<<C4:Container>>\n:Visualização": Mostra edifício que acaba de ser criado
+deactivate "<<C4:Container>>\n:Visualização"
+deactivate "Gestor de Campus"
+
+
+@enduml

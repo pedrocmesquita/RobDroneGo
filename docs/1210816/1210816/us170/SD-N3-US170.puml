@@ -1,0 +1,45 @@
+@startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+title Container Sequence Diagram (SD) - US170 (N3)
+
+autonumber
+
+actor "Gestor de Campus"
+
+activate "Gestor de Campus"
+"Gestor de Campus" -> "<<C4:Container>>\n:Visualização": Pede a lista de todos os edifícios
+activate "<<C4:Container>>\n:Visualização"
+"<<C4:Container>>\n:Visualização" -> "<<C4:Container>>\nMódulo de Gestão\nde Informação": GET /buildings/
+
+activate "<<C4:Container>>\nMódulo de Gestão\nde Informação"
+"<<C4:Container>>\nMódulo de Gestão\nde Informação" -> buildingRoute: GET /buildings/
+activate buildingRoute
+buildingRoute -> buildingController: getBuildings(req, res)
+activate buildingController
+buildingController -> buildingService: getBuildings(req, res)
+activate buildingService
+buildingService -> buildingRepo: getBuildings(req, res)
+activate buildingRepo
+buildingRepo -> buildingSchema: find()
+activate buildingSchema
+buildingSchema --> buildingRepo: buildings
+deactivate buildingSchema
+buildingRepo --> buildingService: buildings
+deactivate buildingRepo
+buildingService -> buildingController: res.status(201).send({ message: buildings })
+deactivate buildingService
+buildingController --> buildingRoute : 200 OK buildings
+deactivate buildingController
+buildingRoute --> "<<C4:Container>>\nMódulo de Gestão\nde Informação" : 200 OK buildings
+deactivate buildingRoute
+"<<C4:Container>>\nMódulo de Gestão\nde Informação" --> "<<C4:Container>>\n:Visualização": 200 OK buildings
+deactivate "<<C4:Container>>\nMódulo de Gestão\nde Informação"
+"Gestor de Campus" <-- "<<C4:Container>>\n:Visualização": Apresenta lista de edifícios\npresentes no sistema
+deactivate "<<C4:Container>>\n:Visualização"
+deactivate "Gestor de Campus"
+
+
+@enduml

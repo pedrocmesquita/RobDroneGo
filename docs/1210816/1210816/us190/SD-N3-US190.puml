@@ -1,0 +1,59 @@
+@startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+title Container Sequence Diagram (SD) - US190 (N3)
+
+autonumber
+
+actor "Gestor de Campus"
+
+activate "Gestor de Campus"
+"Gestor de Campus" -> "<<C4:Container>>\n:Visualização": Inicia operação de criar piso de edifício
+activate "<<C4:Container>>\n:Visualização"
+"<<C4:Container>>\n:Visualização" --> "Gestor de Campus": Solicita dados necessários (buildingId, floorId, floorNumber,\nfloorId, floorDescription)
+deactivate "<<C4:Container>>\n:Visualização"
+
+"Gestor de Campus" -> "<<C4:Container>>\n:Visualização": Introduz dados solicitados
+activate "<<C4:Container>>\n:Visualização"
+"<<C4:Container>>\n:Visualização" -> "<<C4:Container>>\nMódulo de Gestão\nde Informação": POST /floors/ {buildingId, floorId, floorNumber,\nfloorId, floorDescription}
+
+activate "<<C4:Container>>\nMódulo de Gestão\nde Informação"
+"<<C4:Container>>\nMódulo de Gestão\nde Informação" -> floorRoute: POST /floors/ {buildingId, floorId, floorNumber,\nfloorId, floorDescription}
+activate floorRoute
+floorRoute -> floorController: createFloor(req, res)
+activate floorController
+floorController -> floorService: createFloor(req, res)
+activate floorService
+floorService -> floorRepo: findByFloorId(floor)
+activate floorRepo
+alt floor != null
+floorRepo --> floorService: floor
+floorService -> floorController: res.status(400).send({ message: "Floor already exists" })
+floorController --> floorRoute: res.status(400).send({ message: "Floor already exists" })
+floorRoute --> "<<C4:Container>>\nMódulo de Gestão\nde Informação": res.status(400).send({ message: "Floor already exists" })
+"<<C4:Container>>\nMódulo de Gestão\nde Informação" --> "<<C4:Container>>\n:Visualização": res.status(400).send({ message: "Floor already exists" })
+"<<C4:Container>>\n:Visualização" --> "Gestor de Campus": Mostra mensagem de erro
+
+end
+floorRepo --> floorService: null
+deactivate floorRepo
+floorService -> "floor\n:Floor"**: create(req.body)
+floorService -> floorRepo: save(floor)
+activate floorRepo
+deactivate floorRepo
+floorService -> floorController: res.status(201).send({ message: "Floor created successfully" })
+deactivate floorService
+floorController --> floorRoute : 200 OK floor
+deactivate floorController
+floorRoute --> "<<C4:Container>>\nMódulo de Gestão\nde Informação" : 200 OK floor
+deactivate floorRoute
+"<<C4:Container>>\nMódulo de Gestão\nde Informação" --> "<<C4:Container>>\n:Visualização": 200 OK floor
+deactivate "<<C4:Container>>\nMódulo de Gestão\nde Informação"
+"Gestor de Campus" <-- "<<C4:Container>>\n:Visualização": Apresenta piso de edíficio que acaba de ser\ncriado e os seus parâmetros
+deactivate "<<C4:Container>>\n:Visualização"
+deactivate "Gestor de Campus"
+
+
+@enduml

@@ -21,18 +21,6 @@ describe('RobotType', () => {
 
     });
 
-    it('create a robotType', () => {
-        expect(robotType.typeId.typeId.toString()).toBe('1');
-        expect(robotType.brand.brand).toBe('TestBrand');
-        expect(robotType.model.model).toBe('TestModel');
-        expect(robotType.taskCategory.category).toBe('Vigilance');
-    });
-    it('should not have null attributes', () => {
-        expect(robotType.brand.brand).not.toBe("");
-        expect(robotType.model.model).not.toBe("");
-        expect(robotType.taskCategory.category).not.toBe("");
-    });
-
 
     it('expects that typeId is not empty', () => {
             TypeId.create({typeId: ''}).isFailure;

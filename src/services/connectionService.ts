@@ -117,33 +117,6 @@ export default class ConnectionService implements IConnectionService {
 
       await this.connectionRepo.update(connectionResult);
 
-      // Update in floors
-      const floorFrom = await this.floorRepo.findByFloorId(connectionResult.floorfromId);
-      const floorTo = await this.floorRepo.findByFloorId(connectionResult.floortoId);
-
-      floorFrom.connections = floorFrom.connections.filter(existingConnection => existingConnection.connectionId !== connection.connectionId);
-      floorTo.connections = floorTo.connections.filter(existingConnection => existingConnection.connectionId !== connection.connectionId);
-
-      floorFrom.connections.push(connectionResult);
-      floorTo.connections.push(connectionResult);
-
-      await this.floorRepo.update(floorFrom);
-      await this.floorRepo.update(floorTo);
-
-      // Update in buildings
-      const buildingFrom = await this.buildingRepo.findByBuildingId(floorFrom.buildingId);
-      const buildingTo = await this.buildingRepo.findByBuildingId(floorTo.buildingId);
-
-      // Remove old connection
-      buildingFrom.floors = buildingFrom.floors.filter(existingFloor => existingFloor.floorId !== floorFrom.floorId);
-      buildingTo.floors = buildingTo.floors.filter(existingFloor => existingFloor.floorId !== floorTo.floorId);
-
-      buildingFrom.addConnectionToFloor(floorFrom.floorId, connectionResult);
-      buildingTo.addConnectionToFloor(floorTo.floorId, connectionResult);
-
-      await this.buildingRepo.updateConnections(buildingFrom);
-      await this.buildingRepo.updateConnections(buildingTo);
-
       const connectionDTOResult = ConnectionMap.toDTO( connectionResult ) as IConnectionDTO;
 
       return Result.ok<IConnectionDTO>( connectionDTOResult )

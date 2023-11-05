@@ -30,7 +30,7 @@ export default (app: Router) => {
     route.get("",
         (req, res, next) => ctrl.getRobots(req, res, next) );
 
-    route.patch("", (req, res, next) => ctrl.inibRobot(req, res, next));
+    route.patch("/:idRobot", (req, res, next) => ctrl.inibRobot(req, res, next));
 };
 
 

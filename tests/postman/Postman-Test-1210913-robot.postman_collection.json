@@ -21,7 +21,7 @@
                   "});\r",
                   "\r",
                   "pm.test(\"Response JSON matches the request\", function () {\r",
-                  "    const requestBody = pm.request.json();\r",
+                  "    const requestBody = JSON.parse(pm.request.body.raw);\r",
                   "    const responseBody = pm.response.json();\r",
                   "\r",
                   "    pm.expect(responseBody.idRobot).to.equal(requestBody.idRobot);\r",
@@ -96,7 +96,7 @@
       "name": "Patch",
       "item": [
         {
-          "name": "http://localhost:4000/robots",
+          "name": "http://localhost:4000/api/robots",
           "event": [
             {
               "listen": "test",
@@ -107,7 +107,7 @@
                   "});\n",
                   "\n",
                   "pm.test(\"Response JSON matches the request\", function () {\n",
-                  "    const requestBody = pm.request.json();\n",
+                  "    const requestBody = JSON.parse(pm.request.body.raw);\n",
                   "    const responseBody = pm.response.json();\n",
                   "\n",
                   "    pm.expect(responseBody.idRobot).to.equal(requestBody.idRobot);\n",
@@ -136,7 +136,7 @@
                 }
               }
             },
-            "url": "http://localhost:4000/robots"
+            "url": "http://localhost:4000/api/robots"
           },
           "response": []
         }

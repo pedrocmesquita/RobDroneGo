@@ -16,7 +16,7 @@ export class ElevatorBrand extends ValueObject<ElevatorBrandProps> {
   }
 
   public static create(props: ElevatorBrandProps): Result<ElevatorBrand> {
-    const guardResult: IGuardResult = Guard.againstNullOrUndefined(props.elevatorBrand, 'elevatorBrand');
+    const guardResult = Guard.againstNullOrUndefined(props.elevatorBrand, 'elevatorBrand');
 
     if (!guardResult.succeeded) {
       return Result.fail<ElevatorBrand>(guardResult.message);

@@ -25,16 +25,31 @@ roomRoute -> roomController: createRoom(req, res)
 activate roomController
 roomController -> roomService: createRoom(req, res)
 activate roomService
+
+roomService -> roomRepo: findByRoomId(roomId)
+activate roomRepo
+alt room != null
+roomRepo --> roomService: room
+roomService -> roomController: res.status(400).send({ message: "Room already exists" })
+roomController --> roomRoute: res.status(400).send({ message: "Room already exists" })
+roomRoute --> "<<C4:Container>>\nMódulo de Gestão\nde Informação": res.status(400).send({ message: "Room already exists" })
+"<<C4:Container>>\nMódulo de Gestão\nde Informação" --> "<<C4:Container>>\n:Visualização": res.status(400).send({ message: "Room already exists" })
+"<<C4:Container>>\n:Visualização" --> "Gestor de Campus": Mostra mensagem de erro
+
+end
+roomRepo --> roomService: null
+deactivate roomRepo
 roomService -> "room\n:Room"**: create(req.body)
 roomService -> roomRepo: save(room)
 activate roomRepo
 deactivate roomRepo
+roomService --> roomController: res.status(201).send({ message: "Room created successfully" })
 deactivate roomService
-roomController --> roomRoute : 200 OK room
+roomController --> roomRoute : 201 OK room
 deactivate roomController
-roomRoute --> "<<C4:Container>>\nMódulo de Gestão\nde Informação" : 200 OK room
+roomRoute --> "<<C4:Container>>\nMódulo de Gestão\nde Informação" : 201 OK room
 deactivate roomRoute
-"<<C4:Container>>\nMódulo de Gestão\nde Informação" --> "<<C4:Container>>\n:Visualização": 200 OK room
+"<<C4:Container>>\nMódulo de Gestão\nde Informação" --> "<<C4:Container>>\n:Visualização": 201 OK room
 deactivate "<<C4:Container>>\nMódulo de Gestão\nde Informação"
 "Gestor de Campus" <-- "<<C4:Container>>\n:Visualização": Imprime mensagem de sucesso com a sala de piso criada
 deactivate "<<C4:Container>>\n:Visualização"

@@ -25,16 +25,31 @@ elevatorRoute -> elevatorController: createElevator(req, res)
 activate elevatorController
 elevatorController -> elevatorService: createElevator(req, res)
 activate elevatorService
+
+elevatorService -> elevatorRepo: findByElevatorId(elevatorId)
+activate elevatorRepo
+alt elevator != null
+elevatorRepo --> elevatorService: elevator
+elevatorService -> elevatorController: res.status(400).send({ message: "Elevator already exists" })
+elevatorController --> elevatorRoute: res.status(400).send({ message: "Elevator already exists" })
+elevatorRoute --> "<<C4:Container>>\nMódulo de Gestão\nde Informação": res.status(400).send({ message: "Elevator already exists" })
+"<<C4:Container>>\nMódulo de Gestão\nde Informação" --> "<<C4:Container>>\n:Visualização": res.status(400).send({ message: "Elevator already exists" })
+"<<C4:Container>>\n:Visualização" --> "Gestor de Campus": Mostra mensagem de erro
+
+end
+elevatorRepo --> elevatorService: null
+deactivate elevatorRepo
 elevatorService -> "elevator\n:Elevator"**: create(req.body)
 elevatorService -> elevatorRepo: save(elevator)
 activate elevatorRepo
 deactivate elevatorRepo
+elevatorService --> elevatorController: res.status(201).send(elevator)
 deactivate elevatorService
-elevatorController --> elevatorRoute : 200 OK elevator
+elevatorController --> elevatorRoute : 201 OK elevator
 deactivate elevatorController
-elevatorRoute --> "<<C4:Container>>\nMódulo de Gestão\nde Informação" : 200 OK elevator
+elevatorRoute --> "<<C4:Container>>\nMódulo de Gestão\nde Informação" : 201 OK elevator
 deactivate elevatorRoute
-"<<C4:Container>>\nMódulo de Gestão\nde Informação" --> "<<C4:Container>>\n:Visualização": 200 OK elevator
+"<<C4:Container>>\nMódulo de Gestão\nde Informação" --> "<<C4:Container>>\n:Visualização": 201 OK elevator
 deactivate "<<C4:Container>>\nMódulo de Gestão\nde Informação"
 "Gestor de Campus" <-- "<<C4:Container>>\n:Visualização": Imprime elevador que acaba de ser criado
 deactivate "<<C4:Container>>\n:Visualização"

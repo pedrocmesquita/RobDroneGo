@@ -24,7 +24,21 @@ activate connectionRoute
 connectionRoute -> connectionController: updateConnection(req, res)
 activate connectionController
 connectionController -> connectionService: updateConnection(req, res)
+
 activate connectionService
+connectionService -> connectionRepo: findByConnectionId(connectionId)
+activate connectionRepo
+alt connection == null
+connectionRepo --> connectionService: connection
+connectionService -> connectionController: res.status(404).send({ message: "Connection not found." })
+connectionController --> connectionRoute: res.status(404).send({ message: "Connection not found." })
+connectionRoute --> "<<C4:Container>>\nMódulo de Gestão\nde Informação": res.status(404).send({ message: "Connection not found." })
+"<<C4:Container>>\nMódulo de Gestão\nde Informação" --> "<<C4:Container>>\n:Visualização": res.status(404).send({ message: "Connection not found." })
+"<<C4:Container>>\n:Visualização" --> "Gestor de Campus": Mostra mensagem de erro
+
+end
+connectionRepo --> connectionService: null
+deactivate connectionRepo
 connectionService -> "connection\n:Connection"**: create(req.body)
 connectionService -> connectionRepo: update(connection)
 activate connectionRepo

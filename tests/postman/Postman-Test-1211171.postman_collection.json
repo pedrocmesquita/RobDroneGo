@@ -1,0 +1,453 @@
+{
+	"info": {
+		"_postman_id": "25261fb4-9fc7-4d45-85bc-ae627fe8cf14",
+		"name": "Postman-Test-1211171",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "29917040"
+	},
+	"item": [
+		{
+			"name": "Get",
+			"item": [
+				{
+					"name": "http://localhost:4000/api/elevators",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200 OK\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response is a JSON object\", function () {\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									"\r",
+									"pm.test(\"ElevatorId is not null\", function () {\r",
+									"    const jsonData = pm.response.json();\r",
+									"    jsonData.forEach(elevator => {\r",
+									"        pm.expect(elevator.elevatorId).to.not.be.null;\r",
+									"    });\r",
+									"});\r",
+									"\r",
+									"pm.test(\"ElevatorBrand is not null\", function () {\r",
+									"    const jsonData = pm.response.json();\r",
+									"    jsonData.forEach(elevator => {\r",
+									"        pm.expect(elevator.elevatorBrand).to.not.be.null;\r",
+									"    });\r",
+									"});\r",
+									"\r",
+									"pm.test(\"ElevatorModel is not null\", function () {\r",
+									"    const jsonData = pm.response.json();\r",
+									"    jsonData.forEach(elevator => {\r",
+									"        pm.expect(elevator.elevatorModel).to.not.be.null;\r",
+									"    });\r",
+									"});\r",
+									"\r",
+									"pm.test(\"ElevatorSerNum is not null\", function () {\r",
+									"    const jsonData = pm.response.json();\r",
+									"    jsonData.forEach(elevator => {\r",
+									"        pm.expect(elevator.elevatorSerNum).to.not.be.null;\r",
+									"    });\r",
+									"});\r",
+									"\r",
+									"pm.test(\"ElevatorDesc less than 256 chars\", function () {\r",
+									"    const jsonData = pm.response.json();\r",
+									"    jsonData.forEach(elevator => {\r",
+									"        pm.expect(elevator.elevatorDesc.length).to.be.at.most(256);\r",
+									"    });\r",
+									"});\r",
+									"\r",
+									"pm.test(\"CurrentFloor is between -100 and 500\", function () {\r",
+									"    const jsonData = pm.response.json();\r",
+									"    jsonData.forEach(elevator => {\r",
+									"        pm.expect(elevator.currentFloor).to.be.within(-100, 500);\r",
+									"    });\r",
+									"});\r",
+									"\r",
+									"pm.test(\"LocationX and LocationY are not null\", function () {\r",
+									"    const jsonData = pm.response.json();\r",
+									"    jsonData.forEach(elevator => {\r",
+									"        pm.expect(elevator.locationX).to.not.be.null;\r",
+									"        pm.expect(elevator.locationY).to.not.be.null;\r",
+									"    });\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "http://localhost:4000/api/elevators"
+					},
+					"response": []
+				},
+				{
+					"name": "http://localhost:4000/api/connections/ARB/ARQ",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200 OK\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response is a JSON array\", function () {\r",
+									"    pm.response.to.be.json;\r",
+									"    pm.response.to.have.jsonBody('array');\r",
+									"});\r",
+									"\r",
+									"pm.test(\"ConnectionId is not null\", function () {\r",
+									"    const jsonData = pm.response.json();\r",
+									"    jsonData.forEach(connection => {\r",
+									"        pm.expect(connection.connectionId).to.not.be.null;\r",
+									"    });\r",
+									"});\r",
+									"\r",
+									"pm.test(\"BuildingFromId is not null\", function () {\r",
+									"    const jsonData = pm.response.json();\r",
+									"    jsonData.forEach(connection => {\r",
+									"        pm.expect(connection.buildingfromId).to.not.be.null;\r",
+									"    });\r",
+									"});\r",
+									"\r",
+									"pm.test(\"BuildingToId is not null\", function () {\r",
+									"    const jsonData = pm.response.json();\r",
+									"    jsonData.forEach(connection => {\r",
+									"        pm.expect(connection.buildingtoId).to.not.be.null;\r",
+									"    });\r",
+									"});\r",
+									"\r",
+									"pm.test(\"FloorFromId is not null\", function () {\r",
+									"    const jsonData = pm.response.json();\r",
+									"    jsonData.forEach(connection => {\r",
+									"        pm.expect(connection.floorfromId).to.not.be.null;\r",
+									"    });\r",
+									"});\r",
+									"\r",
+									"pm.test(\"FloorToId is not null\", function () {\r",
+									"    const jsonData = pm.response.json();\r",
+									"    jsonData.forEach(connection => {\r",
+									"        pm.expect(connection.floortoId).to.not.be.null;\r",
+									"    });\r",
+									"});\r",
+									"\r",
+									"pm.test(\"LocationX and LocationY are not null\", function () {\r",
+									"    const jsonData = pm.response.json();\r",
+									"    jsonData.forEach(connection => {\r",
+									"        pm.expect(connection.locationX).to.not.be.null;\r",
+									"        pm.expect(connection.locationY).to.not.be.null;\r",
+									"    });\r",
+									"});\r",
+									"\r",
+									"pm.test(\"LocationToX and LocationToY are not null\", function () {\r",
+									"    const jsonData = pm.response.json();\r",
+									"    jsonData.forEach(connection => {\r",
+									"        pm.expect(connection.locationToX).to.not.be.null;\r",
+									"        pm.expect(connection.locationToY).to.not.be.null;\r",
+									"    });\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "http://localhost:4000/api/connections/ARB/ARQ"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Post",
+			"item": [
+				{
+					"name": "http://localhost:4000/api/elevators",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response status code should be 201 Created or 404\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([201, 404]);\r",
+									"});\r",
+									"\r",
+									"if (pm.response.code === 201) {\r",
+									"    // Parse the response JSON\r",
+									"    const responseJson = pm.response.json();\r",
+									"\r",
+									"    // Access the request body\r",
+									"    const requestBody = pm.request.body;\r",
+									"\r",
+									"    // If your request body is in JSON format, parse it\r",
+									"    if (requestBody.mode === 'raw' && requestBody.options.language === 'json') {\r",
+									"        const requestJson = JSON.parse(requestBody.raw);\r",
+									"\r",
+									"        // Now you can use requestJson to access the request data\r",
+									"        pm.test(\"Response JSON matches the request\", function () {\r",
+									"            pm.expect(responseJson.buildingId).to.equal(requestJson.buildingId);\r",
+									"            pm.expect(responseJson.elevatorId).to.equal(requestJson.elevatorId);\r",
+									"            pm.expect(responseJson.elevatorBrand).to.equal(requestJson.elevatorBrand);\r",
+									"            pm.expect(responseJson.elevatorModel).to.equal(requestJson.elevatorModel);\r",
+									"            pm.expect(responseJson.elevatorSerNum).to.equal(requestJson.elevatorSerNum);\r",
+									"            pm.expect(responseJson.elevatorDesc).to.equal(requestJson.elevatorDesc);\r",
+									"            pm.expect(responseJson.currentFloor).to.equal(requestJson.currentFloor);\r",
+									"            pm.expect(responseJson.locationX).to.equal(requestJson.locationX);\r",
+									"            pm.expect(responseJson.elevatorY).to.equal(requestJson.elevatorY);\r",
+									"        });\r",
+									"    }\r",
+									"} else if (pm.response.code === 404) {\r",
+									"    // If the response is 404 Not Found, handle it as per your requirements\r",
+									"    // You can add assertions or take appropriate actions in this case\r",
+									"    pm.test(\"No resource should be found (404)\", function () {\r",
+									"        pm.expect(pm.response.text()).to.be.empty;\r",
+									"    });\r",
+									"}\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n        \"buildingId\": \"ARQXX\",\r\n        \"elevatorId\": \"143\",\r\n        \"elevatorBrand\": \"Dyson\",\r\n        \"elevatorModel\": \"5000\",\r\n        \"elevatorSerNum\": \"1223\",\r\n        \"elevatorDesc\": \"Primeiro teste de elevador\",\r\n        \"currentFloor\": 5,\r\n        \"locationX\": 1,\r\n        \"locationY\": 2\r\n    }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:4000/api/elevators"
+					},
+					"response": []
+				},
+				{
+					"name": "http://localhost:4000/api/rooms",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response status code should be 201 Created or 404\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([201, 404]);\r",
+									"});\r",
+									"\r",
+									"if (pm.response.code === 201) {\r",
+									"    // Parse the response JSON\r",
+									"    const responseJson = pm.response.json();\r",
+									"\r",
+									"    // Access the request body\r",
+									"    const requestBody = pm.request.body;\r",
+									"\r",
+									"    // If your request body is in JSON format, parse it\r",
+									"    if (requestBody.mode === 'raw' && requestBody.options.language === 'json') {\r",
+									"        const requestJson = JSON.parse(requestBody.raw);\r",
+									"\r",
+									"        // Now you can use requestJson to access the request data\r",
+									"        pm.test(\"Response JSON matches the request\", function () {\r",
+									"            pm.expect(responseJson.roomId).to.equal(requestJson.roomId);\r",
+									"            pm.expect(responseJson.floorId).to.equal(requestJson.floorId);\r",
+									"            pm.expect(responseJson.roomName).to.equal(requestJson.roomName);\r",
+									"            pm.expect(responseJson.roomDescription).to.equal(requestJson.roomDescription);\r",
+									"            pm.expect(responseJson.roomCategory).to.equal(requestJson.roomCategory);\r",
+									"            pm.expect(responseJson.door).to.equal(requestJson.door);\r",
+									"        });\r",
+									"    }\r",
+									"} else if (pm.response.code === 404) {\r",
+									"    // If the response is 404 Not Found, handle it as per your requirements\r",
+									"    // You can add assertions or take appropriate actions in this case\r",
+									"    pm.test(\"No resource should be found (404)\", function () {\r",
+									"        pm.expect(pm.response.text()).to.be.empty;\r",
+									"    });\r",
+									"}\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n        \"roomId\": \"138\",\r\n        \"floorId\": \"ARQ-91\",\r\n        \"roomName\": \"Sala de Computadores\",\r\n        \"roomDescription\": \"Teste 1\",\r\n        \"roomCategory\": \"Gabinete\",\r\n        \"doorX\": 1,\r\n        \"doorY\": 1\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:4000/api/rooms"
+					},
+					"response": []
+				},
+				{
+					"name": "http://localhost:4000/api/connections",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response status code should be 201 Created or 404\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([201, 404]);\r",
+									"});\r",
+									"\r",
+									"if (pm.response.code === 201) {\r",
+									"    // Parse the response JSON\r",
+									"    const responseJson = pm.response.json();\r",
+									"\r",
+									"    // Access the request body\r",
+									"    const requestBody = pm.request.body;\r",
+									"\r",
+									"    // If your request body is in JSON format, parse it\r",
+									"    if (requestBody.mode === 'raw' && requestBody.options.language === 'json') {\r",
+									"        const requestJson = JSON.parse(requestBody.raw);\r",
+									"\r",
+									"        // Now you can use requestJson to access the request data\r",
+									"        pm.test(\"Response JSON matches the request\", function () {\r",
+									"            pm.expect(responseJson.connectionId).to.equal(requestJson.connectionId);\r",
+									"            pm.expect(responseJson.buildingfromId).to.equal(requestJson.buildingfromId);\r",
+									"            pm.expect(responseJson.buildingtoId).to.equal(requestJson.buildingtoId);\r",
+									"            pm.expect(responseJson.floorfromId).to.equal(requestJson.floorfromId);\r",
+									"            pm.expect(responseJson.floortoId).to.equal(requestJson.floortoId);\r",
+									"            pm.expect(responseJson.locationX).to.equal(requestJson.locationX);\r",
+									"            pm.expect(responseJson.locationY).to.equal(requestJson.locationY);\r",
+									"            pm.expect(responseJson.locationToX).to.equal(requestJson.locationToX);\r",
+									"            pm.expect(responseJson.locationToY).to.equal(requestJson.locationToY);\r",
+									"        });\r",
+									"    }\r",
+									"} else if (pm.response.code === 404) {\r",
+									"    // If the response is 404 Not Found, handle it as per your requirements\r",
+									"    // You can add assertions or take appropriate actions in this case\r",
+									"    pm.test(\"No resource should be found (404)\", function () {\r",
+									"        pm.expect(pm.response.text()).to.be.empty;\r",
+									"    });\r",
+									"}\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{       \r\n        \"buildingfromId\": \"ARQX\",\r\n        \"buildingtoId\": \"ARQ\",\r\n        \"floorfromId\": \"ARQX-29\",\r\n        \"floortoId\": \"ARQ-91\",\r\n        \"locationX\": 1,\r\n        \"locationY\": 2,\r\n        \"locationToX\": 3,\r\n        \"locationToY\": 4\r\n    }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:4000/api/connections"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "PutOrPatch",
+			"item": [
+				{
+					"name": "http://localhost:4000/api/floormap",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"url": "http://localhost:4000/api/floormap"
+					},
+					"response": []
+				},
+				{
+					"name": "http://localhost:4000/api/connection",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200 OK\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response is a JSON object\", function () {\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									"\r",
+									"const requestData = pm.request.json();\r",
+									"const responseData = pm.response.json();\r",
+									"\r",
+									"pm.test(\"ConnectionId in request and response match\", function () {\r",
+									"    pm.expect(requestData.connectionId).to.equal(responseData.connectionId);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"BuildingFromId in request and response match\", function () {\r",
+									"    pm.expect(requestData.buildingfromId).to.equal(responseData.buildingfromId);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"BuildingToId in request and response match\", function () {\r",
+									"    pm.expect(requestData.buildingtoId).to.equal(responseData.buildingtoId);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"FloorFromId in request and response match\", function () {\r",
+									"    pm.expect(requestData.floorfromId).to.equal(responseData.floorfromId);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"FloorToId in request and response match\", function () {\r",
+									"    pm.expect(requestData.floortoId).to.equal(responseData.floortoId);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"LocationX in request and response match\", function () {\r",
+									"    pm.expect(requestData.locationX).to.equal(responseData.locationX);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"LocationY in request and response match\", function () {\r",
+									"    pm.expect(requestData.locationY).to.equal(responseData.locationY);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"LocationToX in request and response match\", function () {\r",
+									"    pm.expect(requestData.locationToX).to.equal(responseData.locationToX);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"LocationToY in response is as expected\", function () {\r",
+									"    pm.expect(responseData.locationToY).to.equal(responseData.locationToY); \r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{       \r\n        \"connectionId\": \"ARB-29 TO ARQ-13\",\r\n        \"buildingfromId\": \"ARB\",\r\n        \"buildingtoId\": \"ARQ\",\r\n        \"floorfromId\": \"ARB-3\",\r\n        \"floortoId\": \"ARQ-13\",\r\n        \"locationX\": 1,\r\n        \"locationY\": 2,\r\n        \"locationToX\": 3,\r\n        \"locationToY\": 4\r\n    }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:4000/api/connections"
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

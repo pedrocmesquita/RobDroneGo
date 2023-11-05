@@ -86,6 +86,54 @@ export default class ConnectionRepo implements IConnectionRepo {
     return ConnectionMap.toDomain(updatedConnection);
   }
 
+  public async findByFloorFromId(floorFromId: string): Promise<Connection[]> {
+    const query = { floorfromId: floorFromId };
+    const connections = await this.connectionSchema.find(
+      query as FilterQuery<IConnectionPersistence & Document>
+    );
+
+    if (connections != null) {
+      return connections.map(connection => ConnectionMap.toDomain(connection));
+    }
+    return null;
+  }
+
+  public async findByFloorToId(floorToId: string): Promise<Connection[]> {
+    const query = { floortoId: floorToId };
+    const connections = await this.connectionSchema.find(
+      query as FilterQuery<IConnectionPersistence & Document>
+    );
+
+    if (connections != null) {
+      return connections.map(connection => ConnectionMap.toDomain(connection));
+    }
+    return null;
+  }
+
+  public async updateNewConnectionWithOldConnection(connection: Connection, oldConnectionId: string): Promise<Connection> {
+    const query = { connectionId: oldConnectionId };
+
+    const connectionDocument = await this.connectionSchema.findOne(query);
+
+    if (connectionDocument != null) {
+      connectionDocument.connectionId = connection.connectionId;
+      connectionDocument.buildingfromId = connection.buildingfromId;
+      connectionDocument.buildingtoId = connection.buildingtoId;
+      connectionDocument.floorfromId = connection.floorfromId;
+      connectionDocument.floortoId = connection.floortoId;
+      connectionDocument.locationX = connection.locationX
+      connectionDocument.locationY = connection.locationY
+      connectionDocument.locationToX = connection.locationToX
+      connectionDocument.locationToY = connection.locationToY
+      await connectionDocument.save();
+
+      return connection;
+    }
+    else {
+      return null;
+    }
+  }
+
   public async delete(connectionId: string){
     const query = { connectionId: connectionId };
     await this.connectionSchema.deleteOne(query as FilterQuery<IConnectionPersistence & Document>);

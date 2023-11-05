@@ -103,4 +103,55 @@ export default class BuildingController implements IBuildingController {
             return next(e);
         }
     }
+
+    public async updateBuildingDescription(req: Request, res: Response, next: NextFunction) {
+        try {
+            const buildingOrError = (await this.buildingServiceInstance.updateBuildingDescription(
+              req.params.buildingId as string,
+                req.body.buildingDescription as string
+            )) as Result<IBuildingDTO>;
+
+            if (buildingOrError.isFailure) {
+                return res.status(404).send();
+            }
+
+            return res.status(200).json(buildingOrError.getValue());
+        } catch (e) {
+            return next(e);
+        }
+    }
+
+    public async updateBuildingName(req: Request, res: Response, next: NextFunction) {
+        try {
+            const buildingOrError = (await this.buildingServiceInstance.updateBuildingName(
+              req.params.buildingId as string,
+                req.body.buildingName as string
+            )) as Result<IBuildingDTO>;
+
+            if (buildingOrError.isFailure) {
+                return res.status(404).send();
+            }
+
+            return res.status(200).json(buildingOrError.getValue());
+        } catch (e) {
+            return next(e);
+        }
+    }
+
+    public async updateBuildingNumberOfFloors(req: Request, res: Response, next: NextFunction) {
+        try {
+            const buildingOrError = (await this.buildingServiceInstance.updateBuildingNumberOfFloors(
+              req.params.buildingId as string,
+                req.body.buildingNumberOfFloors as number
+            )) as Result<IBuildingDTO>;
+
+            if (buildingOrError.isFailure) {
+                return res.status(404).send();
+            }
+
+            return res.status(200).json(buildingOrError.getValue());
+        } catch (e) {
+            return next(e);
+        }
+    }
 }

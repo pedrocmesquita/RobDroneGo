@@ -60,6 +60,12 @@ export default class ConnectionService implements IConnectionService {
         return Result.fail<IConnectionDTO>("Connection already exists.");
       }
 
+      // Verify if floorFrom and floorTo already have a connection
+      if (floorFrom.connections.find(existingConnection => existingConnection.connectionId === connectionDTO.connectionId)
+      || floorTo.connections.find(existingConnection => existingConnection.connectionId === connectionDTO.connectionId)) {
+        return Result.fail<IConnectionDTO>("Connection already exists.");
+      }
+
       const connectionOrError = await Connection.create( connectionDTO );
 
       if (connectionOrError.isFailure) {
@@ -95,13 +101,13 @@ export default class ConnectionService implements IConnectionService {
 
   public async updateConnection(connectionDTO: IConnectionDTO): Promise<Result<IConnectionDTO>> {
     try {
-      const exists = await this.connectionRepo.findByConnectionId(connectionDTO.connectionId);
+      const connection = await this.connectionRepo.findByConnectionId(connectionDTO.connectionId);
 
-      if (exists === null) {
+      if (connection === null) {
         return Result.fail<IConnectionDTO>("Connection not found");
       }
 
-      const connectionOrError = await Connection.create(connectionDTO);
+      const connectionOrError = await Connection.create( connectionDTO );
 
       if (connectionOrError.isFailure) {
         return Result.fail<IConnectionDTO>(connectionOrError.errorValue());
@@ -111,38 +117,36 @@ export default class ConnectionService implements IConnectionService {
 
       await this.connectionRepo.update(connectionResult);
 
-      // Update connection in floorFrom and floorTo
-      const floorFrom = await this.floorRepo.findByFloorId(connectionDTO.floorfromId);
-      const floorTo = await this.floorRepo.findByFloorId(connectionDTO.floortoId);
+      // Update in floors
+      const floorFrom = await this.floorRepo.findByFloorId(connectionResult.floorfromId);
+      const floorTo = await this.floorRepo.findByFloorId(connectionResult.floortoId);
 
-      // Add connection to floorFrom and floorTo
-      floorFrom.connections.push(connectionResult)
-      floorTo.connections.push(connectionResult)
+      floorFrom.connections = floorFrom.connections.filter(existingConnection => existingConnection.connectionId !== connection.connectionId);
+      floorTo.connections = floorTo.connections.filter(existingConnection => existingConnection.connectionId !== connection.connectionId);
 
-      // Remove old connection from floorFrom and floorTo
-      floorFrom.connections.filter(existingConnection => existingConnection.connectionId !== connectionResult.connectionId)
-      floorTo.connections.filter(existingConnection => existingConnection.connectionId !== connectionResult.connectionId)
+      floorFrom.connections.push(connectionResult);
+      floorTo.connections.push(connectionResult);
 
       await this.floorRepo.update(floorFrom);
       await this.floorRepo.update(floorTo);
 
-      // Update building
+      // Update in buildings
       const buildingFrom = await this.buildingRepo.findByBuildingId(floorFrom.buildingId);
       const buildingTo = await this.buildingRepo.findByBuildingId(floorTo.buildingId);
 
-      // Add connection to floorFrom and floorTo
+      // Remove old connection
+      buildingFrom.floors = buildingFrom.floors.filter(existingFloor => existingFloor.floorId !== floorFrom.floorId);
+      buildingTo.floors = buildingTo.floors.filter(existingFloor => existingFloor.floorId !== floorTo.floorId);
+
       buildingFrom.addConnectionToFloor(floorFrom.floorId, connectionResult);
       buildingTo.addConnectionToFloor(floorTo.floorId, connectionResult);
-
-      // Remove old connection from floorFrom and floorTo
-      buildingFrom.floors.filter(existingFloor => existingFloor.floorId !== floorFrom.floorId);
-      buildingTo.floors.filter(existingFloor => existingFloor.floorId !== floorTo.floorId);
 
       await this.buildingRepo.updateConnections(buildingFrom);
       await this.buildingRepo.updateConnections(buildingTo);
 
-      const connectionDTOResult = ConnectionMap.toDTO(connectionResult) as IConnectionDTO;
-      return Result.ok<IConnectionDTO>(connectionDTOResult);
+      const connectionDTOResult = ConnectionMap.toDTO( connectionResult ) as IConnectionDTO;
+
+      return Result.ok<IConnectionDTO>( connectionDTOResult )
     } catch (e) {
       throw e;
     }

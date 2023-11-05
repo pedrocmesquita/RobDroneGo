@@ -104,7 +104,7 @@ export default class FloorRepo implements IFloorRepo {
     }
 
     public async update(floor: Floor): Promise<Floor> {
-        await this.floorSchema.updateOne( { floorId: floor.floorId }, FloorMap.toDTO(floor));
+        await this.floorSchema.findOneAndUpdate( { floorId: floor.floorId}, FloorMap.toDTO(floor));
 
         const updatedFloor = await this.floorSchema.findOne({ floorId: floor.floorId });
 

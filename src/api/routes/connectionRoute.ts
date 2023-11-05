@@ -31,10 +31,7 @@ export default (app: Router) => {
   route.put("",
     celebrate({
       body: Joi.object({
-        buildingfromId: Joi.string().required(),
-        buildingtoId: Joi.string().required(),
-        floorfromId: Joi.string().required(),
-        floortoId: Joi.string().required(),
+        connectionId: Joi.string().required(),
         locationX: Joi.number().required(),
         locationY: Joi.number().required(),
         locationToX: Joi.number().required(),

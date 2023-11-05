@@ -95,11 +95,6 @@
 							"listen": "test",
 							"script": {
 								"exec": [
-									"pm.test(\"Connection success for floors\", function () {\r",
-									"    const jsonData = pm.response.json();\r",
-									"    pm.expect(jsonData).to.be.an('array').that.is.not.empty;\r",
-									"});\r",
-									"\r",
 									"pm.test(\"FloorId is the concatenation of buildingId and floorNumber\", function () {\r",
 									"    const jsonData = pm.response.json();\r",
 									"    jsonData.forEach(floor => {\r",
@@ -250,22 +245,28 @@
 									"    // Parse the response JSON\r",
 									"    const responseJson = pm.response.json();\r",
 									"\r",
-									"    // Check if the response status code is 201 Created\r",
-									"    pm.test(\"Response status code should be 201 Created\", function () {\r",
-									"        pm.expect(pm.response.code).to.equal(201);\r",
-									"    });\r",
+									"    // Access the request body\r",
+									"    const requestBody = pm.request.body;\r",
 									"\r",
-									"    // Check if the response JSON matches the request data\r",
-									"    pm.test(\"Response JSON matches the request\", function () {\r",
-									"        pm.expect(responseJson.buildingId).to.equal(pm.request.json().buildingId);\r",
-									"        pm.expect(responseJson.buildingName).to.equal(pm.request.json().buildingName);\r",
-									"        pm.expect(responseJson.buildingNumberOfFloors).to.equal(Number(pm.request.json().buildingNumberOfFloors));\r",
-									"        pm.expect(responseJson.buildingDescription).to.equal(pm.request.json().buildingDescription);\r",
-									"        pm.expect(responseJson.dimX).to.equal(Number(pm.request.json().dimX));\r",
-									"        pm.expect(responseJson.dimY).to.equal(Number(pm.request.json().dimY));\r",
-									"        pm.expect(responseJson.floors).to.be.an('array').that.is.empty;\r",
-									"        pm.expect(responseJson.elevators).to.be.an('array').that.is.empty;\r",
-									"    });\r",
+									"    // If your request body is in JSON format, parse it\r",
+									"    if (requestBody.mode === 'raw' && requestBody.options.language === 'json') {\r",
+									"        const requestJson = JSON.parse(requestBody.raw);\r",
+									"\r",
+									"        // Now you can use requestJson to access the request data\r",
+									"        pm.test(\"Response JSON matches the request\", function () {\r",
+									"            pm.expect(responseJson.buildingId).to.equal(requestJson.buildingId);\r",
+									"            pm.expect(responseJson.buildingName).to.equal(requestJson.buildingName);\r",
+									"            pm.expect(responseJson.buildingNumberOfFloors).to.equal(requestJson.buildingNumberOfFloors);\r",
+									"            pm.expect(responseJson.buildingDescription).to.equal(requestJson.buildingDescription);\r",
+									"            pm.expect(responseJson.dimX).to.equal(requestJson.dimX);\r",
+									"            pm.expect(responseJson.dimY).to.equal(requestJson.dimY);\r",
+									"            pm.expect(responseJson.currentFloor).to.equal(requestJson.currentFloor);\r",
+									"            pm.expect(responseJson.locationX).to.equal(requestJson.locationX);\r",
+									"            pm.expect(responseJson.elevatorY).to.equal(requestJson.elevatorY);\r",
+									"            pm.expect(responseJson).to.have.property(\"floors\").to.be.an('array').that.is.empty;\r",
+									"            pm.expect(responseJson).to.have.property(\"elevators\").to.be.an('elevators').that.is.empty;\r",
+									"        });\r",
+									"    }\r",
 									"} else if (pm.response.code === 404) {\r",
 									"    // If the response is 404 Not Found, handle it as per your requirements\r",
 									"    // You can add assertions or take appropriate actions in this case\r",
@@ -284,7 +285,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{   \r\n    \"buildingId\": \"ARQT\",\r\n    \"buildingName\": \"Updated Name\",\r\n    \"buildingNumberOfFloors\": \"20\",\r\n    \"buildingDescription\": \"Updated Desc\",\r\n    \"dimX\": \"3\",\r\n    \"dimY\": \"4\"\r\n}\r\n",
+							"raw": "{   \r\n    \"buildingId\": \"ARQLI\",\r\n    \"buildingName\": \"Edicio de Arquitetura\",\r\n    \"buildingNumberOfFloors\": \"8\",\r\n    \"buildingDescription\": \"teste\",\r\n    \"dimX\": \"3\",\r\n    \"dimY\": \"4\"\r\n}\r\n",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -306,49 +307,33 @@
 									"    pm.expect(pm.response.code).to.be.oneOf([201, 404]);\r",
 									"});\r",
 									"\r",
-									"\r",
 									"if (pm.response.code === 201) {\r",
-									"// Parse the response JSON\r",
-									"const responseJson = pm.response.json();\r",
+									"    // Parse the response JSON\r",
+									"    const responseJson = pm.response.json();\r",
 									"\r",
-									"// Check if the response status code is 201 Created\r",
-									"pm.test(\"Response status code should be 201 Created\", function () {\r",
-									"    pm.response.to.have.status(201);\r",
-									"});\r",
+									"    // Access the request body\r",
+									"    const requestBody = pm.request.body;\r",
 									"\r",
-									"// Check if the response JSON matches the expected structure\r",
-									"pm.test(\"Response should have buildingId\", function () {\r",
-									"    pm.expect(responseJson).to.have.property(\"buildingId\", \"ARB\");\r",
-									"});\r",
+									"    // If your request body is in JSON format, parse it\r",
+									"    if (requestBody.mode === 'raw' && requestBody.options.language === 'json') {\r",
+									"        const requestJson = JSON.parse(requestBody.raw);\r",
 									"\r",
-									"pm.test(\"Response should have floorId\", function () {\r",
-									"    pm.expect(responseJson).to.have.property(\"floorId\", \"ARB-29\");\r",
-									"});\r",
-									"\r",
-									"pm.test(\"Response should have floorNumber as a number\", function () {\r",
-									"    pm.expect(responseJson).to.have.property(\"floorNumber\").to.be.a('number');\r",
-									"    pm.expect(responseJson.floorNumber).to.equal(29);\r",
-									"});\r",
-									"\r",
-									"pm.test(\"Response should have floorDescription\", function () {\r",
-									"    pm.expect(responseJson).to.have.property(\"floorDescription\", \"Description21\");\r",
-									"});\r",
-									"\r",
-									"pm.test(\"Response should have an empty 'connections' array\", function () {\r",
-									"    pm.expect(responseJson).to.have.property(\"connections\").to.be.an('array').that.is.empty;\r",
-									"});\r",
-									"\r",
-									"pm.test(\"Response should have an empty 'rooms' array\", function () {\r",
-									"    pm.expect(responseJson).to.have.property(\"rooms\").to.be.an('array').that.is.empty;\r",
-									"});\r",
-									"}   else if (pm.response.code === 404) {\r",
+									"        // Now you can use requestJson to access the request data\r",
+									"        pm.test(\"Response JSON matches the request\", function () {\r",
+									"            pm.expect(responseJson.buildingId).to.equal(requestJson.buildingId);\r",
+									"            pm.expect(responseJson.floorNumber).to.equal(requestJson.floorNumber);\r",
+									"            pm.expect(responseJson.floorDescription).to.equal(requestJson.floorDescription);\r",
+									"            pm.expect(responseJson).to.have.property(\"connections\").to.be.an('array').that.is.empty;\r",
+									"            pm.expect(responseJson).to.have.property(\"rooms\").to.be.an('elevators').that.is.empty;\r",
+									"        });\r",
+									"    }\r",
+									"} else if (pm.response.code === 404) {\r",
 									"    // If the response is 404 Not Found, handle it as per your requirements\r",
 									"    // You can add assertions or take appropriate actions in this case\r",
 									"    pm.test(\"No resource should be found (404)\", function () {\r",
 									"        pm.expect(pm.response.text()).to.be.empty;\r",
 									"    });\r",
 									"}\r",
-									"\r",
 									""
 								],
 								"type": "text/javascript"
@@ -360,7 +345,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{   \r\n    \"buildingId\":\"ARB\",\r\n    \"floorNumber\":\"29\",\r\n    \"floorDescription\":\"Description21\"\r\n}",
+							"raw": "{   \r\n    \"buildingId\":\"ARQX\",\r\n    \"floorNumber\":\"30\",\r\n    \"floorDescription\":\"Description Teste\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -420,7 +405,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"buildingId\": \"ARB\",\r\n    \"buildingName\": \"Updated Name\",\r\n    \"buildingDescription\": \"Updated Desc\",\r\n    \"buildingNumberOfFloors\": 20\r\n}",
+							"raw": "{\r\n    \"buildingId\": \"ART\",\r\n    \"buildingName\": \"Updated Name\",\r\n    \"buildingDescription\": \"Updated Desc\",\r\n    \"buildingNumberOfFloors\": 20\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -468,7 +453,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{   \r\n    \"floorId\":\"ARB-13\",\r\n    \"floorNumber\":\"90\",\r\n    \"floorDescription\":\"Updated Desc\"\r\n}",
+							"raw": "{   \r\n    \"floorId\":\"ART-29\",\r\n    \"floorNumber\":\"90\",\r\n    \"floorDescription\":\"Updated Desc\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -476,6 +461,141 @@
 							}
 						},
 						"url": "http://localhost:4000/api/floors/"
+					},
+					"response": []
+				},
+				{
+					"name": "http://localhost:4000/api/buildings/",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200 OK\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response is a JSON object\", function () {\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Check if buildingDescription is updated\", function () {\r",
+									"    // Access the request parameter directly.\r",
+									"    const requestDescription = pm.iterationData.get(\"buildingDescription\");\r",
+									"    const responseData = pm.response.json();\r",
+									"\r",
+									"    // Check if the \"buildingDescription\" in the response is equal to the request parameter.\r",
+									"    pm.expect(responseData.buildingDescription).to.equal(\"Updated\");\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"buildingDescription\": \"Updated\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:4000/api/buildings/changeDescription/ARB"
+					},
+					"response": []
+				},
+				{
+					"name": "http://localhost:4000/api/buildings/",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200 OK\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response is a JSON object\", function () {\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Check if buildingName is updated\", function () {\r",
+									"    // Access the request parameter directly.\r",
+									"    const requestDescription = pm.iterationData.get(\"buildingName\");\r",
+									"    const responseData = pm.response.json();\r",
+									"\r",
+									"    // Check if the \"buildingName\" in the response is equal to the request parameter.\r",
+									"    pm.expect(responseData.buildingName).to.equal(\"UpdatedName\");\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"buildingName\": \"UpdatedName\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:4000/api/buildings/changeName/ARB"
+					},
+					"response": []
+				},
+				{
+					"name": "http://localhost:4000/api/buildings/",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200 OK\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response is a JSON object\", function () {\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Check if buildingNumberOfFloors is updated\", function () {\r",
+									"    // Access the request parameter directly.\r",
+									"    const requestDescription = pm.iterationData.get(\"buildingNumberOfFloors\");\r",
+									"    const responseData = pm.response.json();\r",
+									"\r",
+									"    // Check if the \"buildingNumberOfFloors\" in the response is equal to the request parameter.\r",
+									"    pm.expect(responseData.buildingNumberOfFloors).to.equal(200);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"buildingNumberOfFloors\":200\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:4000/api/buildings/changeNumberOfFloors/ARB"
 					},
 					"response": []
 				}

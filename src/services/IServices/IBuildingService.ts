@@ -9,5 +9,8 @@ export default interface IBuildingService {
     deleteBuilding(buildingId: string): Promise<Result<boolean>>;
     updateBuilding(buildingDTO: IBuildingDTO): Promise<Result<IBuildingDTO>>;
     getBuildingsByFloors(min: string, max: string): Promise<Result<IBuildingDTO[]>>;
+    updateBuildingDescription(buildingId: string, buildingDescription: string): Promise<Result<IBuildingDTO>>;
+    updateBuildingName(buildingId: string, buildingName: string): Promise<Result<IBuildingDTO>>;
+    updateBuildingNumberOfFloors(buildingId: string, buildingNumberOfFloors: number): Promise<Result<IBuildingDTO>>;
 
 }

@@ -9,6 +9,7 @@ import { UniqueEntityID } from "../../core/domain/UniqueEntityID";
 import IConnectionDTO from "../../dto/IConnectionDTO";
 import { LocationToY } from "./locationToY";
 import { LocationToX } from "./locationToX";
+import { AggregateRoot } from "../../core/domain/AggregateRoot";
 
 
 interface ConnectionProps {
@@ -24,7 +25,6 @@ interface ConnectionProps {
 }
 
 export class Connection extends ValueObject<ConnectionProps>{
-
   get connectionId (): string {
     return this.props.connectionId;
   }

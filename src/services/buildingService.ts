@@ -12,6 +12,9 @@ import { FloorMap } from "../mappers/FloorMap";
 import IFloorDTO from "../dto/IFloorDTO";
 import IElevatorDTO from "../dto/IElevatorDTO";
 import { ElevatorMap } from "../mappers/ElevatorMap";
+import { BuildingDescription } from "../domain/Building/buildingDescription";
+import { BuildingName } from "../domain/Building/buildingName";
+import { BuildingNumberOfFloors } from "../domain/Building/buildingNumberOfFloors";
 
 @Service()
 export default class BuildingService implements IBuildingService {
@@ -146,6 +149,95 @@ export default class BuildingService implements IBuildingService {
       await this.buildingRepo.delete(buildingId);
 
       return Result.ok<boolean>(true);
+    } catch (e) {
+      throw e;
+    }
+  }
+
+  public async updateBuildingDescription(buildingId: string, buildingDescription: string): Promise<Result<IBuildingDTO>> {
+    try {
+      const building = await this.buildingRepo.findByBuildingId(buildingId);
+
+      if (building === null) {
+        return Result.fail<IBuildingDTO>("Building not found");
+      }
+
+      // Create a buildingDescription object
+      const buildingDescriptionOrError = BuildingDescription.create({ buildingDescription });
+
+      // Check if buildingDescription was created successfully
+      if (buildingDescriptionOrError.isFailure) {
+        return Result.fail<IBuildingDTO>(buildingDescriptionOrError.errorValue());
+      }
+
+      building.buildingDescription = buildingDescriptionOrError.getValue();
+
+      await this.buildingRepo.update(building);
+
+      const buildingDTOResult = BuildingMap.toDTO(building) as IBuildingDTO;
+
+      return Result.ok<IBuildingDTO>(buildingDTOResult);
+    } catch (e) {
+      throw e;
+    }
+  }
+
+  public async updateBuildingName(buildingId: string, buildingName: string): Promise<Result<IBuildingDTO>> {
+    try {
+      const building = await this.buildingRepo.findByBuildingId(buildingId);
+
+      if (building === null) {
+        return Result.fail<IBuildingDTO>("Building not found");
+      }
+
+      // Create a buildingName object
+      const buildingNameOrError = BuildingName.create({ buildingName });
+
+      // Check if buildingName was created successfully
+      if (buildingNameOrError.isFailure) {
+        return Result.fail<IBuildingDTO>(buildingNameOrError.errorValue());
+      }
+
+      building.buildingName = buildingNameOrError.getValue();
+
+      await this.buildingRepo.update(building);
+
+      const buildingDTOResult = BuildingMap.toDTO(building) as IBuildingDTO;
+
+      return Result.ok<IBuildingDTO>(buildingDTOResult);
+    } catch (e) {
+      throw e;
+    }
+  }
+
+  public async updateBuildingNumberOfFloors(buildingId: string, buildingNumberOfFloors: number): Promise<Result<IBuildingDTO>> {
+    try {
+      const building = await this.buildingRepo.findByBuildingId(buildingId);
+
+      if (building === null) {
+        return Result.fail<IBuildingDTO>("Building not found");
+      }
+
+      // Check if the max number of floors has been reached
+      if (building.floors.length > buildingNumberOfFloors) {
+        return Result.fail<IBuildingDTO>("Max number of floors reached for this building");
+      }
+
+      // Create a buildingNumberOfFloors object
+      const buildingNumberOfFloorsOrError = BuildingNumberOfFloors.create({ buildingNumberOfFloors });
+
+      // Check if buildingNumberOfFloors was created successfully
+      if (buildingNumberOfFloorsOrError.isFailure) {
+        return Result.fail<IBuildingDTO>(buildingNumberOfFloorsOrError.errorValue());
+      }
+
+      building.buildingNumberOfFloors = buildingNumberOfFloorsOrError.getValue();
+
+      await this.buildingRepo.update(building);
+
+      const buildingDTOResult = BuildingMap.toDTO(building) as IBuildingDTO;
+
+      return Result.ok<IBuildingDTO>(buildingDTOResult);
     } catch (e) {
       throw e;
     }

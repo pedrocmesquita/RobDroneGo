@@ -1,0 +1,37 @@
+@startuml
+skinparam handwritten false
+skinparam monochrome false
+skinparam packageStyle rect
+skinparam defaultFontName FG Virgil
+skinparam shadowing true
+
+actor GestorDeFrota as GestorDeFrota
+
+activate GestorDeFrota
+GestorDeFrota -> Routes: patch(\data)
+activate Routes
+Routes -> MDR: inibRobot(data)
+activate MDR
+MDR -> Controller: inibRobot(data)
+activate Controller
+Controller -> Service: instance().inibRobot(data)
+activate Service
+Service -> DTO: inibRobot(data)
+activate DTO
+DTO -> Repository: saveRobot(robot)
+activate Repository
+Repository -> Repository: save()
+Repository --> DTO: 200
+deactivate Repository
+DTO --> Service: 200
+deactivate DTO
+Service --> Controller: 200
+deactivate Service
+Controller --> MDR: 200
+deactivate Controller
+MDR --> Routes: 200
+deactivate MDR
+Routes --> GestorDeFrota: Robot inibido
+deactivate Routes
+
+@enduml

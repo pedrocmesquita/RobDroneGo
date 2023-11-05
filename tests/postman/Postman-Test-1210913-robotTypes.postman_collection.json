@@ -1,0 +1,94 @@
+{
+  "info": {
+    "_postman_id": "bbb8551e-a1d2-4380-af2a-52194c554805",
+    "name": "Postman-Test-1210816",
+    "schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+    "_exporter_id": "29917040"
+  },
+  "item": [
+    {
+      "name": "Post",
+      "item": [
+        {
+          "name": "http://localhost:4000/api/robotTypes",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 201 Created\", function () {\r",
+                  "    pm.response.to.have.status(201);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Response JSON matches the request\", function () {\r",
+                  "    const requestBody = pm.request.json();\r",
+                  "    const responseBody = pm.response.json();\r",
+                  "\r",
+                  "    pm.expect(responseBody.typeId).to.equal(requestBody.typeId);\r",
+                  "    pm.expect(responseBody.brand).to.equal(requestBody.brand);\r",
+                  "    pm.expect(responseBody.model).to.equal(requestBody.model);\r",
+                  "    pm.expect(responseBody.taskCategory).to.equal(requestBody.taskCategory);\r",
+                  "});\r",
+                  "\r",
+                  ""
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"typeId\": \"sample_type_id\",\n  \"brand\": \"Sample Brand\",\n  \"model\": 123,\n  \"taskCategory\": \"Vigilance\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": "http://localhost:4000/api/robotTypes"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Get",
+      "item": [
+        {
+          "name": "http://localhost:4000/api/robotTypes",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200 OK\", function () {\n",
+                  "    pm.response.to.have.status(200);\n",
+                  "});\n",
+                  "\n",
+                  "pm.test(\"Response is a JSON object\", function () {\n",
+                  "    pm.response.to.be.json;\n",
+                  "});\n",
+                  "\n",
+                  ""
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "http://localhost:4000/api/robotTypes"
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}

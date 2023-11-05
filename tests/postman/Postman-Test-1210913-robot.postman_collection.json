@@ -1,0 +1,146 @@
+{
+  "info": {
+    "_postman_id": "bbb8551e-a1d2-4380-af2a-52194c554805",
+    "name": "Postman-Test-1210816",
+    "schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+    "_exporter_id": "29917040"
+  },
+  "item": [
+    {
+      "name": "Post",
+      "item": [
+        {
+          "name": "http://localhost:4000/robots",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 201 Created\", function () {\r",
+                  "    pm.response.to.have.status(201);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Response JSON matches the request\", function () {\r",
+                  "    const requestBody = JSON.parse(pm.request.body.raw);\r",
+                  "    const responseBody = pm.response.json();\r",
+                  "\r",
+                  "    pm.expect(responseBody.idRobot).to.equal(requestBody.idRobot);\r",
+                  "    pm.expect(responseBody.robotName).to.equal(requestBody.robotName);\r",
+                  "    pm.expect(responseBody.typeId).to.equal(requestBody.typeId);\r",
+                  "    pm.expect(responseBody.serialNumber).to.equal(requestBody.serialNumber);\r",
+                  "    pm.expect(responseBody.description).to.equal(requestBody.description);\r",
+                  "    pm.expect(responseBody.active).to.equal(requestBody.active);\r",
+                  "});\r",
+                  "\r",
+                  ""
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"idRobot\": \"sample_id\",\n  \"robotName\": \"Sample Robot\",\n  \"typeId\": \"sample_type\",\n  \"serialNumber\": \"sample_serial\",\n  \"description\": \"Sample Description\",\n  \"active\": true\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": "http://localhost:4000/robots"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Get",
+      "item": [
+        {
+          "name": "http://localhost:4000/robots",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200 OK\", function () {\n",
+                  "    pm.response.to.have.status(200);\n",
+                  "});\n",
+                  "\n",
+                  "pm.test(\"Response is a JSON object\", function () {\n",
+                  "    pm.response.to.be.json;\n",
+                  "});\n",
+                  "\n",
+                  ""
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "http://localhost:4000/robots"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Patch",
+      "item": [
+        {
+          "name": "http://localhost:4000/api/robots",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200 OK\", function () {\n",
+                  "    pm.response.to.have.status(200);\n",
+                  "});\n",
+                  "\n",
+                  "pm.test(\"Response JSON matches the request\", function () {\n",
+                  "    const requestBody = JSON.parse(pm.request.body.raw);\n",
+                  "    const responseBody = pm.response.json();\n",
+                  "\n",
+                  "    pm.expect(responseBody.idRobot).to.equal(requestBody.idRobot);\n",
+                  "    pm.expect(responseBody.robotName).to.equal(requestBody.robotName);\n",
+                  "    pm.expect(responseBody.typeId).to.equal(requestBody.typeId);\n",
+                  "    pm.expect(responseBody.serialNumber).to.equal(requestBody.serialNumber);\n",
+                  "    pm.expect(responseBody.description).to.equal(requestBody.description);\n",
+                  "    pm.expect(responseBody.active).to.equal(requestBody.active);\n",
+                  "});\n",
+                  "\n",
+                  ""
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"idRobot\": \"123\",\r\n  \"robotName\": \"Sample Robot\",\n  \"typeId\": \"sample_type\",\n  \"serialNumber\": \"sample_serial\",\n  \"description\": \"Sample Description\",\n  \"active\": true\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": "http://localhost:4000/api/robots"
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}

@@ -9,4 +9,5 @@ export default interface IFloorRepo extends Repo<Floor> {
     delete(floorId: string): void;
     getFloors(): Promise<Floor[]>;
     getConnections(buildingId: string): Promise<Floor[]>;
+    deleteAllConnectionsFromFloor(floorId: string): void;
 }

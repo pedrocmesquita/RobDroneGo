@@ -94,4 +94,18 @@ export default class ConnectionController implements IConnectionController {
       throw e;
     }
   }
+
+    public async deleteAllInstancesOfConnection(req: Request, res: Response, next: NextFunction) {
+        try {
+        const connection = await this.connectionServiceInstance.deleteAllInstancesOfConnection(req.params.connectionId as string);
+
+        if (connection.isFailure) {
+            return res.status(404).send();
+        }
+
+        return res.status(200).json(connection.getValue());
+        } catch (e) {
+        return next(e);
+        }
+    }
 }

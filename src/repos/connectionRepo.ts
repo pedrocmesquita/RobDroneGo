@@ -7,13 +7,17 @@ import { ConnectionMap } from "../mappers/ConnectionMap";
 import { BuildingMap } from "../mappers/BuildingMap";
 import { Building } from "../domain/Building/building";
 import { IFloorPersistence } from "../dataschema/IFloorPersistence";
+import IFloorRepo from "../services/IRepos/IFloorRepo";
+import IBuildingRepo from "../services/IRepos/IBuildingRepo";
 
 @Service()
 export default class ConnectionRepo implements IConnectionRepo {
   private models: any;
 
   constructor(
-    @Inject("connectionSchema") private connectionSchema: Model<IConnectionPersistence & Document>
+    @Inject("connectionSchema") private connectionSchema: Model<IConnectionPersistence & Document>,
+    @Inject("floorSchema") private floorSchema: Model<IFloorPersistence & Document>,
+    @Inject("buildingSchema") private buildingSchema: Model<IFloorPersistence & Document>
   ) {}
 
   private createBaseQuery(): any {
@@ -164,5 +168,10 @@ export default class ConnectionRepo implements IConnectionRepo {
     } catch (e) {
       throw e;
     }
+  }
+
+  public async deleteAllInstancesOfConnection(connectionId: string){
+    const query = { connectionId: connectionId };
+    await this.connectionSchema.deleteMany(query as FilterQuery<IConnectionPersistence & Document>);
   }
 }

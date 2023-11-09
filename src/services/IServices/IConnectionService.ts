@@ -8,4 +8,5 @@ export default interface IConnectionService {
   deleteConnection(connectionId: string): Promise<Result<boolean>>;
   updateConnection(connectionDTO: IConnectionDTO): Promise<Result<IConnectionDTO>>;
   getConnectionsBetween(buildingidFrom: string, buildingidTo: string): Promise<Result<IConnectionDTO[]>>;
+    deleteAllInstancesOfConnection(connectionId: string): Promise<Result<boolean>>;
 }

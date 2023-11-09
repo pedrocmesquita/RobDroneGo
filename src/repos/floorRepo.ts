@@ -126,5 +126,15 @@ export default class FloorRepo implements IFloorRepo {
         return floorDTOResult;
     }
 
+    public async deleteAllConnectionsFromFloor(connectionId: string) {
+        const floors = await this.floorSchema.find({ connections: { $elemMatch: { connectionId: connectionId } } });
+
+        floors.forEach( async floor => {
+            const index = floor.connections.findIndex( connection => connection.connectionId === connectionId );
+            floor.connections.splice(index, 1);
+            await floor.save();
+        });
+    }
+
 }
     

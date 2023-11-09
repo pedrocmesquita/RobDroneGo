@@ -136,4 +136,20 @@ export default class BuildingRepo implements IBuildingRepo {
       throw e;
     }
   }
+
+  public async deleteAllConnectionsFromBuilding(connectionId: string) {
+      const building = await this.buildingSchema.findOne({floors: {$elemMatch: {connections: {$elemMatch: {connectionId: connectionId}}}}});
+
+      if (building === null) {
+          return null;
+      }
+
+      const floors = building.floors;
+      for (var i = 0; i < floors.length; i++) {
+          const floorId = floors[i].floorId;
+          await this.floorSchema.updateOne({floorId: floorId}, {$pull: {connections: {connectionId: connectionId}}});
+      }
+
+      return null;
+  }
 }

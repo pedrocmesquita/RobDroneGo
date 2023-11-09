@@ -12,6 +12,7 @@ export default interface IConnectionRepo extends Repo<Connection> {
   updateNewConnectionWithOldConnection(connection: Connection, oldConnectionId: string): Promise<Connection>;
   findByFloorFromId(floorFromId: string): Promise<Connection[]>;
   findByFloorToId(floorToId: string): Promise<Connection[]>;
+  deleteAllInstancesOfConnection(connectionId: string): void;
 
   //findByIds (connectionsIds: ConnectionId[]): Promise<Connection[]>;
   //saveCollection (connections: Connection[]): Promise<Connection[]>;

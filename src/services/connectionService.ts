@@ -162,4 +162,21 @@ export default class ConnectionService implements IConnectionService {
       throw e;
     }
   }
+
+  public async deleteAllInstancesOfConnection(connectionId: string): Promise<Result<boolean>> {
+    try {
+      const connection = await this.connectionRepo.findByConnectionId(connectionId);
+      if (connection === null) {
+        return Result.fail<boolean>("Connection not found");
+      }
+      else {
+        await this.connectionRepo.deleteAllInstancesOfConnection(connectionId);
+        await this.floorRepo.deleteAllConnectionsFromFloor(connectionId);
+        await this.buildingRepo.deleteAllConnectionsFromBuilding(connectionId);
+        return Result.ok<boolean>(true);
+      }
+    } catch (e) {
+      throw e;
+    }
+  }
 }

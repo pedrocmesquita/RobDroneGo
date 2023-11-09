@@ -50,6 +50,6 @@ export default (app: Router) => {
 
   route.get("", (req, res, next) => ctrl.getConnections(req, res, next) );
 
-  route.delete("/:connectionId", (req, res, next) => ctrl.deleteConnection(req, res, next) );
+  route.delete("/:connectionId", (req, res, next) => ctrl.deleteAllInstancesOfConnection(req, res, next) );
   route.get("/:buildingidFrom/:buildingidTo", (req, res, next) => ctrl.getConnectionsBetween(req, res, next) );
 };

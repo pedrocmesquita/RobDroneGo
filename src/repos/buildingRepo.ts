@@ -9,109 +9,110 @@ import { BuildingId } from "../domain/Building/buildingId";
 @Service()
 export default class BuildingRepo implements IBuildingRepo {
 
-    constructor(
-        @Inject("buildingSchema") private buildingSchema: Model<IBuildingPersistence & Document>,
-        @Inject("floorSchema") private floorSchema: Model<IBuildingPersistence & Document>,
-        @Inject ("elevatorSchema") private elevatorSchema: Model<IBuildingPersistence & Document>
-    ) {}
+  constructor(
+    @Inject("buildingSchema") private buildingSchema: Model<IBuildingPersistence & Document>,
+    @Inject("floorSchema") private floorSchema: Model<IBuildingPersistence & Document>,
+    @Inject("elevatorSchema") private elevatorSchema: Model<IBuildingPersistence & Document>
+  ) {
+  }
 
-    // @ts-ignore
-    public async exists(buildingId: BuildingId | string): Promise<boolean> {
-        const idX = buildingId instanceof BuildingId ? (<BuildingId>buildingId).buildingId : buildingId;
+  // @ts-ignore
+  public async exists(buildingId: BuildingId | string): Promise<boolean> {
+    const idX = buildingId instanceof BuildingId ? (<BuildingId>buildingId).buildingId : buildingId;
 
-        const query = { domainId: idX };
-        const buildingDocument = await this.buildingSchema.findOne(query);
+    const query = { domainId: idX };
+    const buildingDocument = await this.buildingSchema.findOne(query);
 
-        return !!buildingDocument === true;
-    }
+    return !!buildingDocument === true;
+  }
 
-    public async save(building: Building): Promise<Building> {
-        const query = { buildingId: building.buildingId.buildingId };
+  public async save(building: Building): Promise<Building> {
+    const query = { buildingId: building.buildingId.buildingId };
 
-        const buildingDocument = await this.buildingSchema.findOne(query);
+    const buildingDocument = await this.buildingSchema.findOne(query);
 
-        try {
-            if (buildingDocument === null) {
-                const rawBuilding: any = BuildingMap.toPersistence(building);
-                console.log(rawBuilding);
+    try {
+      if (buildingDocument === null) {
+        const rawBuilding: any = BuildingMap.toPersistence(building);
+        console.log(rawBuilding);
 
-                const buildingCreated = await this.buildingSchema.create(rawBuilding);
+        const buildingCreated = await this.buildingSchema.create(rawBuilding);
 
-                return BuildingMap.toDomain(buildingCreated);
-            } else {
-                buildingDocument.buildingId = building.buildingId.buildingId;
-                buildingDocument.buildingName = building.buildingName.buildingName;
-                buildingDocument.buildingDescription = building.buildingDescription.buildingDescription;
-                buildingDocument.buildingNumberOfFloors = building.buildingNumberOfFloors.buildingNumberOfFloors;
-                buildingDocument.dimX = building.dimX;
-                buildingDocument.dimY = building.dimY;
-                buildingDocument.floors = building.floors;
-                buildingDocument.elevators = building.elevators;
-                await buildingDocument.save();
+        return BuildingMap.toDomain(buildingCreated);
+      } else {
+        buildingDocument.buildingId = building.buildingId.buildingId;
+        buildingDocument.buildingName = building.buildingName.buildingName;
+        buildingDocument.buildingDescription = building.buildingDescription.buildingDescription;
+        buildingDocument.buildingNumberOfFloors = building.buildingNumberOfFloors.buildingNumberOfFloors;
+        buildingDocument.dimX = building.dimX;
+        buildingDocument.dimY = building.dimY;
+        buildingDocument.floors = building.floors;
+        buildingDocument.elevators = building.elevators;
+        await buildingDocument.save();
 
-                return building;
-            }
-        } catch (err) {
-            console.log(err)
-            throw err;
-        }
-    }
-
-    public async findByBuildingId(buildingId: BuildingId | string): Promise<Building> {
-        const idX = buildingId instanceof BuildingId ? (<BuildingId>buildingId).buildingId : buildingId;
-
-        const query = { buildingId: idX };
-        const buildingRecord = await this.buildingSchema.findOne(query);
-
-        if (buildingRecord != null) {
-            return BuildingMap.toDomain(buildingRecord);
-        }
-
-        return null;
-    }
-
-    public async update(building: Building): Promise<Building> {
-        await this.buildingSchema.updateOne( { buildingId: building.buildingId.buildingId }, BuildingMap.toDTO(building));
-
-        const updatedBuilding = await this.buildingSchema.findOne({ buildingId: building.buildingId.buildingId });
-
-        return BuildingMap.toDomain(updatedBuilding);
-    }
-
-    public async updateConnections(building: Building): Promise<Building> {
-        await this.buildingSchema.findOneAndUpdate( { buildingId: building.buildingId.buildingId }, BuildingMap.toDTO(building));
-
-        const updatedBuilding = await this.buildingSchema.findOne({ buildingId: building.buildingId.buildingId });
-
-        return BuildingMap.toDomain(updatedBuilding);
-    }
-
-    public async updateRooms(building: Building): Promise<Building> {
-      await this.buildingSchema.findOneAndUpdate( { buildingId: building.buildingId.buildingId }, BuildingMap.toDTO(building));
-
-      const updatedBuilding = await this.buildingSchema.findOne({ buildingId: building.buildingId.buildingId });
-
-      return BuildingMap.toDomain(updatedBuilding);
-    }
-
-    // Before deleting the building, delete all floors associated with the building
-    public async delete(buildingId: string): Promise<void> {
-
-      const query = { buildingId: buildingId };
-      const buildingRecord = await this.buildingSchema.findOne(query);
-
-      if (buildingRecord != null) {
-        const floors = buildingRecord.floors;
-        for (var i = 0; i < floors.length; i++) {
-          const floorId = floors[i].floorId;
-          await this.floorSchema.deleteOne({ floorId: floorId });
-        }
-      } else{
-        throw new Error("Building not found");
+        return building;
       }
-
-      await this.buildingSchema.deleteOne({ buildingId: buildingId });
+    } catch (err) {
+      console.log(err)
+      throw err;
     }
+  }
+
+  public async findByBuildingId(buildingId: BuildingId | string): Promise<Building> {
+    const idX = buildingId instanceof BuildingId ? (<BuildingId>buildingId).buildingId : buildingId;
+
+    const query = { buildingId: idX };
+    const buildingRecord = await this.buildingSchema.findOne(query);
+
+    if (buildingRecord != null) {
+      return BuildingMap.toDomain(buildingRecord);
+    }
+
+    return null;
+  }
+
+  public async update(building: Building): Promise<Building> {
+    await this.buildingSchema.updateOne({ buildingId: building.buildingId.buildingId }, BuildingMap.toDTO(building));
+
+    const updatedBuilding = await this.buildingSchema.findOne({ buildingId: building.buildingId.buildingId });
+
+    return BuildingMap.toDomain(updatedBuilding);
+  }
+
+  public async updateConnections(building: Building): Promise<Building> {
+    await this.buildingSchema.findOneAndUpdate({ buildingId: building.buildingId.buildingId }, BuildingMap.toDTO(building));
+
+    const updatedBuilding = await this.buildingSchema.findOne({ buildingId: building.buildingId.buildingId });
+
+    return BuildingMap.toDomain(updatedBuilding);
+  }
+
+  public async updateRooms(building: Building): Promise<Building> {
+    await this.buildingSchema.findOneAndUpdate({ buildingId: building.buildingId.buildingId }, BuildingMap.toDTO(building));
+
+    const updatedBuilding = await this.buildingSchema.findOne({ buildingId: building.buildingId.buildingId });
+
+    return BuildingMap.toDomain(updatedBuilding);
+  }
+
+  // Before deleting the building, delete all floors associated with the building
+  public async delete(buildingId: string): Promise<void> {
+
+    const query = { buildingId: buildingId };
+    const buildingRecord = await this.buildingSchema.findOne(query);
+
+    if (buildingRecord != null) {
+      const floors = buildingRecord.floors;
+      for (var i = 0; i < floors.length; i++) {
+        const floorId = floors[i].floorId;
+        await this.floorSchema.deleteOne({ floorId: floorId });
+      }
+    } else {
+      throw new Error("Building not found");
+    }
+
+    await this.buildingSchema.deleteOne({ buildingId: buildingId });
+  }
 
   public async getBuildings(): Promise<Building[]> {
     try {
@@ -138,18 +139,13 @@ export default class BuildingRepo implements IBuildingRepo {
   }
 
   public async deleteAllConnectionsFromBuilding(connectionId: string) {
-      const building = await this.buildingSchema.findOne({floors: {$elemMatch: {connections: {$elemMatch: {connectionId: connectionId}}}}});
+    const buildings = await this.buildingSchema.find({ connections: { $elemMatch: { connectionId: connectionId } } });
 
-      if (building === null) {
-          return null;
+    buildings.forEach(async building => {
+        const index = building.floors.findIndex(floor => floor.connections.findIndex(connection => connection.connectionId === connectionId) !== -1);
+        building.floors[index].connections = building.floors[index].connections.filter(connection => connection.connectionId !== connectionId);
+        await building.save();
       }
-
-      const floors = building.floors;
-      for (var i = 0; i < floors.length; i++) {
-          const floorId = floors[i].floorId;
-          await this.floorSchema.updateOne({floorId: floorId}, {$pull: {connections: {connectionId: connectionId}}});
-      }
-
-      return null;
+    );
   }
 }

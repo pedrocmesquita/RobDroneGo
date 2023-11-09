@@ -13,12 +13,15 @@ import IConnectionDTO from "../dto/IConnectionDTO";
 import { ConnectionMap } from "../mappers/ConnectionMap";
 import IRoomDTO from "../dto/IRoomDTO";
 import { RoomMap } from "../mappers/RoomMap";
+import { monitorEventLoopDelay } from "perf_hooks";
+import IConnectionRepo from "./IRepos/IConnectionRepo";
 
 @Service()
 export default class FloorService implements IFloorService {
     constructor(
         @Inject(config.repos.floor.name) private floorRepo : IFloorRepo,
-        @Inject(config.repos.building.name) private buildingRepo : IBuildingRepo
+        @Inject(config.repos.building.name) private buildingRepo : IBuildingRepo,
+        @Inject(config.repos.connection.name) private connectionRepo : IConnectionRepo
     ) {}
 
     public async getFloor(floorId: string): Promise<Result<IFloorDTO>> {
@@ -91,21 +94,41 @@ export default class FloorService implements IFloorService {
         try {
 
             // Check if floor exists
-            const floor = await this.floorRepo.findByFloorId(oldFloorId);
+            const oldFloor = await this.floorRepo.findByFloorId(oldFloorId);
 
-            if (floor === null) {
+            if (oldFloor === null) {
                 return Result.fail<IFloorDTO>("Floor not found");
             }
 
             // Check if the new floorId is already taken
-            const floorId = await this.floorRepo.findByFloorId(floorDTO.floorId);
+            const newFloor = await this.floorRepo.findByFloorId(floorDTO.floorId);
 
-            if (floorId != null) {
+            if (newFloor != null) {
                 return Result.fail<IFloorDTO>("FloorId already taken");
             }
 
-            floorDTO.connections = floor.connections.map(connection => ConnectionMap.toDTO(connection) as IConnectionDTO);
-            floorDTO.rooms = floor.rooms.map(room => RoomMap.toDTO(room) as IRoomDTO);
+            const building = await this.buildingRepo.findByBuildingId(floorDTO.buildingId);
+
+            if (building === null) {
+                return Result.fail<IFloorDTO>("Building not found");
+            }
+
+            if (floorDTO.floorNumber !== oldFloor.floorNumber.floorNumber) {
+
+                const oldConnections = oldFloor.connections.map(connection => ConnectionMap.toDTO(connection) as IConnectionDTO);
+                floorDTO.connections = [];
+                floorDTO.rooms = [];
+
+                // Remove connections from the other floor
+                oldConnections.forEach(async connection => {
+                    await this.connectionRepo.deleteAllInstancesOfConnection(connection.connectionId);
+                }
+                );
+            } else
+            {
+                floorDTO.connections = oldFloor.connections.map(connection => ConnectionMap.toDTO(connection) as IConnectionDTO);
+                floorDTO.rooms = oldFloor.rooms.map(room => RoomMap.toDTO(room) as IRoomDTO);
+            }
 
             const floorOrError = await Floor.create(floorDTO);
 
@@ -117,19 +140,11 @@ export default class FloorService implements IFloorService {
 
             await this.floorRepo.updateNewFloorWithOldFloor(updatedFloor, oldFloorId)
 
-            // Add new floor to building and delete old floor
-            const building = await this.buildingRepo.findByBuildingId(floorDTO.buildingId);
-
-            if (building === null) {
-                return Result.fail<IFloorDTO>("Building not found");
-            }
-
             building.floors.push(updatedFloor);
-            building.floors = building.floors.filter(existingFloor => existingFloor.floorId !== floor.floorId);
+            building.floors = building.floors.filter(existingFloor => existingFloor.floorId !== oldFloor.floorId);
 
             await this.buildingRepo.update(building);
 
-            // Return floor entity
             const floorDTOResult = FloorMap.toDTO(updatedFloor) as IFloorDTO;
             return Result.ok<IFloorDTO>(floorDTOResult);
 

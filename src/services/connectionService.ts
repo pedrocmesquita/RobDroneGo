@@ -116,6 +116,26 @@ export default class ConnectionService implements IConnectionService {
       const connectionResult = connectionOrError.getValue();
 
       await this.connectionRepo.update(connectionResult);
+      await this.floorRepo.deleteAllConnectionsFromFloor(connectionDTO.connectionId);
+      await this.buildingRepo.deleteAllConnectionsFromBuilding(connectionDTO.connectionId);
+
+      const newFloorFrom = await this.floorRepo.findByFloorId(connectionResult.floorfromId);
+      const newFloorTo = await this.floorRepo.findByFloorId(connectionResult.floortoId);
+
+      newFloorFrom.addConnection(connectionResult);
+      newFloorTo.addConnection(connectionResult);
+
+      await this.floorRepo.update(newFloorFrom);
+      await this.floorRepo.update(newFloorTo);
+
+      const newBuildingFrom = await this.buildingRepo.findByBuildingId(newFloorFrom.buildingId);
+      const newBuildingTo = await this.buildingRepo.findByBuildingId(newFloorTo.buildingId);
+
+      newBuildingFrom.addConnectionToFloor(newFloorFrom.floorId, connectionResult);
+      newBuildingTo.addConnectionToFloor(newFloorTo.floorId, connectionResult);
+
+      await this.buildingRepo.updateConnections(newBuildingFrom);
+      await this.buildingRepo.updateConnections(newBuildingTo);
 
       const connectionDTOResult = ConnectionMap.toDTO( connectionResult ) as IConnectionDTO;
 

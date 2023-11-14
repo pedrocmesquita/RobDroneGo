@@ -5,6 +5,9 @@ import { Container } from "typedi";
 import IBuildingController from "../../controllers/IControllers/IBuildingController";
 
 import config from "../../../config";
+import middlewares from "../middlewares";
+import isAuth from "../middlewares/isAuth";
+import attachCurrentUser from "../middlewares/attachCurrentUser";
 
 const route = Router();
 
@@ -12,7 +15,11 @@ export default (app: Router) => {
     app.use("/buildings", route);
     
     const ctrl = Container.get(config.controllers.building.name) as IBuildingController;
-    
+
+    route.use(isAuth);
+
+    route.use(attachCurrentUser);
+
     route.post("",
         celebrate({
         body: Joi.object({
@@ -20,9 +27,7 @@ export default (app: Router) => {
             buildingName: Joi.string().required(),
             buildingNumberOfFloors: Joi.number().required(),
             buildingDescription: Joi.string().required(),
-            dimX: Joi.number().required(),
-            dimY: Joi.number().required(),
-        })
+        }),
         }),
         (req, res, next) => ctrl.createBuilding(req, res, next) );
 
@@ -40,8 +45,22 @@ export default (app: Router) => {
     
     route.get("/:buildingId", (req, res, next) => ctrl.getBuilding(req, res, next) );
 
-    route.get("", (req, res, next) => ctrl.getBuildings(req, res, next) );
-    
+    route.get("", async (req, res, next) => {
+        // Check if the user has the "Gestor de Campus" role
+        if (req.auth.role !== "4789047b-d838-4739-a5c5-27725c14f33b") {
+
+            return res.status(403).json({ error: "Unauthorized access" });
+        }
+
+        // User has the "Gestor de Campus" role, proceed with the controller logic
+        try {
+            await ctrl.getBuildings(req, res, next);
+        } catch (error) {
+            next(error);
+        }
+    });
+
+
     route.delete("/:buildingId", (req, res, next) => ctrl.deleteBuilding(req, res, next) );
 
     route.get("/floors/:min/:max", (req, res, next) => ctrl.getBuildingsByFloors(req, res, next) );
@@ -69,7 +88,6 @@ export default (app: Router) => {
         }),
         }),
         (req, res, next) => ctrl.updateBuildingNumberOfFloors(req, res, next) );
-    };
 
-
+};
 

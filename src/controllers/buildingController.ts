@@ -30,6 +30,7 @@ export default class BuildingController implements IBuildingController {
 
     public async createBuilding(req: Request, res: Response, next: NextFunction) {
         try {
+
             const buildingOrError = (await this.buildingServiceInstance.createBuilding(
               req.params.buildingId as string,
               req.body as IBuildingDTO

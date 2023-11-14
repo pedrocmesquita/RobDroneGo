@@ -12,6 +12,7 @@ import config from '../../../config';
  * Luckily this API follow _common sense_ ergo a _good design_ and don't allow that ugly stuff
  */
 const getTokenFromHeader = req => {
+
   /**
    * @TODO Edge and Internet Explorer do some weird things with the headers
    * So I believe that this should handle more 'edge' cases ;)
@@ -19,7 +20,10 @@ const getTokenFromHeader = req => {
   if (
     (req.headers.authorization && req.headers.authorization.split(' ')[0] === 'Token') ||
     (req.headers.authorization && req.headers.authorization.split(' ')[0] === 'Bearer')
+
+
   ) {
+
     return req.headers.authorization.split(' ')[1];
   }
   return null;

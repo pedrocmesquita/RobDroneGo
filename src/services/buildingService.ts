@@ -128,6 +128,8 @@ export default class BuildingService implements IBuildingService {
 
   public async getBuildings(): Promise<Result<IBuildingDTO[]>> {
     try {
+
+
       const buildings = await this.buildingRepo.getBuildings();
 
       const buildingDTOResult = buildings.map(building => BuildingMap.toDTO(building) as IBuildingDTO);

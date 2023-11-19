@@ -31,6 +31,7 @@
   "author": "Santiago Quinteros",
   "license": "ISC",
   "dependencies": {
+    "@types/three": "^0.158.2",
     "acorn": "^7.1.0",
     "acorn-jsx": "^5.1.0",
     "agenda": "^2.0.2",
@@ -60,6 +61,7 @@
     "shallow-equal-object": "^1.1.1",
     "sinon": "^7.5.0",
     "sinon-chai": "^3.3.0",
+    "three": "^0.158.0",
     "typedi": "^0.10.0",
     "winston": "^3.2.1"
   },

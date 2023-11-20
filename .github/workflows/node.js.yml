@@ -30,3 +30,6 @@ jobs:
     - name: Run linters
       run: npm run lint
 
+    - name: Run Prettier (ignore errors)
+      run: prettier --write '**/*.js' || true
+

@@ -31,6 +31,22 @@ const RoomSchema = new Schema({
     type: Number,
     index: true,
   },
+  originCoordinateX: {
+    type: Number,
+    index: true,
+  },
+  originCoordinateY: {
+    type: Number,
+    index: true,
+  },
+  destinationCoordinateX: {
+    type: Number,
+    index: true,
+  },
+  destinationCoordinateY: {
+    type: Number,
+    index: true,
+  },
 });
 
 export default model<IRoomPersistence & Document>('Room', RoomSchema);

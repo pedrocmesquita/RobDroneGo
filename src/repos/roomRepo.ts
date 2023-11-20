@@ -46,6 +46,10 @@ export default class RoomRepo implements IRoomRepo {
         roleDocument.roomCategory = room.roomCategory.category;
         roleDocument.doorX = room.door.doorX;
         roleDocument.doorY = room.door.doorY;
+        roleDocument.originCoordinateX = room.originCoordinateX;
+        roleDocument.originCoordinateY = room.originCoordinateY;
+        roleDocument.destinationCoordinateX = room.destinationCoordinateX;
+        roleDocument.destinationCoordinateY = room.destinationCoordinateY;
         await roleDocument.save();
 
         return room;
@@ -85,6 +89,10 @@ export default class RoomRepo implements IRoomRepo {
       roomDocument.roomCategory = room.roomCategory.category;
       roomDocument.doorX = room.door.doorX;
       roomDocument.doorY = room.door.doorY;
+      roomDocument.originCoordinateX = room.originCoordinateX;
+      roomDocument.originCoordinateY = room.originCoordinateY;
+      roomDocument.destinationCoordinateX = room.destinationCoordinateX;
+      roomDocument.destinationCoordinateY = room.destinationCoordinateY;
       await roomDocument.save();
 
       return room;
@@ -130,4 +138,12 @@ export default class RoomRepo implements IRoomRepo {
     return roomDTOResult;
   }
 
+  public async deleteAllRoomsFromFloor(floorId: string): Promise<void> {
+    const rooms = await this.roomSchema.find({ floorId: floorId });
+
+    for (var i = 0; i < rooms.length; i++) {
+      const roomId = rooms[i].roomId;
+      await this.roomSchema.deleteOne({ roomId: roomId });
+    }
+  }
 }

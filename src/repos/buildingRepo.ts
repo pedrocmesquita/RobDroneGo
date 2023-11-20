@@ -47,7 +47,6 @@ export default class BuildingRepo implements IBuildingRepo {
         buildingDocument.dimX = building.dimX;
         buildingDocument.dimY = building.dimY;
         buildingDocument.floors = building.floors;
-        buildingDocument.elevators = building.elevators;
         await buildingDocument.save();
 
         return building;
@@ -148,4 +147,5 @@ export default class BuildingRepo implements IBuildingRepo {
       }
     );
   }
+
 }

@@ -7,12 +7,15 @@ import IElevatorDTO from '../dto/IElevatorDTO';
 import { ElevatorMap } from "../mappers/ElevatorMap";
 import { Elevator } from '../domain/Elevator/elevator';
 import IBuildingRepo from "./IRepos/IBuildingRepo";
+import IFloorRepo from "./IRepos/IFloorRepo";
+import { each, floor } from "lodash";
 
 @Service()
 export default class ElevatorService implements IElevatorService {
     constructor(
       @Inject(config.repos.elevator.name) private elevatorRepo : IElevatorRepo,
-      @Inject(config.repos.building.name) private buildingRepo : IBuildingRepo
+      @Inject(config.repos.building.name) private buildingRepo : IBuildingRepo,
+      @Inject(config.repos.floor.name) private floorRepo : IFloorRepo
     ) {}
     public async getElevator(elevatorId: string): Promise<Result<IElevatorDTO>> {
         try {
@@ -30,7 +33,7 @@ export default class ElevatorService implements IElevatorService {
         }
     }
 
-    public async createElevator(elevatorId: string, buildingId: string, elevatorDTO: IElevatorDTO): Promise<Result<IElevatorDTO>> {
+    public async createElevator(elevatorId: string, elevatorDTO: IElevatorDTO): Promise<Result<IElevatorDTO>> {
         try {
             const elevator = await this.elevatorRepo.findByElevatorId(elevatorDTO.elevatorId);
 
@@ -39,14 +42,23 @@ export default class ElevatorService implements IElevatorService {
                 return Result.fail<IElevatorDTO>('Elevator already exists: ' + elevatorDTO.elevatorId);
             }
 
-            const building = await this.buildingRepo.findByBuildingId(elevatorDTO.buildingId);
+            const floors = await this.floorRepo.findAllAttendedFloors(elevatorDTO.floorsAttended);
 
-            if (building === null) {
-                return Result.fail<IElevatorDTO>("Building not found");
+            if (floors === null) {
+                return Result.fail<IElevatorDTO>("Floors not found");
+            }
+
+            // Make sure that the floors are in the same building
+            for(const floor1 of floors){
+                const listOfBuildingIds = floors.map(floor => floor.buildingId);
+                const buildingId = listOfBuildingIds[0];
+                if(floor1.buildingId !== buildingId){
+                    return Result.fail<IElevatorDTO>("Floors are not in the same building");
+                }
             }
 
             console.log(elevatorDTO.elevatorId);
-            console.log(elevatorDTO.buildingId);
+            console.log(elevatorDTO.floorsAttended);
             console.log(elevatorDTO.elevatorBrand);
             console.log(elevatorDTO.elevatorModel);
             console.log(elevatorDTO.elevatorSerNum);
@@ -77,9 +89,24 @@ export default class ElevatorService implements IElevatorService {
             console.log(elevatorResult.elevatorId.elevatorId);
             await this.elevatorRepo.save(elevatorResult);
 
-            building.addElevator(elevatorResult);
+            // Add elevator to floor
+            for (const floor1 of floors) {
+                floor1.addElevator(elevatorResult);
+                await this.floorRepo.update(floor1);
+            }
 
+            //Add elevator to building
+            for (const floor1 of floors) {
+            const building = await this.buildingRepo.findByBuildingId(floor1.buildingId);
+            building.floors.forEach(floor => {
+                if(floor.floorId === floor1.floorId){
+                    floor.addElevator(elevatorResult);
+                }
+            }
+            );
             await this.buildingRepo.update(building);
+            }
+
 
             // Return elevator entity
             const elevatorDTOResult = ElevatorMap.toDTO(elevatorResult) as IElevatorDTO;

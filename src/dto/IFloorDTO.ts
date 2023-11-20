@@ -1,5 +1,6 @@
 import IConnectionDTO from "./IConnectionDTO";
 import IRoomDTO from "./IRoomDTO";
+import IElevatorDTO from "./IElevatorDTO";
 
 export default interface IFloorDTO {
     buildingId: string;
@@ -8,4 +9,5 @@ export default interface IFloorDTO {
     floorDescription?: string;
     connections?: IConnectionDTO[];
     rooms?: IRoomDTO[];
+    elevators?: IElevatorDTO[];
 }

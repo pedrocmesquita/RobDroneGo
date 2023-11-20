@@ -17,6 +17,10 @@ interface RoomProps {
   roomDescription: RoomDescription;
   roomCategory: RoomCategory;
   door: Door;
+  originCoordinateX: number;
+  originCoordinateY: number;
+  destinationCoordinateX: number;
+  destinationCoordinateY: number;
 }
 
 export class Room extends AggregateRoot<RoomProps>{
@@ -55,6 +59,22 @@ export class Room extends AggregateRoot<RoomProps>{
     this.props.floorId = value;
   }
 
+  get originCoordinateX(): number {
+    return this.props.originCoordinateX;
+  }
+
+  get originCoordinateY(): number {
+    return this.props.originCoordinateY;
+  }
+
+  get destinationCoordinateX(): number {
+    return this.props.destinationCoordinateX;
+  }
+
+  get destinationCoordinateY(): number {
+    return this.props.destinationCoordinateY;
+  }
+
   private constructor(props: RoomProps, id?: UniqueEntityID) {
     super(props, id);
   }
@@ -67,6 +87,10 @@ export class Room extends AggregateRoot<RoomProps>{
     const roomCategory = roomDTO.roomCategory;
     const doorX = roomDTO.doorX;
     const doorY = roomDTO.doorY;
+    const originCoordinateX = roomDTO.originCoordinateX;
+    const originCoordinateY = roomDTO.originCoordinateY;
+    const destinationCoordinateX = roomDTO.destinationCoordinateX;
+    const destinationCoordinateY = roomDTO.destinationCoordinateY;
 
     const room = new Room(
       {
@@ -75,7 +99,11 @@ export class Room extends AggregateRoot<RoomProps>{
         roomName: RoomName.create({roomName}).getValue(),
         roomDescription: RoomDescription.create({roomDescription}).getValue(),
         roomCategory: RoomCategory.create({ category: roomCategory as RoomCategoryType }).getValue(),
-        door: Door.create({doorX, doorY}).getValue()
+        door: Door.create({doorX, doorY}).getValue(),
+        originCoordinateX: originCoordinateX,
+        originCoordinateY: originCoordinateY,
+        destinationCoordinateX: destinationCoordinateX,
+        destinationCoordinateY: destinationCoordinateY,
       },
       id
     );

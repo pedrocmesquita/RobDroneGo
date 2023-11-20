@@ -10,5 +10,4 @@ export default interface IBuildingDTO {
     dimX: number;
     dimY: number;
     floors?: IFloorDTO[];
-    elevators?: IElevatorDTO[];
 }

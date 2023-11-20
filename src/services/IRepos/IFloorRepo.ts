@@ -10,4 +10,5 @@ export default interface IFloorRepo extends Repo<Floor> {
     getFloors(): Promise<Floor[]>;
     getConnections(buildingId: string): Promise<Floor[]>;
     deleteAllConnectionsFromFloor(floorId: string): void;
+    findAllAttendedFloors(attendedFloors: string[]): Promise<Floor[]>;
 }

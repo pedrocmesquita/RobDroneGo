@@ -24,7 +24,7 @@ interface ConnectionProps {
   locationToY: number;
 }
 
-export class Connection extends ValueObject<ConnectionProps>{
+export class Connection extends AggregateRoot<ConnectionProps>{
   get connectionId (): string {
     return this.props.connectionId;
   }

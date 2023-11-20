@@ -10,8 +10,8 @@ import { IElevatorPersistence } from "../dataschema/IElevatorPersistence";
 export class ElevatorMap implements Mapper<Elevator> {
     public static toDTO (elevator: Elevator): any {
         return {
-            buildingId: elevator.buildingId,
             elevatorId: elevator.elevatorId.elevatorId,
+            floorsAttended: elevator.floorsAttended,
             elevatorBrand: elevator.elevatorBrand.elevatorBrand,
             elevatorModel: elevator.elevatorModel.elevatorModel,
             elevatorSerNum: elevator.elevatorSerNum.elevatorSerNum,
@@ -32,8 +32,8 @@ export class ElevatorMap implements Mapper<Elevator> {
 
     public static toPersistence (elevator: Elevator): any {
         return {
-            buildingId: elevator.buildingId,
             elevatorId: elevator.elevatorId.elevatorId,
+            floorsAttended: elevator.floorsAttended,
             elevatorBrand: elevator.elevatorBrand.elevatorBrand,
             elevatorModel: elevator.elevatorModel.elevatorModel,
             elevatorSerNum: elevator.elevatorSerNum.elevatorSerNum,

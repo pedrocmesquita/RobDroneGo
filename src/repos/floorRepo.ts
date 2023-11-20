@@ -44,6 +44,8 @@ export default class FloorRepo implements IFloorRepo {
                 roleDocument.floorNumber = floor.floorNumber.floorNumber;
                 roleDocument.floorDescription = floor.floorDescription.floorDescription;
                 roleDocument.connections = floor.connections;
+                roleDocument.rooms = floor.rooms;
+                roleDocument.elevators = floor.elevators;
                 await roleDocument.save();
 
                 return floor;
@@ -81,6 +83,8 @@ export default class FloorRepo implements IFloorRepo {
             floorDocument.floorNumber = floor.floorNumber.floorNumber;
             floorDocument.floorDescription = floor.floorDescription.floorDescription;
             floorDocument.connections = floor.connections;
+            floorDocument.rooms = floor.rooms;
+            floorDocument.elevators = floor.elevators;
             await floorDocument.save();
 
             return floor;
@@ -134,6 +138,19 @@ export default class FloorRepo implements IFloorRepo {
             floor.connections.splice(index, 1);
             await floor.save();
         });
+    }
+
+    public async findAllAttendedFloors(attendedFloors: string[]): Promise<Floor[]> {
+        const floors = await this.floorSchema.find({ floorId: { $in: attendedFloors } });
+
+        const floorDTOResult = floors.map( floor => FloorMap.toDomain( floor ) as Floor );
+
+        if (floorDTOResult.length === 0) {
+            return null;
+        } else {
+            return floorDTOResult;
+        }
+
     }
 
 }

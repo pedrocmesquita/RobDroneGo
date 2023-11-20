@@ -36,6 +36,8 @@ export default class BuildingService implements IBuildingService {
     }
   }
 
+
+
   public async getBuilding(buildingId: string): Promise<Result<IBuildingDTO>> {
     try {
       const building = await this.buildingRepo.findByBuildingId(buildingId);
@@ -63,7 +65,6 @@ export default class BuildingService implements IBuildingService {
       // Initialize floors array
       buildingDTO.floors = [];
 
-      buildingDTO.elevators = [];
 
       // Create building entity
       const buildingOrError = await Building.create(buildingDTO);
@@ -103,7 +104,6 @@ export default class BuildingService implements IBuildingService {
 
       // Making sure the floors are not overwritten
       buildingDTO.floors = exists.floors.map(floor => FloorMap.toDTO(floor) as IFloorDTO);
-      buildingDTO.elevators = exists.elevators.map(elevator => ElevatorMap.toDTO(elevator) as IElevatorDTO);
 
       // Update building entity
       const buildingOrError = await Building.create(buildingDTO);

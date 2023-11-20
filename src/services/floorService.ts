@@ -15,13 +15,19 @@ import IRoomDTO from "../dto/IRoomDTO";
 import { RoomMap } from "../mappers/RoomMap";
 import { monitorEventLoopDelay } from "perf_hooks";
 import IConnectionRepo from "./IRepos/IConnectionRepo";
+import IRoomRepo from "./IRepos/IRoomRepo";
+import IElevatorRepo from "./IRepos/IElevatorRepo";
+import { ElevatorMap } from "../mappers/ElevatorMap";
+import IElevatorDTO from "../dto/IElevatorDTO";
 
 @Service()
 export default class FloorService implements IFloorService {
     constructor(
         @Inject(config.repos.floor.name) private floorRepo : IFloorRepo,
         @Inject(config.repos.building.name) private buildingRepo : IBuildingRepo,
-        @Inject(config.repos.connection.name) private connectionRepo : IConnectionRepo
+        @Inject(config.repos.connection.name) private connectionRepo : IConnectionRepo,
+        @Inject(config.repos.room.name) private roomRepo : IRoomRepo,
+        @Inject(config.repos.elevator.name) private elevatorRepo : IElevatorRepo
     ) {}
 
     public async getFloor(floorId: string): Promise<Result<IFloorDTO>> {
@@ -51,6 +57,7 @@ export default class FloorService implements IFloorService {
 
             floorDTO.connections = [];
             floorDTO.rooms = [];
+            floorDTO.elevators = [];
 
             const floor = await this.floorRepo.findByFloorId(floorDTO.floorId);
 
@@ -116,18 +123,27 @@ export default class FloorService implements IFloorService {
             if (floorDTO.floorNumber !== oldFloor.floorNumber.floorNumber) {
 
                 const oldConnections = oldFloor.connections.map(connection => ConnectionMap.toDTO(connection) as IConnectionDTO);
+                const oldRooms = oldFloor.rooms.map(room => RoomMap.toDTO(room) as IRoomDTO);
+                const oldElevators = oldFloor.elevators.map(elevator => elevator.elevatorId.elevatorId);
                 floorDTO.connections = [];
                 floorDTO.rooms = [];
+                floorDTO.elevators = [];
 
                 // Remove connections from the other floor
-                oldConnections.forEach(async connection => {
+                for (const connection of oldConnections) {
                     await this.connectionRepo.deleteAllInstancesOfConnection(connection.connectionId);
                 }
-                );
+                for (const room of oldRooms) {
+                    this.roomRepo.deleteAllRoomsFromFloor(room.floorId);
+                  }
+                for (const elevator of oldElevators) {
+                    this.elevatorRepo.deleteAllElevatorsFromFloor(elevator);
+                  }
             } else
             {
                 floorDTO.connections = oldFloor.connections.map(connection => ConnectionMap.toDTO(connection) as IConnectionDTO);
                 floorDTO.rooms = oldFloor.rooms.map(room => RoomMap.toDTO(room) as IRoomDTO);
+                floorDTO.elevators = oldFloor.elevators.map(elevator => ElevatorMap.toDTO(elevator) as IElevatorDTO);
             }
 
             const floorOrError = await Floor.create(floorDTO);

@@ -39,6 +39,21 @@ const FloorSchema = new Schema({
         roomCategory: String,
         doorX: Number,
         doorY: Number,
+        originCoordinateX: Number,
+        originCoordinateY: Number,
+        destinationCoordinateX: Number,
+        destinationCoordinateY: Number,
+    }],
+    elevators: [{
+        elevatorId: String,
+        floorsAttended: [String],
+        elevatorBrand: String,
+        elevatorModel: String,
+        elevatorSerNum: String,
+        elevatorDesc: String,
+        currentFloor: Number,
+        locationX: Number,
+        locationY: Number,
     }],
 });
 

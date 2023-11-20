@@ -6,4 +6,8 @@ export interface IRoomPersistence {
   roomCategory: string;
   doorX: number;
   doorY: number;
+  originCoordinateX: number;
+  originCoordinateY: number;
+  destinationCoordinateX: number;
+  destinationCoordinateY: number;
 }

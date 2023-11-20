@@ -42,6 +42,23 @@ export class FloorMap implements Mapper<Floor> {
                     roomCategory: room.roomCategory.category,
                     doorX: room.door.doorX,
                     doorY: room.door.doorY,
+                    originCoordinateX: room.originCoordinateX,
+                    originCoordinateY: room.originCoordinateY,
+                    destinationCoordinateX: room.destinationCoordinateX,
+                    destinationCoordinateY: room.destinationCoordinateY,
+                };
+            }),
+            elevators: floor.elevators.map(elevator => {
+                return {
+                    elevatorId: elevator.elevatorId.elevatorId,
+                    floorsAttended: elevator.floorsAttended,
+                    elevatorBrand: elevator.elevatorBrand.elevatorBrand,
+                    elevatorModel: elevator.elevatorModel.elevatorModel,
+                    elevatorSerNum: elevator.elevatorSerNum.elevatorSerNum,
+                    elevatorDesc: elevator.elevatorDesc.elevatorDesc,
+                    currentFloor: elevator.currentFloor.currentFloor,
+                    locationX: elevator.locationX.locationX,
+                    locationY: elevator.locationY.locationY
                 };
             })
         } as IFloorDTO;
@@ -61,6 +78,23 @@ export class FloorMap implements Mapper<Floor> {
                         roomCategory: room.roomCategory.category,
                         doorX: room.door.doorX,
                         doorY: room.door.doorY,
+                        originCoordinateX: room.originCoordinateX,
+                        originCoordinateY: room.originCoordinateY,
+                        destinationCoordinateX: room.destinationCoordinateX,
+                        destinationCoordinateY: room.destinationCoordinateY,
+                    };
+                }),
+                elevators: floor.elevators.map(elevator => {
+                    return {
+                        elevatorId: elevator.elevatorId.elevatorId,
+                        floorsAttended: elevator.floorsAttended,
+                        elevatorBrand: elevator.elevatorBrand.elevatorBrand,
+                        elevatorModel: elevator.elevatorModel.elevatorModel,
+                        elevatorSerNum: elevator.elevatorSerNum.elevatorSerNum,
+                        elevatorDesc: elevator.elevatorDesc.elevatorDesc,
+                        currentFloor: elevator.currentFloor.currentFloor,
+                        locationX: elevator.locationX.locationX,
+                        locationY: elevator.locationY.locationY
                     };
                 })
             } as IFloorDTO;
@@ -85,7 +119,20 @@ export class FloorMap implements Mapper<Floor> {
                             locationToY: connection.locationToY
                         };
                     }),
-                    rooms: [] // or another default value as needed
+                    rooms: [], // or another default value as needed
+                    elevators: floor.elevators.map(elevator => {
+                        return {
+                            elevatorId: elevator.elevatorId.elevatorId,
+                            floorsAttended: elevator.floorsAttended,
+                            elevatorBrand: elevator.elevatorBrand.elevatorBrand,
+                            elevatorModel: elevator.elevatorModel.elevatorModel,
+                            elevatorSerNum: elevator.elevatorSerNum.elevatorSerNum,
+                            elevatorDesc: elevator.elevatorDesc.elevatorDesc,
+                            currentFloor: elevator.currentFloor.currentFloor,
+                            locationX: elevator.locationX.locationX,
+                            locationY: elevator.locationY.locationY
+                        };
+                    })
                 } as IFloorDTO;
             }
 }
@@ -128,6 +175,10 @@ export class FloorMap implements Mapper<Floor> {
                     roomCategory: room.roomCategory.category,
                     doorX: room.door.doorX,
                     doorY: room.door.doorY,
+                    originCoordinateX: room.originCoordinateX,
+                    originCoordinateY: room.originCoordinateY,
+                    destinationCoordinateX: room.destinationCoordinateX,
+                    destinationCoordinateY: room.destinationCoordinateY,
                 };
             })
         };

@@ -23,6 +23,10 @@ export default (app: Router) => {
         roomCategory: Joi.string().required(),
         doorX: Joi.number().required(),
         doorY: Joi.number().required(),
+        originCoordinateX: Joi.number().required(),
+        originCoordinateY: Joi.number().required(),
+        destinationCoordinateX: Joi.number().required(),
+        destinationCoordinateY: Joi.number().required(),
       })
     }),
     (req, res, next) => ctrl.createRoom(req, res, next) );

@@ -21,7 +21,6 @@ interface BuildingProps {
   dimX: number;
   dimY: number;
   floors: Floor[];
-  elevators: Elevator[];
 }
 
 export class Building extends AggregateRoot<BuildingProps> {
@@ -45,9 +44,6 @@ export class Building extends AggregateRoot<BuildingProps> {
     return this.props.floors.flatMap(floor => floor.connections);
   }
 
-  get elevators (): Elevator[] {
-    return this.props.elevators;
-  }
 
   get buildingDescription (): BuildingDescription {
     return this.props.buildingDescription;
@@ -93,9 +89,6 @@ export class Building extends AggregateRoot<BuildingProps> {
     this.props.floors = value;
   }
 
-  set elevators (value: Elevator[]) {
-    this.props.elevators = value;
-  }
 
   // Add floor to building
   public addFloor(floor: Floor): void {
@@ -117,9 +110,6 @@ export class Building extends AggregateRoot<BuildingProps> {
       throw new Error("Floor not found");
   }
 
-  public addElevator(elevator: Elevator): void {
-    this.props.elevators = [...this.props.elevators, elevator];
-  }
 
 
   // Remove floor from building
@@ -155,7 +145,6 @@ export class Building extends AggregateRoot<BuildingProps> {
         dimX: dimensionX,
         dimY: dimensionY,
         floors: buildingDTO.floors.map(floor => Floor.create(floor).getValue()),
-        elevators: buildingDTO.elevators.map(elevator => Elevator.create(elevator).getValue())
       },
       id
     );

@@ -1,0 +1,71 @@
+.floor-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-family: Arial, sans-serif;
+  background-color: #f4f4f4;
+}
+
+input {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  margin-bottom: 10px;
+}
+
+button {
+  padding: 10px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-bottom: 20px;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
+.floor-container div {
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 10px;
+  margin-bottom: 10px;
+  width: 80%;
+}
+
+.floor-container h2 {
+  margin: 0;
+  margin-bottom: 10px;
+  font-size: 1.5em;
+}
+
+.floor-container p {
+  margin: 0;
+  margin-bottom: 5px;
+  font-size: 1em;
+}
+
+:root {
+  --success-bg-color: #dff0d8;
+  --success-text-color: #3c763d;
+}
+
+.success-message {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: var(--success-bg-color);
+  color: var(--success-text-color);
+  padding: 2.5rem;
+  border-radius: 0.625rem;
+  z-index: 1000;
+  text-align: center;
+  transition: opacity 0.3s ease;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.15);
+  font-size: 2rem;
+}
+

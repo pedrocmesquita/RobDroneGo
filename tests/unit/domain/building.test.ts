@@ -51,17 +51,6 @@ describe('Building', () => {
       locationToY: 1
     }).getValue();
 
-    elevator = Elevator.create({
-      elevatorId: '1',
-      buildingId: '1',
-      elevatorBrand: 'Test Brand',
-      elevatorModel: 'Test Model',
-      elevatorSerNum: 'Test Serial Number',
-      elevatorDesc: 'Test Description',
-      currentFloor: 1,
-      locationX: 1,
-      locationY: 1
-    }).getValue();
 
     room = Room.create({
       roomId: '1',
@@ -71,6 +60,10 @@ describe('Building', () => {
       roomCategory: 'Gabinete',
       doorX: 1,
       doorY: 1,
+      originCoordinateX: 1,
+      originCoordinateY: 1,
+      destinationCoordinateX: 1,
+      destinationCoordinateY: 1,
     }).getValue();
   });
 
@@ -91,10 +84,6 @@ describe('Building', () => {
     expect(floor.rooms).contain(room);
   });
 
-  it('addElevator adds an elevator to the building', () => {
-    building.addElevator(elevator);
-    expect(building.elevators).contain(elevator);
-  });
 
   it('removeFloor removes a floor from the building', () => {
     building.addFloor(floor);

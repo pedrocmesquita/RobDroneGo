@@ -11,12 +11,13 @@ import { AggregateRoot } from "../../core/domain/AggregateRoot";
 import { CurrentFloor } from "./currentFloor";
 import { LocationX } from "./locationX";
 import { LocationY } from "./locationY";
+import { Floor } from "../Floor/floor";
 
 
 
 interface ElevatorProps {
-    buildingId: string;
     elevatorId: ElevatorId;
+    floorsAttended: string[];
     elevatorBrand: ElevatorBrand;
     elevatorModel: ElevatorModel;
     elevatorSerNum: ElevatorSerNum;
@@ -26,10 +27,11 @@ interface ElevatorProps {
     locationY: LocationY;
 }
 
-export class Elevator extends ValueObject<ElevatorProps> {
+export class Elevator extends AggregateRoot<ElevatorProps> {
 
-    get buildingId (): string {
-        return this.props.buildingId;
+
+    get floorsAttended (): string[] {
+        return this.props.floorsAttended;
     }
     get elevatorId (): ElevatorId {
         return this.props.elevatorId;
@@ -56,9 +58,6 @@ export class Elevator extends ValueObject<ElevatorProps> {
         return this.props.locationY;
     }
 
-    set buildingId (value: string) {
-        this.props.buildingId = value;
-    }
     set elevatorId (value: ElevatorId) {
         this.props.elevatorId = value;
     }
@@ -90,8 +89,9 @@ export class Elevator extends ValueObject<ElevatorProps> {
     }
 
     public static create (elevatorDTO: IElevatorDTO, id?: UniqueEntityID): Result<Elevator> {
-        const buildingId = elevatorDTO.buildingId;
+
         const elevatorId = elevatorDTO.elevatorId;
+        const floorsAttended = elevatorDTO.floorsAttended;
         const elevatorBrand = elevatorDTO.elevatorBrand;
         const elevatorModel = elevatorDTO.elevatorModel;
         const elevatorSerNum = elevatorDTO.elevatorSerNum;
@@ -102,8 +102,8 @@ export class Elevator extends ValueObject<ElevatorProps> {
 
         const elevator = new Elevator(
           {
-              buildingId: buildingId,
               elevatorId: ElevatorId.create({elevatorId}).getValue(),
+              floorsAttended: floorsAttended,
               elevatorBrand: ElevatorBrand.create({elevatorBrand}).getValue(),
               elevatorModel: ElevatorModel.create({elevatorModel}).getValue(),
               elevatorSerNum: ElevatorSerNum.create({elevatorSerNum}).getValue(),

@@ -40,10 +40,14 @@ export default class ElevatorRepo implements IElevatorRepo {
                 return ElevatorMap.toDomain(elevatorCreated);
             } else {
                 elevatorDocument.elevatorId = elevator.elevatorId.elevatorId;
+                elevatorDocument.floorsAttended = elevator.floorsAttended;
                 elevatorDocument.elevatorBrand = elevator.elevatorBrand.elevatorBrand;
                 elevatorDocument.elevatorModel = elevator.elevatorModel.elevatorModel;
                 elevatorDocument.elevatorSerNum = elevator.elevatorSerNum.elevatorSerNum;
                 elevatorDocument.elevatorDesc = elevator.elevatorDesc.elevatorDesc;
+                elevatorDocument.currentFloor = elevator.currentFloor.currentFloor;
+                elevatorDocument.locationX = elevator.locationX.locationX;
+                elevatorDocument.locationY = elevator.locationY.locationY;
                 await elevatorDocument.save();
 
                 return elevator;
@@ -105,4 +109,15 @@ export default class ElevatorRepo implements IElevatorRepo {
             throw e;
         }
     }
+
+    public async deleteAllElevatorsFromFloor(floorId: string): Promise<void> {
+        try {
+            const query = { floorId: floorId };
+            await this.elevatorSchema.deleteMany(query as FilterQuery<IElevatorPersistence & Document>);
+        } catch (e) {
+            throw e;
+        }
+    }
+
+
 }

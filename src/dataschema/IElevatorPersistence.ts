@@ -1,6 +1,6 @@
 export interface IElevatorPersistence {
-    buildingId: string;
     elevatorId: string;
+    floorsAttended: string[];
     elevatorBrand: string;
     elevatorModel: string;
     elevatorSerNum: string;

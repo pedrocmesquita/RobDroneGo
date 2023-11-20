@@ -18,6 +18,10 @@ export class RoomMap implements Mapper<Room> {
       roomCategory: room.roomCategory.category,
       doorX: room.door.doorX,
       doorY: room.door.doorY,
+      originCoordinateX: room.originCoordinateX,
+      originCoordinateY: room.originCoordinateY,
+      destinationCoordinateX: room.destinationCoordinateX,
+      destinationCoordinateY: room.destinationCoordinateY,
     } as IRoomDTO;
   }
 
@@ -38,6 +42,10 @@ export class RoomMap implements Mapper<Room> {
       roomCategory: room.roomCategory.category,
       doorX: room.door.doorX,
       doorY: room.door.doorY,
+      originCoordinateX: room.originCoordinateX,
+      originCoordinateY: room.originCoordinateY,
+      destinationCoordinateX: room.destinationCoordinateX,
+      destinationCoordinateY: room.destinationCoordinateY,
     };
   }
 }

@@ -37,7 +37,6 @@ export default class RoomService implements IRoomService {
     try {
       const floor = await this.floorRepo.findByFloorId(roomDTO.floorId);
 
-      // Check if floorFrom exists and if floorTo exists
       if (floor === null) {
         return Result.fail<IRoomDTO>("Floor not found.");
       }
@@ -52,6 +51,14 @@ export default class RoomService implements IRoomService {
 
       if (building === null) {
         return Result.fail<IRoomDTO>("Building not found.");
+      }
+
+      // Check if the room overlaps with any other rooms on the floor
+      const rooms = await this.roomRepo.getRooms();
+      const overlap = rooms.some( r => this.isOverlapWith( RoomMap.toDomain(r), RoomMap.toDomain(roomDTO) ) );
+
+      if (overlap) {
+        return Result.fail<IRoomDTO>("Room overlaps with another room on the floor.");
       }
 
       const roomOrError = await Room.create( roomDTO );
@@ -131,5 +138,28 @@ export default class RoomService implements IRoomService {
     } catch (e) {
       throw e;
     }
+  }
+
+  public isOverlapWith(originalRoom: Room,otherRoom: Room): boolean {
+    // Check if the rooms are on the same floor
+    if (originalRoom.floorId !== otherRoom.floorId) {
+      return false;
+    }
+
+    // Check if the rooms overlap in terms of coordinates
+    const thisX1 = originalRoom.originCoordinateX;
+    const thisY1 = originalRoom.originCoordinateY;
+    const thisX2 = originalRoom.destinationCoordinateX;
+    const thisY2 = originalRoom.destinationCoordinateY;
+
+    const otherX1 = otherRoom.originCoordinateX;
+    const otherY1 = otherRoom.originCoordinateY;
+    const otherX2 = otherRoom.destinationCoordinateX;
+    const otherY2 = otherRoom.destinationCoordinateY;
+
+    const overlapX = thisX1 < otherX2 && thisX2 > otherX1;
+    const overlapY = thisY1 < otherY2 && thisY2 > otherY1;
+
+    return overlapX && overlapY;
   }
 }

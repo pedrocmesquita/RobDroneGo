@@ -11,5 +11,4 @@ export interface IBuilding {
   dimX: number;
   dimY: number;
   floors?: IFloor[];
-  elevators?: IElevator[];
 }

@@ -12,7 +12,6 @@ import IConnectionDTO from "../dto/IConnectionDTO";
 export class BuildingMap implements Mapper<Building> {
     public static toDTO(building: Building): any {
         const floors = building.floors;
-        const elevators = building.elevators;
 
         if (Array.isArray(floors)) {
             return {
@@ -51,46 +50,40 @@ export class BuildingMap implements Mapper<Building> {
                                 roomCategory: room.roomCategory.category,
                                 doorX: room.door.doorX,
                                 doorY: room.door.doorY,
+                                originCoordinateX: room.originCoordinateX,
+                                originCoordinateY: room.originCoordinateY,
+                                destinationCoordinateX: room.destinationCoordinateX,
+                                destinationCoordinateY: room.destinationCoordinateY,
                             }
-                        })
+                        }),
+                        elevators: floor.elevators.map(elevator => {
+                            return {
+                                elevatorId: elevator.elevatorId.elevatorId,
+                                floorsAttended: elevator.floorsAttended,
+                                elevatorBrand: elevator.elevatorBrand.elevatorBrand,
+                                elevatorModel: elevator.elevatorModel.elevatorModel,
+                                elevatorSerNum: elevator.elevatorSerNum.elevatorSerNum,
+                                elevatorDesc: elevator.elevatorDesc.elevatorDesc,
+                                currentFloor: elevator.currentFloor.currentFloor,
+                                locationX: elevator.locationX.locationX,
+                                locationY: elevator.locationY.locationY
+                            }
+                        }),
                     };
-                },
+                }
                 ),
-                elevators: elevators.map(elevator => {
-                    return {
-                        buildingId: elevator.buildingId,
-                        elevatorId: elevator.elevatorId.elevatorId,
-                        elevatorBrand: elevator.elevatorBrand.elevatorBrand,
-                        elevatorModel: elevator.elevatorModel.elevatorModel,
-                        elevatorSerNum: elevator.elevatorSerNum.elevatorSerNum,
-                        elevatorDesc: elevator.elevatorDesc.elevatorDesc,
-                        currentFloor: elevator.currentFloor.currentFloor,
-                        locationX: elevator.locationX.locationX,
-                        locationY: elevator.locationY.locationY
-                    }
-                })
             } as IBuildingDTO;
-        } else {
+        }
+        else {
             // Handle the case where 'floors' is not an array
             return {
                 buildingId: building.buildingId.buildingId,
                 buildingName: building.buildingName.buildingName,
                 buildingDescription: building.buildingDescription.buildingDescription,
                 buildingNumberOfFloors: building.buildingNumberOfFloors.buildingNumberOfFloors,
+                dimX: building.dimX,
+                dimY: building.dimY,
                 floors: [], // or another default value as needed
-                elevators: elevators.map(elevator => {
-                    return {
-                        buildingId: elevator.buildingId,
-                        elevatorId: elevator.elevatorId.elevatorId,
-                        elevatorBrand: elevator.elevatorBrand.elevatorBrand,
-                        elevatorModel: elevator.elevatorModel.elevatorModel,
-                        elevatorSerNum: elevator.elevatorSerNum.elevatorSerNum,
-                        elevatorDesc: elevator.elevatorDesc.elevatorDesc,
-                        currentFloor: elevator.currentFloor.currentFloor,
-                        locationX: elevator.locationX.locationX,
-                        locationY: elevator.locationY.locationY
-                    }
-                })
             } as IBuildingDTO;
         }
     }
@@ -140,23 +133,29 @@ export class BuildingMap implements Mapper<Building> {
                             roomCategory: room.roomCategory.category,
                             doorX: room.door.doorX,
                             doorY: room.door.doorY,
+                            originCoordinateX: room.originCoordinateX,
+                            originCoordinateY: room.originCoordinateY,
+                            destinationCoordinateX: room.destinationCoordinateX,
+                            destinationCoordinateY: room.destinationCoordinateY,
                         }
-                    }})
+                    }},
+                    ),
+                    elevators: floor.elevators.map(elevator => {
+                        return{
+                            elevatorId: elevator.elevatorId.elevatorId,
+                            floorsAttended: elevator.floorsAttended,
+                            elevatorBrand: elevator.elevatorBrand.elevatorBrand,
+                            elevatorModel: elevator.elevatorModel.elevatorModel,
+                            elevatorSerNum: elevator.elevatorSerNum.elevatorSerNum,
+                            elevatorDesc: elevator.elevatorDesc.elevatorDesc,
+                            currentFloor: elevator.currentFloor.currentFloor,
+                            locationX: elevator.locationX.locationX,
+                            locationY: elevator.locationY.locationY
+                        }
+                    })
                 };
             }),
-            elevators: building.elevators.map(elevator => {
-                return{
-                    buildingId: elevator.buildingId,
-                    elevatorId: elevator.elevatorId.elevatorId,
-                    elevatorBrand: elevator.elevatorBrand.elevatorBrand,
-                    elevatorModel: elevator.elevatorModel.elevatorModel,
-                    elevatorSerNum: elevator.elevatorSerNum.elevatorSerNum,
-                    elevatorDesc: elevator.elevatorDesc.elevatorDesc,
-                    currentFloor: elevator.currentFloor.currentFloor,
-                    locationX: elevator.locationX.locationX,
-                    locationY: elevator.locationY.locationY
-                }
-            })
+
         };
     }
 }

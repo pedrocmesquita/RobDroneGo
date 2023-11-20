@@ -54,19 +54,23 @@ const BuildingSchema = new mongoose.Schema({
             roomCategory: String,
             doorX: Number,
             doorY: Number,
+            originCoordinateX: Number,
+            originCoordinateY: Number,
+            destinationCoordinateX: Number,
+            destinationCoordinateY: Number,
+        }],
+        elevators: [{
+            elevatorId: String,
+            floorsAttended: [String],
+            elevatorBrand: String,
+            elevatorModel: String,
+            elevatorSerNum: String,
+            elevatorDesc: String,
+            currentFloor: Number,
+            locationX: Number,
+            locationY: Number,
         }],
     }],
-    elevators: [{
-        elevatorId: String,
-        buildingId: String,
-        elevatorBrand: String,
-        elevatorModel: String,
-        elevatorSerNum: String,
-        elevatorDesc: String,
-        currentFloor: Number,
-        locationX: Number,
-        locationY: Number,
-    }]
 });
 
 export default mongoose.model<IBuildingPersistence & mongoose.Document>('Building', BuildingSchema);

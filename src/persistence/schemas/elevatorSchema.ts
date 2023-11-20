@@ -2,13 +2,14 @@ import { IBuildingPersistence } from "../../dataschema/IBuildingPersistence";
 import mongoose from 'mongoose';
 
 const ElevatorSchema = new mongoose.Schema({
-  buildingId: {
-    type: String,
-    unique: true,
-  },
   elevatorId: {
     type: String,
     unique: true,
+  },
+  floorsAttended: {
+    type: [String],
+    required: [true, 'Please enter floors attended by elevator.'],
+    index: true,
   },
   elevatorBrand: {
     type: String,

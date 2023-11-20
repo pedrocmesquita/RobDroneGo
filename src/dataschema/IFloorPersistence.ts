@@ -1,4 +1,6 @@
 import { Connection } from "../domain/Connection/connection";
+import { Elevator } from "../domain/Elevator/elevator";
+import { Room } from "../domain/Room/room";
 
 export interface IFloorPersistence {
     floorId: string;
@@ -6,4 +8,6 @@ export interface IFloorPersistence {
     floorNumber: number;
     floorDescription: string;
     connections?: Connection[];
+    rooms?: Room[];
+    elevators?: Elevator[];
 }

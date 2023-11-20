@@ -13,7 +13,7 @@ describe ( 'Elevator', () => {
   beforeEach(() => {
     elevator = Elevator.create({
       elevatorId: '1',
-      buildingId: '1',
+      floorsAttended: ['1'],
       elevatorBrand : 'Test Brand',
       elevatorModel: 'Test Model',
       elevatorSerNum: 'Test Serial Number',
@@ -32,9 +32,6 @@ describe ( 'Elevator', () => {
     expect(elevator.elevatorId.elevatorId).to.equal('1');
   });
 
-  it('should return the buildingId', () => {
-    expect(elevator.buildingId).to.equal('1');
-  });
 
   it('should return the elevatorBrand', () => {
     expect(elevator.elevatorBrand.elevatorBrand).to.equal('Test Brand');

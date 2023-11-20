@@ -9,5 +9,4 @@ export interface IBuildingPersistence {
     dimX: number;
     dimY: number;
     floors?: Floor[];
-    elevators?: Elevator[];
 }

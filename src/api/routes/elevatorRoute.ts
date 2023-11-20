@@ -16,8 +16,8 @@ export default (app: Router) => {
     route.post("",
         celebrate({
         body: Joi.object({
-            buildingId: Joi.string().required(),
             elevatorId: Joi.string().required(),
+            floorsAttended: Joi.string().required(),
             elevatorBrand: Joi.string().required(),
             elevatorModel: Joi.string().required(),
             elevatorSerNum: Joi.string().required(),

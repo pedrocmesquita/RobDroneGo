@@ -1,1 +1,49 @@
-<p>floor works!</p>
+<div class="floor-container">
+  <p *ngIf="successMessage">{{ successMessage }}</p>
+  <h1>Create Floor</h1>
+  <form (ngSubmit)="createFloor()">
+    <input [(ngModel)]="newFloor.buildingId" name="buildingId" placeholder="ID">
+    <input [(ngModel)]="newFloor.floorNumber" name="floorNumber" placeholder="Floor Number">
+    <input [(ngModel)]="newFloor.floorDescription" name="floorDescription" placeholder="Description">
+    <button type="submit">Create Floor</button>
+  </form>
+
+  <input [(ngModel)]="filterText" placeholder="Filter by ID">
+  <button (click)="filterFloors()">Filter</button>
+
+  <table>
+    <thead>
+    <tr>
+      <th>Building ID</th>
+      <th>Floor ID</th>
+      <th>Floor Number</th>
+      <th>Description</th>
+      <th>Connections</th>
+      <th>Rooms</th>
+      <th>Elevators</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let floor of filteredFloors">
+      <td>{{ floor.buildingId }}</td>
+      <td>{{ floor.floorId }}</td>
+      <td><input [(ngModel)]="floor.floorNumber" placeholder="Floor Number"></td>
+      <td><input [(ngModel)]="floor.floorDescription" placeholder="Description"></td>
+    <td>
+      <div *ngFor="let connections of floor.connections">
+        Connection Id: {{ connections.connectionId }}, Origin: {{ connections.floorfromId }},
+        Destination: {{ connections.floortoId }}
+      </div>
+      <div *ngFor="let room of floor.rooms">
+        Room Id: {{ room.roomId }}, Floor Id: {{ room.floorId }}, Room Name: {{ room.roomName }},
+        Room Description: {{ room.roomDescription }}, Room Category: {{ room.roomCategory }}
+      </div>
+      <div *ngFor="let elevators of floor.elevators">
+        Elevator Id: {{ elevators.elevatorId }}, Floors Attended: {{ elevators.floorsAttended }},
+        Brand: {{ elevators.elevatorBrand }}, Model: {{ elevators.elevatorModel }}, Serial Number: {{ elevators.elevatorSerNum }},
+        Description: {{ elevators.elevatorDesc}}, Current Floor: {{ elevators.currentFloor }}
+      </div>
+    </td>
+      <td><button (click)="editFloor(floor)">Edit</button></td>
+  </table>
+</div>

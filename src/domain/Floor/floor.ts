@@ -12,6 +12,7 @@ import { AggregateRoot } from "../../core/domain/AggregateRoot";
 import { Connection } from "../Connection/connection";
 import IConnectionDTO from "../../dto/IConnectionDTO";
 import { Room } from "../Room/room";
+import { Elevator } from "../Elevator/elevator";
 
 interface FloorProps {
     //floorId is a value object that is unique, and the first parts equals the building name and the second the floor number.
@@ -21,6 +22,7 @@ interface FloorProps {
     floorDescription?: FloorDescription;
     connections?: Connection[];
     rooms?: Room[];
+    elevators?: Elevator[];
 }
 
 export class Floor extends AggregateRoot<FloorProps> {
@@ -45,6 +47,9 @@ export class Floor extends AggregateRoot<FloorProps> {
         return this.props.floorDescription;
     }
 
+    get elevators (): Elevator[] {
+        return this.props.elevators;
+    }
 
     set buildingId (value: string) {
         this.props.buildingId = value;
@@ -78,10 +83,18 @@ export class Floor extends AggregateRoot<FloorProps> {
         return this.props.rooms;
     }
 
+    set elevators (value: Elevator[]) {
+        this.props.elevators = value;
+    }
+
     // Add connection to floor
     // Add floor to building
     public addConnection(connection: Connection): void {
         this.props.connections = [...this.props.connections, connection];
+    }
+
+    public addElevator(elevator: Elevator): void {
+        this.props.elevators = [...this.props.elevators, elevator];
     }
 
     public addRoom(room: Room): void {
@@ -119,7 +132,8 @@ export class Floor extends AggregateRoot<FloorProps> {
               floorId: floorId,
               floorDescription: FloorDescription.create({ floorDescription }).getValue(),
               connections: floorDTO.connections.map(connection => Connection.create(connection).getValue()),
-              rooms: floorDTO.rooms.map(room => Room.create(room).getValue())
+              rooms: floorDTO.rooms.map(room => Room.create(room).getValue()),
+              elevators: floorDTO.elevators.map(elevator => Elevator.create(elevator).getValue()),
           },
             id
         );

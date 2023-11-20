@@ -1,1 +1,44 @@
-<p>building works!</p>
+<div class="building-container">
+  <p *ngIf="successMessage">{{ successMessage }}</p>
+  <h1>Create Building</h1>
+  <form (ngSubmit)="createBuilding()">
+    <input [(ngModel)]="newBuilding.buildingId" name="buildingId" placeholder="ID">
+    <input [(ngModel)]="newBuilding.buildingName" name="buildingName" placeholder="Name">
+    <input [(ngModel)]="newBuilding.buildingDescription" name="buildingDescription" placeholder="Description">
+    <input [(ngModel)]="newBuilding.buildingNumberOfFloors" name="buildingNumberOfFloors" placeholder="Number of Floors">
+    <input [(ngModel)]="newBuilding.dimX" name="dimX" placeholder="Dimension X">
+    <input [(ngModel)]="newBuilding.dimY" name="dimY" placeholder="Dimension Y">
+    <button type="submit">Create Building</button>
+  </form>
+
+  <input [(ngModel)]="filterText" placeholder="Filter by ID">
+  <button (click)="filterBuildings()">Filter</button>
+
+  <table>
+    <thead>
+    <tr>
+      <th>ID</th>
+      <th>Name</th>
+      <th>Number of Floors</th>
+      <th>Description</th>
+      <th>Dimension X</th>
+      <th>Dimension Y</th>
+      <th>Floors</th>
+      <th>Elevators</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let building of filteredBuildings">
+      <td>{{ building.buildingId }}</td>
+      <td><input [(ngModel)]="building.buildingName" placeholder="Name"></td>
+      <td><input [(ngModel)]="building.buildingNumberOfFloors" placeholder="Number of Floors"></td>
+      <td><input [(ngModel)]="building.buildingDescription" placeholder="Description"></td>
+      <td><input [(ngModel)]="building.dimX" placeholder="Dimension X"></td>
+      <td><input [(ngModel)]="building.dimY" placeholder="Dimension Y"></td>
+      <td>{{ building.floors }}</td>
+      <td>{{ building.elevators }}</td>
+      <td><button (click)="editBuilding(building)">Edit Building</button></td>
+    </tr>
+    </tbody>
+  </table>
+</div>

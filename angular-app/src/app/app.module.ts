@@ -21,6 +21,7 @@ import { HeaderComponent } from "./component/header/header.component";
 import { UnauthorizedComponent } from "./component/unauthorized/unauthorized.component";
 import { RobotTypeComponent } from "./component/robot-type/robot-type.component";
 import { RobotComponent } from "./component/robot/robot.component";
+import { BuildingComponent } from "./component/building/building.component";
 
 @NgModule({
   declarations: [
@@ -33,7 +34,8 @@ import { RobotComponent } from "./component/robot/robot.component";
     HeaderComponent,
     UnauthorizedComponent,
     RobotTypeComponent,
-    RobotComponent
+    RobotComponent,
+    BuildingComponent,
   ],
   imports: [
     CommonModule,

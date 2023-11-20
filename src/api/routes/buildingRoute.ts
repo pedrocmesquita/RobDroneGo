@@ -27,6 +27,8 @@ export default (app: Router) => {
             buildingName: Joi.string().required(),
             buildingNumberOfFloors: Joi.number().required(),
             buildingDescription: Joi.string().required(),
+            dimX: Joi.number().required(),
+            dimY: Joi.number().required(),
         }),
         }),
         (req, res, next) => ctrl.createBuilding(req, res, next) );
@@ -47,7 +49,7 @@ export default (app: Router) => {
 
     route.get("", async (req, res, next) => {
         // Check if the user has the "Gestor de Campus" role
-        if (req.auth.role !== "4789047b-d838-4739-a5c5-27725c14f33b") {
+        if (req.auth.role !== "cd81a3f0-bcf8-496d-80ba-c5b950ad5514" && req.auth.role !== "eff20b8c-7241-4581-99ce-137ac0f3db0b") {
 
             return res.status(403).json({ error: "Unauthorized access" });
         }

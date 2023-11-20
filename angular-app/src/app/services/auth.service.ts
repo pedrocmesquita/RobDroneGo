@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from "@angular/core";
 import { Observable, tap } from "rxjs";
+import { response } from "express";
 
 @Injectable({
   providedIn: 'root',
@@ -8,13 +9,17 @@ import { Observable, tap } from "rxjs";
 
 export class AuthService {
   currentUser: any = null;
+  token: string | null = null;
+  response: any = null;
   constructor(private http: HttpClient) {}
 
   login(email: string, password: string) {
     // Replace with your actual backend API endpoint
-    return this.http.post('http://localhost:4000/api/auth/signin', { email, password }).pipe(
-      tap(user => {
-        this.currentUser = user;
+    return this.http.post<any>('http://localhost:4000/api/auth/signin', { email, password }).pipe(
+      tap(response => {
+        console.log(response);
+        this.currentUser = response.userDTO;
+        this.token = response.token;
       })
     );
   }
@@ -38,5 +43,8 @@ export class AuthService {
     return !!this.currentUser;
   }
 
+  getToken(): string | null {
+    return this.token;
+  }
 
 }

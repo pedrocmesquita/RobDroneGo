@@ -62,7 +62,7 @@ export class HomeComponent implements OnInit{
       }
     );
 
-    this.currentUser = this.authService.currentUser.userDTO;
+    this.currentUser = this.authService.currentUser;
     console.log(this.currentUser);
 
     if (this.currentUser == null) {

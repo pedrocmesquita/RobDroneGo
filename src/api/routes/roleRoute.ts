@@ -29,4 +29,13 @@ export default (app: Router) => {
       }),
     }),
     (req, res, next) => ctrl.updateRole(req, res, next) );
+
+  route.get('', async (req, res, next) => {
+    try {
+      await ctrl.getRoles(req, res, next);
+    } catch (error) {
+      next(error);
+    }
+  }
+  );
 };

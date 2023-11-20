@@ -1,0 +1,56 @@
+<div class="home-container">
+  <header class="home-header">
+    <div>
+      <h1>Welcome to RobDroneGo</h1>
+    </div>
+    <div *ngIf="currentUser">
+      <p>Hello, {{ currentUser.firstName + " " +currentUser.lastName}}!</p>
+    </div>
+  </header>
+
+  <nav class="home-menu" *ngIf="currentUser">
+    <div class="menu-item" *ngIf="currentUser.role === this.roleGestorDeCampus.id || currentUser.role === this.roleAdmin.id">
+      <a routerLink="/building">
+        <img src="assets/buildings-icon.png" alt="buildings"> <!-- Replace with the actual path to your icon -->
+        <span>Buildings</span>
+      </a>
+    </div>
+    <div class="menu-item" *ngIf="currentUser.role === this.roleGestorDeCampus.id || currentUser.role === this.roleAdmin.id">
+      <a routerLink="/floor">
+        <img src="assets/floors-icon.png" alt="floors"> <!-- Replace with the actual path to your icon -->
+        <span>Floors</span>
+      </a>
+    </div>
+    <div class="menu-item" *ngIf="currentUser.role === this.roleGestorDeCampus.id || currentUser.role === this.roleAdmin.id">
+      <a routerLink="/room">
+        <img src="assets/rooms-icon.png" alt="rooms"> <!-- Replace with the actual path to your icon -->
+        <span>Rooms</span>
+      </a>
+    </div>
+    <div class="menu-item">
+      <a routerLink="/connection" *ngIf="currentUser.role === this.roleGestorDeCampus.id || currentUser.role === this.roleAdmin.id">
+        <img src="assets/connections-icon.png" alt="connections"> <!-- Replace with the actual path to your icon -->
+        <span>Connections</span>
+      </a>
+    </div>
+    <div class="menu-item">
+      <a routerLink="/elevator" *ngIf="currentUser.role === this.roleGestorDeCampus.id || currentUser.role === this.roleAdmin.id">
+        <img src="assets/elevators-icon.png" alt="elevators"> <!-- Replace with the actual path to your icon -->
+        <span>Elevators</span>
+      </a>
+    </div>
+    <div class="menu-item" *ngIf="currentUser.role === this.roleGestorDeFrota.id || currentUser.role === this.roleAdmin.id">
+      <a routerLink="/robot">
+        <img src="assets/robots-icon.png" alt="robots"> <!-- Replace with the actual path to your icon -->
+        <span>Robots</span>
+      </a>
+    </div>
+    <div class="menu-item" *ngIf="currentUser.role === this.roleGestorDeFrota.id || currentUser.role === this.roleAdmin.id">
+      <a routerLink="/robot-type">
+        <img src="assets/type-icon.png" alt="robotType"> <!-- Replace with the actual path to your icon -->
+        <span>Robot Type</span>
+      </a>
+    </div>
+
+  </nav>
+</div>

@@ -183,12 +183,12 @@
       <DasType>Int32|4s</DasType>
       <Position>1</Position>
     </column>
-    <column id="55" parent="7" name="locationY">
-      <DasType>Int32|4s</DasType>
+    <column id="55" parent="7" name="elevatorDesc">
+      <DasType>String|12s</DasType>
       <Position>2</Position>
     </column>
-    <column id="56" parent="7" name="elevatorDesc">
-      <DasType>String|12s</DasType>
+    <column id="56" parent="7" name="locationY">
+      <DasType>Int32|4s</DasType>
       <Position>2</Position>
     </column>
     <column id="57" parent="7" name="elevatorId">

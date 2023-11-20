@@ -1,0 +1,14 @@
+.unauthorized-page {
+  background-color: black;
+  color: white;
+  min-height: 100vh;
+}
+
+h1 {
+  color: red;
+}
+
+h6{
+  color: red;
+  text-decoration: underline;
+}

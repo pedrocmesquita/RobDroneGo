@@ -17,6 +17,10 @@ export class RoleMap extends Mapper<Role> {
     } as IRoleDTO;
   }
 
+  public static toDTOArray( roles: Role[]): IRoleDTO[] {
+    return roles.map( (role) => RoleMap.toDTO( role ) );
+  }
+
   public static toDomain (role: any | Model<IRolePersistence & Document> ): Role {
     const roleOrError = Role.create(
       role,

@@ -1,0 +1,9 @@
+<div class="role-container">
+  <h1>Create a Role</h1>
+  <form (ngSubmit)="onSubmit(roleCreationForm)" #roleCreationForm="ngForm" class="role-creation-form">
+    <label for="roleName">Role Name</label>
+    <input type="text" id="roleName" name="roleName" ngModel required>
+    <button type="submit">Create Role</button>
+  </form>
+  <p *ngIf="errorMessage" class="error-message">{{ errorMessage }}</p>
+</div>

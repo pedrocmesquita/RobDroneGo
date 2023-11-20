@@ -1,0 +1,21 @@
+<div class="signup-container">
+<form (ngSubmit)="onSubmit(signupForm)" #signupForm="ngForm" class="signup-form">
+  <label for="firstName">First Name</label>
+  <input type="text" id="firstName" name="firstName" ngModel required>
+  <label for="lastName">Last Name</label>
+  <input type="text" id="lastName" name="lastName" ngModel required>
+  <label for="email">Email</label>
+  <input type="email" id="email" name="email" ngModel required>
+  <label for="password">Password</label>
+  <input type="password" id="password" name="password" ngModel required>
+  <label for="role">Role</label>
+  <select id="role" name="role" [(ngModel)]="selectedRole" required>
+    <option value="" disabled>Select a role</option>
+    <option *ngFor="let role of roles" [value]="role.id">{{ role.name }}</option>
+  </select>
+  <button type="submit">Signup</button>
+  <p *ngIf="successMessage" class="success-message">{{ successMessage }}</p>
+  <p *ngIf="isLoading" class="loading-spinner"></p>
+</form>
+</div>
+

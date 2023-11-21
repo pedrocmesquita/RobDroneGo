@@ -1,1 +1,42 @@
-<p>room works!</p>
+<div class="room-container">
+  <p *ngIf="successMessage">{{ successMessage }}</p>
+  <h1>Create Room</h1>
+  <form (ngSubmit)="createRoom()">
+    <input [(ngModel)]="newRoom.roomId" name="roomId" placeholder="Room ID">
+    <input [(ngModel)]="newRoom.floorId" name="floorId" placeholder="Floor ID">
+    <input [(ngModel)]="newRoom.roomName" name="roomName" placeholder="Room Name">
+    <input [(ngModel)]="newRoom.roomDescription" name="roomDescription" placeholder="Room Description">
+    <input [(ngModel)]="newRoom.roomCategory" name="roomCategory" placeholder="Room Category">
+    <input [(ngModel)]="newRoom.doorX" name="doorX" placeholder="Door X">
+    <input [(ngModel)]="newRoom.doorY" name="doorY" placeholder="Door Y">
+    <input [(ngModel)]="newRoom.originCoordinateX" name="originCoordinateX" placeholder="Origin Coordinate X">
+    <input [(ngModel)]="newRoom.originCoordinateY" name="originCoordinateY" placeholder="Origin Coordinate Y">
+    <input [(ngModel)]="newRoom.destinationCoordinateX" name="destinationCoordinateX" placeholder="Destination Coordinate X">
+    <input [(ngModel)]="newRoom.destinationCoordinateY" name="destinationCoordinateY" placeholder="Destination Coordinate Y">
+    <button type="submit">Create Room</button>
+  </form>
+
+  <input [(ngModel)]="filterText" placeholder="Filter by ID">
+  <button (click)="filterRooms()">Filter</button>
+
+  <table>
+    <thead>
+    <tr>
+      <th>Room ID</th>
+      <th>Floor ID</th>
+      <th>Room Name</th>
+      <th>Room Description</th>
+      <th>Room Category</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let room of filteredRooms">
+      <td>{{ room.roomId }}</td>
+      <td>{{ room.floorId }}</td>
+      <td>{{ room.roomName }}</td>
+      <td>{{ room.roomDescription }}</td>
+      <td>{{ room.roomCategory }}</td>
+    </tr>
+    </tbody>
+  </table>
+</div>

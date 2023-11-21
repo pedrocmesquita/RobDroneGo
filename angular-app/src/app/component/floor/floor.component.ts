@@ -6,8 +6,6 @@ import { FormsModule } from "@angular/forms";
 
 @Component({
   selector: 'app-floor',
-  standalone: true,
-  imports: [CommonModule, FormsModule],
   templateUrl: './floor.component.html',
   styleUrl: './floor.component.css'
 })

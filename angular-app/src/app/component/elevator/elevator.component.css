@@ -1,0 +1,60 @@
+.elevator-container {
+    width: 80%;
+    margin: auto;
+    font-family: Arial, sans-serif;
+}
+
+.elevator-container h1 {
+    text-align: center;
+    color: #333;
+}
+
+.elevator-container form {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 20px;
+}
+
+.elevator-container input {
+    margin: 5px 0;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+.elevator-container button {
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    background-color: #007bff;
+    color: white;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+.elevator-container button:hover {
+    background-color: #0056b3;
+}
+
+.elevator-container table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.elevator-container th, .elevator-container td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+.elevator-container th {
+    background-color: #f2f2f2;
+}
+
+.elevator-container tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+.elevator-container tr:hover {
+    background-color: #ddd;
+}

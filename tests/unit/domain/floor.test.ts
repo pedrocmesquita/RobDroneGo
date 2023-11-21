@@ -16,7 +16,8 @@ describe('Floor', () => {
         floorNumber: 1,
         floorDescription: 'Test Floor',
         connections: [],
-        rooms: []
+        rooms: [] ,
+            elevators: []
         }).getValue();
     });
     

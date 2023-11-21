@@ -28,6 +28,7 @@ export const routes: Routes = [
   { path: 'robot-type', component: RobotTypeComponent , canActivate: [AuthGuard] },
   { path: 'role', component: RoleComponent},
   { path: 'unauthorized', component: UnauthorizedComponent},
+
   { path: '**', redirectTo: '' },
 
 

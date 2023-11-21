@@ -27,7 +27,6 @@ describe('Building', () => {
       dimX: 4,
       dimY: 5,
       floors: [],
-      elevators: []
     }).getValue();
 
     floor = Floor.create({
@@ -36,7 +35,8 @@ describe('Building', () => {
       floorNumber: 1,
       floorDescription: 'Test Floor',
       connections: [],
-      rooms: []
+      rooms: [],
+      elevators: []
     }).getValue();
     
     connection = Connection.create({

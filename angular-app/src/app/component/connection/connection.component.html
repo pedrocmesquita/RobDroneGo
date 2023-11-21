@@ -1,1 +1,46 @@
-<p>connection works!</p>
+<div class="connection-container">
+  <p *ngIf="successMessage">{{ successMessage }}</p>
+  <h1>Create Building</h1>
+  <form (ngSubmit)="createConnection()">
+    <input [(ngModel)]="newConnection.buildingfromId" name="buildingfromId" placeholder="Building From Id">
+    <input [(ngModel)]="newConnection.buildingtoId" name="buildingtoId" placeholder="Building To Id">
+    <input [(ngModel)]="newConnection.floorfromId" name="floorfromId" placeholder="Floor From Id">
+    <input [(ngModel)]="newConnection.floortoId" name="floortoId" placeholder="Floor To Id">
+    <input [(ngModel)]="newConnection.locationX" name="locationX" placeholder="Location X">
+    <input [(ngModel)]="newConnection.locationY" name="locationY" placeholder="Location Y">
+    <input [(ngModel)]="newConnection.locationToX" name="locationToX" placeholder="Location To X">
+    <input [(ngModel)]="newConnection.locationToY" name="locationToY" placeholder="Location To Y">
+    <button type="submit">Create Connection</button>
+  </form>
+
+  <input [(ngModel)]="filterText" placeholder="Filter by ID">
+  <button (click)="filterConnections()">Filter</button>
+
+  <table>
+    <thead>
+    <tr>
+      <th>Origin Building</th>
+      <th>Destination Building</th>
+      <th>Origin Floor</th>
+      <th>Destination Floor</th>
+      <th>Origin Dimension X</th>
+      <th>Origin Dimension Y</th>
+      <th>Destination Dimension X</th>
+      <th>Destination Dimension Y</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let connections of filteredConnections">
+      <td>{{ connections.buildingfromId }}</td>
+      <td>{{ connections.buildingtoId }}</td>
+      <td>{{ connections.floorfromId }}</td>
+      <td>{{ connections.floortoId }}</td>
+      <td><input [(ngModel)]="connections.locationX" placeholder = "Location X"></td>
+      <td><input [(ngModel)]="connections.locationY" placeholder = "Location Y"></td>
+      <td><input [(ngModel)]="connections.locationToX" placeholder = "Location To X"></td>
+      <td><input [(ngModel)]="connections.locationToY" placeholder = "Location To Y"></td>
+      <td><button (click)="updateConnection(connections)">Update</button></td>
+    </tr>
+    </tbody>
+  </table>
+</div>

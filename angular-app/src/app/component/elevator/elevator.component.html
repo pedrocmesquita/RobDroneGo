@@ -1,1 +1,46 @@
-<p>elevator works!</p>
+<div class="elevator-container">
+  <p *ngIf="successMessage">{{ successMessage }}</p>
+  <h1>Create Elevator</h1>
+  <form (ngSubmit)="createElevator()">
+    <input [(ngModel)]="newElevator.elevatorId" name="elevatorId" placeholder="Elevator ID">
+    <input [(ngModel)]="newElevator.floorsAttended" name="floorsAttended" placeholder="Floors Attended">
+    <input [(ngModel)]="newElevator.elevatorBrand" name="elevatorBrand" placeholder="Elevator Brand">
+    <input [(ngModel)]="newElevator.elevatorModel" name="elevatorModel" placeholder="Elevator Model">
+    <input [(ngModel)]="newElevator.elevatorSerNum" name="elevatorSerNum" placeholder="Elevator Serial Number">
+    <input [(ngModel)]="newElevator.elevatorDesc" name="elevatorDesc" placeholder="Elevator Description">
+    <input [(ngModel)]="newElevator.currentFloor" name="currentFloor" placeholder="Current Floor">
+    <button type="submit">Create Elevator</button>
+  </form>
+
+  <input [(ngModel)]="filterText" placeholder="Filter by ID">
+  <button (click)="filterElevators()">Filter</button>
+
+  <table>
+    <thead>
+    <tr>
+      <th>Elevator ID</th>
+      <th>Floors Attended</th>
+      <th>Elevator Brand</th>
+      <th>Elevator Model</th>
+      <th>Elevator Serial Number</th>
+      <th>Elevator Description</th>
+      <th>Current Floor</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let elevator of filteredElevators">
+      <td>{{ elevator.elevatorId }}</td>
+      <td>
+        <ul>
+          <li *ngFor="let floor of elevator.floorsAttended">{{ floor }}</li>
+        </ul>
+      </td>
+      <td>{{ elevator.elevatorBrand }}</td>
+      <td>{{ elevator.elevatorModel }}</td>
+      <td>{{ elevator.elevatorSerNum }}</td>
+      <td>{{ elevator.elevatorDesc }}</td>
+      <td>{{ elevator.currentFloor }}</td>
+    </tr>
+    </tbody>
+  </table>
+</div>

@@ -1,4 +1,4 @@
-export default interface IElevator{
+export interface IElevator{
   elevatorId: string;
   floorsAttended: string[];
   elevatorBrand: string;

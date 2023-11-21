@@ -1,5 +1,5 @@
 export interface IConnection{
-  connectionId: string;
+  connectionId?: string;
   buildingfromId: string;
   buildingtoId: string;
   floorfromId: string;

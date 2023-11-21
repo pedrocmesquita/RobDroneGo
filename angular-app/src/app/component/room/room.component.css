@@ -1,0 +1,60 @@
+.room-container {
+    width: 80%;
+    margin: auto;
+    font-family: Arial, sans-serif;
+}
+
+.room-container h1 {
+    text-align: center;
+    color: #333;
+}
+
+.room-container form {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 20px;
+}
+
+.room-container input {
+    margin: 5px 0;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+.room-container button {
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    background-color: #007bff;
+    color: white;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+.room-container button:hover {
+    background-color: #0056b3;
+}
+
+.room-container table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.room-container th, .room-container td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+.room-container th {
+    background-color: #f2f2f2;
+}
+
+.room-container tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+.room-container tr:hover {
+    background-color: #ddd;
+}

@@ -12,7 +12,6 @@ const RoomSchema = new Schema({
   },
   roomName: {
     type: String,
-    required: [true, 'Please enter room name'],
     index: true,
   },
   roomDescription: {

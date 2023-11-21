@@ -22,6 +22,10 @@ import { UnauthorizedComponent } from "./component/unauthorized/unauthorized.com
 import { RobotTypeComponent } from "./component/robot-type/robot-type.component";
 import { RobotComponent } from "./component/robot/robot.component";
 import { BuildingComponent } from "./component/building/building.component";
+import { FloorComponent } from "./component/floor/floor.component";
+import { ConnectionComponent } from "./component/connection/connection.component";
+import { RoomComponent } from "./component/room/room.component";
+import { ElevatorComponent } from "./component/elevator/elevator.component";
 
 @NgModule({
   declarations: [
@@ -36,6 +40,10 @@ import { BuildingComponent } from "./component/building/building.component";
     RobotTypeComponent,
     RobotComponent,
     BuildingComponent,
+    FloorComponent,
+    ConnectionComponent,
+    RoomComponent,
+    ElevatorComponent
   ],
   imports: [
     CommonModule,

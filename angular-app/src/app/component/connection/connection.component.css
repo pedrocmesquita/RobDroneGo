@@ -1,0 +1,60 @@
+.connection-container {
+    width: 80%;
+    margin: auto;
+    font-family: Arial, sans-serif;
+}
+
+.connection-container h1 {
+    text-align: center;
+    color: #333;
+}
+
+.connection-container form {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 20px;
+}
+
+.connection-container input {
+    margin: 5px 0;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+.connection-container button {
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    background-color: #007bff;
+    color: white;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+.connection-container button:hover {
+    background-color: #0056b3;
+}
+
+.connection-container table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.connection-container th, .connection-container td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+.connection-container th {
+    background-color: #f2f2f2;
+}
+
+.connection-container tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+.connection-container tr:hover {
+    background-color: #ddd;
+}

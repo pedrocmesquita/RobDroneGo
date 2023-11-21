@@ -26,17 +26,4 @@ export class RoomService {
 
     return this.http.post(`${this.apiUrl}/rooms`, room, { headers });
   }
-
-  updateRoom(room: IRoom): Observable<any> {
-    const token = this.authService.getToken();
-    const headers = { Authorization: `Bearer ${token}` };
-
-    return this.http.put(`${this.apiUrl}/rooms/`,  {
-      roomId: room.roomId,
-      floorId: room.floorId,
-      roomName: room.roomName,
-      roomDescription: room.roomDescription,
-      roomCategory: room.roomCategory,
-    }, { headers });
-  }
 }

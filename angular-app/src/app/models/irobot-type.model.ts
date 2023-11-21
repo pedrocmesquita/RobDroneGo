@@ -1,6 +1,6 @@
 import { List } from "lodash";
 
-export default interface IRobotType {
+export  interface IRobotType {
   typeId: string;
   brand: string;
   model: string;

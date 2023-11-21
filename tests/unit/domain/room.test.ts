@@ -16,7 +16,11 @@ describe ('Room', () => {
       roomDescription: 'Test Description',
       roomCategory: 'Gabinete',
       doorX: 1,
-      doorY: 1
+      doorY: 1,
+      originCoordinateX: 1,
+      originCoordinateY: 1,
+      destinationCoordinateX: 1,
+      destinationCoordinateY: 1,
     }).getValue();
   });
 

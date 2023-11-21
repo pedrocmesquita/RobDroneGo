@@ -9,6 +9,8 @@
     <input [(ngModel)]="newElevator.elevatorSerNum" name="elevatorSerNum" placeholder="Elevator Serial Number">
     <input [(ngModel)]="newElevator.elevatorDesc" name="elevatorDesc" placeholder="Elevator Description">
     <input [(ngModel)]="newElevator.currentFloor" name="currentFloor" placeholder="Current Floor">
+    <input [(ngModel)]="newElevator.locationX" name="locationX" placeholder="Pos X">
+    <input [(ngModel)]="newElevator.locationY" name="locationY" placeholder="Pos Y">
     <button type="submit">Create Elevator</button>
   </form>
 
@@ -25,6 +27,8 @@
       <th>Elevator Serial Number</th>
       <th>Elevator Description</th>
       <th>Current Floor</th>
+      <th>Pos X</th>
+      <th>Pos Y</th>
     </tr>
     </thead>
     <tbody>
@@ -40,6 +44,8 @@
       <td>{{ elevator.elevatorSerNum }}</td>
       <td>{{ elevator.elevatorDesc }}</td>
       <td>{{ elevator.currentFloor }}</td>
+      <td>{{ elevator.locationX }}</td>
+      <td>{{ elevator.locationY }}</td>
     </tr>
     </tbody>
   </table>

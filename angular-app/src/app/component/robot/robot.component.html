@@ -1,1 +1,40 @@
-<p>robot works!</p>
+<div class="robot-container">
+  <p *ngIf="successMessage">{{ successMessage }}</p>
+  <h1>Create Robot</h1>
+  <form (ngSubmit)="createRobot()">
+    <input [(ngModel)]="newRobot.idRobot" name="idRobot" placeholder="ID">
+    <input [(ngModel)]="newRobot.robotName" name="robotName" placeholder="Robot Name">
+    <input [(ngModel)]="newRobot.typeId" name="typeId" placeholder="Type ID">
+    <input [(ngModel)]="newRobot.serialNumber" name="serialNumber" placeholder="Serial Number">
+    <input [(ngModel)]="newRobot.description" name="description" placeholder="Description">
+    <input [(ngModel)]="newRobot.active" name="active" placeholder="Active">
+    <button type="submit">Create Robot</button>
+  </form>
+
+  <input [(ngModel)]="filterText" placeholder="Filter by ID">
+  <button (click)="filterRobots()">Filter</button>
+
+  <table>
+    <thead>
+    <tr>
+      <th>Robot ID</th>
+      <th>Robot Name</th>
+      <th>Type ID</th>
+      <th>Serial Number</th>
+      <th>Description</th>
+      <th>Active</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let robot of filteredRobots">
+      <td>{{ robot.idRobot }}</td>
+      <td>{{ robot.robotName }}</td>
+      <td>{{ robot.typeId }}</td>
+      <td>{{ robot.serialNumber }}</td>
+      <td>{{ robot.description }}</td>
+      <td>{{ robot.active }}</td>
+      <td><button (click)="patchRobot(robot)">Edit</button></td>
+    </tr>
+    </tbody>
+  </table>
+</div>

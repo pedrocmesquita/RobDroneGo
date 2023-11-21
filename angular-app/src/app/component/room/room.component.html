@@ -2,17 +2,41 @@
   <p *ngIf="successMessage">{{ successMessage }}</p>
   <h1>Create Room</h1>
   <form (ngSubmit)="createRoom()">
+    <label>Floor ID</label>
+    <select [(ngModel)]="newRoom.floorId" name="Floor ID">
+      <option *ngFor="let floor of floors" [value]="floor.floorId">{{ floor.floorId }}</option>
+    </select>
     <input [(ngModel)]="newRoom.roomId" name="roomId" placeholder="Room ID">
-    <input [(ngModel)]="newRoom.floorId" name="floorId" placeholder="Floor ID">
     <input [(ngModel)]="newRoom.roomName" name="roomName" placeholder="Room Name">
     <input [(ngModel)]="newRoom.roomDescription" name="roomDescription" placeholder="Room Description">
-    <input [(ngModel)]="newRoom.roomCategory" name="roomCategory" placeholder="Room Category">
-    <input [(ngModel)]="newRoom.doorX" name="doorX" placeholder="Door X">
-    <input [(ngModel)]="newRoom.doorY" name="doorY" placeholder="Door Y">
-    <input [(ngModel)]="newRoom.originCoordinateX" name="originCoordinateX" placeholder="Origin Coordinate X">
-    <input [(ngModel)]="newRoom.originCoordinateY" name="originCoordinateY" placeholder="Origin Coordinate Y">
-    <input [(ngModel)]="newRoom.destinationCoordinateX" name="destinationCoordinateX" placeholder="Destination Coordinate X">
-    <input [(ngModel)]="newRoom.destinationCoordinateY" name="destinationCoordinateY" placeholder="Destination Coordinate Y">
+    <label>Room Category</label>
+    <select name="roomCategory" [(ngModel)]="newRoom.roomCategory" >
+      <option *ngFor="let roomCategory of roomCategories" [value]="roomCategory">{{ roomCategory }}</option>
+    </select>
+    <label>Door X</label>
+    <select name="doorX" [(ngModel)]="newRoom.doorX" >
+      <option *ngFor="let doorX of doorOptions" [value]="doorX">{{ doorX }}</option>
+    </select>
+    <label>Door Y</label>
+    <select name="doorY" [(ngModel)]="newRoom.doorY" >
+      <option *ngFor="let doorY of doorOptions" [value]="doorY">{{ doorY }}</option>
+    </select>
+    <label>Origin Coordinate X</label>
+    <select name="originCoordinateX" [(ngModel)]="newRoom.originCoordinateX" >
+      <option *ngFor="let originCoordinateX of coordinateOptions" [value]="originCoordinateX">{{ originCoordinateX }}</option>
+    </select>
+    <label>Origin Coordinate Y</label>
+    <select name="originCoordinateY" [(ngModel)]="newRoom.originCoordinateY">
+      <option *ngFor="let originCoordinateY of coordinateOptions" [value]="originCoordinateY">{{ originCoordinateY }}</option>
+    </select>
+    <label>Destination Coordinate X</label>
+    <select name="destinationCoordinateX" [(ngModel)]="newRoom.destinationCoordinateX" >
+      <option *ngFor="let destinationCoordinateX of coordinateOptions" [value]="destinationCoordinateX">{{ destinationCoordinateX }}</option>
+    </select>
+    <label>Destination Coordinate Y</label>
+    <select name="destinationCoordinateY" [(ngModel)]="newRoom.destinationCoordinateY" >
+      <option *ngFor="let destinationCoordinateY of coordinateOptions" [value]="destinationCoordinateY">{{ destinationCoordinateY }}</option>
+    </select>
     <button type="submit">Create Room</button>
   </form>
 

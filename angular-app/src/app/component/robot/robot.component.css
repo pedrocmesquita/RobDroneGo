@@ -1,0 +1,51 @@
+.robot-container {
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.robot-container h1 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.robot-container form {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 20px;
+}
+
+.robot-container form input {
+  margin-bottom: 10px;
+  padding: 10px;
+  font-size: 16px;
+}
+
+.robot-container form button {
+  padding: 10px;
+  font-size: 16px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+.robot-container table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.robot-container table th,
+.robot-container table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+}
+
+.robot-container table th {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  text-align: left;
+  background-color: #007bff;
+  color: white;
+}

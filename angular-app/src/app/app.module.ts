@@ -13,7 +13,7 @@ import { HomeComponent } from "./component/home/home.component";
 import { LoginComponent } from "./component/login/login.component";
 import { AuthService } from "./services/auth.service";
 import { HttpClientModule } from "@angular/common/http";
-import { FormsModule } from "@angular/forms";
+import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { SignupComponent } from "./component/signup/signup.component";
 import { RoleComponent } from "./component/role/role.component";
 import { FooterComponent } from "./component/footer/footer.component";
@@ -26,6 +26,7 @@ import { FloorComponent } from "./component/floor/floor.component";
 import { ConnectionComponent } from "./component/connection/connection.component";
 import { RoomComponent } from "./component/room/room.component";
 import { ElevatorComponent } from "./component/elevator/elevator.component";
+import { MatMenuModule } from "@angular/material/menu";
 
 @NgModule({
   declarations: [
@@ -52,11 +53,13 @@ import { ElevatorComponent } from "./component/elevator/elevator.component";
     AppRoutingModule,
     MatSidenavModule,
     MatListModule,
+    MatMenuModule,
     MatIconModule,
     MatButtonModule,
     HttpClientModule,
     FormsModule,
     RouterModule.forRoot(routes),
+    ReactiveFormsModule
   ],
   providers: [
     AuthService

@@ -3,6 +3,8 @@ import { CommonModule } from '@angular/common';
 import { IFloor } from "../../models/ifloor.model";
 import { FloorService } from "../../services/floor.service";
 import { FormsModule } from "@angular/forms";
+import { BuildingService } from "../../services/building.service";
+import { IBuilding } from "../../models/ibuilding.model";
 
 @Component({
   selector: 'app-floor',
@@ -11,7 +13,10 @@ import { FormsModule } from "@angular/forms";
 })
 export class FloorComponent implements OnInit{
 
+  floorOptions = Array.from({length: 10}, (_, i) => i + 1);
+
   selectedFloor: IFloor | null = null;
+  buildings: IBuilding[] = [];
   floors: IFloor[] = [];
   filteredFloors: IFloor[] = [];
   filterText: string = '';
@@ -21,9 +26,13 @@ export class FloorComponent implements OnInit{
     floorDescription: '',
   };
   successMessage: string | null = null;
-  constructor(private floorService:FloorService) { }
+  constructor(private floorService:FloorService, private buildingService:BuildingService) { }
 
   ngOnInit(): void {
+    this.buildingService.getBuildings().subscribe((buildings) => {
+      this.buildings = buildings;
+    });
+
     this.floorService.getFloors().subscribe(
       (floors) => {
         console.log(floors);

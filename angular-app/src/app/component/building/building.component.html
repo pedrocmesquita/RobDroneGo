@@ -5,9 +5,26 @@
     <input [(ngModel)]="newBuilding.buildingId" name="buildingId" placeholder="ID">
     <input [(ngModel)]="newBuilding.buildingName" name="buildingName" placeholder="Name">
     <input [(ngModel)]="newBuilding.buildingDescription" name="buildingDescription" placeholder="Description">
-    <input [(ngModel)]="newBuilding.buildingNumberOfFloors" name="buildingNumberOfFloors" placeholder="Number of Floors">
-    <input [(ngModel)]="newBuilding.dimX" name="dimX" placeholder="Dimension X">
-    <input [(ngModel)]="newBuilding.dimY" name="dimY" placeholder="Dimension Y">
+    <label>Number of Floors</label>
+    <select name="buildingNumberOfFloors" [(ngModel)]="newBuilding.buildingNumberOfFloors">
+      <option *ngFor="let number of floorOptions" [value]="number">{{ number }}</option>
+    </select>
+    <label>Dim X</label>
+    <select name="dimX" [(ngModel)]="newBuilding.dimX">
+      <option *ngFor="let number of dimensionOptions" [value]="number">{{ number }}</option>
+    </select>
+    <label>Dim Y</label>
+    <select name="dimY" [(ngModel)]="newBuilding.dimY">
+      <option *ngFor="let number of dimensionOptions" [value]="number">{{ number }}</option>
+    </select>
+    <label>Wall Height</label>
+    <select name="wallHeight" [(ngModel)]="newBuilding.wallHeight">
+      <option *ngFor="let number of wallOptions" [value]="number">{{ number }}</option>
+    </select>
+    <label>Wall Width</label>
+    <select name="wallWidth" [(ngModel)]="newBuilding.wallWidth">
+      <option *ngFor="let number of wallOptions" [value]="number">{{ number }}</option>
+    </select>
     <button type="submit">Create Building</button>
   </form>
 
@@ -21,8 +38,10 @@
       <th>Name</th>
       <th>Number of Floors</th>
       <th>Description</th>
-      <th>Dimension X</th>
-      <th>Dimension Y</th>
+      <th>Dim X</th>
+      <th>Dim Y</th>
+      <th>Wall Height</th>
+      <th>Wall Width</th>
       <th>Floors</th>
     </tr>
     </thead>
@@ -34,6 +53,8 @@
       <td><input [(ngModel)]="building.buildingDescription" placeholder="Description"></td>
       <td><input [(ngModel)]="building.dimX" placeholder="Dimension X"></td>
       <td><input [(ngModel)]="building.dimY" placeholder="Dimension Y"></td>
+      <td><input [(ngModel)]="building.wallHeight" placeholder="Wall Height"></td>
+      <td><input [(ngModel)]="building.wallWidth" placeholder="Wall Width"></td>
       <td>
         <div *ngFor="let floor of building.floors">
           Floor Id: {{ floor.floorId }}, Floor Number: {{ floor.floorNumber }},

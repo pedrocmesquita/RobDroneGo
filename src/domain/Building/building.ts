@@ -20,6 +20,8 @@ interface BuildingProps {
   buildingNumberOfFloors: BuildingNumberOfFloors;
   dimX: number;
   dimY: number;
+  wallHeight: number;
+  wallWidth: number;
   floors: Floor[];
 }
 
@@ -30,6 +32,14 @@ export class Building extends AggregateRoot<BuildingProps> {
   }
   get buildingId (): BuildingId {
     return this.props.buildingId;
+  }
+
+  get wallHeight (): number {
+    return this.props.wallHeight;
+  }
+
+  get wallWidth (): number {
+    return this.props.wallWidth;
   }
 
   get buildingName (): BuildingName {
@@ -77,16 +87,24 @@ export class Building extends AggregateRoot<BuildingProps> {
     this.props.buildingNumberOfFloors = value;
   }
 
-  set DimensonX (value: number) {
+  set dimX (value: number) {
     this.props.dimX = value;
   }
 
-  set DimensonY (value: number) {
+  set dimY (value: number) {
     this.props.dimY = value;
   }
 
   set floors (value: Floor[]) {
     this.props.floors = value;
+  }
+
+  set wallHeight (value: number) {
+    this.props.wallHeight = value;
+  }
+
+  set wallWidth (value: number) {
+    this.props.wallWidth = value;
   }
 
 
@@ -144,6 +162,8 @@ export class Building extends AggregateRoot<BuildingProps> {
         buildingNumberOfFloors: BuildingNumberOfFloors.create({buildingNumberOfFloors}).getValue(),
         dimX: dimensionX,
         dimY: dimensionY,
+        wallHeight: buildingDTO.wallHeight,
+        wallWidth: buildingDTO.wallWidth,
         floors: buildingDTO.floors.map(floor => Floor.create(floor).getValue()),
       },
       id

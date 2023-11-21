@@ -1,1 +1,33 @@
-<p>robot-type works!</p>
+<div class="robotType-container">
+  <p *ngIf="successMessage">{{ successMessage }}</p>
+  <h1>Create Robot Type</h1>
+  <form (ngSubmit)="createRobotType()">
+    <input [(ngModel)]="newRobotType.typeId" name="typeId" placeholder="Type ID">
+    <input [(ngModel)]="newRobotType.brand" name="brand" placeholder="Brand">
+    <input [(ngModel)]="newRobotType.model" name="model" placeholder="Model">
+    <input [(ngModel)]="newRobotType.taskCategory" name="taskCategory" placeholder="Task Category">
+    <button type="submit">Create Robot Type</button>
+  </form>
+
+  <input [(ngModel)]="filterText" placeholder="Filter by Type ID">
+  <button (click)="filterRobotTypes()">Filter</button>
+
+  <table>
+    <thead>
+    <tr>
+      <th>Type ID</th>
+      <th>Brand</th>
+      <th>Model</th>
+      <th>Task Category</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let robotType of filteredRobotTypes">
+      <td>{{ robotType.typeId }}</td>
+      <td>{{ robotType.brand }}</td>
+      <td>{{ robotType.model }}</td>
+      <td>{{ robotType.taskCategory }}</td>
+    </tr>
+    </tbody>
+  </table>
+</div>

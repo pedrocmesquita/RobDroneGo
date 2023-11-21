@@ -8,6 +8,11 @@ import { IBuilding } from "../../models/ibuilding.model";
   styleUrls: ['./building.component.css']
 })
 export class BuildingComponent implements OnInit {
+
+  floorOptions: number[] = Array.from({ length: 10 }, (_, index) => index + 1);
+  wallOptions: number[] = Array.from({ length: 15 }, (_, index) => index + 1);
+  dimensionOptions: number[] = Array.from({ length: 10 }, (_, index) => index + 1);
+
   selectedBuilding: IBuilding | null = null;
   buildings: IBuilding[] = [];
   filteredBuildings: IBuilding[] = [];
@@ -18,11 +23,14 @@ export class BuildingComponent implements OnInit {
     buildingDescription: '',
     buildingNumberOfFloors: 0, // Initialize to 0 or another default value
     dimX: 0,
-    dimY: 0
+    dimY: 0,
+    wallHeight: 0,
+    wallWidth: 0
   };
   successMessage: string | null = null;
 
-  constructor(private buildingService: BuildingService) {}
+  constructor(private buildingService: BuildingService) {
+  }
 
   ngOnInit(): void {
     this.buildingService.getBuildings().subscribe(
@@ -36,6 +44,7 @@ export class BuildingComponent implements OnInit {
       }
     );
   }
+
 
   filterBuildings(): void {
     if (this.filterText) {
@@ -58,6 +67,8 @@ export class BuildingComponent implements OnInit {
           buildingNumberOfFloors: 0,
           dimX: 0,
           dimY: 0,
+          wallHeight: 0,
+          wallWidth: 0
         };
         this.successMessage = 'Building created successfully!';
         setTimeout(() => {

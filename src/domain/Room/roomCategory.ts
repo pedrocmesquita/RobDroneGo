@@ -5,7 +5,7 @@ import { Guard } from "../../core/logic/Guard";
 export enum RoomCategoryType {
   Gabinete = "Gabinete",
   Anfiteatro = "Anfiteatro",
-  Laboratório = "Laboratório",
+  Laboratório = "Laboratorio",
   Outro = "Outro",
 }
 

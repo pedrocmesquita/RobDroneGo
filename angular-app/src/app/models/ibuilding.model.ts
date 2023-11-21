@@ -9,5 +9,7 @@ export interface IBuilding {
   buildingNumberOfFloors: number;
   dimX: number;
   dimY: number;
+  wallHeight: number;
+  wallWidth: number;
   floors?: IFloor[];
 }

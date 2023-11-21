@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { RoomService } from '../../services/room.service';
 import { IRoom } from "../../models/iroom.model";
+import { FloorService } from "../../services/floor.service";
+import { IFloor } from "../../models/ifloor.model";
 
 @Component({
   selector: 'app-room',
@@ -8,8 +10,14 @@ import { IRoom } from "../../models/iroom.model";
   styleUrls: ['./room.component.css']
 })
 export class RoomComponent implements OnInit {
+
+  roomCategories = ['Gabinete','Anfiteatro','Laboratorio','Outro'];
+  doorOptions = Array.from({length: 10}, (_, i) => i + 1);
+  coordinateOptions = Array.from({length: 10}, (_, i) => i + 1);
+
   selectedRoom: IRoom | null = null;
   rooms: IRoom[] = [];
+  floors: IFloor[] = [];
   filteredRooms: IRoom[] = [];
   filterText: string = '';
   newRoom: IRoom = {
@@ -27,9 +35,13 @@ export class RoomComponent implements OnInit {
   };
   successMessage: string | null = null;
 
-  constructor(private roomService: RoomService) {}
+  constructor(private roomService: RoomService, private floorService: FloorService) {}
 
   ngOnInit(): void {
+    this.floorService.getFloors().subscribe((floors) => {
+      this.floors = floors;
+    });
+
     this.roomService.getRooms().subscribe(
       (rooms) => {
         console.log(rooms);

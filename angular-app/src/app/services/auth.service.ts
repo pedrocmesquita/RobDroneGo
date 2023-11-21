@@ -11,6 +11,7 @@ export class AuthService {
   currentUser: any = null;
   token: string | null = null;
   response: any = null;
+
   constructor(private http: HttpClient) {}
 
   login(email: string, password: string) {
@@ -18,8 +19,8 @@ export class AuthService {
     return this.http.post<any>('http://localhost:4000/api/auth/signin', { email, password }).pipe(
       tap(response => {
         console.log(response);
-        this.currentUser = response.userDTO;
-        this.token = response.token;
+        localStorage.setItem('authToken', response.token);
+        localStorage.setItem('currentUser', JSON.stringify(response.userDTO));
       })
     );
   }
@@ -40,11 +41,22 @@ export class AuthService {
   }
 
   isUserAuthorized(): boolean {
-    return !!this.currentUser;
+    const token = this.getToken();
+    return token !== null;
   }
 
   getToken(): string | null {
-    return this.token;
+    return localStorage.getItem('authToken');
+  }
+
+  getCurrentUser(): any {
+    const currentUser = localStorage.getItem('currentUser');
+    return currentUser ? JSON.parse(currentUser) : null;
+  }
+
+  logout(): void {
+    localStorage.removeItem('authToken');
+    this.currentUser = null;
   }
 
 }

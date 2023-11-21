@@ -37,6 +37,10 @@ export class BuildingService {
         buildingName: building.buildingName,
         buildingNumberOfFloors: building.buildingNumberOfFloors,
         buildingDescription: building.buildingDescription,
+        dimX: building.dimX,
+        dimY: building.dimY,
+        wallHeight: building.wallHeight,
+        wallWidth: building.wallWidth,
     }, { headers });
   }
 

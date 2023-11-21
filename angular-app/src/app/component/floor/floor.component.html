@@ -2,8 +2,14 @@
   <p *ngIf="successMessage">{{ successMessage }}</p>
   <h1>Create Floor</h1>
   <form (ngSubmit)="createFloor()">
-    <input [(ngModel)]="newFloor.buildingId" name="buildingId" placeholder="ID">
-    <input [(ngModel)]="newFloor.floorNumber" name="floorNumber" placeholder="Floor Number">
+    <label>Building ID</label>
+    <select [(ngModel)]="newFloor.buildingId" name="Building ID">
+      <option *ngFor="let building of buildings" [value]="building.buildingId">{{ building.buildingId }}</option>
+    </select>
+    <label> Floor Number</label>
+    <select  name="floorNumber" [(ngModel)]="newFloor.floorNumber">
+      <option *ngFor="let number of floorOptions" [value]="number">{{ number }}</option>
+    </select>
     <input [(ngModel)]="newFloor.floorDescription" name="floorDescription" placeholder="Description">
     <button type="submit">Create Floor</button>
   </form>
@@ -34,10 +40,14 @@
         Connection Id: {{ connections.connectionId }}, Origin: {{ connections.floorfromId }},
         Destination: {{ connections.floortoId }}
       </div>
+    </td>
+    <td>
       <div *ngFor="let room of floor.rooms">
         Room Id: {{ room.roomId }}, Floor Id: {{ room.floorId }}, Room Name: {{ room.roomName }},
         Room Description: {{ room.roomDescription }}, Room Category: {{ room.roomCategory }}
       </div>
+    </td>
+    <td>
       <div *ngFor="let elevators of floor.elevators">
         Elevator Id: {{ elevators.elevatorId }}, Floors Attended: {{ elevators.floorsAttended }},
         Brand: {{ elevators.elevatorBrand }}, Model: {{ elevators.elevatorModel }}, Serial Number: {{ elevators.elevatorSerNum }},
@@ -45,5 +55,7 @@
       </div>
     </td>
       <td><button (click)="editFloor(floor)">Edit</button></td>
+    </tr>
+    </tbody>
   </table>
 </div>

@@ -9,5 +9,7 @@ export default interface IBuildingDTO {
     buildingNumberOfFloors: number;
     dimX: number;
     dimY: number;
+    wallHeight: number;
+    wallWidth: number;
     floors?: IFloorDTO[];
 }

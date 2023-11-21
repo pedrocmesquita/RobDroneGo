@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { AuthService } from "../../services/auth.service";
 import { FormsModule, NgForm } from "@angular/forms";
 import { Router } from "@angular/router";
+import { error } from "winston";
 
 @Component({
   selector: 'app-login',
@@ -10,7 +11,7 @@ import { Router } from "@angular/router";
   styleUrl: './login.component.css'
 })
 
-export class LoginComponent{
+export class LoginComponent implements OnInit{
 
   isLoading = false;
   constructor(private authService: AuthService, private router: Router) {}
@@ -18,6 +19,7 @@ export class LoginComponent{
   errorMessage: string | null = null;
   successMessage: string | null = null;
   onSubmit(form: NgForm) {
+
     if (form.invalid) {
       return;
     }
@@ -45,5 +47,9 @@ export class LoginComponent{
         this.isLoading = false;
       }
     );
+  }
+
+  ngOnInit(): void {
+    this.authService.logout();
   }
 }

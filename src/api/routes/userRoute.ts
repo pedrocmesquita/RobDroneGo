@@ -92,6 +92,7 @@ export default (app: Router) => {
     logger.debug('Calling Sign-Out endpoint with body: %o', req.body)
     try {
       //@TODO AuthService.Logout(req.user) do some clever stuff
+
       return res.status(200).end();
     } catch (e) {
       logger.error('🔥 error %o', e);

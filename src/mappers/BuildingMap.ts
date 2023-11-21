@@ -21,6 +21,8 @@ export class BuildingMap implements Mapper<Building> {
                 buildingNumberOfFloors: building.buildingNumberOfFloors.buildingNumberOfFloors,
                 dimX: building.dimX,
                 dimY: building.dimY,
+                wallHeight: building.wallHeight,
+                wallWidth: building.wallWidth,
                 floors: floors.map(floor => {
                     return {
                         buildingId: floor.buildingId,
@@ -83,6 +85,8 @@ export class BuildingMap implements Mapper<Building> {
                 buildingNumberOfFloors: building.buildingNumberOfFloors.buildingNumberOfFloors,
                 dimX: building.dimX,
                 dimY: building.dimY,
+                wallHeight: building.wallHeight,
+                wallWidth: building.wallWidth,
                 floors: [], // or another default value as needed
             } as IBuildingDTO;
         }
@@ -105,6 +109,8 @@ export class BuildingMap implements Mapper<Building> {
             buildingDescription: building.buildingDescription.buildingDescription,
             dimX: building.dimX,
             dimY: building.dimY,
+            wallHeight: building.wallHeight,
+            wallWidth: building.wallWidth,
             floors: building.floors.map(floor => {
                 return {
                     buildingId: floor.buildingId,

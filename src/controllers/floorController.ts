@@ -20,7 +20,7 @@ export default class FloorController implements IFloorController{
 
     public async getFloor(req: Request, res: Response, next: NextFunction) {
         try {
-            const floor = await this.floorServiceInstance.getFloor(req.params.id as string);
+            const floor = await this.floorServiceInstance.getFloor(req.params.floorId as string);
 
             if (floor.isFailure) {
                 return res.status(404).send();

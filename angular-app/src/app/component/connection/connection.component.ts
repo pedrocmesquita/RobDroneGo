@@ -1,6 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { ConnectionService } from '../../services/connection.service';
 import { IConnection } from "../../models/iconnection.model";
+import { BuildingService } from "../../services/building.service";
+import { IBuilding } from "../../models/ibuilding.model";
+import { FloorService } from "../../services/floor.service";
+import { IFloor } from "../../models/ifloor.model";
 
 @Component({
   selector: 'app-connection',
@@ -8,6 +12,11 @@ import { IConnection } from "../../models/iconnection.model";
   styleUrls: ['./connection.component.css']
 })
 export class ConnectionComponent implements OnInit {
+
+  coordinatesOption = Array.from({length: 10}, (_, i) => i + 1);
+
+  buildings: IBuilding[] = [];
+  floors: IFloor[] = [];
   selectedConnection: IConnection | null = null;
   connections: IConnection[] = [];
   filteredConnections: IConnection[] = [];
@@ -24,9 +33,19 @@ export class ConnectionComponent implements OnInit {
   };
   successMessage: string | null = null;
 
-  constructor(private connectionService: ConnectionService) {}
+  constructor(private connectionService: ConnectionService, private buildingService:BuildingService, private floorService:FloorService) {}
 
   ngOnInit(): void {
+    this.buildingService.getBuildings().subscribe((buildings) => {
+      this.buildings = buildings;
+    }
+    );
+
+    this.floorService.getFloors().subscribe((floors) => {
+      this.floors = floors;
+    }
+    );
+
     this.connectionService.getConnections().subscribe(
       (connections) => {
         console.log(connections);

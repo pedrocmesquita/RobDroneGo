@@ -1,3 +1,13 @@
-<header class="app-header">
-  <!-- Your header content here... -->
+<header class="app-header" *ngIf="isUserAuthorized()">
+  <a routerLink="/home">Home</a>
+
+  <mat-menu #settingsMenu="matMenu">
+    <button mat-menu-item (click)="switchUser()">
+      <span class="mat-mdc-menu-item-text">Logout</span>
+    </button>
+  </mat-menu>
+
+  <button mat-icon-button [matMenuTriggerFor]="settingsMenu">
+    <mat-icon class="icon">settings</mat-icon>
+  </button>
 </header>

@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "25261fb4-9fc7-4d45-85bc-ae627fe8cf14",
+		"_postman_id": "5b689672-3632-44e2-99a3-41a282c8a8b2",
 		"name": "Postman-Test-1211171",
 		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
 		"_exporter_id": "29917040"
@@ -223,7 +223,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n        \"buildingId\": \"ARQXX\",\r\n        \"elevatorId\": \"143\",\r\n        \"elevatorBrand\": \"Dyson\",\r\n        \"elevatorModel\": \"5000\",\r\n        \"elevatorSerNum\": \"1223\",\r\n        \"elevatorDesc\": \"Primeiro teste de elevador\",\r\n        \"currentFloor\": 5,\r\n        \"locationX\": 1,\r\n        \"locationY\": 2\r\n    }",
+							"raw": "{\r\n        \"elevatorId\": \"123\",\r\n        \"floorsAttended\": \"ARQ2-31\",\r\n        \"elevatorBrand\": \"Dyson\",\r\n        \"elevatorModel\": \"500\",\r\n        \"elevatorSerNum\": \"124\",\r\n        \"elevatorDesc\": \"Primeiro teste de elevador\",\r\n        \"currentFloor\": 5,\r\n        \"locationX\": 1,\r\n        \"locationY\": 2\r\n    }",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -284,7 +284,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n        \"roomId\": \"138\",\r\n        \"floorId\": \"ARQ-91\",\r\n        \"roomName\": \"Sala de Computadores\",\r\n        \"roomDescription\": \"Teste 1\",\r\n        \"roomCategory\": \"Gabinete\",\r\n        \"doorX\": 1,\r\n        \"doorY\": 1\r\n}",
+							"raw": "{\r\n        \"roomId\": \"192\",\r\n        \"floorId\": \"ARQ2-31\",\r\n        \"roomName\": \"Sala de Computadores\",\r\n        \"roomDescription\": \"Teste 1\",\r\n        \"roomCategory\": \"Gabinete\",\r\n        \"doorX\": 1,\r\n        \"doorY\": 1,\r\n        \"originCoordinateX\": 4,\r\n        \"originCoordinateY\": 4,\r\n        \"destinationCoordinateX\": 4,\r\n        \"destinationCoordinateY\": 4\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -369,6 +369,10 @@
 					"request": {
 						"method": "PATCH",
 						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
 						"url": "http://localhost:4000/api/floormap"
 					},
 					"response": []

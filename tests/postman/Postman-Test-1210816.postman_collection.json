@@ -73,6 +73,12 @@
 						"disableBodyPruning": true
 					},
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjViZTBkNWM3LWMzNmItNDZhZi05YzFmLTE0NGRmYWM5ZTBjYyIsImVtYWlsIjoibWNAZ21haWwuY29tIiwicm9sZSI6ImNkODFhM2YwLWJjZjgtNDk2ZC04MGJhLWM1Yjk1MGFkNTUxNCIsImZpcnN0TmFtZSI6Ik1hcnRhIiwibGFzdE5hbWUiOiJDYW1wb3MiLCJleHAiOjE3MDU2Mjg1MzguMDU0LCJpYXQiOjE3MDA0NDQ1Mzh9.kIJbweHRQl-UzCG5SxC418KjWgVLg99EFo0CdjS3sQE"
+							}
+						},
 						"method": "GET",
 						"header": [],
 						"body": {
@@ -84,7 +90,7 @@
 								}
 							}
 						},
-						"url": "http://localhost:4000/api/buildings/"
+						"url": "http://localhost:4000/api/buildings/floors/3/10"
 					},
 					"response": []
 				},
@@ -118,7 +124,7 @@
 					"request": {
 						"method": "GET",
 						"header": [],
-						"url": "http://localhost:4000/api/floors"
+						"url": "http://localhost:4000/api/floors/"
 					},
 					"response": []
 				},
@@ -152,7 +158,7 @@
 							}
 						],
 						"url": {
-							"raw": "http://localhost:4000/api/buildings/floors/3/10",
+							"raw": "http://localhost:4000/api/buildings/floors/3/21",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -163,7 +169,7 @@
 								"buildings",
 								"floors",
 								"3",
-								"10"
+								"21"
 							],
 							"query": [
 								{
@@ -221,7 +227,16 @@
 					"request": {
 						"method": "GET",
 						"header": [],
-						"url": "http://localhost:4000/api/floors/connections/ARB"
+						"url": "http://localhost:4000/api/floors/connections/ARQ"
+					},
+					"response": []
+				},
+				{
+					"name": "http://localhost:4000/api/roles/",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "http://localhost:4000/api/roles/"
 					},
 					"response": []
 				}
@@ -281,11 +296,17 @@
 						}
 					],
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjViZTBkNWM3LWMzNmItNDZhZi05YzFmLTE0NGRmYWM5ZTBjYyIsImVtYWlsIjoibWNAZ21haWwuY29tIiwicm9sZSI6ImNkODFhM2YwLWJjZjgtNDk2ZC04MGJhLWM1Yjk1MGFkNTUxNCIsImZpcnN0TmFtZSI6Ik1hcnRhIiwibGFzdE5hbWUiOiJDYW1wb3MiLCJleHAiOjE3MDU2MjY5ODcuMzcyLCJpYXQiOjE3MDA0NDI5ODd9.u-fUiwlgcR0VrwqnB2p0EdcfGlQ8lS86KzOu_7EmfRs"
+							}
+						},
 						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{   \r\n    \"buildingId\": \"ARQLI\",\r\n    \"buildingName\": \"Edicio de Arquitetura\",\r\n    \"buildingNumberOfFloors\": \"8\",\r\n    \"buildingDescription\": \"teste\",\r\n    \"dimX\": \"3\",\r\n    \"dimY\": \"4\"\r\n}\r\n",
+							"raw": "{   \r\n    \"buildingId\": \"ARQ2\",\r\n    \"buildingName\": \"Edicio de Arquitetura\",\r\n    \"buildingNumberOfFloors\": \"8\",\r\n    \"buildingDescription\": \"teste\",\r\n    \"dimX\": \"3\",\r\n    \"dimY\": \"4\"\r\n}\r\n",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -345,7 +366,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{   \r\n    \"buildingId\":\"ARQX\",\r\n    \"floorNumber\":\"30\",\r\n    \"floorDescription\":\"Description Teste\"\r\n}",
+							"raw": "{   \r\n    \"buildingId\":\"ARQ2\",\r\n    \"floorNumber\":\"31\",\r\n    \"floorDescription\":\"Description Teste\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -353,6 +374,42 @@
 							}
 						},
 						"url": "http://localhost:4000/api/floors"
+					},
+					"response": []
+				},
+				{
+					"name": "http://localhost:4000/api/auth/signin",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{   \r\n    \"email\":\"mc@gmail.com\",\r\n    \"password\":\"123\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:4000/api/auth/signin"
+					},
+					"response": []
+				},
+				{
+					"name": "http://localhost:4000/api/auth/signup",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{   \r\n    \"firstName\": \"Joao\",\r\n    \"lastName\": \"Castro\",\r\n    \"email\":\"joaocastro@gmail.com\",\r\n    \"password\":\"123\",\r\n    \"role\": \"4789047b-d838-4739-a5c5-27725c14f33b\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:4000/api/auth/signup"
 					},
 					"response": []
 				}
@@ -405,7 +462,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"buildingId\": \"ART\",\r\n    \"buildingName\": \"Updated Name\",\r\n    \"buildingDescription\": \"Updated Desc\",\r\n    \"buildingNumberOfFloors\": 20\r\n}",
+							"raw": "{\r\n    \"buildingId\": \"ARQ\",\r\n    \"buildingName\": \"Updated Name\",\r\n    \"buildingDescription\": \"Updated Descr\",\r\n    \"buildingNumberOfFloors\": 20\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -453,7 +510,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{   \r\n    \"floorId\":\"ART-29\",\r\n    \"floorNumber\":\"90\",\r\n    \"floorDescription\":\"Updated Desc\"\r\n}",
+							"raw": "{   \r\n    \"floorId\":\"ARQ-39\",\r\n    \"floorNumber\":\"32\",\r\n    \"floorDescription\":\"asdad\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -600,6 +657,12 @@
 					"response": []
 				}
 			]
+		}
+	],
+	"variable": [
+		{
+			"key": "jwt",
+			"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjAyODBlYTg2LWY4MTUtNGQyYi05ZjcyLTEwOGMxZWQzNzZlZiIsImVtYWlsIjoiam9hb2Nhc3Ryb0BnbWFpbC5jb20iLCJyb2xlIjoiNDc4OTA0N2ItZDgzOC00NzM5LWE1YzUtMjc3MjVjMTRmMzNiIiwiZmlyc3ROYW1lIjoiSm9hbyIsImxhc3ROYW1lIjoiQ2FzdHJvIiwiZXhwIjoxNzA1MTAxNjUxLjExMiwiaWF0IjoxNjk5OTE3NjUxfQ.2xLvet5aR_6RDaWRyWV0zJPikdsKug-C3hwXJ6FQRf8"
 		}
 	]
 }

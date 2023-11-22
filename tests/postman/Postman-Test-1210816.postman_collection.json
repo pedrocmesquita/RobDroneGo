@@ -90,7 +90,7 @@
 								}
 							}
 						},
-						"url": "http://localhost:4000/api/buildings/floors/3/10"
+						"url": "http://localhost:4000/api/buildings/ARQ2"
 					},
 					"response": []
 				},
@@ -124,7 +124,7 @@
 					"request": {
 						"method": "GET",
 						"header": [],
-						"url": "http://localhost:4000/api/floors/"
+						"url": "http://localhost:4000/api/floors/ARQ2-32"
 					},
 					"response": []
 				},
@@ -366,7 +366,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{   \r\n    \"buildingId\":\"ARQ2\",\r\n    \"floorNumber\":\"31\",\r\n    \"floorDescription\":\"Description Teste\"\r\n}",
+							"raw": "{   \r\n    \"buildingId\":\"ARQ2\",\r\n    \"floorNumber\":\"32\",\r\n    \"floorDescription\":\"Description Teste\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -410,6 +410,24 @@
 							}
 						},
 						"url": "http://localhost:4000/api/auth/signup"
+					},
+					"response": []
+				},
+				{
+					"name": "http://localhost:4000/api/robotTypes",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"brand\": \"asdad\",\r\n    \"model\": \"asdwe\",\r\n    \"taskCategory\": \"Vigilance\",\r\n    \"typeId\": \"adad2\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:4000/api/robotTypes"
 					},
 					"response": []
 				}

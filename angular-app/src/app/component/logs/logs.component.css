@@ -1,0 +1,35 @@
+.logs-container {
+  width: 80%;
+  margin: auto;
+  padding: 20px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+}
+
+.logs-container h1,
+.logs-container h2 {
+  text-align: center;
+  color: #333;
+}
+
+.logs-container h2 {
+  margin-top: 10px;
+  font-size: 1.2em;
+  color: #666;
+}
+
+.logs-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+.logs-table thead th {
+  background-color: #f5f5f5;
+  padding: 10px;
+  text-align: left;
+}
+
+.logs-table tbody td {
+  padding: 10px;
+  border-bottom: 1px solid #f5f5f5;
+}

@@ -45,6 +45,12 @@ export class LoginComponent implements OnInit{
         this.errorMessage = 'Login failed: ' + error.message;
         this.successMessage = null;
         this.isLoading = false;
+
+        // Log the failed login attempt
+        this.authService.logFailedLoginAttempt(email).subscribe(
+          () => console.log('Logged failed login attempt'),
+          (error) => console.error('Failed to log login attempt:', error)
+        );
       }
     );
   }

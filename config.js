@@ -73,6 +73,10 @@ export default {
       name: "roomController",
       path: "../controllers/roomController"
     },
+    log: {
+      name: "logController",
+      path: "../controllers/logController"
+    },
   },
 
   repos: {
@@ -146,6 +150,10 @@ export default {
     room: {
       name: "roomService",
       path: "../services/roomService"
+    },
+    log: {
+      name: "logService",
+      path: "../services/logService"
     },
   },
 };

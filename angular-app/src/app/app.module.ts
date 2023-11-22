@@ -28,6 +28,7 @@ import { RoomComponent } from "./component/room/room.component";
 import { ElevatorComponent } from "./component/elevator/elevator.component";
 import { MatMenuModule } from "@angular/material/menu";
 import { BuildingFilterPipe } from "./services/building-filter-pipe.service";
+import { LogsComponent } from "./component/logs/logs.component";
 
 @NgModule({
   declarations: [
@@ -46,7 +47,8 @@ import { BuildingFilterPipe } from "./services/building-filter-pipe.service";
     ConnectionComponent,
     RoomComponent,
     ElevatorComponent,
-    BuildingFilterPipe
+    BuildingFilterPipe,
+    LogsComponent
   ],
   imports: [
     CommonModule,

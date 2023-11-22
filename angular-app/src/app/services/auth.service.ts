@@ -59,4 +59,16 @@ export class AuthService {
     this.currentUser = null;
   }
 
+  logFailedLoginAttempt(email: string) {
+
+    return this.http.post('http://localhost:4000/api/log/auth', { email });
+  }
+
+  getUsersWithMoreThanThreeFailedLoginAttempts() {
+
+    return this.http.get('http://localhost:4000/api/log/auth');
+  }
+
+
+
 }

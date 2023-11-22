@@ -9,6 +9,7 @@ import connection from './routes/connectionRoute';
 import robotType from './routes/robotTypesRoute';
 import robot from './routes/robotRoute';
 import room from './routes/roomRoute';
+import log from './routes/logRoute';
 
 export default () => {
 	const app = Router();
@@ -23,6 +24,7 @@ export default () => {
 	robotType(app);
 	robot(app);
 	room(app);
+	log(app)
 	
 	return app
 }

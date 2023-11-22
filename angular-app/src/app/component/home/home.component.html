@@ -51,6 +51,12 @@
         <span>Robot Type</span>
       </a>
     </div>
+    <div class="menu-item" *ngIf="currentUser.role === this.roleAdmin.id">
+      <a routerLink="/logs">
+        <img src="assets/logs-icon.png" alt="logs"> <!-- Replace with the actual path to your icon -->
+        <span>Logs</span>
+      </a>
+    </div>
 
   </nav>
 </div>

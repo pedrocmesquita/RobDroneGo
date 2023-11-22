@@ -13,6 +13,7 @@ import { UnauthorizedComponent } from "./component/unauthorized/unauthorized.com
 import { AuthGuard } from "./services/auth.guard";
 import { RobotComponent } from "./component/robot/robot.component";
 import { RobotTypeComponent } from "./component/robot-type/robot-type.component";
+import { LogsComponent } from "./component/logs/logs.component";
 
 export const routes: Routes = [
   { path: '', component: LoginComponent },
@@ -28,6 +29,7 @@ export const routes: Routes = [
   { path: 'robot-type', component: RobotTypeComponent , canActivate: [AuthGuard] },
   { path: 'role', component: RoleComponent},
   { path: 'unauthorized', component: UnauthorizedComponent},
+  { path: 'logs', component: LogsComponent, canActivate: [AuthGuard]},
 
   { path: '**', redirectTo: '' },
 

@@ -5,6 +5,10 @@ import { Container } from "typedi";
 import IRoomController from "../../controllers/IControllers/IRoomController";
 
 import config from "../../../config";
+import RoleService from "../../services/roleService";
+import isAuth from "../middlewares/isAuth";
+import attachCurrentUser from "../middlewares/attachCurrentUser";
+import roleCheck from "../middlewares/roleCheck";
 
 const route = Router();
 
@@ -12,6 +16,12 @@ export default (app: Router) => {
   app.use("/rooms", route);
 
   const ctrl = Container.get(config.controllers.room.name) as IRoomController;
+  const roleService = Container.get(RoleService);
+  route.use(isAuth);
+
+  route.use(attachCurrentUser);
+
+  route.use(roleCheck);
 
   route.post("",
     celebrate({
@@ -29,7 +39,19 @@ export default (app: Router) => {
         destinationCoordinateY: Joi.number().required(),
       })
     }),
-    (req, res, next) => ctrl.createRoom(req, res, next) );
+    (req, res, next) => {
+    if (req.auth.role != req.gestorDeCampusRole.id && req.auth.role != req.adminRole.id) {
+
+      return res.status(403).json({ error: "Unauthorized access" });
+    } else {
+      // User has the "Gestor de Campus" role, proceed with the controller logic
+      try {
+
+        ctrl.createRoom(req, res, next);
+      } catch (error) {
+        next(error);
+      }
+    }});
 
   // RoomId cannot be changed
   route.put("",
@@ -41,11 +63,61 @@ export default (app: Router) => {
         roomDescription: Joi.string().required(),
       }),
     }),
-    (req, res, next) => ctrl.updateRoom(req, res, next) );
+    (req, res, next) => {
+    if (req.auth.role != req.gestorDeCampusRole.id && req.auth.role != req.adminRole.id) {
 
-  route.get("/:roomId", (req, res, next) => ctrl.getRoom(req, res, next) );
+      return res.status(403).json({ error: "Unauthorized access" });
+    } else {
+      // User has the "Gestor de Campus" role, proceed with the controller logic
+      try {
 
-  route.get("", (req, res, next) => ctrl.getRooms(req, res, next) );
+        ctrl.updateRoom(req, res, next);
+      } catch (error) {
+        next(error);
+      }
+    }});
 
-  route.delete("/:roomId", (req, res, next) => ctrl.deleteRoom(req, res, next) );
+  route.get("/:roomId", (req, res, next) => {
+    if (req.auth.role != req.gestorDeCampusRole.id && req.auth.role != req.adminRole.id) {
+
+      return res.status(403).json({ error: "Unauthorized access" });
+    } else {
+      // User has the "Gestor de Campus" role, proceed with the controller logic
+      try {
+
+        ctrl.updateRoom(req, res, next);
+      } catch (error) {
+        next(error);
+      }
+    }});
+
+  route.get("", (req, res, next) => {
+    if (req.auth.role != req.gestorDeCampusRole.id && req.auth.role != req.adminRole.id) {
+
+      return res.status(403).json({ error: "Unauthorized access" });
+    } else {
+      // User has the "Gestor de Campus" role, proceed with the controller logic
+      try {
+
+        ctrl.getRooms(req, res, next);
+      } catch (error) {
+        next(error);
+      }
+    }
+  });
+
+  route.delete("/:roomId", (req, res, next) => {
+    if (req.auth.role != req.gestorDeCampusRole.id && req.auth.role != req.adminRole.id) {
+
+      return res.status(403).json({ error: "Unauthorized access" });
+    } else {
+      // User has the "Gestor de Campus" role, proceed with the controller logic
+      try {
+
+        ctrl.deleteRoom(req, res, next);
+      } catch (error) {
+        next(error);
+      }
+    }
+  });
 };

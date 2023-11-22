@@ -37,7 +37,21 @@ export default (app: Router) => {
           wallWidth: Joi.number().required(),
         }),
       }),
-      (req, res, next) => ctrl.createBuilding(req, res, next));
+      (req, res, next) => {
+        if (req.auth.role != req.gestorDeCampusRole.id && req.auth.role != req.adminRole.id) {
+
+          return res.status(403).json({ error: "Unauthorized access" });
+        } else {
+          // User has the "Gestor de Campus" role, proceed with the controller logic
+          try {
+
+            ctrl.createBuilding(req, res, next);
+          } catch (error) {
+            next(error);
+          }
+        }
+    }
+      );
 
     // BuildingId cannot be changed
     route.put("",
@@ -53,9 +67,36 @@ export default (app: Router) => {
           wallWidth: Joi.number().optional(),
         }),
       }),
-      (req, res, next) => ctrl.updateBuilding(req, res, next));
+      (req, res, next) => {
+        if (req.auth.role != req.gestorDeCampusRole.id && req.auth.role != req.adminRole.id) {
 
-    route.get("/:buildingId", (req, res, next) => ctrl.getBuilding(req, res, next));
+          return res.status(403).json({ error: "Unauthorized access" });
+        } else {
+          // User has the "Gestor de Campus" role, proceed with the controller logic
+          try {
+
+            ctrl.updateBuilding(req, res, next);
+          } catch (error) {
+            next(error);
+          }
+        }
+    });
+
+    route.get("/:buildingId", (req, res, next) => {
+      if (req.auth.role != req.gestorDeCampusRole.id && req.auth.role != req.adminRole.id) {
+
+        return res.status(403).json({ error: "Unauthorized access" });
+      } else {
+        // User has the "Gestor de Campus" role, proceed with the controller logic
+        try {
+
+          ctrl.getBuilding(req, res, next);
+        } catch (error) {
+          next(error);
+        }
+      }
+    }
+    );
 
     route.get("",  (req, res, next) => {
 
@@ -75,9 +116,33 @@ export default (app: Router) => {
     );
 
 
-    route.delete("/:buildingId", (req, res, next) => ctrl.deleteBuilding(req, res, next));
+    route.delete("/:buildingId", (req, res, next) => {
+      if (req.auth.role != req.gestorDeCampusRole.id && req.auth.role != req.adminRole.id) {
 
-    route.get("/floors/:min/:max", (req, res, next) => ctrl.getBuildingsByFloors(req, res, next));
+      return res.status(403).json({ error: "Unauthorized access" });
+    } else {
+      // User has the "Gestor de Campus" role, proceed with the controller logic
+      try {
+
+        ctrl.deleteBuilding(req, res, next);
+      } catch (error) {
+        next(error);
+      }
+    }});
+
+    route.get("/floors/:min/:max", (req, res, next) => {
+      if (req.auth.role != req.gestorDeCampusRole.id && req.auth.role != req.adminRole.id) {
+
+      return res.status(403).json({ error: "Unauthorized access" });
+    } else {
+      // User has the "Gestor de Campus" role, proceed with the controller logic
+      try {
+
+        ctrl.getBuildingsByFloors(req, res, next);
+      } catch (error) {
+        next(error);
+      }
+    }});
 
     // Patch is used to update a single field, in this case the building description
     route.patch("/changeDescription/:buildingId", celebrate({
@@ -85,7 +150,18 @@ export default (app: Router) => {
           buildingDescription: Joi.string().required(),
         }),
       }),
-      (req, res, next) => ctrl.updateBuildingDescription(req, res, next));
+      (req, res, next) => {if (req.auth.role != req.gestorDeCampusRole.id && req.auth.role != req.adminRole.id) {
+
+        return res.status(403).json({ error: "Unauthorized access" });
+      } else {
+        // User has the "Gestor de Campus" role, proceed with the controller logic
+        try {
+
+          ctrl.updateBuildingDescription(req, res, next);
+        } catch (error) {
+          next(error);
+        }
+      }});
 
     // Patch to update the buildingName
     route.patch("/changeName/:buildingId", celebrate({
@@ -93,7 +169,19 @@ export default (app: Router) => {
           buildingName: Joi.string().required(),
         }),
       }),
-      (req, res, next) => ctrl.updateBuildingName(req, res, next));
+      (req, res, next) => {
+      if (req.auth.role != req.gestorDeCampusRole.id && req.auth.role != req.adminRole.id) {
+
+        return res.status(403).json({ error: "Unauthorized access" });
+      } else {
+        // User has the "Gestor de Campus" role, proceed with the controller logic
+        try {
+
+          ctrl.updateBuildingName(req, res, next);
+        } catch (error) {
+          next(error);
+        }
+      }});
 
     // Patch to update the buildingNumberOfFloors
     route.patch("/changeNumberOfFloors/:buildingId", celebrate({
@@ -101,7 +189,19 @@ export default (app: Router) => {
           buildingNumberOfFloors: Joi.number().required(),
         }),
       }),
-      (req, res, next) => ctrl.updateBuildingNumberOfFloors(req, res, next));
+      (req, res, next) => {
+      if (req.auth.role != req.gestorDeCampusRole.id && req.auth.role != req.adminRole.id) {
+
+        return res.status(403).json({ error: "Unauthorized access" });
+      } else {
+        // User has the "Gestor de Campus" role, proceed with the controller logic
+        try {
+
+          ctrl.updateBuildingNumberOfFloors(req, res, next);
+        } catch (error) {
+          next(error);
+        }
+      }});
 };
 
 

@@ -26,7 +26,9 @@ describe('Building', () => {
       buildingNumberOfFloors: 3,
       dimX: 4,
       dimY: 5,
-      floors: [],
+      wallHeight: 3,
+      wallWidth: 3,
+      floors: []
     }).getValue();
 
     floor = Floor.create({

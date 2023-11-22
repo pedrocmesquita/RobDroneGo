@@ -78,6 +78,7 @@ export default class robotService implements IRobotService {
     public async getRobots(): Promise<Result<Array<IRobotDTO>>> {
         try {
             const robots = await this.robotRepo.getRobots();
+            //console.log(robots);
             const robotDTOList = robots.map(robot => RobotMap.toDTO(robot));
             return Result.ok<Array<IRobotDTO>>(robotDTOList);
         } catch (e) {

@@ -1,3 +1,4 @@
+
 .building-container {
   display: flex;
   flex-direction: column;
@@ -13,68 +14,63 @@ form {
 }
 
 input, select {
-  margin-bottom: 10px;
-  padding: 10px;
-  font-size: 16px;
+  padding: 4px;
+  font-size: 8px;
+  margin-right: 2px;
 }
 
-button {
-  padding: 10px;
-  background-color: #007bff;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
+.building-container h1 {
+  text-align: center;
+  color: #333;
+}
+
+.building-container form {
+  display: flex;
+  flex-direction: column;
   margin-bottom: 20px;
 }
 
-button:hover {
+
+.building-container input, .building-container select {
+  margin: 2px 0;
+  padding: 2px;
+  border-radius: 2px;
+  border: 1px solid #ccc;
+}
+
+.building-container button {
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  background-color: #007bff;
+  color: white;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+.building-container button:hover {
   background-color: #0056b3;
 }
 
-.building-container div {
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  padding: 10px;
-  margin-bottom: 10px;
-  width: 80%;
+.building-container table {
+  width: 100%;
+  border-collapse: collapse;
 }
 
-.building-container h2 {
-  margin: 0;
-  margin-bottom: 10px;
-  font-size: 1.5em;
+.building-container th, .building-container td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
 }
 
-.building-container p {
-  margin: 0;
-  margin-bottom: 5px;
-  font-size: 1em;
+.building-container th {
+  background-color: #f2f2f2;
 }
 
-:root {
-  --success-bg-color: #dff0d8;
-  --success-text-color: #3c763d;
+.building-container tr:nth-child(even) {
+  background-color: #f2f2f2;
 }
 
-.success-message {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background-color: var(--success-bg-color);
-  color: var(--success-text-color);
-  padding: 2.5rem;
-  border-radius: 0.625rem;
-  z-index: 1000;
-  text-align: center;
-  transition: opacity 0.3s ease;
-  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.15);
-  font-size: 2rem;
+.building-container tr:hover {
+  background-color: #ddd;
 }
-
-button:disabled {
-  background-color: #ccc;
-  cursor: not-allowed;
-}
-

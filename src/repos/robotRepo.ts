@@ -55,7 +55,9 @@ export default class robotRepo implements IRobotRepo {
     public async getRobots(): Promise<Array<Robots>> {
         try {
             const RobotRecord = await this.robotSchema.find({});
+            console.log(RobotRecord);
             const RobotMapArray = RobotRecord.map(robot => RobotMap.toDomain(robot));
+            console.log(RobotMapArray);
             return RobotMapArray;
         } catch (err) {
             throw err;

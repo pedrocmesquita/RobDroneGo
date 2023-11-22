@@ -70,8 +70,8 @@ export class Robots extends AggregateRoot<robotsProps> {
                 typeId: typeId,
                 serialNumber: SerialNumber.create({ serialNumber }).getValue(),
                 description: Description.create({ description }).getValue(),
-                active: active ? active : true },
-                    id
+                active: active}
+            , id
         );
         return Result.ok<Robots>(robot);
         }

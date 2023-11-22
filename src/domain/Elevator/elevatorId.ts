@@ -25,8 +25,8 @@ export class ElevatorId extends ValueObject<ElevatorIdProps> {
     }
 
     // Check if the elevatorId has a maximum of 5 alphanumeric characters and a space.
-    if (!/^[0-9]{1,5}$/.test(String(props.elevatorId))) {
-      return Result.fail<ElevatorId>('ElevatorId must be a string.');
+    if (!/^[a-zA-Z0-9 ]{1,5}$/.test(props.elevatorId)) {
+      return Result.fail<ElevatorId>("ElevatorId must be a maximum of 5 alphanumeric characters and a space.");
     }
 
     return Result.ok<ElevatorId>(new ElevatorId(props));

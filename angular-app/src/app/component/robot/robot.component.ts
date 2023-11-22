@@ -3,6 +3,9 @@ import { CommonModule } from '@angular/common';
 import { IRobot } from "../../models/irobot.model";
 import { RobotService } from "../../services/robot.service";
 import { FormsModule } from "@angular/forms";
+import { RobotTypeService } from "../../services/robot-type.service";
+import { IRobotType } from "../../models/irobot-type.model";
+import { bool } from "three/examples/jsm/nodes/shadernode/ShaderNodeBaseElements";
 
 @Component({
   selector: 'app-robot',
@@ -11,6 +14,7 @@ import { FormsModule } from "@angular/forms";
 })
 export class RobotComponent implements OnInit{
 
+  robotTypes: IRobotType[] = [];
   selectedRobot: IRobot | null = null;
   robots: IRobot[] = [];
   filteredRobots: IRobot[] = [];
@@ -21,12 +25,18 @@ export class RobotComponent implements OnInit{
     typeId: '',
     serialNumber: '',
     description: '',
-    active: false,
+    active: true,
   };
   successMessage: string | null = null;
-  constructor(private robotService:RobotService) { }
+  constructor(private robotService:RobotService, private robotTypeService:RobotTypeService) { }
 
   ngOnInit(): void {
+    this.robotTypeService.getRobotTypes().subscribe((robotTypes) => {
+      this.robotTypes = robotTypes;
+    }
+    );
+
+
     this.robotService.getRobots().subscribe(
       (robots) => {
         console.log(robots);
@@ -59,7 +69,7 @@ export class RobotComponent implements OnInit{
           typeId: '',
           serialNumber: '',
           description: '',
-          active: false,
+          active: true,
         };
         this.successMessage = 'Robot created successfully!';
       },

@@ -1,6 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { ElevatorService } from '../../services/elevator.service';
 import { IElevator } from "../../models/ielevator.model";
+import { FloorService } from "../../services/floor.service";
+import { IFloor } from "../../models/ifloor.model";
+import { BuildingService } from "../../services/building.service";
+import { IBuilding } from "../../models/ibuilding.model";
 
 @Component({
   selector: 'app-elevator',
@@ -8,13 +12,20 @@ import { IElevator } from "../../models/ielevator.model";
   styleUrls: ['./elevator.component.css']
 })
 export class ElevatorComponent implements OnInit {
+  floorOptions = Array.from({length: 10}, (_, i) => i + 1);
+  coordinateOptions = Array.from({length: 10}, (_, i) => i + 1);
+
   selectedElevator: IElevator | null = null;
+  selectedFloors: string[] = [];
   elevators: IElevator[] = [];
+  buildings: IBuilding[] = [];
   filteredElevators: IElevator[] = [];
   filterText: string = '';
+  floors: string[] = [];
+  selectedBuildingId: string = '';
   newElevator: IElevator = {
     elevatorId: '',
-    floorsAttended: [''],
+    floorsAttended: '',
     elevatorBrand: '',
     elevatorModel: '',
     elevatorSerNum: '',
@@ -25,9 +36,19 @@ export class ElevatorComponent implements OnInit {
   };
   successMessage: string | null = null;
 
-  constructor(private elevatorService: ElevatorService) {}
+  constructor(private elevatorService: ElevatorService, private floorService:FloorService, private buildingService:BuildingService) {}
 
   ngOnInit(): void {
+    this.buildingService.getBuildings().subscribe((buildings) => {
+      this.buildings = buildings;
+    }
+    );
+
+    this.floorService.getFloors().subscribe((floors) => {
+      this.floors = floors.map((floor: { floorId: string; }) => floor.floorId);
+    }
+    );
+
     this.elevatorService.getElevators().subscribe(
       (elevators) => {
         console.log(elevators);
@@ -49,12 +70,13 @@ export class ElevatorComponent implements OnInit {
   }
 
   createElevator(): void {
+    this.newElevator.floorsAttended = this.selectedFloors.join(',');
     this.elevatorService.createElevator(this.newElevator).subscribe(
       (elevator) => {
         this.elevators.push(elevator);
         this.newElevator = {
           elevatorId: '',
-          floorsAttended: [''],
+          floorsAttended: '',
           elevatorBrand: '',
           elevatorModel: '',
           elevatorSerNum: '',

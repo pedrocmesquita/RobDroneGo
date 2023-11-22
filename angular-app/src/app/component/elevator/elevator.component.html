@@ -3,14 +3,33 @@
   <h1>Create Elevator</h1>
   <form (ngSubmit)="createElevator()">
     <input [(ngModel)]="newElevator.elevatorId" name="elevatorId" placeholder="Elevator ID">
-    <input [(ngModel)]="newElevator.floorsAttended" name="floorsAttended" placeholder="Floors Attended">
+    <label>Building</label>
+    <select [(ngModel)]="selectedBuildingId">
+      <option *ngFor="let building of buildings" [value]="building.buildingId">{{ building.buildingId }}</option>
+    </select>
+    <label>Floors Attended</label>
+    <select [(ngModel)]="selectedFloors" name="Floors Attended" multiple>
+      <ng-container *ngFor="let floor of floors | buildingFilter: selectedBuildingId">
+        <option [value]="floor">{{ floor }}</option>
+      </ng-container>
+    </select>
+    <p>You have selected {{ selectedFloors?.length }} floor(s).</p>
     <input [(ngModel)]="newElevator.elevatorBrand" name="elevatorBrand" placeholder="Elevator Brand">
     <input [(ngModel)]="newElevator.elevatorModel" name="elevatorModel" placeholder="Elevator Model">
     <input [(ngModel)]="newElevator.elevatorSerNum" name="elevatorSerNum" placeholder="Elevator Serial Number">
     <input [(ngModel)]="newElevator.elevatorDesc" name="elevatorDesc" placeholder="Elevator Description">
-    <input [(ngModel)]="newElevator.currentFloor" name="currentFloor" placeholder="Current Floor">
-    <input [(ngModel)]="newElevator.locationX" name="locationX" placeholder="Pos X">
-    <input [(ngModel)]="newElevator.locationY" name="locationY" placeholder="Pos Y">
+    <label>Current Floor</label>
+    <select [(ngModel)]="newElevator.currentFloor" name="currentFloor">
+      <option *ngFor="let floor of selectedFloors" [value]="floor.split('-')[1]">{{ floor.split('-')[1] }}</option>
+    </select>
+    <label>Pos X</label>
+    <select [(ngModel)]="newElevator.locationX" name="locationX">
+      <option *ngFor="let locationX of coordinateOptions" [value]="locationX">{{ locationX }}</option>
+    </select>
+    <label>Pos Y</label>
+    <select [(ngModel)]="newElevator.locationY" name="locationY">
+      <option *ngFor="let locationY of coordinateOptions" [value]="locationY">{{ locationY }}</option>
+    </select>
     <button type="submit">Create Elevator</button>
   </form>
 

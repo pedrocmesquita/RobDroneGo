@@ -31,7 +31,7 @@ export default class ElevatorController implements IElevatorController {
         try {
             const floorsAttended = req.body.floorsAttended.split(",");
             req.body.floorsAttended = floorsAttended;
-
+            console.log(req.body);
             const elevatorOrError = (await this.elevatorServiceInstance.createElevator(
               req.params.elevatorId as string,
               req.body as IElevatorDTO,

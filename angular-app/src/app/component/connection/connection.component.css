@@ -1,7 +1,21 @@
 .connection-container {
-    width: 80%;
-    margin: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
     font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+input, select {
+    margin-bottom: 10px;
+    padding: 10px;
+    font-size: 16px;
 }
 
 .connection-container h1 {

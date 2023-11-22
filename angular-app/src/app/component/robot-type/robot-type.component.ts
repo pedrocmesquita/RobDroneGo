@@ -11,6 +11,10 @@ import { FormsModule } from "@angular/forms";
 })
 export class RobotTypeComponent implements OnInit{
 
+  taskCategoryTypes = [
+    'Vigilance',
+    'PickUpAndDelivery',
+  ];
   selectedRobotType: IRobotType | null = null;
   robotTypes: IRobotType[] = [];
   filteredRobotTypes: IRobotType[] = [];
@@ -60,6 +64,7 @@ export class RobotTypeComponent implements OnInit{
         this.successMessage = 'Robot Type created successfully!';
       },
       (error) => {
+        console.log(this.newRobotType);
         console.error('Failed to create robot type:', error);
         this.successMessage = null;
       }

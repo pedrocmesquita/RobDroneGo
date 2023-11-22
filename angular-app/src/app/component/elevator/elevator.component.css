@@ -1,60 +1,93 @@
 .elevator-container {
-    width: 80%;
-    margin: auto;
-    font-family: Arial, sans-serif;
-}
-
-.elevator-container h1 {
-    text-align: center;
-    color: #333;
-}
-
-.elevator-container form {
     display: flex;
     flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+input, select {
+    margin-bottom: 10px;
+    padding: 10px;
+    font-size: 16px;
+}
+
+button {
+    padding: 10px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
     margin-bottom: 20px;
 }
 
-.elevator-container input {
-    margin: 5px 0;
-    padding: 10px;
-    border-radius: 5px;
-    border: 1px solid #ccc;
-}
-
-.elevator-container button {
-    padding: 10px;
-    border: none;
-    border-radius: 5px;
-    background-color: #007bff;
-    color: white;
-    cursor: pointer;
-    margin-top: 10px;
-}
-
-.elevator-container button:hover {
+button:hover {
     background-color: #0056b3;
 }
 
-.elevator-container table {
+.elevator-container div {
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 10px;
+    margin-bottom: 10px;
+    width: 80%;
+}
+
+.elevator-container h2 {
+    margin: 0;
+    margin-bottom: 10px;
+    font-size: 1.5em;
+}
+
+.elevator-container p {
+    margin: 0;
+    margin-bottom: 5px;
+    font-size: 1em;
+}
+
+:root {
+    --success-bg-color: #dff0d8;
+    --success-text-color: #3c763d;
+}
+
+.success-message {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: var(--success-bg-color);
+    color: var(--success-text-color);
+    padding: 2.5rem;
+    border-radius: 0.625rem;
+    z-index: 1000;
+    text-align: center;
+    transition: opacity 0.3s ease;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.15);
+    font-size: 2rem;
+}
+
+button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
+table {
     width: 100%;
     border-collapse: collapse;
 }
 
-.elevator-container th, .elevator-container td {
-    border: 1px solid #ddd;
-    padding: 8px;
+table, th, td {
+    border: 1px solid #ccc;
+}
+
+th, td {
+    padding: 10px;
     text-align: left;
-}
-
-.elevator-container th {
-    background-color: #f2f2f2;
-}
-
-.elevator-container tr:nth-child(even) {
-    background-color: #f2f2f2;
-}
-
-.elevator-container tr:hover {
-    background-color: #ddd;
 }

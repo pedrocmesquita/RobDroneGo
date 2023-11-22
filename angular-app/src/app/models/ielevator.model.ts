@@ -1,6 +1,6 @@
 export interface IElevator{
   elevatorId: string;
-  floorsAttended: string[];
+  floorsAttended: string;
   elevatorBrand: string;
   elevatorModel: string;
   elevatorSerNum: string;

@@ -14,6 +14,7 @@ export default class robotTypeController implements IRobotTypeController {
     public async createRobotType(req: Request, res: Response, next: NextFunction) {
         try {
             console.log(req.body.typeId);
+            console.log(req.body);
             const robotOrError = (await this.RobotServiceInstance.createRobotType(
                 req.params.typeId as string,
                 req.body as IRobotTypeDTO,

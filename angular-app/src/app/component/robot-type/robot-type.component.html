@@ -4,8 +4,11 @@
   <form (ngSubmit)="createRobotType()">
     <input [(ngModel)]="newRobotType.typeId" name="typeId" placeholder="Type ID">
     <input [(ngModel)]="newRobotType.brand" name="brand" placeholder="Brand">
-    <input [(ngModel)]="newRobotType.model" name="model" placeholder="Model">
-    <input [(ngModel)]="newRobotType.taskCategory" name="taskCategory" placeholder="Task Category">
+    <input [(ngModel)]="newRobotType.model" name="model" placeholder="Model Number">
+    <label>Task Category</label>
+    <select name="taskCategory" [(ngModel)]="newRobotType.taskCategory" >
+      <option *ngFor="let taskCategoryType of taskCategoryTypes" [value]="taskCategoryType">{{ taskCategoryType }}</option>
+    </select>
     <button type="submit">Create Robot Type</button>
   </form>
 

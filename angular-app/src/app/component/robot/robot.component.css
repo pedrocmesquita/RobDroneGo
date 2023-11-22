@@ -1,13 +1,26 @@
 .robot-container {
-  width: 100%;
-  max-width: 800px;
-  margin: 0 auto;
-  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-family: Arial, sans-serif;
+  background-color: #f4f4f4;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+}
+
+input, select {
+  margin-bottom: 10px;
+  padding: 10px;
+  font-size: 16px;
 }
 
 .robot-container h1 {
   text-align: center;
-  margin-bottom: 20px;
+  color: #333;
 }
 
 .robot-container form {
@@ -16,19 +29,25 @@
   margin-bottom: 20px;
 }
 
-.robot-container form input {
-  margin-bottom: 10px;
+.robot-container input, .robotType-container select {
+  margin: 5px 0;
   padding: 10px;
-  font-size: 16px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
 }
 
-.robot-container form button {
+.robot-container button {
   padding: 10px;
-  font-size: 16px;
+  border: none;
+  border-radius: 5px;
   background-color: #007bff;
   color: white;
-  border: none;
   cursor: pointer;
+  margin-top: 10px;
+}
+
+.robot-container button:hover {
+  background-color: #0056b3;
 }
 
 .robot-container table {
@@ -36,16 +55,20 @@
   border-collapse: collapse;
 }
 
-.robot-container table th,
-.robot-container table td {
+.robot-container th, .robotType-container td {
   border: 1px solid #ddd;
   padding: 8px;
+  text-align: left;
 }
 
-.robot-container table th {
-  padding-top: 12px;
-  padding-bottom: 12px;
-  text-align: left;
-  background-color: #007bff;
-  color: white;
+.robot-container th {
+  background-color: #f2f2f2;
+}
+
+.robot-container tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+.robot-container tr:hover {
+  background-color: #ddd;
 }

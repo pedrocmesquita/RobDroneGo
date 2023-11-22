@@ -13,6 +13,8 @@ export class BuildingComponent implements OnInit {
   wallOptions: number[] = Array.from({ length: 15 }, (_, index) => index + 1);
   dimensionOptions: number[] = Array.from({ length: 11 }, (_, index) => index);
 
+  minFloors: number = 1;
+  maxFloors: number = 10;
   selectedBuilding: IBuilding | null = null;
   buildings: IBuilding[] = [];
   filteredBuildings: IBuilding[] = [];
@@ -53,6 +55,12 @@ export class BuildingComponent implements OnInit {
     } else {
       this.filteredBuildings = this.buildings;
     }
+  }
+
+  filterBuildingsByFloors() {
+    this.filteredBuildings = this.buildings.filter(building =>
+      building.buildingNumberOfFloors >= this.minFloors && building.buildingNumberOfFloors <= this.maxFloors
+    );
   }
 
   createBuilding(): void {

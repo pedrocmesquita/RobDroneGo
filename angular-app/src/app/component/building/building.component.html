@@ -31,6 +31,13 @@
 
   <input [(ngModel)]="filterText" placeholder="Filter by ID">
   <button (click)="filterBuildings()">Filter</button>
+  <select [(ngModel)]="minFloors">
+    <option *ngFor="let number of floorOptions" [value]="number">{{ number }}</option>
+  </select>
+  <select [(ngModel)]="maxFloors">
+    <option *ngFor="let number of floorOptions" [value]="number">{{ number }}</option>
+  </select>
+  <button (click)="filterBuildingsByFloors()">Filter by Number of Floors</button>
 
   <table>
     <thead>

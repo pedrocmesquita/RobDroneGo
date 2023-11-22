@@ -10,6 +10,7 @@ const fetchRoles = async (req, res, next) => {
     req.adminRole = roles.find((role) => role.name === "Admin");
     req.gestorDeCampusRole = roles.find((role) => role.name === "Gestor de Campus");
     req.gestorDeFrotaRole = roles.find((role) => role.name === "Gestor de Frota");
+    req.gestorDeTarefasRole = roles.find((role) => role.name === "Gestor de Tarefas");
     next();
   } catch (error) {
     next(error);

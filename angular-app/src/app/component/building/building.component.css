@@ -120,3 +120,26 @@ select {
   color: #721c24;
   border: 1px solid #f5c6cb;
 }
+
+.building-container select {
+  padding: 4px;
+  font-size: 18px;
+  margin-right: 2px;
+  margin-bottom: 10px;
+  margin-top: 10px;
+}
+
+.building-container button {
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  background-color: #007bff;
+  color: white;
+  cursor: pointer;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.building-container button:hover {
+  background-color: #0056b3;
+}

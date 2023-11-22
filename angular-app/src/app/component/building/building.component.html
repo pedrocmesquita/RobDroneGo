@@ -1,5 +1,6 @@
 <div class="building-container">
-  <p *ngIf="successMessage">{{ successMessage }}</p>
+  <p *ngIf="successMessage" class="success-message">{{ successMessage }}</p>
+  <p *ngIf="errorMessage" class="error-message">{{ errorMessage }}</p>
   <h1>Create Building</h1>
   <form (ngSubmit)="createBuilding()">
     <input [(ngModel)]="newBuilding.buildingId" name="buildingId" placeholder="ID">
@@ -56,21 +57,18 @@
       <td><input [(ngModel)]="building.wallHeight" placeholder="Wall Height"></td>
       <td><input [(ngModel)]="building.wallWidth" placeholder="Wall Width"></td>
       <td>
-        <div *ngFor="let floor of building.floors">
-          Floor Id: {{ floor.floorId }}, Floor Number: {{ floor.floorNumber }},
-          Description: {{ floor.floorDescription }},
-          <div *ngFor="let connections of floor.connections">
+        <div *ngFor="let floor of building.floors" class="floor-div">
+          Floor Id: {{ floor.floorId }}
+          <div *ngFor="let connections of floor.connections" class="connection-div">
             Connection Id: {{ connections.connectionId }}, Origin: {{ connections.floorfromId }},
             Destination: {{ connections.floortoId }}
           </div>
-          <div *ngFor="let room of floor.rooms">
-            Room Id: {{ room.roomId }}, Floor Id: {{ room.floorId }}, Room Name: {{ room.roomName }},
-            Room Description: {{ room.roomDescription }}, Room Category: {{ room.roomCategory }}
+          <div *ngFor="let room of floor.rooms" class="room-div">
+            Room Id: {{ room.roomId }}
           </div>
-          <div *ngFor="let elevators of floor.elevators">
+          <div *ngFor="let elevators of floor.elevators" class="elevator-div">
             Elevator Id: {{ elevators.elevatorId }}, Floors Attended: {{ elevators.floorsAttended }},
-            Brand: {{ elevators.elevatorBrand }}, Model: {{ elevators.elevatorModel }}, Serial Number: {{ elevators.elevatorSerNum }},
-            Description: {{ elevators.elevatorDesc}}, Current Floor: {{ elevators.currentFloor }}
+            Current Floor: {{ elevators.currentFloor }}
           </div>
         </div>
       </td>

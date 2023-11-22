@@ -26,6 +26,7 @@ export class FloorComponent implements OnInit{
     floorDescription: '',
   };
   successMessage: string | null = null;
+  errorMessage: string | null = null;
   constructor(private floorService:FloorService, private buildingService:BuildingService) { }
 
   ngOnInit(): void {
@@ -65,10 +66,17 @@ export class FloorComponent implements OnInit{
           floorDescription: '',
         };
         this.successMessage = 'Floor created successfully!';
+        setTimeout(() => {
+          this.successMessage = null;
+        }, 1500); // Message will disappear after 3 seconds
       },
       (error) => {
+        setTimeout(() => {
+          this.errorMessage = null;
+
+        }, 1500); // Message will disappear after 3 seconds
         console.error('Failed to create floor:', error);
-        this.successMessage = null;
+        this.errorMessage = 'Failed to create floor!';
       }
     );
   }
@@ -89,8 +97,11 @@ export class FloorComponent implements OnInit{
         }, 1500); // Message will disappear after 3 seconds
       },
       (error) => {
+        setTimeout(() => {
+          this.errorMessage = null;
+        }, 1500); // Message will disappear after 3 seconds
         console.error('Failed to update floor:', error);
-        this.successMessage = null;
+        this.errorMessage = 'Failed to update floor!';
       }
     );
   }

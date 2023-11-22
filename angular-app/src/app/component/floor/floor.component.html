@@ -1,5 +1,6 @@
 <div class="floor-container">
-  <p *ngIf="successMessage">{{ successMessage }}</p>
+  <p *ngIf="successMessage" class="success-message">{{ successMessage }}</p>
+  <p *ngIf="errorMessage" class="error-message">{{ errorMessage }}</p>
   <h1>Create Floor</h1>
   <form (ngSubmit)="createFloor()">
     <label>Building ID</label>
@@ -36,22 +37,21 @@
       <td><input [(ngModel)]="floor.floorNumber" placeholder="Floor Number"></td>
       <td><input [(ngModel)]="floor.floorDescription" placeholder="Description"></td>
     <td>
-      <div *ngFor="let connections of floor.connections">
+      <div *ngFor="let connections of floor.connections" class="connections-div">
         Connection Id: {{ connections.connectionId }}, Origin: {{ connections.floorfromId }},
         Destination: {{ connections.floortoId }}
       </div>
     </td>
     <td>
-      <div *ngFor="let room of floor.rooms">
+      <div *ngFor="let room of floor.rooms" class="room-div">
         Room Id: {{ room.roomId }}, Floor Id: {{ room.floorId }}, Room Name: {{ room.roomName }},
         Room Description: {{ room.roomDescription }}, Room Category: {{ room.roomCategory }}
       </div>
     </td>
     <td>
-      <div *ngFor="let elevators of floor.elevators">
+      <div *ngFor="let elevators of floor.elevators" class="elevators-div">
         Elevator Id: {{ elevators.elevatorId }}, Floors Attended: {{ elevators.floorsAttended }},
-        Brand: {{ elevators.elevatorBrand }}, Model: {{ elevators.elevatorModel }}, Serial Number: {{ elevators.elevatorSerNum }},
-        Description: {{ elevators.elevatorDesc}}, Current Floor: {{ elevators.currentFloor }}
+        Brand: {{ elevators.elevatorBrand }}, Current Floor: {{ elevators.currentFloor }}
       </div>
     </td>
       <td><button (click)="editFloor(floor)">Edit</button></td>

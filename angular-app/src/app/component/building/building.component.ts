@@ -11,7 +11,7 @@ export class BuildingComponent implements OnInit {
 
   floorOptions: number[] = Array.from({ length: 10 }, (_, index) => index + 1);
   wallOptions: number[] = Array.from({ length: 15 }, (_, index) => index + 1);
-  dimensionOptions: number[] = Array.from({ length: 10 }, (_, index) => index + 1);
+  dimensionOptions: number[] = Array.from({ length: 11 }, (_, index) => index);
 
   selectedBuilding: IBuilding | null = null;
   buildings: IBuilding[] = [];
@@ -28,6 +28,7 @@ export class BuildingComponent implements OnInit {
     wallWidth: 0
   };
   successMessage: string | null = null;
+  errorMessage: string | null = null;
 
   constructor(private buildingService: BuildingService) {
   }
@@ -76,7 +77,12 @@ export class BuildingComponent implements OnInit {
         }, 1500); // Message will disappear after 3 seconds
       },
       (error) => {
+        setTimeout(() => {
+          this.errorMessage = null;
+
+        }, 1500); // Message will disappear after 3 seconds
         console.error('Failed to create building:', error);
+        this.errorMessage = 'Failed to create building!';
       }
     );
   }
@@ -97,7 +103,12 @@ export class BuildingComponent implements OnInit {
         }, 1500); // Message will disappear after 3 seconds
       },
       (error) => {
+        setTimeout(() => {
+          this.errorMessage = null;
+
+        }, 1500); // Message will disappear after 3 seconds
         console.error('Failed to update building:', error);
+        this.errorMessage = 'Failed to update building!';
       }
     );
   }

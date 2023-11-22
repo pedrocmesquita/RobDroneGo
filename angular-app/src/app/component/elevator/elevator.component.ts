@@ -13,7 +13,7 @@ import { IBuilding } from "../../models/ibuilding.model";
 })
 export class ElevatorComponent implements OnInit {
   floorOptions = Array.from({length: 10}, (_, i) => i + 1);
-  coordinateOptions = Array.from({length: 10}, (_, i) => i + 1);
+  coordinateOptions = Array.from({length: 11}, (_, i) => i);
 
   selectedElevator: IElevator | null = null;
   selectedFloors: string[] = [];
@@ -35,6 +35,7 @@ export class ElevatorComponent implements OnInit {
     locationY: 0
   };
   successMessage: string | null = null;
+  errorMessage: string | null = null;
 
   constructor(private elevatorService: ElevatorService, private floorService:FloorService, private buildingService:BuildingService) {}
 
@@ -91,7 +92,12 @@ export class ElevatorComponent implements OnInit {
         }, 1500); // Message will disappear after 3 seconds
       },
       (error) => {
+        setTimeout(() => {
+          this.errorMessage = null;
+
+        }, 1500); // Message will disappear after 3 seconds
         console.error('Failed to create elevator:', error);
+        this.errorMessage = 'Failed to create elevator!';
       }
     );
   }

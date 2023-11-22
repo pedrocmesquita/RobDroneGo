@@ -13,7 +13,7 @@ import { IFloor } from "../../models/ifloor.model";
 })
 export class ConnectionComponent implements OnInit {
 
-  coordinatesOption = Array.from({length: 10}, (_, i) => i + 1);
+  coordinatesOption = Array.from({length: 11}, (_, i) => i );
 
   buildings: IBuilding[] = [];
   floors: IFloor[] = [];
@@ -32,6 +32,7 @@ export class ConnectionComponent implements OnInit {
     locationToY: 0,
   };
   successMessage: string | null = null;
+  errorMessage: string | null = null;
 
   constructor(private connectionService: ConnectionService, private buildingService:BuildingService, private floorService:FloorService) {}
 
@@ -87,7 +88,12 @@ export class ConnectionComponent implements OnInit {
         }, 1500); // Message will disappear after 3 seconds
       },
       (error) => {
+        setTimeout(() => {
+          this.errorMessage = null;
+
+        }, 1500); // Message will disappear after 3 seconds
         console.error('Failed to create connection:', error);
+        this.errorMessage = 'Failed to create connection!';
       }
     );
   }
@@ -108,7 +114,12 @@ export class ConnectionComponent implements OnInit {
         }, 1500); // Message will disappear after 3 seconds
       },
       (error) => {
+        setTimeout(() => {
+          this.errorMessage = null;
+
+        }, 1500); // Message will disappear after 3 seconds
         console.error('Failed to update connection:', error);
+        this.errorMessage = 'Failed to update connection!';
       }
     );
   }

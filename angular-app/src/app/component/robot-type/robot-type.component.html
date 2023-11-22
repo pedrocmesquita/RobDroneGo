@@ -1,5 +1,6 @@
 <div class="robotType-container">
-  <p *ngIf="successMessage">{{ successMessage }}</p>
+  <p *ngIf="successMessage" class="success-message">{{ successMessage }}</p>
+  <p *ngIf="errorMessage" class="error-message">{{ errorMessage }}</p>
   <h1>Create Robot Type</h1>
   <form (ngSubmit)="createRobotType()">
     <input [(ngModel)]="newRobotType.typeId" name="typeId" placeholder="Type ID">

@@ -28,6 +28,7 @@ export class RobotComponent implements OnInit{
     active: true,
   };
   successMessage: string | null = null;
+  errorMessage: string | null = null;
   constructor(private robotService:RobotService, private robotTypeService:RobotTypeService) { }
 
   ngOnInit(): void {
@@ -72,10 +73,17 @@ export class RobotComponent implements OnInit{
           active: true,
         };
         this.successMessage = 'Robot created successfully!';
+        setTimeout(() => {
+          this.successMessage = null;
+        }, 1500); // Message will disappear after 3 seconds
       },
       (error) => {
+        setTimeout(() => {
+          this.errorMessage = null;
+
+        }, 1500); // Message will disappear after 3 seconds
         console.error('Failed to create robot:', error);
-        this.successMessage = null;
+        this.errorMessage = 'Failed to create robot!';
       }
     );
   }
@@ -96,8 +104,12 @@ export class RobotComponent implements OnInit{
         }, 1500); // Message will disappear after 3 seconds
       },
       (error) => {
+        setTimeout(() => {
+          this.errorMessage = null;
+
+        }, 1500); // Message will disappear after 3 seconds
         console.error('Failed to update robot:', error);
-        this.successMessage = null;
+        this.errorMessage = 'Failed to update robot!';
       }
     );
   }

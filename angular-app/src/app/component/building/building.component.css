@@ -1,4 +1,3 @@
-
 .building-container {
   display: flex;
   flex-direction: column;
@@ -13,9 +12,15 @@ form {
   flex-direction: column;
 }
 
-input, select {
+input{
   padding: 4px;
-  font-size: 8px;
+  font-size: 12px;
+  margin-right: 2px;
+}
+
+select {
+  padding: 4px;
+  font-size: 18px;
   margin-right: 2px;
 }
 
@@ -33,10 +38,12 @@ input, select {
 
 .building-container input, .building-container select {
   margin: 2px 0;
-  padding: 2px;
+  padding: 8px;
   border-radius: 2px;
   border: 1px solid #ccc;
 }
+
+.building-container
 
 .building-container button {
   padding: 10px;
@@ -73,4 +80,43 @@ input, select {
 
 .building-container tr:hover {
   background-color: #ddd;
+}
+
+.floor-div {
+  /* Add your styles here */
+  padding: 5px;
+  background-color: #e8e8e8;
+  margin-bottom: 5px;
+}
+
+.connection-div {
+  /* Add your styles here */
+  padding: 5px;
+  background-color: #f2f2f2;
+  margin-bottom: 5px;
+}
+
+.room-div {
+  /* Add your styles here */
+  padding: 5px;
+  background-color: #f2f2f2;
+  margin-bottom: 5px;
+}
+
+.elevator-div {
+  /* Add your styles here */
+  padding: 5px;
+  background-color: #f2f2f2;
+  margin-bottom: 5px;
+}
+.success-message {
+  background-color: #d4edda;
+  color: #155724;
+  border: 1px solid #c3e6cb;
+}
+
+.error-message {
+  background-color: #f8d7da;
+  color: #721c24;
+  border: 1px solid #f5c6cb;
 }

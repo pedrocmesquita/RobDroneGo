@@ -12,8 +12,8 @@ import { IFloor } from "../../models/ifloor.model";
 export class RoomComponent implements OnInit {
 
   roomCategories = ['Gabinete','Anfiteatro','Laboratorio','Outro'];
-  doorOptions = Array.from({length: 10}, (_, i) => i + 1);
-  coordinateOptions = Array.from({length: 10}, (_, i) => i + 1);
+  doorOptions = Array.from({length: 11}, (_, i) => i );
+  coordinateOptions = Array.from({length: 11}, (_, i) => i );
 
   selectedRoom: IRoom | null = null;
   rooms: IRoom[] = [];
@@ -34,6 +34,7 @@ export class RoomComponent implements OnInit {
     destinationCoordinateY: 0
   };
   successMessage: string | null = null;
+  errorMessage: string | null = null;
 
   constructor(private roomService: RoomService, private floorService: FloorService) {}
 
@@ -85,7 +86,12 @@ export class RoomComponent implements OnInit {
         }, 1500); // Message will disappear after 3 seconds
       },
       (error) => {
+        setTimeout(() => {
+          this.errorMessage = null;
+
+        }, 1500); // Message will disappear after 3 seconds
         console.error('Failed to create room:', error);
+        this.errorMessage = 'Failed to create room!';
       }
     );
   }

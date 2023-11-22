@@ -26,6 +26,7 @@ export class RobotTypeComponent implements OnInit{
     taskCategory: '',
   };
   successMessage: string | null = null;
+  errorMessage: string | null = null;
   constructor(private robotTypeService:RobotTypeService) { }
 
   ngOnInit(): void {
@@ -62,11 +63,18 @@ export class RobotTypeComponent implements OnInit{
           taskCategory: '',
         };
         this.successMessage = 'Robot Type created successfully!';
+        setTimeout(() => {
+          this.successMessage = null;
+
+        }, 1500); // Message will disappear after 3 seconds
       },
       (error) => {
-        console.log(this.newRobotType);
+        setTimeout(() => {
+          this.errorMessage = null;
+
+        }, 1500); // Message will disappear after 3 seconds
         console.error('Failed to create robot type:', error);
-        this.successMessage = null;
+        this.errorMessage = 'Failed to create robot type';
       }
     );
   }

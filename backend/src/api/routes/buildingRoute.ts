@@ -11,18 +11,15 @@ import attachCurrentUser from "../middlewares/attachCurrentUser";
 import RoleService from "../../services/roleService";
 import roleCheck from "../middlewares/roleCheck";
 import fetchRoles from "../middlewares/roleCheck";
+import jwt from 'jsonwebtoken';
 
 const route = Router();
 export default (app: Router) => {
     app.use("/buildings", route);
 
     const ctrl = Container.get(config.controllers.building.name) as IBuildingController;
-    const roleService = Container.get(RoleService);
-    route.use(isAuth);
 
-    route.use(attachCurrentUser);
-
-    route.use(roleCheck);
+    route.use(isAuth,attachCurrentUser,fetchRoles);
 
     route.post("",
       celebrate({
@@ -37,21 +34,7 @@ export default (app: Router) => {
           wallWidth: Joi.number().required(),
         }),
       }),
-      (req, res, next) => {
-        if (req.auth.role != req.gestorDeCampusRole.id && req.auth.role != req.adminRole.id) {
-
-          return res.status(403).json({ error: "Unauthorized access" });
-        } else {
-          // User has the "Gestor de Campus" role, proceed with the controller logic
-          try {
-
-            ctrl.createBuilding(req, res, next);
-          } catch (error) {
-            next(error);
-          }
-        }
-    }
-      );
+      (req, res, next) => ctrl.createBuilding(req, res, next));
 
     // BuildingId cannot be changed
     route.put("",
@@ -71,12 +54,27 @@ export default (app: Router) => {
 
     route.get("/:buildingId", (req, res, next) => ctrl.getBuilding(req, res, next));
 
-    route.get("",  (req, res, next) => ctrl.getBuildings(req, res, next));
+    route.get("",  (req, res, next) => {
+      // @ts-ignore
+      if (req.auth.role != req.gestorDeCampusRole.id && req.auth.role != req.adminRole.id) {
+
+        return res.status(403).json({ error: "Unauthorized access" });
+      } else {
+        // User has the "Gestor de Campus" role, proceed with the controller logic
+        try {
+
+          ctrl.getBuildings(req, res, next);
+        } catch (error) {
+          next(error);
+        }
+      }
+
+    });
 
 
     route.delete("/:buildingId", (req, res, next) => ctrl.deleteBuilding(req, res, next));
 
-    route.get("/floors/:min/:max", (req, res, next) => ctrl.getFloors(req, res, next));
+    route.get("/floors/:min/:max", (req, res, next) => ctrl.getBuildingsByFloors(req, res, next));
 
     // Patch is used to update a single field, in this case the building description
     route.patch("/changeDescription/:buildingId", celebrate({

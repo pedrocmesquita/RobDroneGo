@@ -6,13 +6,14 @@ import {Floor} from "../domain/Floor/floor";
 import {FloorMap} from "../mappers/FloorMap";
 import e from "express";
 import { BuildingMap } from "../mappers/BuildingMap";
+import { IBuildingPersistence } from "../dataschema/IBuildingPersistence";
 
 @Service()
 export default class FloorRepo implements IFloorRepo {
 
     constructor(
         @Inject("floorSchema") private floorSchema: Model<IFloorPersistence & Document>,
-        @Inject("buildingSchema") private buildingSchema: Model<IFloorPersistence & Document>
+        @Inject("buildingSchema") private buildingSchema: Model<IBuildingPersistence & Document>
     ) {}
 
     // @ts-ignore
@@ -151,6 +152,30 @@ export default class FloorRepo implements IFloorRepo {
             return floorDTOResult;
         }
 
+    }
+
+    public async deleteConnectionFromFloor(floorId: string, connectionId: string) {
+
+        // Delete connection from floor
+        const floor = await this.floorSchema.findOne({ floorId: floorId });
+
+        const index = floor.connections.findIndex( connection => connection.connectionId === connectionId );
+
+        floor.connections.splice(index, 1);
+
+        await floor.save();
+
+        // Delete connection from building
+
+        const building = await this.buildingSchema.findOne({ buildingId: floor.buildingId });
+
+        const index2 = building.floors.findIndex( floor => floor.floorId === floorId );
+
+        const index3 = building.floors[index2].connections.findIndex( connection => connection.connectionId === connectionId );
+
+        building.floors[index2].connections.splice(index3, 1);
+
+        await building.save();
     }
 
 }

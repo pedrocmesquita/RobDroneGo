@@ -132,6 +132,7 @@ export default class FloorService implements IFloorService {
                 // Remove connections from the other floor
                 for (const connection of oldConnections) {
                     await this.connectionRepo.deleteAllInstancesOfConnection(connection.connectionId);
+                    await this.floorRepo.deleteAllConnectionsFromFloor(connection.connectionId);
                 }
                 for (const room of oldRooms) {
                     this.roomRepo.deleteAllRoomsFromFloor(room.floorId);
@@ -139,6 +140,10 @@ export default class FloorService implements IFloorService {
                 for (const elevator of oldElevators) {
                     this.elevatorRepo.deleteAllElevatorsFromFloor(elevator);
                   }
+
+                // Remove connection from the other floor
+
+
             } else
             {
                 floorDTO.connections = oldFloor.connections.map(connection => ConnectionMap.toDTO(connection) as IConnectionDTO);

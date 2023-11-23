@@ -34,5 +34,6 @@ jobs:
 
     - name: Run Prettier (ignore errors)
       run: prettier --write '**/*.js' || true
+      working-directory: backend
 
 

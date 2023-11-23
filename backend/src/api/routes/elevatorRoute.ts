@@ -37,20 +37,7 @@ export default (app: Router) => {
             locationY: Joi.number().required(),
         })
         }),
-        (req, res, next) => {
-            if (req.auth.role != req.gestorDeCampusRole.id && req.auth.role != req.adminRole.id) {
-
-                return res.status(403).json({ error: "Unauthorized access" });
-            } else {
-                // User has the "Gestor de Campus" role, proceed with the controller logic
-                try {
-
-                    ctrl.createElevator(req, res, next);
-                } catch (error) {
-                    next(error);
-                }
-            }
-        });
+        (req, res, next) => ctrl.createElevator(req, res, next));
     
     route.put("",
         celebrate({
@@ -61,20 +48,7 @@ export default (app: Router) => {
             buildingId: Joi.string().required(),
         }),
         }),
-        (req, res, next) =>{
-            if (req.auth.role != req.gestorDeCampusRole.id && req.auth.role != req.adminRole.id) {
-
-                return res.status(403).json({ error: "Unauthorized access" });
-            } else {
-                // User has the "Gestor de Campus" role, proceed with the controller logic
-                try {
-
-                    ctrl.updateElevator(req, res, next);
-                } catch (error) {
-                    next(error);
-                }
-            }
-        });
+        (req, res, next) => ctrl.updateElevator(req, res, next));
     
     route.get("/:elevatorId",
         celebrate({
@@ -82,48 +56,9 @@ export default (app: Router) => {
             elevatorId: Joi.string().required()
         })
         }),
-        (req, res, next) => {
-            if (req.auth.role != req.gestorDeCampusRole.id && req.auth.role != req.adminRole.id) {
+        (req, res, next) => ctrl.getElevator(req, res, next));
 
-                return res.status(403).json({ error: "Unauthorized access" });
-            } else {
-                // User has the "Gestor de Campus" role, proceed with the controller logic
-                try {
-
-                    ctrl.getElevator(req, res, next);
-                } catch (error) {
-                    next(error);
-                }
-            }
-        });
-
-    route.get("", (req, res, next) =>{
-        if (req.auth.role != req.gestorDeCampusRole.id && req.auth.role != req.adminRole.id) {
-
-            return res.status(403).json({ error: "Unauthorized access" });
-        } else {
-            // User has the "Gestor de Campus" role, proceed with the controller logic
-            try {
-
-                ctrl.getElevators(req, res, next);
-            } catch (error) {
-                next(error);
-            }
-        }
-    });
+    route.get("", (req, res, next) => ctrl.getElevators(req, res, next));
     
-    route.delete("/:elevatorId", (req, res, next) => {
-        if (req.auth.role != req.gestorDeCampusRole.id && req.auth.role != req.adminRole.id) {
-
-            return res.status(403).json({ error: "Unauthorized access" });
-        } else {
-            // User has the "Gestor de Campus" role, proceed with the controller logic
-            try {
-
-                ctrl.deleteElevator(req, res, next);
-            } catch (error) {
-                next(error);
-            }
-        }
-    });
+    route.delete("/:elevatorId", (req, res, next) => ctrl.deleteElevator(req, res, next));
     };

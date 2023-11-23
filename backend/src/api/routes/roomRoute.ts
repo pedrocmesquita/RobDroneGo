@@ -39,19 +39,7 @@ export default (app: Router) => {
         destinationCoordinateY: Joi.number().required(),
       })
     }),
-    (req, res, next) => {
-    if (req.auth.role != req.gestorDeCampusRole.id && req.auth.role != req.adminRole.id) {
-
-      return res.status(403).json({ error: "Unauthorized access" });
-    } else {
-      // User has the "Gestor de Campus" role, proceed with the controller logic
-      try {
-
-        ctrl.createRoom(req, res, next);
-      } catch (error) {
-        next(error);
-      }
-    }});
+    (req, res, next) => ctrl.createRoom(req, res, next));
 
   // RoomId cannot be changed
   route.put("",
@@ -63,61 +51,11 @@ export default (app: Router) => {
         roomDescription: Joi.string().required(),
       }),
     }),
-    (req, res, next) => {
-    if (req.auth.role != req.gestorDeCampusRole.id && req.auth.role != req.adminRole.id) {
+    (req, res, next) => ctrl.updateRoom(req, res, next));
 
-      return res.status(403).json({ error: "Unauthorized access" });
-    } else {
-      // User has the "Gestor de Campus" role, proceed with the controller logic
-      try {
+  route.get("/:roomId", (req, res, next) => ctrl.getRoom(req, res, next));
 
-        ctrl.updateRoom(req, res, next);
-      } catch (error) {
-        next(error);
-      }
-    }});
+  route.get("", (req, res, next) => ctrl.getRooms(req, res, next));
 
-  route.get("/:roomId", (req, res, next) => {
-    if (req.auth.role != req.gestorDeCampusRole.id && req.auth.role != req.adminRole.id) {
-
-      return res.status(403).json({ error: "Unauthorized access" });
-    } else {
-      // User has the "Gestor de Campus" role, proceed with the controller logic
-      try {
-
-        ctrl.updateRoom(req, res, next);
-      } catch (error) {
-        next(error);
-      }
-    }});
-
-  route.get("", (req, res, next) => {
-    if (req.auth.role != req.gestorDeCampusRole.id && req.auth.role != req.adminRole.id) {
-
-      return res.status(403).json({ error: "Unauthorized access" });
-    } else {
-      // User has the "Gestor de Campus" role, proceed with the controller logic
-      try {
-
-        ctrl.getRooms(req, res, next);
-      } catch (error) {
-        next(error);
-      }
-    }
-  });
-
-  route.delete("/:roomId", (req, res, next) => {
-    if (req.auth.role != req.gestorDeCampusRole.id && req.auth.role != req.adminRole.id) {
-
-      return res.status(403).json({ error: "Unauthorized access" });
-    } else {
-      // User has the "Gestor de Campus" role, proceed with the controller logic
-      try {
-
-        ctrl.deleteRoom(req, res, next);
-      } catch (error) {
-        next(error);
-      }
-    }
-  });
+  route.delete("/:roomId", (req, res, next) => ctrl.deleteRoom(req, res, next));
 };

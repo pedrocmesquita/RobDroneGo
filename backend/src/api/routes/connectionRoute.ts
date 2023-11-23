@@ -36,19 +36,7 @@ export default (app: Router) => {
         locationToY: Joi.number().required(),
       })
     }),
-    (req, res, next) =>{
-    if (req.auth.role != req.gestorDeCampusRole.id && req.auth.role != req.adminRole.id) {
-
-      return res.status(403).json({ error: "Unauthorized access" });
-    } else {
-      // User has the "Gestor de Campus" role, proceed with the controller logic
-      try {
-
-        ctrl.createConnection(req, res, next);
-      } catch (error) {
-        next(error);
-      }
-    }});
+    (req, res, next) => ctrl.createConnection(req, res, next));
 
   route.put("",
     celebrate({
@@ -60,19 +48,7 @@ export default (app: Router) => {
         locationToY: Joi.number().required(),
       }),
     }),
-    (req, res, next) => {
-    if (req.auth.role != req.gestorDeCampusRole.id && req.auth.role != req.adminRole.id) {
-
-      return res.status(403).json({ error: "Unauthorized access" });
-    } else {
-      // User has the "Gestor de Campus" role, proceed with the controller logic
-      try {
-
-        ctrl.updateConnection(req, res, next);
-      } catch (error) {
-        next(error);
-      }
-    }});
+    (req, res, next) => ctrl.updateConnection(req, res, next));
 
   route.get("/:connectionId",
     celebrate({
@@ -80,60 +56,10 @@ export default (app: Router) => {
         connectionId: Joi.string().required()
       })
     }),
-    (req, res, next) =>{
-    if (req.auth.role != req.gestorDeCampusRole.id && req.auth.role != req.adminRole.id) {
+    (req, res, next) => ctrl.getConnection(req, res, next));
 
-      return res.status(403).json({ error: "Unauthorized access" });
-    } else {
-      // User has the "Gestor de Campus" role, proceed with the controller logic
-      try {
+  route.get("", (req, res, next) => ctrl.getConnections(req, res, next));
 
-        ctrl.getConnection(req, res, next);
-      } catch (error) {
-        next(error);
-      }
-    }});
-
-  route.get("", (req, res, next) =>{
-    if (req.auth.role != req.gestorDeCampusRole.id && req.auth.role != req.adminRole.id) {
-
-    return res.status(403).json({ error: "Unauthorized access" });
-  } else {
-    // User has the "Gestor de Campus" role, proceed with the controller logic
-    try {
-
-      ctrl.getConnections(req, res, next);
-    } catch (error) {
-      next(error);
-    }
-  }});
-
-  route.delete("/:connectionId", (req, res, next) => {
-    if (req.auth.role != req.gestorDeCampusRole.id && req.auth.role != req.adminRole.id) {
-
-      return res.status(403).json({ error: "Unauthorized access" });
-    } else {
-      // User has the "Gestor de Campus" role, proceed with the controller logic
-      try {
-
-        ctrl.deleteAllInstancesOfConnection(req, res, next);
-      } catch (error) {
-        next(error);
-      }
-    }
-  });
-  route.get("/:buildingidFrom/:buildingidTo", (req, res, next) =>{
-    if (req.auth.role != req.gestorDeCampusRole.id && req.auth.role != req.adminRole.id) {
-
-      return res.status(403).json({ error: "Unauthorized access" });
-    } else {
-      // User has the "Gestor de Campus" role, proceed with the controller logic
-      try {
-
-        ctrl.getConnectionsBetween(req, res, next);
-      } catch (error) {
-        next(error);
-      }
-    }
-  });
+  route.delete("/:connectionId", (req, res, next) => ctrl.deleteConnection(req, res, next));
+  route.get("/:buildingidFrom/:buildingidTo", (req, res, next) => ctrl.getConnectionsBetween(req, res, next));
 };

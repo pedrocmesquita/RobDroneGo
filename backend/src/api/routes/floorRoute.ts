@@ -31,20 +31,7 @@ export default (app: Router) => {
             floorDescription: Joi.string().required(),
         })
         }),
-        (req, res, next) => {
-            if (req.auth.role != req.gestorDeCampusRole.id && req.auth.role != req.adminRole.id) {
-
-                return res.status(403).json({ error: "Unauthorized access" });
-            } else {
-                // User has the "Gestor de Campus" role, proceed with the controller logic
-                try {
-
-                    ctrl.createFloor(req, res, next);
-                } catch (error) {
-                    next(error);
-                }
-            }
-    });
+        (req, res, next) => ctrl.createFloor(req, res, next));
     
     route.put("",
         celebrate({
@@ -54,19 +41,7 @@ export default (app: Router) => {
             floorDescription: Joi.string().required(),
         }),
         }),
-        (req, res, next) => {
-            if (req.auth.role != req.gestorDeCampusRole.id && req.auth.role != req.adminRole.id) {
-
-                return res.status(403).json({ error: "Unauthorized access" });
-            } else {
-                // User has the "Gestor de Campus" role, proceed with the controller logic
-                try {
-
-                    ctrl.updateFloor(req, res, next);
-                } catch (error) {
-                    next(error);
-                }
-            }});
+        (req, res, next) => ctrl.updateFloor(req, res, next));
     
     route.get("/:floorId",
         celebrate({
@@ -74,61 +49,12 @@ export default (app: Router) => {
             floorId: Joi.string().required()
         })
         }),
-        (req, res, next) => {
-            if (req.auth.role != req.gestorDeCampusRole.id && req.auth.role != req.adminRole.id) {
+        (req, res, next) => ctrl.getFloor(req, res, next));
 
-                return res.status(403).json({ error: "Unauthorized access" });
-            } else {
-                // User has the "Gestor de Campus" role, proceed with the controller logic
-                try {
-
-                    ctrl.getFloor(req, res, next);
-                } catch (error) {
-                    next(error);
-                }
-            }
-        });
-
-    route.get("", (req, res, next) => {
-        if (req.auth.role != req.gestorDeCampusRole.id && req.auth.role != req.adminRole.id) {
-
-            return res.status(403).json({ error: "Unauthorized access" });
-        } else {
-            // User has the "Gestor de Campus" role, proceed with the controller logic
-            try {
-
-                ctrl.getFloors(req, res, next);
-            } catch (error) {
-                next(error);
-            }
-        }});
+    route.get("", (req, res, next) => ctrl.getFloors(req, res, next));
     
-    route.delete("/:floorId", (req, res, next) => {
-        if (req.auth.role != req.gestorDeCampusRole.id && req.auth.role != req.adminRole.id) {
-
-            return res.status(403).json({ error: "Unauthorized access" });
-        } else {
-            // User has the "Gestor de Campus" role, proceed with the controller logic
-            try {
-
-                ctrl.deleteFloor(req, res, next);
-            } catch (error) {
-                next(error);
-            }
-        }});
+    route.delete("/:floorId", (req, res, next) => ctrl.deleteFloor(req, res, next));
 
     // Route that gets all the floors of a building that have connections to other buildings
-    route.get("/connections/:buildingId", (req, res, next) => {
-        if (req.auth.role != req.gestorDeCampusRole.id && req.auth.role != req.adminRole.id) {
-
-            return res.status(403).json({ error: "Unauthorized access" });
-        } else {
-            // User has the "Gestor de Campus" role, proceed with the controller logic
-            try {
-
-                ctrl.getConnections(req, res, next);
-            } catch (error) {
-                next(error);
-            }
-        }});
+    route.get("/connections/:buildingId", (req, res, next) => ctrl.getConnections(req, res, next));
     };

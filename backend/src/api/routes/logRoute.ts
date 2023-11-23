@@ -24,21 +24,7 @@ export default (app: Router) => {
 
   route.use(roleCheck);
 
-  route.get("/auth", (req, res, next) => {
-    if (req.auth.role != req.adminRole.id) {
-
-      return res.status(403).json({ error: "Unauthorized access" });
-    } else {
-      // User has the "Gestor de Campus" role, proceed with the controller logic
-      try {
-
-        ctrl.getAuth(req, res, next);
-      } catch (error) {
-        next(error);
-      }
-    }
-  }
-  );
+  route.get("/auth", (req, res, next) => ctrl.getAuth(req, res, next));
 
   route.post("/auth",
     celebrate({
@@ -46,18 +32,5 @@ export default (app: Router) => {
         email: Joi.string().required()
       }),
     }),
-    (req, res, next) => {
-      if (req.auth.role != req.adminRole.id) {
-
-        return res.status(403).json({ error: "Unauthorized access" });
-      } else {
-        // User has the "Gestor de Campus" role, proceed with the controller logic
-        try {
-
-          ctrl.postAuth(req, res, next);
-        } catch (error) {
-          next(error);
-        }
-      }
-    });
+    (req, res, next) => ctrl.postAuth(req, res, next));
 }

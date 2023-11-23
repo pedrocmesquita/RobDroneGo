@@ -31,13 +31,17 @@ export class AuthService {
   }
 
   getRoles(): Observable<any> {
-    // Replace with your actual backend API endpoint
-    return this.http.get('http://localhost:4000/api/roles');
+
+    const headers = { Authorization: `Bearer ${this.getToken()}` };
+
+    return this.http.get('http://localhost:4000/api/roles', { headers });
   }
 
   createRole(roleName: string): Observable<any> {
-    // Replace with your actual backend API endpoint
-    return this.http.post('http://localhost:4000/api/roles', { name: roleName });
+
+    const headers = { Authorization: `Bearer ${this.getToken()}` };
+
+    return this.http.post('http://localhost:4000/api/roles', { roleName }, { headers });
   }
 
   isUserAuthorized(): boolean {
@@ -61,12 +65,16 @@ export class AuthService {
 
   logFailedLoginAttempt(email: string) {
 
-    return this.http.post('http://localhost:4000/api/log/auth', { email });
+    const headers = { Authorization: `Bearer ${this.getToken()}` };
+
+    return this.http.post('http://localhost:4000/api/log/auth', { email }, { headers });
   }
 
   getUsersWithMoreThanThreeFailedLoginAttempts() {
 
-    return this.http.get('http://localhost:4000/api/log/auth');
+    const headers = { Authorization: `Bearer ${this.getToken()}` };
+
+    return this.http.get('http://localhost:4000/api/log/auth', { headers });
   }
 
 

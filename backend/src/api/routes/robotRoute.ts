@@ -34,49 +34,14 @@ export default (app: Router) => {
                 active: Joi.boolean().required()
         }),
         }),
-        (req, res, next) => {
-        if (req.auth.role != req.gestorDeFrotaRole.id && req.auth.role != req.adminRole.id) {
-
-            return res.status(403).json({ error: "Unauthorized access" });
-        } else {
-            // User has the "Gestor de Campus" role, proceed with the controller logic
-            try {
-
-                ctrl.createRobot(req, res, next);
-            } catch (error) {
-                next(error);
-            }
-        }} );
+        (req, res, next) => ctrl.createRobot(req, res, next) );
 
     // Get all robots
     route.get("",
-        (req, res, next) => {
-            if (req.auth.role != req.gestorDeFrotaRole.id && req.auth.role != req.adminRole.id) {
+        (req, res, next) => ctrl.getRobots(req, res, next) );
 
-                return res.status(403).json({ error: "Unauthorized access" });
-            } else {
-                // User has the "Gestor de Campus" role, proceed with the controller logic
-                try {
 
-                    ctrl.getRobots(req, res, next);
-                } catch (error) {
-                    next(error);
-                }
-            }});
-
-    route.patch("/:idRobot", (req, res, next) => {
-        if (req.auth.role != req.gestorDeFrotaRole.id && req.auth.role != req.adminRole.id) {
-
-        return res.status(403).json({ error: "Unauthorized access" });
-    } else {
-        // User has the "Gestor de Campus" role, proceed with the controller logic
-        try {
-
-            ctrl.inibRobot(req, res, next);
-        } catch (error) {
-            next(error);
-        }
-    }});
+    route.patch("/:idRobot", (req, res, next) => ctrl.inibRobot(req, res, next) );
 };
 
 

@@ -15,9 +15,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Change to /backend directory
-      run: cd backend
-
+  
     - name: Checkout code
       uses: actions/checkout@v2
 
@@ -25,6 +23,9 @@ jobs:
       uses: actions/setup-node@v3
       with:
         node-version: '18'
+
+    - name: Change to /backend directory
+      run: cd backend
 
     - name: Install dependencies
       run: npm install

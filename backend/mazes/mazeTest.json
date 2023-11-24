@@ -4,8 +4,8 @@
     "doorTextureUrl": "./textures/door.jpg",
     "elevatorTextureUrl": "./textures/elevator.jpg",
     "size": {
-        "width": 10,
-        "height": 10
+        "width": 9,
+        "height": 7
     },
     "map": [
         [
@@ -21,12 +21,12 @@
             0
         ],
         [
+            1,
             0,
             0,
-            0,
-            0,
-            0,
-            0,
+            3,
+            3,
+            3,
             0,
             0,
             0,
@@ -36,9 +36,9 @@
             0,
             0,
             0,
-            0,
-            0,
-            0,
+            3,
+            3,
+            3,
             0,
             0,
             0,
@@ -142,7 +142,7 @@
         ]
     ],
     "initialPosition": [
-        7,
+        0,
         6
     ],
     "initialDirection": 0,

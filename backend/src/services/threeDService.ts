@@ -49,7 +49,9 @@ export default class ThreeDService implements IThreeDService {
                       console.log("floor.map:");
                       console.log(floor.map);
 
-                      const json = this.toJsonObject(building, floor);
+                      //const json = this.toJsonObject(building, floor);
+
+                      const json = this.toJsonObjectTest(building, floor);
                       const jsonTest = this.toJsonObjectTest(building, floor);
 
                       // Use JSON.stringify with a space parameter of 4 to format the JSON
@@ -63,6 +65,7 @@ export default class ThreeDService implements IThreeDService {
               }
             );
         } catch (e) {
+            console.log(e);
             return Result.fail<any>(e);
         }
     }
@@ -130,7 +133,7 @@ export default class ThreeDService implements IThreeDService {
             "wallTextureUrl": "./textures/wall2.jpg",
             "doorTextureUrl": "./textures/door.jpg",
             "elevatorTextureUrl": "./textures/elevator.jpg",
-            "size": { "width": 10, "height": 10 },
+            "size": { "width": floor.width-1, "height": floor.height-1 },
             "map": floor.map,
             "doors": [
                 [4, 2, 1],
@@ -145,7 +148,7 @@ export default class ThreeDService implements IThreeDService {
                 [10, 9, 1],
                 [4, 5, 1]
             ],
-            "initialPosition": [7, 6],
+            "initialPosition": [0, 6],
             "initialDirection": 0.0,
             "exitLocation": [-0.5, 6]
         };

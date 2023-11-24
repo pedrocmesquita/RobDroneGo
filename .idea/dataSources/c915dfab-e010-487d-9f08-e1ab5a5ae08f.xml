@@ -259,23 +259,23 @@
       <DasType>String|12s</DasType>
       <Position>1</Position>
     </column>
-    <column id="74" parent="13" name="lastName">
+    <column id="74" parent="13" name="email">
       <DasType>String|12s</DasType>
       <Position>1</Position>
     </column>
-    <column id="75" parent="13" name="password">
+    <column id="75" parent="13" name="lastName">
       <DasType>String|12s</DasType>
       <Position>1</Position>
     </column>
-    <column id="76" parent="13" name="updatedAt">
+    <column id="76" parent="13" name="password">
+      <DasType>String|12s</DasType>
+      <Position>1</Position>
+    </column>
+    <column id="77" parent="13" name="updatedAt">
       <DasType>ISODate|91s</DasType>
       <Position>1</Position>
     </column>
-    <column id="77" parent="13" name="role">
-      <DasType>String|12s</DasType>
-      <Position>1</Position>
-    </column>
-    <column id="78" parent="13" name="email">
+    <column id="78" parent="13" name="role">
       <DasType>String|12s</DasType>
       <Position>1</Position>
     </column>

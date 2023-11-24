@@ -16,12 +16,8 @@ export default (app: Router) => {
   app.use("/rooms", route);
 
   const ctrl = Container.get(config.controllers.room.name) as IRoomController;
-  const roleService = Container.get(RoleService);
-  route.use(isAuth);
 
-  route.use(attachCurrentUser);
-
-  //route.use(roleCheck);
+  route.use(isAuth,attachCurrentUser,roleCheck(["Admin","Gestor de Campus"]));
 
   route.post("",
     celebrate({

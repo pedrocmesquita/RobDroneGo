@@ -16,15 +16,8 @@ export default (app: Router) => {
     app.use("/floors", route);
     
     const ctrl = Container.get(config.controllers.floor.name) as IFloorController;
-    const roleService = Container.get(RoleService);
 
-
-
-    /*route.use(isAuth);
-
-    route.use(attachCurrentUser);
-
-    route.use(roleCheck);*/
+    route.use(isAuth,attachCurrentUser,roleCheck(["Admin","Gestor de Campus"]));
 
     route.post("",
         celebrate({

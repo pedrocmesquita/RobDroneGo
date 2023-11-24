@@ -17,12 +17,8 @@ export default (app: Router) => {
   app.use("/log", route);
 
   const ctrl = Container.get(config.controllers.log.name) as ILogController;
+  route.use(isAuth,attachCurrentUser,roleCheck(["Admin"]));
 
-  route.use(isAuth);
-
-  route.use(attachCurrentUser);
-
-  route.use(roleCheck);
 
   route.get("/auth", (req, res, next) => ctrl.getAuth(req, res, next));
 

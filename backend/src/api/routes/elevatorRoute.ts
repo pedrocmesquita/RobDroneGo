@@ -16,12 +16,8 @@ export default (app: Router) => {
     app.use("/elevators", route);
     
     const ctrl = Container.get(config.controllers.elevator.name) as IElevatorController;
-    const roleService = Container.get(RoleService);
-    route.use(isAuth);
 
-    route.use(attachCurrentUser);
-
-    //route.use(roleCheck);
+    route.use(isAuth,attachCurrentUser,roleCheck(["Admin","Gestor de Campus"]));
 
     route.post("",
         celebrate({

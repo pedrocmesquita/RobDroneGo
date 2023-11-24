@@ -29,6 +29,9 @@ export default class ElevatorController implements IElevatorController {
 
     public async createElevator(req: Request, res: Response, next: NextFunction) {
         try {
+            console.log(req.body);
+            console.log(req.params.elevatorId);
+            console.log("elevador");
             const floorsAttended = req.body.floorsAttended.split(",");
             req.body.floorsAttended = floorsAttended;
             console.log(req.body);

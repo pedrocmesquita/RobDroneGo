@@ -44,6 +44,8 @@ export default class FloorRepo implements IFloorRepo {
                 roleDocument.buildingId = floor.buildingId;
                 roleDocument.floorNumber = floor.floorNumber.floorNumber;
                 roleDocument.floorDescription = floor.floorDescription.floorDescription;
+                roleDocument.width = floor.width;
+                roleDocument.height = floor.height;
                 roleDocument.connections = floor.connections;
                 roleDocument.rooms = floor.rooms;
                 roleDocument.elevators = floor.elevators;
@@ -83,6 +85,8 @@ export default class FloorRepo implements IFloorRepo {
             floorDocument.buildingId = floor.buildingId;
             floorDocument.floorNumber = floor.floorNumber.floorNumber;
             floorDocument.floorDescription = floor.floorDescription.floorDescription;
+            floorDocument.width = floor.width;
+            floorDocument.height = floor.height;
             floorDocument.connections = floor.connections;
             floorDocument.rooms = floor.rooms;
             floorDocument.elevators = floor.elevators;

@@ -54,7 +54,9 @@ export default (app: Router) => {
 
     route.get("/:buildingId", (req, res, next) => ctrl.getBuilding(req, res, next));
 
-    route.get("",  (req, res, next) => {
+    route.get("",  (req, res, next) => ctrl.getBuildings(req, res, next));
+
+    /*{
       // @ts-ignore
       if (req.auth.role != req.gestorDeCampusRole.id && req.auth.role != req.adminRole.id) {
 
@@ -69,7 +71,7 @@ export default (app: Router) => {
         }
       }
 
-    });
+    });*/
 
 
     route.delete("/:buildingId", (req, res, next) => ctrl.deleteBuilding(req, res, next));

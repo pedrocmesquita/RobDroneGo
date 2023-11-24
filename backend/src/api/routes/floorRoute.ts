@@ -17,11 +17,14 @@ export default (app: Router) => {
     
     const ctrl = Container.get(config.controllers.floor.name) as IFloorController;
     const roleService = Container.get(RoleService);
-    route.use(isAuth);
+
+
+
+    /*route.use(isAuth);
 
     route.use(attachCurrentUser);
 
-    route.use(roleCheck);
+    route.use(roleCheck);*/
 
     route.post("",
         celebrate({
@@ -43,13 +46,7 @@ export default (app: Router) => {
         }),
         (req, res, next) => ctrl.updateFloor(req, res, next));
     
-    route.get("/:floorId",
-        celebrate({
-        params: Joi.object({
-            floorId: Joi.string().required()
-        })
-        }),
-        (req, res, next) => ctrl.getFloor(req, res, next));
+
 
     route.get("", (req, res, next) => ctrl.getFloors(req, res, next));
     

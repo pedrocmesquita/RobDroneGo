@@ -129,8 +129,14 @@
 
 <body>
     <script>
-        displaySelectors('A', 'f1');
+        window.onload = function() {
+            displaySelectors('', '');
+        };
     </script>
+    <div id="building-container">
+        <select id="building"></select>
+        <select id="floor"></select>
+    </div>
 
     <div id="parent">
         <div id="views-panel">

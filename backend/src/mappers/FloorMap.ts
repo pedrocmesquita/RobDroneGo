@@ -19,6 +19,8 @@ export class FloorMap implements Mapper<Floor> {
             floorId: floor.floorId,
             floorNumber: floor.floorNumber.floorNumber,
             floorDescription: floor.floorDescription.floorDescription,
+            width: floor.width,
+            height: floor.height,
             connections: connections.map(connection => {
                 return {
                     connectionId: connection.connectionId,
@@ -68,6 +70,8 @@ export class FloorMap implements Mapper<Floor> {
                 floorId: floor.floorId,
                 floorNumber: floor.floorNumber.floorNumber,
                 floorDescription: floor.floorDescription.floorDescription,
+                width: floor.width,
+                height: floor.height,
                 connections: [], // or another default value as needed
                 rooms: rooms.map(room => {
                     return {
@@ -106,6 +110,8 @@ export class FloorMap implements Mapper<Floor> {
                     floorId: floor.floorId,
                     floorNumber: floor.floorNumber.floorNumber,
                     floorDescription: floor.floorDescription.floorDescription,
+                    width: floor.width,
+                    height: floor.height,
                     connections: connections.map(connection => {
                         return {
                             connectionId: connection.connectionId,
@@ -153,6 +159,8 @@ export class FloorMap implements Mapper<Floor> {
             floorId: floor.floorId,
             floorNumber: floor.floorNumber.floorNumber,
             floorDescription: floor.floorDescription.floorDescription,
+            width: floor.width,
+            height: floor.height,
             connections: floor.connections.map(connection => {
                 return {
                     connectionId: connection.connectionId,

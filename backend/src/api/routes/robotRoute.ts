@@ -17,7 +17,7 @@ export default (app: Router) => {
 
     const ctrl = Container.get(config.controllers.robot.name) as IRobotController;
     const roleService = Container.get(RoleService);
-    route.use(isAuth);
+    //route.use(isAuth);
 
     route.use(attachCurrentUser);
 

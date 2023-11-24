@@ -7,6 +7,8 @@ export interface IFloorPersistence {
     buildingId: string;
     floorNumber: number;
     floorDescription: string;
+    width?: number;
+    height?: number;
     connections?: Connection[];
     rooms?: Room[];
     elevators?: Elevator[];

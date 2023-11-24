@@ -7,6 +7,8 @@ export default interface IFloorDTO {
     floorNumber: number;
     floorId: string;
     floorDescription?: string;
+    width?: number;
+    height?: number;
     connections?: IConnectionDTO[];
     rooms?: IRoomDTO[];
     elevators?: IElevatorDTO[];

@@ -55,6 +55,11 @@ export default class FloorService implements IFloorService {
                 return Result.fail<IFloorDTO>("Building not found");
             }
 
+            // Get building size
+
+
+
+
             floorDTO.connections = [];
             floorDTO.rooms = [];
             floorDTO.elevators = [];
@@ -70,6 +75,15 @@ export default class FloorService implements IFloorService {
             if (building.floors.length >= building.buildingNumberOfFloors.buildingNumberOfFloors) {
                 return Result.fail<IFloorDTO>("Max number of floors reached for this building");
             }
+
+            const width = building.dimX;
+            const height = building.dimY;
+
+            console.log(width);
+            console.log(height);
+
+            floorDTO.width = width;
+            floorDTO.height = height;
 
             // Create floor entity
             const floorOrError = await Floor.create(floorDTO);

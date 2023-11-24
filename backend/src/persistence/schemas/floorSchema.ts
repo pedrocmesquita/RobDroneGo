@@ -20,6 +20,14 @@ const FloorSchema = new Schema({
         type: String,
         index: true,
     },
+    width: {
+        type: Number,
+        index: true,
+    },
+    height: {
+        type: Number,
+        index: true,
+    },
     connections: [{
         connectionId: String,
         buildingfromId: String,

@@ -19,6 +19,8 @@ interface FloorProps {
     buildingId?: string;
     floorNumber?: FloorNumber;
     floorId?: string;
+    width?: number;
+    height?: number;
     floorDescription?: FloorDescription;
     connections?: Connection[];
     rooms?: Room[];
@@ -39,12 +41,57 @@ export class Floor extends AggregateRoot<FloorProps> {
         return this.props.floorId;
     }
 
+    get width (): number {
+        return this.props.width;
+    }
+
+    get height (): number {
+        return this.props.height;
+    }
+
+    get map (): number[][] {
+        // Initialize the map with empty strings
+        let map = Array.from(Array(this.props.height), () => new Array(this.props.width).fill(0));
+
+        // Loop over connections and mark them on the map
+        for (let connection of this.props.connections) {
+            map[connection.locationY][connection.locationX] = 2;
+            map[connection.locationToY][connection.locationToX] = 2;
+        }
+
+        // Loop over rooms and mark them on the map
+        for (let room of this.props.rooms) {
+            for (let x = room.originCoordinateX; x <= room.destinationCoordinateX; x++) {
+                for (let y = room.originCoordinateY; y <= room.destinationCoordinateY; y++) {
+                    map[y][x] = 3;
+                }
+            }
+            // Mark the door on the map
+            map[room.door.doorY][room.door.doorX] = 1;
+        }
+
+        // Loop over elevators and mark them on the map
+        for (let elevator of this.props.elevators) {
+            map[elevator.locationY.locationY][elevator.locationX.locationX] = 1;
+        }
+
+        return map;
+    }
+
     get floorNumber (): FloorNumber {
         return this.props.floorNumber;
     }
 
     get floorDescription (): FloorDescription {
         return this.props.floorDescription;
+    }
+
+    set width (value: number) {
+        this.props.width = value;
+    }
+
+    set height (value: number) {
+        this.props.height = value;
     }
 
     get elevators (): Elevator[] {
@@ -109,6 +156,8 @@ export class Floor extends AggregateRoot<FloorProps> {
         const floorNumber = floorDTO.floorNumber;
         const floorId = floorDTO.floorId;
         const floorDescription = floorDTO.floorDescription;
+        const width = floorDTO.width;
+        const height = floorDTO.height;
 
 
         // Check if buildingId and floorId are defined and not empty
@@ -131,6 +180,8 @@ export class Floor extends AggregateRoot<FloorProps> {
               floorNumber: FloorNumber.create({ floorNumber }).getValue(),
               floorId: floorId,
               floorDescription: FloorDescription.create({ floorDescription }).getValue(),
+              width: width,
+              height: height,
               connections: floorDTO.connections.map(connection => Connection.create(connection).getValue()),
               rooms: floorDTO.rooms.map(room => Room.create(room).getValue()),
               elevators: floorDTO.elevators.map(elevator => Elevator.create(elevator).getValue()),

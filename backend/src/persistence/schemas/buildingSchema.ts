@@ -45,6 +45,8 @@ const BuildingSchema = new mongoose.Schema({
         buildingId: String,
         floorNumber: Number,
         floorDescription: String,
+        width: Number,
+        height: Number,
         connections: [{
             connectionId: String,
             buildingfromId: String,

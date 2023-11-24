@@ -21,7 +21,7 @@ export default (app: Router) => {
 
   route.use(attachCurrentUser);
 
-  route.use(roleCheck);
+  //route.use(roleCheck);
 
   route.post("",
     celebrate({

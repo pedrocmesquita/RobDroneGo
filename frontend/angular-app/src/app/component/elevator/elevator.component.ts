@@ -71,6 +71,7 @@ export class ElevatorComponent implements OnInit {
   }
 
   createElevator(): void {
+    console.log(this.selectedFloors);
     this.newElevator.floorsAttended = this.selectedFloors.join(',');
     this.elevatorService.createElevator(this.newElevator).subscribe(
       (elevator) => {

@@ -6,7 +6,7 @@ export const generalData = {
 }
 
 export const mazeData = {
-    url: "./mazes/Loquitas.json",
+    url: "http://localhost:4000/api/3d/json",
     credits: "Maze designed by Cecília Fernandes and Nikita.",
     scale: new THREE.Vector3(1.0, 1.0, 1.0)
 }

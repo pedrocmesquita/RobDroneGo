@@ -10,6 +10,7 @@ import robotType from './routes/robotTypesRoute';
 import robot from './routes/robotRoute';
 import room from './routes/roomRoute';
 import log from './routes/logRoute';
+import threeD from "./routes/threeDRoute";
 
 export default () => {
 	const app = Router();
@@ -24,7 +25,8 @@ export default () => {
 	robotType(app);
 	robot(app);
 	room(app);
-	log(app)
+	log(app);
+	threeD(app);
 	
 	return app
 }

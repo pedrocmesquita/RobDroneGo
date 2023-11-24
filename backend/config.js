@@ -77,6 +77,10 @@ export default {
       name: "logController",
       path: "../controllers/logController"
     },
+    threeD: {
+      name: "threeDController",
+      path: "../controllers/threeDController"
+    },
   },
 
   repos: {
@@ -154,6 +158,10 @@ export default {
     log: {
       name: "logService",
       path: "../services/logService"
+    },
+    threeD: {
+      name: "threeDService",
+      path: "../services/threeDService"
     },
   },
 };

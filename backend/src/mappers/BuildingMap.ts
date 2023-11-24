@@ -29,6 +29,8 @@ export class BuildingMap implements Mapper<Building> {
                         floorId: floor.floorId,
                         floorNumber: floor.floorNumber.floorNumber,
                         floorDescription: floor.floorDescription.floorDescription,
+                        width: floor.width,
+                        height: floor.height,
                         connections: floor.connections.map(connection => {
                             return {
                                 connectionId: connection.connectionId,
@@ -117,6 +119,8 @@ export class BuildingMap implements Mapper<Building> {
                     floorId: floor.floorId,
                     floorNumber: floor.floorNumber.floorNumber,
                     floorDescription: floor.floorDescription.floorDescription,
+                    width: floor.width,
+                    height: floor.height,
                     connections: floor.connections.map(connection => {
                         return {
                             connectionId: connection.connectionId,

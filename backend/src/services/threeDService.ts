@@ -50,11 +50,14 @@ export default class ThreeDService implements IThreeDService {
                       console.log(floor.map);
 
                       const json = this.toJsonObject(building, floor);
+                      const jsonTest = this.toJsonObjectTest(building, floor);
 
                       // Use JSON.stringify with a space parameter of 4 to format the JSON
                       const formattedJson = JSON.stringify(json, null, 4);
+                      const formattedJsonTest = JSON.stringify(jsonTest, null, 4);
 
                       fs.writeFile(jsonPath, formattedJson);
+                      fs.writeFile("mazes/mazeTest.json", formattedJsonTest);
                       return Result.ok<any>(json);
                   }
               }
@@ -102,6 +105,33 @@ export default class ThreeDService implements IThreeDService {
                 [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
                 [2, 2, 2, 2, 2, 0, 2, 2, 2, 0, 0]
             ],
+            "doors": [
+                [4, 2, 1],
+                [1, 3, 2]
+            ],
+            "elevators": [
+                [10, 5, 1],
+                [5, 0, 2]
+
+            ],
+            "accesses": [
+                [10, 9, 1],
+                [4, 5, 1]
+            ],
+            "initialPosition": [7, 6],
+            "initialDirection": 0.0,
+            "exitLocation": [-0.5, 6]
+        };
+    }
+
+    toJsonObjectTest(building: Building,floor: Floor): any {
+        return {
+            "groundTextureUrl": "./textures/ground.jpg",
+            "wallTextureUrl": "./textures/wall2.jpg",
+            "doorTextureUrl": "./textures/door.jpg",
+            "elevatorTextureUrl": "./textures/elevator.jpg",
+            "size": { "width": 10, "height": 10 },
+            "map": floor.map,
             "doors": [
                 [4, 2, 1],
                 [1, 3, 2]

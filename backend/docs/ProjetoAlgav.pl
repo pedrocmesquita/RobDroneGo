@@ -2134,3 +2134,33 @@ cria_grafos :-
     cria_grafo(d,3,14,9),
     cria_grafo(b,3,8,17),
     cria_grafo(c,4,15,9).
+
+
+% A* algorithm with ligacel (without heuristic estimation)
+% A* algorithm with ligacel and heuristic estimation
+aStar(Orig, Dest, Cam, Custo):-
+    aStar2(Dest, [(_, 0, [Orig])], [], Cam, Custo).
+
+aStar2(Dest, [(_, Custo, [Dest|T])|_], _, Cam, Custo):-
+    reverse([Dest|T], Cam).
+
+aStar2(Dest, [(_, Ca, LA)|Outros], Visitados, Cam, Custo):-
+    LA = [Act|_],
+    findall((CEX, CaX, [X|LA]),
+            (Dest \== Act,
+             ligacel(Act, X),
+             \+ member(X, Visitados),
+             \+ member(X, LA),
+             CaX is Ca + 1,  % Cost from start to current node
+             heuristic(X, Dest, EstX),  % Heuristic estimation from current node to goal
+             CEX is CaX + EstX),  % Total cost including heuristic
+            Novos),
+    append(Outros, Novos, Todos),
+    append(Visitados, [Act], VisitadosAtualizados),
+    sort(Todos, TodosOrd),
+    aStar2(Dest, TodosOrd, VisitadosAtualizados, Cam, Custo).
+
+% Example heuristic function (Euclidean distance)
+heuristic(cel(_, X1, Y1, _), cel(_, X2, Y2, _), Estimativa):-
+    Estimativa is sqrt((X1 - X2)^2 + (Y1 - Y2)^2).
+

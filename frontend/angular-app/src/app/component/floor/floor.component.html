@@ -1,7 +1,12 @@
 <div class="floor-container">
   <p *ngIf="successMessage" class="success-message">{{ successMessage }}</p>
   <p *ngIf="errorMessage" class="error-message">{{ errorMessage }}</p>
-  <h1>Create Floor</h1>
+  <div class="header-container">
+    <h1>Floor Component</h1>
+  </div>
+  <button (click)="selectOption('create')">Create Floor</button>
+  <button (click)="selectOption('listOrEdit')">List or Edit Floor</button>
+  <div *ngIf="selectedOption === 'create'">
   <form (ngSubmit)="createFloor()">
     <label>Building ID</label>
     <select [(ngModel)]="newFloor.buildingId" name="Building ID">
@@ -14,10 +19,15 @@
     <input [(ngModel)]="newFloor.floorDescription" name="floorDescription" placeholder="Description">
     <button type="submit">Create Floor</button>
   </form>
-
+  </div>
+  <div *ngIf="selectedOption === 'listOrEdit'" class="list-edit-container">
+<div class="filter-con-buttons">
+  <button (click)="filterFloorsWithConnections()">Filter Floors With Connections</button>
+</div>
+    <div class="filter-buttons">
   <input [(ngModel)]="filterText" placeholder="Filter by ID">
   <button (click)="filterFloors()">Filter</button>
-
+    </div>
   <table>
     <thead>
     <tr>
@@ -58,4 +68,5 @@
     </tr>
     </tbody>
   </table>
+</div>
 </div>

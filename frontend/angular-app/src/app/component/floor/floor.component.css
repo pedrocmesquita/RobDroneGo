@@ -4,36 +4,27 @@
   justify-content: center;
   align-items: center;
   font-family: Arial, sans-serif;
-  background-color: #f4f4f4;
-}
-
-form {
-  display: flex;
-  flex-direction: column;
-}
-
-input, select {
-  margin-bottom: 10px;
-  padding: 10px;
-  font-size: 16px;
-}
-
-
-.floor-container h1 {
-  text-align: center;
-  color: #333;
+  background-image: url('/assets/floor.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  min-height: 100vh;
+  width: 100vw;
 }
 
 .floor-container form {
   display: flex;
   flex-direction: column;
   margin-bottom: 20px;
+  margin-top: 10px;
+  background-color: #f2f2f2;
+  padding: 20px;
 }
 
 .floor-container input, .floor-container select {
-  margin: 4px 0;
-  padding: 4px;
-  border-radius: 4px;
+  margin: 10px 0;
+  padding: 8px;
+  border-radius: 2px;
   border: 1px solid #ccc;
 }
 
@@ -63,7 +54,7 @@ input, select {
 }
 
 .floor-container th {
-  background-color: #007bff;
+  background-color: #f2f2f2;
 }
 
 .floor-container tr:nth-child(even) {
@@ -74,19 +65,65 @@ input, select {
   background-color: #ddd;
 }
 
-.room-div {
+.header-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(255, 255, 255, 0.8); /* white with 80% opacity */
+  padding: 10px;
+  border-radius: 5px;
+  margin-top: 40px;
+}
+.header-container h1 {
+  margin: 0;
+  font-size: 24px;
+  color: #007bff;
+  font-weight: bold;
+}
+
+.list-edit-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 90%;
+}
+
+.list-edit-container table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: #f2f2f2
+}
+
+.filter-id,
+
+.filter-floors {
+  margin-bottom: 1rem;
+}
+
+
+.floor-div {
+  /* Add your styles here */
   padding: 5px;
   background-color: #f2f2f2;
   margin-bottom: 5px;
 }
 
-.connections-div {
+.connection-div {
+  /* Add your styles here */
+  padding: 5px;
+  background-color: #f2f2f2;
+  margin-bottom: 5px;
+}
+
+.room-div {
+  /* Add your styles here */
   padding: 5px;
   background-color: #f2f2f2;
   margin-bottom: 5px;
 }
 
 .elevator-div {
+  /* Add your styles here */
   padding: 5px;
   background-color: #f2f2f2;
   margin-bottom: 5px;
@@ -103,3 +140,6 @@ input, select {
   color: #721c24;
   border: 1px solid #f5c6cb;
 }
+
+
+

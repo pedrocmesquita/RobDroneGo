@@ -14,7 +14,8 @@ import { IBuilding } from "../../models/ibuilding.model";
 export class FloorComponent implements OnInit{
 
   floorOptions = Array.from({length: 10}, (_, i) => i + 1);
-
+  areFloorsFiltered: boolean = false;
+  selectedOption: string = '';
   selectedFloor: IFloor | null = null;
   buildings: IBuilding[] = [];
   floors: IFloor[] = [];
@@ -53,6 +54,26 @@ export class FloorComponent implements OnInit{
       this.filteredFloors = this.floors.filter(floor => floor.floorId.toLowerCase().includes(this.filterText.toLowerCase()));
     } else {
       this.filteredFloors = this.floors;
+    }
+  }
+
+  filterFloorsWithConnections(): void {
+    if (this.areFloorsFiltered) {
+      // If the floors are currently filtered, reset the floors to the original list
+      this.filteredFloors = this.floors;
+      this.areFloorsFiltered = false;
+    } else {
+      // If the floors are not currently filtered, filter the floors
+      this.filteredFloors = this.filteredFloors.filter(floor => floor.connections && floor.connections.length > 0);
+      this.areFloorsFiltered = true;
+    }
+  }
+
+  selectOption(option: string) {
+    if (this.selectedOption === option) {
+      this.selectedOption = '';
+    } else {
+      this.selectedOption = option;
     }
   }
 

@@ -1,7 +1,12 @@
 <div class="building-container">
   <p *ngIf="successMessage" class="success-message">{{ successMessage }}</p>
   <p *ngIf="errorMessage" class="error-message">{{ errorMessage }}</p>
-  <h1>Create Building</h1>
+  <div class="header-container">
+    <h1>Building Component</h1>
+  </div>
+  <button (click)="selectOption('create')">Create Building</button>
+  <button (click)="selectOption('listOrEdit')">List or Edit Building</button>
+  <div *ngIf="selectedOption === 'create'">
   <form (ngSubmit)="createBuilding()">
     <input [(ngModel)]="newBuilding.buildingId" name="buildingId" placeholder="ID">
     <input [(ngModel)]="newBuilding.buildingName" name="buildingName" placeholder="Name">
@@ -28,17 +33,21 @@
     </select>
     <button type="submit">Create Building</button>
   </form>
-
-  <input [(ngModel)]="filterText" placeholder="Filter by ID">
-  <button (click)="filterBuildings()">Filter</button>
-  <select [(ngModel)]="minFloors">
-    <option *ngFor="let number of floorOptions" [value]="number">{{ number }}</option>
-  </select>
-  <select [(ngModel)]="maxFloors">
-    <option *ngFor="let number of floorOptions" [value]="number">{{ number }}</option>
-  </select>
-  <button (click)="filterBuildingsByFloors()">Filter by Number of Floors</button>
-
+  </div>
+    <div *ngIf="selectedOption === 'listOrEdit'" class="list-edit-container">
+      <div class="filter-id">
+      <input [(ngModel)]="filterText" placeholder="Filter by ID">
+      <button (click)="filterBuildings()">Filter</button>
+      </div>
+      <div class="filter-floors">
+      <select [(ngModel)]="minFloors">
+        <option *ngFor="let number of floorOptions" [value]="number">{{ number }}</option>
+      </select>
+      <select [(ngModel)]="maxFloors">
+        <option *ngFor="let number of floorOptions" [value]="number">{{ number }}</option>
+      </select>
+      <button (click)="filterBuildingsByFloors()">Filter by Number of Floors</button>
+      </div>
   <table>
     <thead>
     <tr>
@@ -83,4 +92,5 @@
     </tr>
     </tbody>
   </table>
-</div>
+    </div>
+  </div>

@@ -1,7 +1,12 @@
 <div class="elevator-container">
   <p *ngIf="successMessage" class="success-message">{{ successMessage }}</p>
   <p *ngIf="errorMessage" class="error-message">{{ errorMessage }}</p>
-  <h1>Create Elevator</h1>
+  <div class="header-container">
+  <h1>Elevator Component</h1>
+  </div>
+  <button (click)="selectOption('create')">Create Elevator</button>
+  <button (click)="selectOption('listOrEdit')">List Elevator</button>
+  <div *ngIf="selectedOption === 'create'">
   <form (ngSubmit)="createElevator()">
     <input [(ngModel)]="newElevator.elevatorId" name="elevatorId" placeholder="Elevator ID">
     <label>Building</label>
@@ -33,10 +38,12 @@
     </select>
     <button type="submit">Create Elevator</button>
   </form>
-
+  </div>
+  <div *ngIf="selectedOption === 'listOrEdit'" class="list-edit-container">
+    <div class="filter-id">
   <input [(ngModel)]="filterText" placeholder="Filter by ID">
   <button (click)="filterElevators()">Filter</button>
-
+    </div>
   <table>
     <thead>
     <tr>
@@ -70,3 +77,5 @@
     </tbody>
   </table>
 </div>
+</div>
+

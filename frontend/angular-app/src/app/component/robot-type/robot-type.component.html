@@ -1,7 +1,12 @@
 <div class="robotType-container">
   <p *ngIf="successMessage" class="success-message">{{ successMessage }}</p>
   <p *ngIf="errorMessage" class="error-message">{{ errorMessage }}</p>
-  <h1>Create Robot Type</h1>
+  <div class="header-container">
+    <h1>Robot Type Component</h1>
+  </div>
+  <button (click)="selectOption('create')">Create Building</button>
+  <button (click)="selectOption('listOrEdit')">List or Edit Building</button>
+  <div *ngIf="selectedOption === 'create'">
   <form (ngSubmit)="createRobotType()">
     <input [(ngModel)]="newRobotType.typeId" name="typeId" placeholder="Type ID">
     <input [(ngModel)]="newRobotType.brand" name="brand" placeholder="Brand">
@@ -12,10 +17,12 @@
     </select>
     <button type="submit">Create Robot Type</button>
   </form>
-
+  </div>
+  <div *ngIf="selectedOption === 'listOrEdit'" class="list-edit-container">
+    <div class="filter-id">
   <input [(ngModel)]="filterText" placeholder="Filter by Type ID">
   <button (click)="filterRobotTypes()">Filter</button>
-
+      </div>
   <table>
     <thead>
     <tr>
@@ -35,3 +42,6 @@
     </tbody>
   </table>
 </div>
+</div>
+
+

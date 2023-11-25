@@ -1,21 +1,34 @@
 <div class="signup-container">
+  <h1>Signup</h1>
 <form (ngSubmit)="onSubmit(signupForm)" #signupForm="ngForm" class="signup-form">
   <label for="firstName">First Name</label>
   <input type="text" id="firstName" name="firstName" ngModel required>
   <label for="lastName">Last Name</label>
   <input type="text" id="lastName" name="lastName" ngModel required>
   <label for="email">Email</label>
-  <input type="email" id="email" name="email" ngModel required>
+  <input type="email" id="email" name="email" ngModel required email>
+  <p *ngIf="signupForm.controls['email']?.errors?.['email']" class="error-message">Please enter a valid email address.</p>
   <label for="password">Password</label>
-  <input type="password" id="password" name="password" ngModel required>
+  <input type="password" id="password" name="password" ngModel required pattern="(?=.*[A-Za-z])(?=.*\d).{5,}">
+  <p *ngIf="signupForm.controls['password']?.errors?.['pattern']" class="error-message">Password must be at least 5 characters long, contain at least one number and one letter.</p>
   <label for="role">Role</label>
   <select id="role" name="role" [(ngModel)]="selectedRole" required>
     <option value="" disabled>Select a role</option>
     <option *ngFor="let role of roles" [value]="role.id">{{ role.name }}</option>
   </select>
+  <div class="role-text">No roles? Create a role <a routerLink="/role" class="role-link">here</a></div>
+  <div class="privacy-policy-container">
+    <label for="privacyPolicy" class="privacy-policy-label">
+      <a href="http://google.com" target="_blank">Accept Privacy Policy</a>
+    </label>
+    <input type="checkbox" id="privacyPolicy" name="privacyPolicy" ngModel required>
+    <p *ngIf="signupForm.controls['privacyPolicy']?.errors?.['required']" class="error-message error-message-centered">You must accept the privacy policy to sign up.</p>
+  </div>
   <button type="submit">Signup</button>
-  <p *ngIf="successMessage" class="success-message">{{ successMessage }}</p>
-  <p *ngIf="isLoading" class="loading-spinner"></p>
+  <a routerLink="/login" class="login-link">Back to Login</a>
 </form>
+  <p *ngIf="successMessage" class="success-message">{{ successMessage }}</p>
+  <p *ngIf="errorMessage" class="error-message">{{ errorMessage }}</p>
+  <p *ngIf="isLoading" class="loading-spinner"></p>
 </div>
 

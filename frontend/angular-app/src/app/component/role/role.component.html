@@ -5,5 +5,7 @@
     <input type="text" id="roleName" name="roleName" ngModel required>
     <button type="submit">Create Role</button>
   </form>
+  <a routerLink="/signup" class="back-link">Back to Signup</a>
+  <a routerLink="/login" class="back-link">Back to Login</a>
   <p *ngIf="errorMessage" class="error-message">{{ errorMessage }}</p>
 </div>

@@ -14,7 +14,10 @@ import { IFloor } from "../../models/ifloor.model";
 export class ConnectionComponent implements OnInit {
 
   coordinatesOption = Array.from({length: 11}, (_, i) => i );
+  filterOriginBuildingId: string = '';
+  filterDestinationBuildingId: string = '';
 
+  selectedOption: string = '';
   buildings: IBuilding[] = [];
   floors: IFloor[] = [];
   selectedConnection: IConnection | null = null;
@@ -65,6 +68,21 @@ export class ConnectionComponent implements OnInit {
       this.filteredConnections = this.connections.filter(connection => connection.connectionId.toLowerCase().includes(this.filterText.toLowerCase()));
     } else {
       this.filteredConnections = this.connections;
+    }
+  }
+
+  filterConnectionsByBuildings() {
+    this.filteredConnections = this.connections.filter(connection =>
+      connection.buildingfromId === this.filterOriginBuildingId &&
+      connection.buildingtoId === this.filterDestinationBuildingId
+    );
+  }
+
+  selectOption(option: string) {
+    if (this.selectedOption === option) {
+      this.selectedOption = '';
+    } else {
+      this.selectedOption = option;
     }
   }
 

@@ -4,46 +4,29 @@
   justify-content: center;
   align-items: center;
   font-family: Arial, sans-serif;
-  background-color: #f4f4f4;
-}
-
-form {
-  display: flex;
-  flex-direction: column;
-}
-
-input{
-  padding: 4px;
-  font-size: 12px;
-  margin-right: 2px;
-}
-
-select {
-  padding: 4px;
-  font-size: 18px;
-  margin-right: 2px;
-}
-
-.building-container h1 {
-  text-align: center;
-  color: #333;
+  background-image: url('/assets/building.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  min-height: 100vh;
+  width: 100vw;
 }
 
 .building-container form {
   display: flex;
   flex-direction: column;
   margin-bottom: 20px;
+  margin-top: 10px;
+  background-color: #f2f2f2;
+  padding: 20px;
 }
 
-
 .building-container input, .building-container select {
-  margin: 2px 0;
+  margin: 10px 0;
   padding: 8px;
   border-radius: 2px;
   border: 1px solid #ccc;
 }
-
-.building-container
 
 .building-container button {
   padding: 10px;
@@ -82,10 +65,46 @@ select {
   background-color: #ddd;
 }
 
+.header-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(255, 255, 255, 0.8); /* white with 80% opacity */
+  padding: 10px;
+  border-radius: 5px;
+  margin-top: 40px;
+}
+.header-container h1 {
+  margin: 0;
+  font-size: 24px;
+  color: #007bff;
+  font-weight: bold;
+}
+
+.list-edit-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 90%;
+}
+
+.list-edit-container table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: #f2f2f2
+}
+
+.filter-id,
+
+.filter-floors {
+  margin-bottom: 1rem;
+}
+
+
 .floor-div {
   /* Add your styles here */
   padding: 5px;
-  background-color: #e8e8e8;
+  background-color: #f2f2f2;
   margin-bottom: 5px;
 }
 
@@ -109,6 +128,7 @@ select {
   background-color: #f2f2f2;
   margin-bottom: 5px;
 }
+
 .success-message {
   background-color: #d4edda;
   color: #155724;
@@ -121,25 +141,5 @@ select {
   border: 1px solid #f5c6cb;
 }
 
-.building-container select {
-  padding: 4px;
-  font-size: 18px;
-  margin-right: 2px;
-  margin-bottom: 10px;
-  margin-top: 10px;
-}
 
-.building-container button {
-  padding: 10px;
-  border: none;
-  border-radius: 5px;
-  background-color: #007bff;
-  color: white;
-  cursor: pointer;
-  margin-top: 10px;
-  margin-bottom: 10px;
-}
 
-.building-container button:hover {
-  background-color: #0056b3;
-}

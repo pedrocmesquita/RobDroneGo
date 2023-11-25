@@ -1,7 +1,12 @@
 <div class="connection-container">
   <p *ngIf="successMessage" class="success-message">{{ successMessage }}</p>
   <p *ngIf="errorMessage" class="error-message">{{ errorMessage }}</p>
-  <h1>Create Connections</h1>
+  <div class="header-container">
+  <h1>Connection Component</h1>
+  </div>
+  <button (click)="selectOption('create')">Create Building</button>
+  <button (click)="selectOption('listOrEdit')">List or Edit Building</button>
+  <div *ngIf="selectedOption === 'create'">
   <form (ngSubmit)="createConnection()">
     <label>Origin Building ID</label>
     <select [(ngModel)]="newConnection.buildingfromId" name="buildingfromId">
@@ -41,10 +46,23 @@
       </select>
     <button type="submit">Create Connection</button>
   </form>
-
+  </div>
+  <div *ngIf="selectedOption === 'listOrEdit'" class="list-edit-container">
+    <div class="filtercon-id">
+  <label>Origin ID</label>
+  <select [(ngModel)]="filterOriginBuildingId">
+    <option *ngFor="let building of buildings" [value]="building.buildingId">{{ building.buildingId }}</option>
+  </select>
+  <label>Destination ID</label>
+  <select [(ngModel)]="filterDestinationBuildingId">
+    <option *ngFor="let building of buildings" [value]="building.buildingId">{{ building.buildingId }}</option>
+  </select>
+  <button (click)="filterConnectionsByBuildings()">Filter</button>
+    </div>
+    <div class="filter-id">
   <input [(ngModel)]="filterText" placeholder="Filter by ID">
   <button (click)="filterConnections()">Filter</button>
-
+    </div>
   <table>
     <thead>
     <tr>
@@ -73,3 +91,5 @@
     </tbody>
   </table>
 </div>
+</div>
+

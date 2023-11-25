@@ -2,6 +2,8 @@ import { Component } from "@angular/core";
 import { AuthService } from "../../services/auth.service";
 import { NgForm } from "@angular/forms";
 import { Router } from "@angular/router";
+import { Validators, AbstractControl } from '@angular/forms';
+
 
 @Component({
   selector: 'app-signup',
@@ -27,7 +29,7 @@ export class SignupComponent {
   }
   onSubmit(form: NgForm) {
     if (form.invalid) {
-      this.errorMessage = 'Please fill out all fields';
+      this.errorMessage = 'Please fill out all fields correctly';
       return;
     }
 
@@ -62,5 +64,16 @@ export class SignupComponent {
         this.isLoading = false;
       }
     );
+  }
+
+  passwordValidator(control: AbstractControl): { [key: string]: boolean } | null {
+    const password = control.value;
+    const hasNumber = /\d/.test(password);
+    const hasMinLength = password.length >= 5;
+    if (hasNumber && hasMinLength) {
+      return null;
+    } else {
+      return { 'passwordStrength': true };
+    }
   }
 }

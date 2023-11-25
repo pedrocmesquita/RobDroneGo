@@ -1,11 +1,13 @@
 <div class="robot-container">
   <p *ngIf="successMessage" class="success-message">{{ successMessage }}</p>
   <p *ngIf="errorMessage" class="error-message">{{ errorMessage }}</p>
-  <h1>Create Robot</h1>
+  <div class="header-container">
+  <h1>Robot Component</h1>
+  </div>
+  <button (click)="selectOption('create')">Create Building</button>
+  <button (click)="selectOption('listOrEdit')">List or Edit Building</button>
+  <div *ngIf="selectedOption === 'create'">
   <form (ngSubmit)="createRobot()">
-
-
-
     <input [(ngModel)]="newRobot.idRobot" name="idRobot" placeholder="ID">
     <input [(ngModel)]="newRobot.robotName" name="robotName" placeholder="Robot Name">
 
@@ -22,10 +24,12 @@
     </select>
     <button type="submit">Create Robot</button>
   </form>
-
+</div>
+    <div *ngIf="selectedOption === 'listOrEdit'" class="list-edit-container">
+      <div class="filter-id">
   <input [(ngModel)]="filterText" placeholder="Filter by ID">
   <button (click)="filterRobots()">Filter</button>
-
+      </div>
   <table>
     <thead>
     <tr>
@@ -49,4 +53,5 @@
     </tr>
     </tbody>
   </table>
+</div>
 </div>

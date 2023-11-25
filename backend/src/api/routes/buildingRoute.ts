@@ -56,23 +56,6 @@ export default (app: Router) => {
 
     route.get("",  (req, res, next) => ctrl.getBuildings(req, res, next));
 
-    /*{
-      // @ts-ignore
-      if (req.auth.role != req.gestorDeCampusRole.id && req.auth.role != req.adminRole.id) {
-
-        return res.status(403).json({ error: "Unauthorized access" });
-      } else {
-        // User has the "Gestor de Campus" role, proceed with the controller logic
-        try {
-
-          ctrl.getBuildings(req, res, next);
-        } catch (error) {
-          next(error);
-        }
-      }
-
-    });*/
-
 
     route.delete("/:buildingId", (req, res, next) => ctrl.deleteBuilding(req, res, next));
 

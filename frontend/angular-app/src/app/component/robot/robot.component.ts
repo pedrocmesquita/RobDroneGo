@@ -13,7 +13,7 @@ import { bool } from "three/examples/jsm/nodes/shadernode/ShaderNodeBaseElements
   styleUrl: './robot.component.css',
 })
 export class RobotComponent implements OnInit{
-
+  selectedOption: string = '';
   robotTypes: IRobotType[] = [];
   selectedRobot: IRobot | null = null;
   robots: IRobot[] = [];
@@ -57,6 +57,14 @@ export class RobotComponent implements OnInit{
       this.filteredRobots = this.robots.filter(robot => robot.idRobot.toLowerCase().includes(this.filterText.toLowerCase()));
     } else {
       this.filteredRobots = this.robots;
+    }
+  }
+
+  selectOption(option: string) {
+    if (this.selectedOption === option) {
+      this.selectedOption = '';
+    } else {
+      this.selectedOption = option;
     }
   }
 

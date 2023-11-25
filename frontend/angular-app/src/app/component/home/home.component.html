@@ -1,9 +1,10 @@
+
 <div class="home-container">
   <header class="home-header">
     <div>
       <h1>Welcome to RobDroneGo</h1>
     </div>
-    <div *ngIf="currentUser">
+    <div *ngIf="currentUser" class="user">
       <p>Hello, {{ currentUser.firstName + " " +currentUser.lastName}}!</p>
     </div>
   </header>
@@ -65,3 +66,4 @@
     </div>
   </nav>
 </div>
+

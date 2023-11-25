@@ -1,6 +1,10 @@
 body {
   background-color: #f4f4f4;
   font-family: Arial, sans-serif;
+
+}
+.login-form label {
+  display: block;
 }
 
 .login-container {
@@ -9,6 +13,13 @@ body {
   justify-content: center;
   align-items: center;
   height: 100vh;
+  padding: 1rem;
+  background-image: url('/assets/root.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  min-height: 100vh;
+  width: 100vw;
 }
 
 h1 {
@@ -16,6 +27,7 @@ h1 {
   text-align: center;
   color: #333;
   font-size: 2em;
+
 }
 
 .login-form {
@@ -27,7 +39,7 @@ h1 {
 }
 
 .login-form input {
-  width: 100%;
+  width: 80%;
   padding: 10px;
   margin-bottom: 10px;
   border: 1px solid #ccc;
@@ -35,7 +47,7 @@ h1 {
 }
 
 .login-form button {
-  width: 100%;
+  width: 87%;
   padding: 10px;
   background-color: #007bff;
   color: white;

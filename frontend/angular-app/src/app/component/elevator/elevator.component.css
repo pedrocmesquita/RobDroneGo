@@ -1,96 +1,134 @@
 .elevator-container {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    font-family: Arial, sans-serif;
-    background-color: #f4f4f4;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-family: Arial, sans-serif;
+  background-image: url('/assets/elevator.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  min-height: 100vh;
+  width: 100vw;
 }
 
-form {
-    display: flex;
-    flex-direction: column;
+.elevator-container form {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 20px;
+  margin-top: 10px;
+  background-color: #f2f2f2;
+  padding: 20px;
 }
 
-input, select {
-    margin-bottom: 10px;
-    padding: 10px;
-    font-size: 16px;
+.elevator-container input, .elevator-container select {
+  margin: 10px 0;
+  padding: 8px;
+  border-radius: 2px;
+  border: 1px solid #ccc;
 }
 
-button {
-    padding: 10px;
-    background-color: #007bff;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    margin-bottom: 20px;
+.elevator-container button {
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  background-color: #007bff;
+  color: white;
+  cursor: pointer;
+  margin-top: 10px;
 }
 
-button:hover {
-    background-color: #0056b3;
+.elevator-container button:hover {
+  background-color: #0056b3;
 }
 
-.elevator-container div {
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    padding: 10px;
-    margin-bottom: 10px;
-    width: 80%;
+.elevator-container table {
+  width: 100%;
+  border-collapse: collapse;
 }
 
-.elevator-container h2 {
-    margin: 0;
-    margin-bottom: 10px;
-    font-size: 1.5em;
+.elevator-container th, .elevator-container td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
 }
 
-.elevator-container p {
-    margin: 0;
-    margin-bottom: 5px;
-    font-size: 1em;
+.elevator-container th {
+  background-color: #f2f2f2;
 }
 
-:root {
-    --success-bg-color: #dff0d8;
-    --success-text-color: #3c763d;
+.elevator-container tr:nth-child(even) {
+  background-color: #f2f2f2;
 }
 
-.success-message {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background-color: var(--success-bg-color);
-    color: var(--success-text-color);
-    padding: 2.5rem;
-    border-radius: 0.625rem;
-    z-index: 1000;
-    text-align: center;
-    transition: opacity 0.3s ease;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.15);
-    font-size: 2rem;
+.elevator-container tr:hover {
+  background-color: #ddd;
 }
 
-button:disabled {
-    background-color: #ccc;
-    cursor: not-allowed;
+.header-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(255, 255, 255, 0.8); /* white with 80% opacity */
+  padding: 10px;
+  border-radius: 5px;
+  margin-top: 40px;
+}
+.header-container h1 {
+  margin: 0;
+  font-size: 24px;
+  color: #007bff;
+  font-weight: bold;
 }
 
-table {
-    width: 100%;
-    border-collapse: collapse;
+.list-edit-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 90%;
 }
 
-table, th, td {
-    border: 1px solid #ccc;
+.list-edit-container table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: #f2f2f2
 }
 
-th, td {
-    padding: 10px;
-    text-align: left;
+.filter-id,
+
+.filter-floors {
+  margin-bottom: 1rem;
 }
+
+
+.floor-div {
+  /* Add your styles here */
+  padding: 5px;
+  background-color: #f2f2f2;
+  margin-bottom: 5px;
+}
+
+.connection-div {
+  /* Add your styles here */
+  padding: 5px;
+  background-color: #f2f2f2;
+  margin-bottom: 5px;
+}
+
+.room-div {
+  /* Add your styles here */
+  padding: 5px;
+  background-color: #f2f2f2;
+  margin-bottom: 5px;
+}
+
+.elevator-div {
+  /* Add your styles here */
+  padding: 5px;
+  background-color: #f2f2f2;
+  margin-bottom: 5px;
+}
+
 .success-message {
   background-color: #d4edda;
   color: #155724;
@@ -102,3 +140,6 @@ th, td {
   color: #721c24;
   border: 1px solid #f5c6cb;
 }
+
+
+

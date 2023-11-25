@@ -15,6 +15,8 @@ export class RobotTypeComponent implements OnInit{
     'Vigilance',
     'PickUpAndDelivery',
   ];
+
+  selectedOption: string = '';
   selectedRobotType: IRobotType | null = null;
   robotTypes: IRobotType[] = [];
   filteredRobotTypes: IRobotType[] = [];
@@ -51,7 +53,13 @@ export class RobotTypeComponent implements OnInit{
       this.filteredRobotTypes = this.robotTypes;
     }
   }
-
+  selectOption(option: string) {
+    if (this.selectedOption === option) {
+      this.selectedOption = '';
+    } else {
+      this.selectedOption = option;
+    }
+  }
   createRobotType(): void {
     this.robotTypeService.createRobotType(this.newRobotType).subscribe(
       (robotType) => {

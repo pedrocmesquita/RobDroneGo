@@ -15,6 +15,8 @@ export class RoomComponent implements OnInit {
   doorOptions = Array.from({length: 11}, (_, i) => i );
   coordinateOptions = Array.from({length: 11}, (_, i) => i );
 
+  selectedOption: string = '';
+
   selectedRoom: IRoom | null = null;
   rooms: IRoom[] = [];
   floors: IFloor[] = [];
@@ -60,6 +62,14 @@ export class RoomComponent implements OnInit {
       this.filteredRooms = this.rooms.filter(room => room.roomId.toLowerCase().includes(this.filterText.toLowerCase()));
     } else {
       this.filteredRooms = this.rooms;
+    }
+  }
+
+  selectOption(option: string) {
+    if (this.selectedOption === option) {
+      this.selectedOption = '';
+    } else {
+      this.selectedOption = option;
     }
   }
 

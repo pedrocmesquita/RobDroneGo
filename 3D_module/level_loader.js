@@ -1,5 +1,6 @@
 
 
+
 function getBuildingsFromBackend() {
     return new Promise((resolve, reject) => {
         const xhr = new XMLHttpRequest();
@@ -65,9 +66,16 @@ async function displaySelectors(selectedBuilding, selectedFloor) {
         goButton.innerText = 'Go';
         goButton.addEventListener('click', goToBuilding);
 
+        // Create a home button that redirects to the home page
+        const homeButton = document.createElement('button');
+        homeButton.innerText = 'Home';
+        homeButton.addEventListener('click', () => {
+            window.open('http://localhost:4200/home', '_blank');
+        });
         // Append the button to the building-container div
         const container = document.getElementById('building-container');
         container.appendChild(goButton);
+        container.appendChild(homeButton);
 
         // Trigger the change event to populate the floor select element
         buildingSelect.dispatchEvent(new Event('change'));
@@ -101,3 +109,5 @@ async function goToBuilding() {
         alert("The selected building and floor do not exist");
     }
 }
+
+

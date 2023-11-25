@@ -66,6 +66,7 @@ export class Floor extends AggregateRoot<FloorProps> {
                     map[y][x] = 3;
                 }
             }
+
             // Mark the door on the map
             map[room.door.doorY][room.door.doorX] = 1;
         }

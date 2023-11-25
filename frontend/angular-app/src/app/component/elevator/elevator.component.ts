@@ -15,6 +15,7 @@ export class ElevatorComponent implements OnInit {
   floorOptions = Array.from({length: 10}, (_, i) => i + 1);
   coordinateOptions = Array.from({length: 11}, (_, i) => i);
 
+  selectedOption: string = '';
   selectedElevator: IElevator | null = null;
   selectedFloors: string[] = [];
   elevators: IElevator[] = [];
@@ -67,6 +68,14 @@ export class ElevatorComponent implements OnInit {
       this.filteredElevators = this.elevators.filter(elevator => elevator.elevatorId.toLowerCase().includes(this.filterText.toLowerCase()));
     } else {
       this.filteredElevators = this.elevators;
+    }
+  }
+
+  selectOption(option: string) {
+    if (this.selectedOption === option) {
+      this.selectedOption = '';
+    } else {
+      this.selectedOption = option;
     }
   }
 

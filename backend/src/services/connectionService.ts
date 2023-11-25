@@ -116,26 +116,85 @@ export default class ConnectionService implements IConnectionService {
       const connectionResult = connectionOrError.getValue();
 
       await this.connectionRepo.update(connectionResult);
-      await this.floorRepo.deleteAllConnectionsFromFloor(connectionDTO.connectionId);
-      await this.buildingRepo.deleteAllConnectionsFromBuilding(connectionDTO.connectionId);
 
-      const newFloorFrom = await this.floorRepo.findByFloorId(connectionResult.floorfromId);
-      const newFloorTo = await this.floorRepo.findByFloorId(connectionResult.floortoId);
+      const floorFrom= await this.floorRepo.findByFloorId(connectionResult.floorfromId);
+      const floorTo= await this.floorRepo.findByFloorId(connectionResult.floortoId);
+      console.log("1 - ", connectionResult);
 
-      newFloorFrom.addConnection(connectionResult);
-      newFloorTo.addConnection(connectionResult);
+      console.log("2 - ", floorFrom.connections);
+      //Remove old connection from floorFrom
+      const oldConnectionFrom = floorFrom.connections.find(existingConnection => existingConnection.connectionId === connectionResult.connectionId);
 
-      await this.floorRepo.update(newFloorFrom);
-      await this.floorRepo.update(newFloorTo);
+      if (oldConnectionFrom) {
+      floorFrom.connections.splice(floorFrom.connections.indexOf(oldConnectionFrom), 1);
+      } else
+      {
+        console.log("Connection not found");
+        return Result.fail<IConnectionDTO>("Connection not found");
+      }
 
-      const newBuildingFrom = await this.buildingRepo.findByBuildingId(newFloorFrom.buildingId);
-      const newBuildingTo = await this.buildingRepo.findByBuildingId(newFloorTo.buildingId);
+      floorFrom.addConnection(connectionResult);
 
-      newBuildingFrom.addConnectionToFloor(newFloorFrom.floorId, connectionResult);
-      newBuildingTo.addConnectionToFloor(newFloorTo.floorId, connectionResult);
+      await this.floorRepo.update(floorFrom);
 
-      await this.buildingRepo.updateConnections(newBuildingFrom);
-      await this.buildingRepo.updateConnections(newBuildingTo);
+      //Remove old connection from floorTo
+      const oldConnectionTo = floorTo.connections.find(existingConnection => existingConnection.connectionId === connectionResult.connectionId);
+
+      if (oldConnectionTo) {
+      floorTo.connections.splice(floorTo.connections.indexOf(oldConnectionTo), 1);
+      }
+      else
+      {
+        console.log("Connection not found");
+        return Result.fail<IConnectionDTO>("Connection not found");
+      }
+
+      floorTo.addConnection(connectionResult);
+
+      await this.floorRepo.update(floorTo);
+
+      //await this.floorRepo.deleteAllConnectionsFromFloor(connectionDTO.connectionId);
+      //await this.buildingRepo.deleteAllConnectionsFromBuilding(connectionDTO.connectionId);
+
+      // Retrieve buildings
+      const buildingFrom = await this.buildingRepo.findByBuildingId(floorFrom.buildingId);
+      const buildingTo = await this.buildingRepo.findByBuildingId(floorTo.buildingId);
+
+      //Update building
+      buildingFrom.addConnectionToFloor(floorFrom.floorId, connectionResult);
+      buildingTo.addConnectionToFloor(floorTo.floorId, connectionResult);
+
+      // Remove old connection from buildingFrom
+      const oldConnectionFromBuilding = buildingFrom.connections.find(existingConnection => existingConnection.connectionId === connectionResult.connectionId);
+
+      if (oldConnectionFromBuilding) {
+      buildingFrom.connections.splice(buildingFrom.connections.indexOf(oldConnectionFromBuilding), 1);
+      }
+      else
+      {
+        console.log("Connection not found");
+        return Result.fail<IConnectionDTO>("Connection not found");
+      }
+
+      buildingFrom.addConnectionToFloor(floorFrom.floorId, connectionResult);
+
+      await this.buildingRepo.updateConnections(buildingFrom);
+
+      // Remove old connection from buildingTo
+      const oldConnectionToBuilding = buildingTo.connections.find(existingConnection => existingConnection.connectionId === connectionResult.connectionId);
+
+      if (oldConnectionToBuilding) {
+      buildingTo.connections.splice(buildingTo.connections.indexOf(oldConnectionToBuilding), 1);
+      }
+      else
+      {
+        console.log("Connection not found");
+        return Result.fail<IConnectionDTO>("Connection not found");
+      }
+
+      buildingTo.addConnectionToFloor(floorTo.floorId, connectionResult);
+
+      await this.buildingRepo.updateConnections(buildingTo);
 
       const connectionDTOResult = ConnectionMap.toDTO( connectionResult ) as IConnectionDTO;
 

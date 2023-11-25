@@ -140,12 +140,20 @@ export default class BuildingRepo implements IBuildingRepo {
   public async deleteAllConnectionsFromBuilding(connectionId: string) {
     const buildings = await this.buildingSchema.find({ connections: { $elemMatch: { connectionId: connectionId } } });
 
-    buildings.forEach(async building => {
-        const index = building.floors.findIndex(floor => floor.connections.findIndex(connection => connection.connectionId === connectionId) !== -1);
-        building.floors[index].connections = building.floors[index].connections.filter(connection => connection.connectionId !== connectionId);
-        await building.save();
+    for (var i = 0; i < buildings.length; i++) {
+      const building = buildings[i];
+      const floors = building.floors;
+      //Loop through floors because they have connections
+      for (var j = 0; j < floors.length; j++) {
+        const floor = floors[j];
+        let connections = floor.connections;
+        //Create a new array of connections that does not include the connection to be deleted
+        connections = connections.filter(connection => connection.connectionId !== connectionId);
+        //Update floor with the new connections array
+        await this.floorSchema.findOneAndUpdate({ floorId: floor.floorId }, { $set: { connections: connections } });
       }
-    );
+      //Update building
+      await this.buildingSchema.findOneAndUpdate({ buildingId: building.buildingId }, { $set: { floors: floors } });
+    }
   }
-
 }

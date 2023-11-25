@@ -61,6 +61,7 @@ export class RobotTypeComponent implements OnInit{
     }
   }
   createRobotType(): void {
+    console.log("Creating robot type:", this.newRobotType);
     this.robotTypeService.createRobotType(this.newRobotType).subscribe(
       (robotType) => {
         this.robotTypes.push(robotType);

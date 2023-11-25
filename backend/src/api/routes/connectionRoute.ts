@@ -40,6 +40,10 @@ export default (app: Router) => {
     celebrate({
       body: Joi.object({
         connectionId: Joi.string().required(),
+        buildingfromId: Joi.string().required(),
+        buildingtoId: Joi.string().required(),
+        floorfromId: Joi.string().required(),
+        floortoId: Joi.string().required(),
         locationX: Joi.number().required(),
         locationY: Joi.number().required(),
         locationToX: Joi.number().required(),

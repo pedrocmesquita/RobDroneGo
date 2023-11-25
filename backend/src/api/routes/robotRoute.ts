@@ -18,9 +18,6 @@ export default (app: Router) => {
     const ctrl = Container.get(config.controllers.robot.name) as IRobotController;
     route.use(isAuth,attachCurrentUser,roleCheck(["Admin","Gestor de Frota"]));
 
-    route.use(attachCurrentUser);
-
-    route.use(roleCheck);
 
     route.post("",
         celebrate({

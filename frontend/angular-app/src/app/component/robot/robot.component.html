@@ -4,15 +4,15 @@
   <div class="header-container">
   <h1>Robot Component</h1>
   </div>
-  <button (click)="selectOption('create')">Create Building</button>
-  <button (click)="selectOption('listOrEdit')">List or Edit Building</button>
+  <button (click)="selectOption('create')">Create Robot</button>
+  <button (click)="selectOption('listOrEdit')">List Robots</button>
   <div *ngIf="selectedOption === 'create'">
   <form (ngSubmit)="createRobot()">
     <input [(ngModel)]="newRobot.idRobot" name="idRobot" placeholder="ID">
     <input [(ngModel)]="newRobot.robotName" name="robotName" placeholder="Robot Name">
 
     <label> Robot Type ID</label>
-    <select [(ngModel)]="newRobot.typeId" name="Type ID">
+    <select [(ngModel)]="newRobot.typeId" name="typeId">
       <option *ngFor="let robotType of robotTypes" [value]="robotType.typeId">{{ robotType.typeId }}</option>
     </select>
 
@@ -20,7 +20,7 @@
     <input [(ngModel)]="newRobot.description" name="description" placeholder="Description">
     <label>Active</label>
     <select [(ngModel)]="newRobot.active" name="active">
-      <option value="true">True</option>
+      <option value="true">true</option>
     </select>
     <button type="submit">Create Robot</button>
   </form>

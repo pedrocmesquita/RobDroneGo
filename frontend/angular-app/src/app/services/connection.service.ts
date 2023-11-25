@@ -35,6 +35,10 @@ export class ConnectionService {
 
     return this.http.put(`${this.apiUrl}/connections/`,  {
       connectionId: connection.connectionId,
+      buildingfromId: connection.buildingfromId,
+      buildingtoId: connection.buildingtoId,
+      floorfromId: connection.floorfromId,
+      floortoId: connection.floortoId,
       locationX: connection.locationX,
       locationY: connection.locationY,
       locationToX: connection.locationToX,

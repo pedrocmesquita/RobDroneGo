@@ -4,5 +4,5 @@ export interface IRobot {
   typeId: string;
   serialNumber: string;
   description: string;
-  active?: boolean;
+  active: boolean;
 }

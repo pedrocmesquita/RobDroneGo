@@ -4,8 +4,8 @@
   <div class="header-container">
   <h1>Connection Component</h1>
   </div>
-  <button (click)="selectOption('create')">Create Building</button>
-  <button (click)="selectOption('listOrEdit')">List or Edit Building</button>
+  <button (click)="selectOption('create')">Create Connection</button>
+  <button (click)="selectOption('listOrEdit')">List or Edit Connections</button>
   <div *ngIf="selectedOption === 'create'">
   <form (ngSubmit)="createConnection()">
     <label>Origin Building ID</label>

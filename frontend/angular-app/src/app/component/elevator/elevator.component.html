@@ -19,7 +19,7 @@
         <option [value]="floor">{{ floor }}</option>
       </ng-container>
     </select>
-    <p>You have selected {{ selectedFloors?.length }} floor(s).</p>
+    <p>You have selected {{ selectedFloors.length }} floor(s).</p>
     <input [(ngModel)]="newElevator.elevatorBrand" name="elevatorBrand" placeholder="Elevator Brand">
     <input [(ngModel)]="newElevator.elevatorModel" name="elevatorModel" placeholder="Elevator Model">
     <input [(ngModel)]="newElevator.elevatorSerNum" name="elevatorSerNum" placeholder="Elevator Serial Number">

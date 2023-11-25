@@ -4,8 +4,8 @@
   <div class="header-container">
     <h1>Robot Type Component</h1>
   </div>
-  <button (click)="selectOption('create')">Create Building</button>
-  <button (click)="selectOption('listOrEdit')">List or Edit Building</button>
+  <button (click)="selectOption('create')">Create Robot Type</button>
+  <button (click)="selectOption('listOrEdit')">List Robot Types</button>
   <div *ngIf="selectedOption === 'create'">
   <form (ngSubmit)="createRobotType()">
     <input [(ngModel)]="newRobotType.typeId" name="typeId" placeholder="Type ID">

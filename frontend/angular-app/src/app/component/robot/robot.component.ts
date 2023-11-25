@@ -69,6 +69,7 @@ export class RobotComponent implements OnInit{
   }
 
   createRobot(): void {
+    console.log('Creating robot:', this.newRobot);
     this.robotService.createRobot(this.newRobot).subscribe(
       (robot) => {
         this.robots.push(robot);

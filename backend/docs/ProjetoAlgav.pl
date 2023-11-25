@@ -2007,7 +2007,7 @@ ligacao_edificio(cel(c,3,14,1), cel(d,3,2,9)).
 ligacao_edificio(cel(b,3,7,17), cel(c,4,7,1)).
 
 :- set_prolog_flag(answer_write_options,[max_depth(0)]).
-:- set_prolog_flag(stack_limit,8_589_934_592). %next size stack 17_179_869_184
+:- set_prolog_flag(stack_limit,17_179_869_184). %next size stack 17_179_869_184
 
 :- dynamic ligacel/2.
 :- dynamic ligacao_piso/3.
@@ -2054,11 +2054,15 @@ ligacel(Cel1, Cel2) :-
     ligacao_edificio(Cel1, Cel2);  % Verifica ligações entre edifícios
     ligacao_edificio(Cel2, Cel1).  % Verifica se a ligação entre edifícios é bidirecional
 
-% Predicado auxiliar para verificar ligações no mesmo piso
+ligacel_piso(cel(Edificio, Piso, Col, Lin), cel(Edificio, Piso, Col, LinS)) :-
+    m(Edificio, Piso, Col, Lin, 0),
+    m(Edificio, Piso, Col, LinS, 0),
+    LinS is Lin + 1.
+
 ligacel_piso(cel(Edificio, Piso, Col, Lin), cel(Edificio, Piso, ColS, Lin)) :-
     m(Edificio, Piso, Col, Lin, 0),
-    m(Edificio, Piso, ColS, Lin, 0).
-
+    m(Edificio, Piso, ColS, Lin, 0),
+    ColS is Col + 1.
 
 %Inicia a pesquisa em profundidade
 dfs(Orig, Dest, Cam):- 
@@ -2078,8 +2082,6 @@ ligacao(Act, Next) :-
     (ligacao_piso(_, Act, Next); ligacao_piso(_, Next, Act); 
      ligacao_edificio(Act, Next); ligacao_edificio(Next, Act)).
 
-
-
 %Encontra o caminho mais curto
 better_dfs(Orig, Dest, Cam):- 
     all_dfs(Orig, Dest, LCam), 
@@ -2096,7 +2098,6 @@ shortlist([L|LL], Lm, Nm):-
     shortlist(LL, Lm1, Nm1),
     length(L, NL),
     ((NL < Nm1, !, Lm = L, Nm is NL); (Lm = Lm1, Nm is Nm1)).
-
 
 % BFS 
 bfs(Inicio, Fim, Caminho) :-
@@ -2115,9 +2116,6 @@ bfs_aux(_, [], _, []).
 
 cria_novo_caminho(Caminho, Prox, [Prox|Caminho]).
 
-
-
-
 % Predicado de inicialização
 :- initialization(cria_grafos).
 
@@ -2135,9 +2133,6 @@ cria_grafos :-
     cria_grafo(b,3,8,17),
     cria_grafo(c,4,15,9).
 
-
-% A* algorithm with ligacel (without heuristic estimation)
-% A* algorithm with ligacel and heuristic estimation
 aStar(Orig, Dest, Cam, Custo):-
     aStar2(Dest, [(_, 0, [Orig])], [], Cam, Custo).
 
@@ -2160,7 +2155,5 @@ aStar2(Dest, [(_, Ca, LA)|Outros], Visitados, Cam, Custo):-
     sort(Todos, TodosOrd),
     aStar2(Dest, TodosOrd, VisitadosAtualizados, Cam, Custo).
 
-% Example heuristic function (Euclidean distance)
-heuristic(cel(_, X1, Y1, _), cel(_, X2, Y2, _), Estimativa):-
-    Estimativa is sqrt((X1 - X2)^2 + (Y1 - Y2)^2).
-
+heuristic(cel(_, _, X1, Y1), cel(_, _, X2, Y2), Estimativa) :-
+    Estimativa is abs(X2 - X1) + abs(Y2 - Y1).

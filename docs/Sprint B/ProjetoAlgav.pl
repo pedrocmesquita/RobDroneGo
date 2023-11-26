@@ -2147,7 +2147,7 @@ aStar2(Dest, [(_, Ca, LA)|Outros], Visitados, Cam, Custo):-
              \+ member(X, Visitados),
              \+ member(X, LA),
              CaX is Ca + 1,  % Cost from start to current node
-             heuristic(X, Dest, EstX),  % Heuristic estimation from current node to goal
+             heuristic(X, Dest, EstX),  % node to goal estimation
              CEX is CaX + EstX),  % Total cost including heuristic
             Novos),
     append(Outros, Novos, Todos),
@@ -2157,3 +2157,5 @@ aStar2(Dest, [(_, Ca, LA)|Outros], Visitados, Cam, Custo):-
 
 heuristic(cel(_, _, X1, Y1), cel(_, _, X2, Y2), Estimativa) :-
     Estimativa is abs(X2 - X1) + abs(Y2 - Y1).
+
+    

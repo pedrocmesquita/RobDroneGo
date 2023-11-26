@@ -1,0 +1,26 @@
+
+name: deployment schedule
+
+on:
+  schedule:
+    - cron: '0 3 * * *'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: Run tests
+        run: npx test
+
+
+
+      - name: deploy and build
+        if: success()
+        run: |
+          ng build --configuration=production
+          scp –r dist root@10.9.22.76:/var/www/frontend
+
+
+

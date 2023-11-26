@@ -1,0 +1,31 @@
+@startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+title Container Sequence Diagram (SD) - US1100 (N3)
+
+autonumber
+
+actor "Gestor de Campus"
+
+activate "Gestor de Campus"
+"Gestor de Campus" -> "<<C4:Container>>\n:Visualização": Inicia operação de listar pisos de edificio
+activate "<<C4:Container>>\n:Visualização"
+"<<C4:Container>>\n:Visualização" -> Component: ngInit()
+activate Component
+Component -> Service: getFloors()
+activate Service
+Service -> "<<C4:Container>>\nMódulo de Gestão\nde Informação" : getFloors()
+activate "<<C4:Container>>\nMódulo de Gestão\nde Informação"
+"<<C4:Container>>\nMódulo de Gestão\nde Informação" --> Service : Lista de pisos de edificio
+deactivate "<<C4:Container>>\nMódulo de Gestão\nde Informação"
+Service --> Component : Lista de pisos de edificio
+deactivate Service
+Component --> "<<C4:Container>>\n:Visualização" : floors
+deactivate Component
+
+"<<C4:Container>>\n:Visualização" --> "Gestor de Campus": Mostra lista de pisos de edificio\npresentes no sistema
+deactivate "<<C4:Container>>\n:Visualização"
+
+@enduml

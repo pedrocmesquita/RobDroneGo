@@ -197,32 +197,42 @@ export default class ThreeDService implements IThreeDService {
 
 
     toJsonObject(building: Building,floor: Floor, doormap: Number[][],elevatormap: Number[][],connectionmap: Number[][]): any {
-        let transposedMap = this.transpose(floor.map);
-        let formattedMap = transposedMap.map(row => '\n' + row.join(',\n')).join(',\n');
         return {
-            "groundTextureUrl":"./textures/ground.jpg","wallTextureUrl":"./textures/wall2.jpg","doorTextureUrl":"./textures/door.jpg","elevatorTextureUrl":"./textures/elevator.jpg","size":{"width":10,"height":10},"map":[
-                [3,3,3,3,3,3,3,3,3,3]
-                ,[3,0,0,0,3,0,0,0,0,3]
-                ,[3,0,0,0,3,0,0,0,0,3]
-                ,[3,0,0,0,3,0,0,0,0,3]
-                ,[3,0,0,0,3,0,0,0,0,3]
-                ,[3,0,0,0,3,0,0,0,0,3]
-                ,[3,0,0,0,3,0,0,0,0,3]
-                ,[3,0,0,0,3,0,0,0,0,3]
-                ,[3,0,0,0,0,0,0,0,3,3]
-                ,[3,2,2,2,3,3,3,3,3,3]
-            ]
-            ,"doors":[[1,3,2]
-                ,[7,7,2]
-                ,[10,6,2]
-            ]
-            ,"elevators":[[8,7,1]
-            ]
-            ,"accesses":[[4,8,1]
-            ]
-            ,"initialPosition":[0,6]
-            ,"initialDirection":0.0,"exitLocation":[-0.5,6]
-        };
+            "groundTextureUrl": "./textures/ground.jpg",
+            "wallTextureUrl": "./textures/wall2.jpg",
+            "doorTextureUrl": "./textures/door.jpg",
+            "elevatorTextureUrl": "./textures/elevator.jpg",
+            "size": { "width": 10, "height": 10 },
+            "map": [
+                [3, 2, 2, 3, 2, 2, 3, 2, 2, 2, 1],
+                [1, 0, 0, 1, 0, 0, 1, 0, 0, 0, 1],
+                [1, 0, 0, 1, 0, 0, 1, 0, 0, 0, 1],
+                [1, 0, 0, 1, 0, 0, 1, 0, 0, 0, 1],
+                [3, 2, 0, 2, 2, 0, 2, 2, 2, 2, 1],
+                [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+                [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+                [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+                [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+                [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+                [2, 2, 2, 2, 2, 0, 2, 2, 2, 0, 0]
+            ],
+            "doors": [
+                [4,2,1],
+                [1,3,2]
+            ],
+            "elevators": [
+                [10,5,1],
+                [5,0,2]
+
+            ],
+            "accesses": [
+                [10,9,1],
+                [4,5,1]
+            ],
+            "initialPosition": [7, 6],
+            "initialDirection": 0.0,
+            "exitLocation": [-0.5, 6]
+        }
     }
 
     transpose(matrix) {
@@ -240,7 +250,7 @@ export default class ThreeDService implements IThreeDService {
             "doors": doormap,
             "elevators": elevatormap,
             "accesses": connectionmap,
-            "initialPosition": [0, 6],
+            "initialPosition": [(floor.width/2)+1, (floor.height/2)-1],
             "initialDirection": 0.0,
             "exitLocation": [-0.5, 6]
         };

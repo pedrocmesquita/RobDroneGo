@@ -1,0 +1,43 @@
+@startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+title Container Sequence Diagram (SD) - US1200 (N3)
+
+autonumber
+
+actor "Gestor de Campus"
+
+activate "Gestor de Campus"
+"Gestor de Campus" -> "<<C4:Container>>\n:Visualização": Inicia operação de listar pisos de edifício\ncom passagem para outros edifícios
+activate "<<C4:Container>>\n:Visualização"
+"<<C4:Container>>\n:Visualização" -> Component: ngInit()
+activate Component
+deactivate Service
+Component -> Service : getFloors()
+activate Service
+
+Service -> "<<C4:Container>>\nMódulo de Gestão\nde Informação" : getFloors()
+activate "<<C4:Container>>\nMódulo de Gestão\nde Informação"
+"<<C4:Container>>\nMódulo de Gestão\nde Informação" --> Service: Lista de pisos de edificio
+deactivate "<<C4:Container>>\nMódulo de Gestão\nde Informação"
+Service --> Component: Lista de pisos de edificio
+deactivate Service
+Component --> "<<C4:Container>>\n:Visualização" : floors
+deactivate Component
+
+"<<C4:Container>>\n:Visualização" --> "Gestor de Campus": Solicita id do edifício
+deactivate "<<C4:Container>>\n:Visualização"
+
+"Gestor de Campus" -> "<<C4:Container>>\n:Visualização": Introduz dados solicitados
+activate "<<C4:Container>>\n:Visualização"
+"<<C4:Container>>\n:Visualização" -> Component : filterFloorsWithConnections()
+activate Component
+Component --> "<<C4:Container>>\n:Visualização" : floors
+deactivate Component
+deactivate "<<C4:Container>>\nMódulo de Gestão\nde Informação"
+"Gestor de Campus" <-- "<<C4:Container>>\n:Visualização": Lista de pisos de edificio no edificio\nescolhido com passagens para outros\nedifícios
+deactivate "<<C4:Container>>\n:Visualização"
+
+@enduml

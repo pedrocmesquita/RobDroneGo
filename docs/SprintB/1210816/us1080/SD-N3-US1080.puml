@@ -1,0 +1,43 @@
+@startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+title Container Sequence Diagram (SD) - US1080 (N3)
+
+autonumber
+
+actor "Gestor de Campus"
+
+activate "Gestor de Campus"
+"Gestor de Campus" -> "<<C4:Container>>\n:Visualização": Inicia operação de listar edifícios\ncom mínimo e máximo de pisos
+activate "<<C4:Container>>\n:Visualização"
+"<<C4:Container>>\n:Visualização" -> Component: ngInit()
+activate Component
+deactivate Service
+Component -> Service : getBuildings()
+activate Service
+
+Service -> "<<C4:Container>>\nMódulo de Gestão\nde Informação" : getBuildings()
+activate "<<C4:Container>>\nMódulo de Gestão\nde Informação"
+"<<C4:Container>>\nMódulo de Gestão\nde Informação" --> Service: Lista de edificios
+deactivate "<<C4:Container>>\nMódulo de Gestão\nde Informação"
+Service --> Component: Lista de edificios
+deactivate Service
+Component --> "<<C4:Container>>\n:Visualização" : buildings
+deactivate Component
+
+"<<C4:Container>>\n:Visualização" --> "Gestor de Campus": Solicita máximo e minimo de pisos
+deactivate "<<C4:Container>>\n:Visualização"
+
+"Gestor de Campus" -> "<<C4:Container>>\n:Visualização": Introduz dados solicitados
+activate "<<C4:Container>>\n:Visualização"
+"<<C4:Container>>\n:Visualização" -> Component : filterBuildingsByFloors()
+activate Component
+Component --> "<<C4:Container>>\n:Visualização" : buildings
+deactivate Component
+deactivate "<<C4:Container>>\nMódulo de Gestão\nde Informação"
+"Gestor de Campus" <-- "<<C4:Container>>\n:Visualização": Lista de edificios com os critérios\npedidos
+deactivate "<<C4:Container>>\n:Visualização"
+
+@enduml

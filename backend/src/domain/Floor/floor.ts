@@ -65,8 +65,6 @@ export class Floor extends AggregateRoot<FloorProps> {
             map[this.props.height][j] = 2; // South wall
         }
 
-
-
         // Set room walls
         for (let room of this.props.rooms) {
             for (let i = room.originCoordinateY; i <= room.destinationCoordinateY; i++) {
@@ -76,16 +74,19 @@ export class Floor extends AggregateRoot<FloorProps> {
                         // If it's at a corner position with the outer wall, set it to 3
                         map[i][j] = 3; // Room wall
 
-                        } else if (i === room.originCoordinateY || i === room.destinationCoordinateY) {
-                            // If it's a north/south wall, mark it as 2
-                                map[i][j] = 2; // Room wall
+                    } else if (i === room.originCoordinateY || i === room.destinationCoordinateY) {
+                        // If it's a north/south wall, mark it as 2
+                        map[i][j] = 2; // Room wall
 
-                        } else if (j === room.originCoordinateX || j === room.destinationCoordinateX) {
-                            // If it's an east/west wall, mark it as 1
-                                map[i][j] = 1; // Room wall
-                        }
+                    } else if (j === room.originCoordinateX || j === room.destinationCoordinateX) {
+                        // If it's an east/west wall, mark it as 1
+                        map[i][j] = 1; // Room wall
+                    } else
+                    {
+                        map[i][j] = 0
                     }
                 }
+            }
         }
 
         // Set the top right cell to 1 and the top left cell to 3

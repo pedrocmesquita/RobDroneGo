@@ -1,0 +1,21 @@
+@startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+title System Sequence Diagram (SSD) - US1200
+
+autonumber
+
+actor "Gestor de Campus"
+
+activate "Gestor de Campus"
+"Gestor de Campus" -> "<<C4:System>>\n:RobDroneGo": Solicita a listagem de todos os pisos de um edifício\ncom passagens para outros edifícios
+activate "<<C4:System>>\n:RobDroneGo"
+"Gestor de Campus" <-- "<<C4:System>>\n:RobDroneGo": Solicita edifício para qual pretende a listagem
+deactivate "<<C4:System>>\n:RobDroneGo"
+"Gestor de Campus" -> "<<C4:System>>\n:RobDroneGo": Introduz id do edifício para o qual pretende a listagem
+activate "<<C4:System>>\n:RobDroneGo"
+"Gestor de Campus" <-- "<<C4:System>>\n:RobDroneGo": Lista de pisos do edifícios com passagens\npara outros edifícios
+deactivate "<<C4:System>>\n:RobDroneGo"
+@enduml

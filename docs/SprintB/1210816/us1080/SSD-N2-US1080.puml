@@ -1,0 +1,28 @@
+@startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+title Container Sequence Diagram (SSD) - US1080 (N2)
+
+autonumber
+
+actor "Gestor de Campus"
+
+activate "Gestor de Campus"
+"Gestor de Campus" -> "<<C4:Container>>\n:Visualização": Requesita a listagem dos edifícios com\nmáximo e mínimo de pisos
+activate "<<C4:Container>>\n:Visualização"
+"<<C4:Container>>\n:Visualização" -> "<<C4:Container>>\nMódulo de Gestão\nde Informação": GET /buildings/
+activate "<<C4:Container>>\nMódulo de Gestão\nde Informação"
+"<<C4:Container>>\nMódulo de Gestão\nde Informação" --> "<<C4:Container>>\n:Visualização": 200 OK buildings
+deactivate "<<C4:Container>>\nMódulo de Gestão\nde Informação"
+"<<C4:Container>>\n:Visualização" -> "Gestor de Campus": Solicita informação necessária\npara a listagem dos edifícios (max e min)
+deactivate "<<C4:Container>>\n:Visualização"
+"Gestor de Campus" -> "<<C4:Container>>\n:Visualização": Apresenta dados necessários
+activate "<<C4:Container>>\n:Visualização"
+"<<C4:Container>>\n:Visualização" -> "<<C4:Container>>\n:Visualização": filterBuildingsByFloors()
+"Gestor de Campus" <-- "<<C4:Container>>\n:Visualização": Imprime lista de edifícios\ncom os parâmetros desejados
+deactivate "<<C4:Container>>\n:Visualização"
+deactivate "Gestor de Campus"
+
+@enduml

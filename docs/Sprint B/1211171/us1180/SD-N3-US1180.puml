@@ -3,13 +3,13 @@ skinparam monochrome true
 skinparam packageStyle rectangle
 skinparam shadowing false
 
-title Container Sequence Diagram (SD) - US1170 (N3)
+title Container Sequence Diagram (SD) - US1180 (N3)
 
 autonumber
 
 actor "Gestor de Campus"
 
-"Gestor de Campus" -> "<<C4:Container>>\n:Visualização": Inicia operação de criar passagem entre\ndois edifícios
+"Gestor de Campus" -> "<<C4:Container>>\n:Visualização": Inicia operação de editar passagem entre\ndois edifícios
 activate "<<C4:Container>>\n:Visualização"
 "<<C4:Container>>\n:Visualização" -> Component: ngInit()
 activate Component
@@ -38,19 +38,19 @@ activate "<<C4:Container>>\nMódulo de Gestão\nde Informação"
 deactivate "<<C4:Container>>\nMódulo de Gestão\nde Informação"
 Service --> Component: Lista de passagens
 deactivate Service
-Component --> "<<C4:Container>>\n:Visualização": buildings, floors, connections
+Component --> "<<C4:Container>>\n:Visualização" : buildings, floors, connections
 deactivate Component
 
-"<<C4:Container>>\n:Visualização" --> "Gestor de Campus": Solicita dados necessários (connectionId,\nbuildingfromId, buildingtoId, floorfromId, floortoId,\n locationX, locationY)
+"<<C4:Container>>\n:Visualização" --> "Gestor de Campus": Solicita dados que pretende mudar
 deactivate "<<C4:Container>>\n:Visualização"
 
 "Gestor de Campus" -> "<<C4:Container>>\n:Visualização": Introduz dados solicitados
 activate "<<C4:Container>>\n:Visualização"
-"<<C4:Container>>\n:Visualização" -> Component : create(connection)
+"<<C4:Container>>\n:Visualização" -> Component : update(connection)
 activate Component
-Component -> Service : create(connection)
+Component -> Service : update(connection)
 activate Service
-Service -> "<<C4:Container>>\nMódulo de Gestão\nde Informação" : create(connection)
+Service -> "<<C4:Container>>\nMódulo de Gestão\nde Informação" : update(connection)
 
 activate "<<C4:Container>>\nMódulo de Gestão\nde Informação"
 "<<C4:Container>>\nMódulo de Gestão\nde Informação" --> Service: 201 OK connection

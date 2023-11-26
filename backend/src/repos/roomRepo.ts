@@ -146,4 +146,12 @@ export default class RoomRepo implements IRoomRepo {
       await this.roomSchema.deleteOne({ roomId: roomId });
     }
   }
+
+  public async findRoomsByFloorId(floorId: string): Promise<Room[]> {
+    const rooms = await this.roomSchema.find({ floorId: floorId });
+
+    const roomDTOResult = rooms.map( room => RoomMap.toDomain( room ) as Room );
+
+    return roomDTOResult;
+  }
 }

@@ -39,7 +39,7 @@ async function displaySelectors(selectedBuilding, selectedFloor) {
         buildings.forEach(building => {
             const option = document.createElement('option');
             option.value = building.buildingId;
-            option.text = building.buildingName;
+            option.text = building.buildingId + ': ' + building.buildingName;
             option.selected = building.buildingId === selectedBuilding;
             buildingSelect.appendChild(option);
         });

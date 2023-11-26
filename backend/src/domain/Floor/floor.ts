@@ -49,35 +49,70 @@ export class Floor extends AggregateRoot<FloorProps> {
         return this.props.height;
     }
 
+
     get map (): number[][] {
         // Initialize the map with empty strings
-        let map = Array.from(Array(this.props.height), () => new Array(this.props.width).fill(0));
+        let map = Array.from(Array(this.props.height+1), () => new Array(this.props.width+1).fill(0));
+
+        // Set outer walls
+        for (let i = 0; i < this.props.height+1; i++) {
+            map[i][0] = 1; // West wall
+            map[i][this.props.width] = 1; // East wall
+        }
+
+        for (let j = 0; j < this.props.width+1; j++) {
+            map[0][j] = 2; // North wall
+            map[this.props.height][j] = 2; // South wall
+        }
+
+
+
+        // Set room walls
+        for (let room of this.props.rooms) {
+            for (let i = room.originCoordinateY; i <= room.destinationCoordinateY; i++) {
+                for (let j = room.originCoordinateX; j <= room.destinationCoordinateX; j++) {
+                    if ((i === 0 && j === 0) || (i === 0 && j === this.props.width) ||
+                      (i === this.props.height && j === 0) || (i === this.props.height && j === this.props.width)) {
+                        // If it's at a corner position with the outer wall, set it to 3
+                        map[i][j] = 3; // Room wall
+
+                        } else if (i === room.originCoordinateY || i === room.destinationCoordinateY) {
+                            // If it's a north/south wall, mark it as 2
+                                map[i][j] = 2; // Room wall
+
+                        } else if (j === room.originCoordinateX || j === room.destinationCoordinateX) {
+                            // If it's an east/west wall, mark it as 1
+                                map[i][j] = 1; // Room wall
+                        }
+                    }
+                }
+        }
+
+        // Set the top right cell to 1 and the top left cell to 3
+        map[0][this.props.width] = 1; // Top right cell
+        map[0][0] = 3; // Top left cell
+        map[this.props.height][this.props.width] = 0; // Bottom right cell
+        map[this.props.height][0] = 2; // Bottom left cell
 
         // Loop over connections and mark them on the map
         for (let connection of this.props.connections) {
-            map[connection.locationY][connection.locationX] = 2;
-            map[connection.locationToY][connection.locationToX] = 2;
-        }
-
-        // Loop over rooms and mark them on the map
-        for (let room of this.props.rooms) {
-            for (let x = room.originCoordinateX; x <= room.destinationCoordinateX; x++) {
-                for (let y = room.originCoordinateY; y <= room.destinationCoordinateY; y++) {
-                    map[y][x] = 3;
-                }
-            }
-
-            // Mark the door on the map
-            map[room.door.doorY][room.door.doorX] = 1;
+            map[connection.locationY][connection.locationX] = 0;
+            map[connection.locationToY][connection.locationToX] = 0;
         }
 
         // Loop over elevators and mark them on the map
         for (let elevator of this.props.elevators) {
-            map[elevator.locationY.locationY][elevator.locationX.locationX] = 1;
+            map[elevator.locationY.locationY][elevator.locationX.locationX] = 0;
+        }
+
+        // Loop over accesses and mark them on the map
+        for (let access of this.props.connections) {
+            map[access.locationY][access.locationX] = 0;
         }
 
         return map;
     }
+
 
     get floorNumber (): FloorNumber {
         return this.props.floorNumber;
@@ -122,6 +157,8 @@ export class Floor extends AggregateRoot<FloorProps> {
     get connections (): Connection[] {
         return this.props.connections;
     }
+
+
 
     set rooms (value: Room[]) {
         this.props.rooms = value;

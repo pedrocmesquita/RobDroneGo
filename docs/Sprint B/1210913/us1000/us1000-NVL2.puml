@@ -1,0 +1,24 @@
+@startuml
+
+skinparam handwritten false
+skinparam monochrome false
+skinparam packageStyle rect
+skinparam defaultFontName FG Virgil
+skinparam shadowing true
+
+actor GestorDeFrota as GestorDeFrota
+activate GestorDeFrota
+GestorDeFrota -> Frontend: create robotType
+activate Frontend
+Frontend --> GestorDeFrota: data request
+deactivate Frontend
+GestorDeFrota -> Frontend: data response
+activate Frontend
+Frontend -> MasterData: post(robotType)
+activate MasterData
+MasterData --> Frontend: 201 (Success)
+deactivate MasterData
+Frontend -> GestorDeFrota: success
+deactivate Frontend
+
+@enduml

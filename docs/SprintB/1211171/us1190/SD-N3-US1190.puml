@@ -3,14 +3,14 @@ skinparam monochrome true
 skinparam packageStyle rectangle
 skinparam shadowing false
 
-title Container Sequence Diagram (SD) - US1180 (N3)
+title Container Sequence Diagram (SD) - US1190 (N3)
 
 autonumber
 
 actor "Gestor de Campus"
 
 activate "Gestor de Campus"
-"Gestor de Campus" -> "<<C4:Container>>\n:Visualização": Inicia operação de editar passagem entre\ndois edifícios
+"Gestor de Campus" -> "<<C4:Container>>\n:Visualização": Inicia operação de listar passagem entre\ndois edifícios
 activate "<<C4:Container>>\n:Visualização"
 "<<C4:Container>>\n:Visualização" -> Component: ngInit()
 activate Component
@@ -35,7 +35,7 @@ deactivate Service
 Component --> "<<C4:Container>>\n:Visualização" : buildings, floors, connections
 deactivate Component
 
-"<<C4:Container>>\n:Visualização" --> "Gestor de Campus": Solicita dados que pretende mudar
+"<<C4:Container>>\n:Visualização" --> "Gestor de Campus": Solicita critérios desejados
 deactivate "<<C4:Container>>\n:Visualização"
 
 "Gestor de Campus" -> "<<C4:Container>>\n:Visualização": Introduz dados solicitados

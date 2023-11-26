@@ -1,0 +1,51 @@
+@startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+title Container Sequence Diagram (SD) - US1180 (N3)
+
+autonumber
+
+actor "Gestor de Campus"
+
+activate "Gestor de Campus"
+"Gestor de Campus" -> "<<C4:Container>>\n:Visualização": Inicia operação de editar passagem entre\ndois edifícios
+activate "<<C4:Container>>\n:Visualização"
+"<<C4:Container>>\n:Visualização" -> Component: ngInit()
+activate Component
+deactivate Service
+Component -> Service : getFloors()
+activate Service
+Service -> "<<C4:Container>>\nMódulo de Gestão\nde Informação" : getFloors()
+activate "<<C4:Container>>\nMódulo de Gestão\nde Informação"
+"<<C4:Container>>\nMódulo de Gestão\nde Informação" --> Service : Lista de pisos
+deactivate "<<C4:Container>>\nMódulo de Gestão\nde Informação"
+Service --> Component : Lista de pisos
+deactivate Service
+Component -> Service : getConnections()
+activate Service
+
+Service -> "<<C4:Container>>\nMódulo de Gestão\nde Informação" : getConnections()
+activate "<<C4:Container>>\nMódulo de Gestão\nde Informação"
+"<<C4:Container>>\nMódulo de Gestão\nde Informação" --> Service: Lista de passagens
+deactivate "<<C4:Container>>\nMódulo de Gestão\nde Informação"
+Service --> Component: Lista de passagens
+deactivate Service
+Component --> "<<C4:Container>>\n:Visualização" : buildings, floors, connections
+deactivate Component
+
+"<<C4:Container>>\n:Visualização" --> "Gestor de Campus": Solicita dados que pretende mudar
+deactivate "<<C4:Container>>\n:Visualização"
+
+"Gestor de Campus" -> "<<C4:Container>>\n:Visualização": Introduz dados solicitados
+activate "<<C4:Container>>\n:Visualização"
+"<<C4:Container>>\n:Visualização" -> Component : filterConnectionsByBuildings()
+activate Component
+Component --> "<<C4:Container>>\n:Visualização" : connections
+deactivate Component
+deactivate "<<C4:Container>>\nMódulo de Gestão\nde Informação"
+"Gestor de Campus" <-- "<<C4:Container>>\n:Visualização": Lista de passagens entre\nos dois edíficios
+deactivate "<<C4:Container>>\n:Visualização"
+
+@enduml

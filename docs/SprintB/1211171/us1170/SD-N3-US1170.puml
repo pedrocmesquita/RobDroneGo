@@ -1,0 +1,67 @@
+@startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+title Container Sequence Diagram (SD) - US1170 (N3)
+
+autonumber
+
+actor "Gestor de Campus"
+
+"Gestor de Campus" -> "<<C4:Container>>\n:Visualização": Inicia operação de criar passagem entre\ndois edifícios
+activate "<<C4:Container>>\n:Visualização"
+"<<C4:Container>>\n:Visualização" -> Component: ngInit()
+activate Component
+Component -> Service: getBuildings()
+activate Service
+Service -> "<<C4:Container>>\nMódulo de Gestão\nde Informação" : getBuildings()
+activate "<<C4:Container>>\nMódulo de Gestão\nde Informação"
+"<<C4:Container>>\nMódulo de Gestão\nde Informação" --> Service : Lista de edifícios
+deactivate "<<C4:Container>>\nMódulo de Gestão\nde Informação"
+Service --> Component : Lista de edifícios
+deactivate Service
+Component -> Service : getFloors()
+activate Service
+Service -> "<<C4:Container>>\nMódulo de Gestão\nde Informação" : getFloors()
+activate "<<C4:Container>>\nMódulo de Gestão\nde Informação"
+"<<C4:Container>>\nMódulo de Gestão\nde Informação" --> Service : Lista de pisos
+deactivate "<<C4:Container>>\nMódulo de Gestão\nde Informação"
+Service --> Component : Lista de pisos
+deactivate Service
+Component -> Service : getConnections()
+activate Service
+
+Service -> "<<C4:Container>>\nMódulo de Gestão\nde Informação" : getConnections()
+activate "<<C4:Container>>\nMódulo de Gestão\nde Informação"
+"<<C4:Container>>\nMódulo de Gestão\nde Informação" --> Service: Lista de passagens
+deactivate "<<C4:Container>>\nMódulo de Gestão\nde Informação"
+Service --> Component: Lista de passagens
+deactivate Service
+Component --> "<<C4:Container>>\n:Visualização": buildings, floors, connections
+deactivate Component
+
+"<<C4:Container>>\n:Visualização" --> "Gestor de Campus": Solicita dados necessários (connectionId,\nbuildingfromId, buildingtoId, floorfromId, floortoId,\n locationX, locationY)
+deactivate "<<C4:Container>>\n:Visualização"
+
+"Gestor de Campus" -> "<<C4:Container>>\n:Visualização": Introduz dados solicitados
+activate "<<C4:Container>>\n:Visualização"
+"<<C4:Container>>\n:Visualização" -> Component : create(connection)
+activate Component
+Component -> Service : create(connection)
+activate Service
+Service -> "<<C4:Container>>\nMódulo de Gestão\nde Informação" : create(connection)
+
+activate "<<C4:Container>>\nMódulo de Gestão\nde Informação"
+"<<C4:Container>>\nMódulo de Gestão\nde Informação" --> Service: 201 OK connection
+
+deactivate "<<C4:Container>>\nMódulo de Gestão\nde Informação"
+Service --> Component: 201 OK connection
+deactivate Service
+Component --> "<<C4:Container>>\n:Visualização" : 201 OK connection
+deactivate Component
+deactivate "<<C4:Container>>\nMódulo de Gestão\nde Informação"
+"Gestor de Campus" <-- "<<C4:Container>>\n:Visualização": Mensagem de sucesso
+deactivate "<<C4:Container>>\n:Visualização"
+
+@enduml

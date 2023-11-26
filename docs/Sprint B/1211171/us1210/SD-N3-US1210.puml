@@ -1,0 +1,59 @@
+@startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+title Container Sequence Diagram (SD) - US1210 (N3)
+
+autonumber
+
+actor "Gestor de Campus"
+
+"Gestor de Campus" -> "<<C4:Container>>\n:Visualização": Inicia operação de criar sala de piso
+activate "<<C4:Container>>\n:Visualização"
+"<<C4:Container>>\n:Visualização" -> Component: ngInit()
+activate Component
+Component -> Service : getFloors()
+activate Service
+Service -> "<<C4:Container>>\nMódulo de Gestão\nde Informação" : getFloors()
+activate "<<C4:Container>>\nMódulo de Gestão\nde Informação"
+"<<C4:Container>>\nMódulo de Gestão\nde Informação" --> Service : Lista de pisos
+deactivate "<<C4:Container>>\nMódulo de Gestão\nde Informação"
+Service --> Component : Lista de pisos
+deactivate Service
+Component -> Service : getRooms()
+activate Service
+
+Service -> "<<C4:Container>>\nMódulo de Gestão\nde Informação" : getRooms()
+activate "<<C4:Container>>\nMódulo de Gestão\nde Informação"
+"<<C4:Container>>\nMódulo de Gestão\nde Informação" --> Service: Lista de sala de pisoes
+deactivate "<<C4:Container>>\nMódulo de Gestão\nde Informação"
+Service --> Component: Lista de sala de pisoes
+deactivate Service
+Component --> "<<C4:Container>>\n:Visualização" : buildings, floors, rooms
+deactivate Component
+
+"<<C4:Container>>\n:Visualização" --> "Gestor de Campus": Solicita dados que pretende mudar
+deactivate "<<C4:Container>>\n:Visualização"
+
+"Gestor de Campus" -> "<<C4:Container>>\n:Visualização": Introduz dados solicitados
+activate "<<C4:Container>>\n:Visualização"
+"<<C4:Container>>\n:Visualização" -> Component : create(room)
+activate Component
+Component -> Service : create(room)
+activate Service
+Service -> "<<C4:Container>>\nMódulo de Gestão\nde Informação" : create(room)
+
+activate "<<C4:Container>>\nMódulo de Gestão\nde Informação"
+"<<C4:Container>>\nMódulo de Gestão\nde Informação" --> Service: 201 OK room
+
+deactivate "<<C4:Container>>\nMódulo de Gestão\nde Informação"
+Service --> Component: 201 OK room
+deactivate Service
+Component --> "<<C4:Container>>\n:Visualização" : 201 OK room
+deactivate Component
+deactivate "<<C4:Container>>\nMódulo de Gestão\nde Informação"
+"Gestor de Campus" <-- "<<C4:Container>>\n:Visualização": Mensagem de sucesso
+deactivate "<<C4:Container>>\n:Visualização"
+
+@enduml

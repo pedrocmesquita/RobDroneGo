@@ -1,0 +1,21 @@
+@startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+title System Sequence Diagram (SSD) - US1080
+
+autonumber
+
+actor "Gestor de Campus"
+
+activate "Gestor de Campus"
+"Gestor de Campus" -> "<<C4:System>>\n:RobDroneGo": Solicita a listagem de edifícios com\nmáximo e mínimo de pisos
+activate "<<C4:System>>\n:RobDroneGo"
+"<<C4:System>>\n:RobDroneGo" -> "Gestor de Campus": Solicita dados necessários (max/min pisos)
+deactivate "<<C4:System>>\n:RobDroneGo"
+"Gestor de Campus" -> "<<C4:System>>\n:RobDroneGo": Apresenta informação necessária
+activate "<<C4:System>>\n:RobDroneGo"
+"Gestor de Campus" <-- "<<C4:System>>\n:RobDroneGo": Lista de edifícios dentro dos parâmetros
+deactivate "<<C4:System>>\n:RobDroneGo"
+@enduml

@@ -54,4 +54,14 @@
 .list-path-between-two-rooms p {
   font-size: 1.2em;
   color: #333;
+  white-space: pre-wrap; /* Preserve white space, including line breaks */
+  word-break: break-all; /* Allow long words to break */
 }
+
+/* Add zero-width space after every 40 characters */
+.list-path-between-two-rooms p::after {
+  content: "\200B"; /* Unicode character for zero-width space */
+  white-space: pre-wrap;
+  display: inline;
+}
+

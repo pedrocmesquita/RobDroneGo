@@ -2,6 +2,8 @@ import * as THREE from "three";
 import * as TWEEN from "three/addons/libs/tween.module.js";
 
 export default class Door {
+
+    isOpen = false;
     constructor(parameters) {
         this.scale = parameters.scale || new THREE.Vector3(1, 1, 1);
 
@@ -64,12 +66,6 @@ export default class Door {
         this.object.scale.copy(this.scale);
         this.isOpen = false;
     }
-
-    rotateDoor() {
-        // Rotate the door group by 90 degrees around its edge
-        this.doorGroup.rotation.y += Math.PI / 2;
-    }
-
     
 }
 

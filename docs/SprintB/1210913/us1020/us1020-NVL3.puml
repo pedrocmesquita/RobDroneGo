@@ -10,6 +10,23 @@ actor GestorDeFrota as GestorDeFrota
 activate GestorDeFrota
 GestorDeFrota -> View: inibRobot
 activate View
+View -> Component: ngInit()
+activate Component
+Component -> Service: getr()
+activate Service
+Service -> MódulodeGestãodeInformação : getRobot()
+activate MódulodeGestãodeInformação
+MódulodeGestãodeInformação --> Service : Lista de robot
+deactivate MódulodeGestãodeInformação
+Service --> Component : Lista de robot
+deactivate Service
+Component --> View : robot
+deactivate Component
+View -> GestorDeFrota: robot
+deactivate View
+
+GestorDeFrota -> View: inibRobot
+activate View
 View --> GestorDeFrota: data request
 deactivate View
 GestorDeFrota -> View: data required
@@ -18,10 +35,10 @@ View -> Component: inibRobot(data)
 activate Component
 Component -> Service: inibRobot(data)
 activate Service
-Service -> MasterData: patch(robot)
-activate MasterData
-MasterData -> Service: 201(robot)
-deactivate MasterData
+Service -> MódulodeGestãodeInformação: patch(robot)
+activate MódulodeGestãodeInformação
+MódulodeGestãodeInformação -> Service: 201(robot)
+deactivate MódulodeGestãodeInformação
 Service -> Component: 201(robot)
 deactivate Service
 Component -> View: 201(robot)

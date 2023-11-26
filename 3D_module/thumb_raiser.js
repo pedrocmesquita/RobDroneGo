@@ -23,6 +23,7 @@ import Camera from "./camera.js";
 import Animations from "./animations.js";
 import UserInterface from "./user_interface.js";
 
+
 /*
  * generalParameters = {
  *  setDevicePixelRatio: Boolean
@@ -352,10 +353,10 @@ export default class ThumbRaiser {
 
     pointerIsOverViewport(pointer, viewport) {
         return (
-            pointer.x >= viewport.x &&
-            pointer.x < viewport.x + viewport.width &&
-            pointer.y >= viewport.y &&
-            pointer.y < viewport.y + viewport.height);
+          pointer.x >= viewport.x &&
+          pointer.x < viewport.x + viewport.width &&
+          pointer.y >= viewport.y &&
+          pointer.y < viewport.y + viewport.height);
     }
 
     getPointedViewport(pointer) {
@@ -751,20 +752,65 @@ export default class ThumbRaiser {
                     }
                     else if (this.player.keyStates.forward) {
                         const newPosition = new THREE.Vector3(coveredDistance * Math.sin(direction), 0.0, coveredDistance * Math.cos(direction)).add(this.player.position);
-                        
+
                         if(this.openDoor(newPosition)){
                             console.log("Door opened");
                             let closestDoor = this.maze.closestDoor(newPosition);
                             this.maze.openDoor(closestDoor);
                         }
 
-                        if(this.access()){
-                            console.log("Access to another floor");
-                            //APARTIR DAQUI DA RELOAD AO HTML COM UM FLOOR NOVO
-                            //SO FALTA E PASSAR O JSON NOVO AINDA TENHO DE VER COMO FAZER ISSO!!!!!!
-                            let newJsonFile = "thum_raiser.js";
-                            window.location.href = window.location.pathname + "?json=" + newJsonFile;
+                        if (this.access()) {
+                            const buildingElement = document.getElementById("building");
+                            const floorElement = document.getElementById('floor');
+
+                            if (!buildingElement || !floorElement) {
+                                console.error("Os elementos de seleção de edifício e piso não estão presentes no DOM.");
+                                return;
+                            }
+
+                            const buildingId = buildingElement.value;
+                            const floorId = floorElement.value;
+
+                            if (!buildingId || !floorId) {
+                                alert("ERROR! This floor does not exist!");
+                                return;
+                            }
+
+                            this.getBuildings().then(buildings => {
+                                const building = buildings.find(b => b.buildingId === buildingId);
+                                if (!building) {
+                                    console.error("Buildings not found");
+                                    return;
+                                }
+
+                                const floor = building.floors.find(f => f.floorId === floorId);
+                                if (!floor) {
+                                    console.error("Floor not found");
+                                    return;
+                                }
+
+                                const connection = floor.connections.find(c => c.floorfromId === floorId || c.floortoId === floorId);
+                                if (connection) {
+                                    let newFloorId = connection.floorfromId === floorId ? connection.floortoId : connection.floorfromId;
+                                    let newBuildingId = connection.buildingfromId === buildingId ? connection.buildingtoId : connection.buildingfromId;
+
+
+                                    this.createJsonOnBackend(newFloorId)
+
+                                    let url = `http://127.0.0.1:5500/Thumb_Raiser.html?buildingId=${encodeURIComponent(newBuildingId)}&floorId=${encodeURIComponent(newFloorId)}`;
+
+                                    const response = fetch(url);
+
+                                } else {
+                                    console.error("No connection in this floor:", floorId);
+                                }
+                            }).catch(error => {
+                                console.error("Error loading buildings:", error);
+                            });
+
+
                         }
+
 
                         if (this.collision(newPosition)) {
                             this.animations.fadeToAction("Death", 0.2);
@@ -850,8 +896,64 @@ export default class ThumbRaiser {
         }
     }
 
-    positionOfPlayer() {
-        return this.positionOfPlayer;
+    getBuildings() {
+        return new Promise((resolve, reject) => {
+            const xhr = new XMLHttpRequest();
+            xhr.open('GET', 'http://localhost:4000/api/3d/buildings', true);
+
+            xhr.onload = () => {
+                if (xhr.status >= 200 && xhr.status < 300) {
+                    resolve(JSON.parse(xhr.responseText));
+                } else {
+                    reject("Error: " + xhr.statusText);
+                }
+            };
+
+            xhr.onerror = () => reject(xhr.statusText);
+            xhr.send();
+        });
+    }
+
+    updateFloorAndReloadPage(buildingId, floorId) {
+        return new Promise((resolve, reject) => {
+
+            const xhr = new XMLHttpRequest();
+            xhr.open('POST', 'http://localhost:4000/api/3d/json/');
+            xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+
+            xhr.onload = () => {
+                if (xhr.status >= 200 && xhr.status < 300) {
+                    console.log('server response:', xhr.responseText);
+                    resolve(JSON.parse(xhr.responseText));
+
+                    let url = `http://127.0.0.1:5500/Thumb_Raiser.html?floorId=${encodeURIComponent(floorId)}`;
+
+                    window.location.href = url;
+                } else {
+                    console.error("Error loading:", xhr.statusText);
+                    reject(xhr.statusText);
+                }
+            };
+            xhr.onerror = () => {
+                console.error("Error communicating w server.");
+                reject(xhr.statusText);
+            };
+            xhr.send(JSON.stringify({ buildingId: buildingId, floorId: floorId }));
+        });
+    }
+
+    createJsonOnBackend(floorId) {
+        return new Promise((resolve, reject) => {
+            console.log('floorId:', floorId);
+            const xhr = new XMLHttpRequest();
+            xhr.open('POST', 'http://localhost:4000/api/3d/json/' + floorId);
+            xhr.onload = () => {
+                console.log(xhr.responseText);
+                resolve(JSON.parse(xhr.responseText));
+            };
+            xhr.onerror = () => reject(xhr.statusText);
+            xhr.send();
+        });
     }
 
 }

@@ -7,6 +7,8 @@ skinparam shadowing true
 
 actor GestorDeFrota as GestorDeFrota
 
+
+
 activate GestorDeFrota
 GestorDeFrota -> View: createRobotType
 activate View
@@ -18,10 +20,10 @@ View -> Component: createRobotType(data)
 activate Component
 Component -> Service: createRobotType(data)
 activate Service
-Service -> MasterData: post(robotType)
-activate MasterData
-MasterData -> Service: 201(robotType)
-deactivate MasterData
+Service -> MódulodeGestãodeInformação: post(robotType)
+activate MódulodeGestãodeInformação
+MódulodeGestãodeInformação -> Service: 201(robotType)
+deactivate MódulodeGestãodeInformação
 Service -> Component: 201(robotType)
 deactivate Service
 Component -> View: 201(robotType)

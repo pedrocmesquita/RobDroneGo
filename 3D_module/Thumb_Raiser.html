@@ -130,8 +130,20 @@
 <body>
     <script>
         window.onload = function() {
-            displaySelectors('', '');
+
+            const urlParams = new URLSearchParams(window.location.search);
+            const selectedBuilding = urlParams.get('buildingId');
+            const selectedFloor = urlParams.get('floorId');
+
+
+            console.log('Selected Building ID:', selectedBuilding);
+            console.log('Selected Floor ID:', selectedFloor);
+
+
+            displaySelectors(selectedBuilding, selectedFloor);
         };
+
+
     </script>
     <div id="building-container">
         <select id="building"></select>

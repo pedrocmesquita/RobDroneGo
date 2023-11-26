@@ -1,0 +1,54 @@
+<div class="path-search">
+  <form>
+    <div>
+      <label for="startBuilding">Start Building:</label>
+      <select id="startBuilding" name="startBuilding">
+        <!-- Options will be populated dynamically -->
+      </select>
+    </div>
+    <div>
+      <label for="startPosition">Start Position:</label>
+      <input type="text" id="startPosition" name="startPosition">
+    </div>
+    <div>
+      <label for="startRoom">Start Room:</label>
+      <select id="startRoom" name="startRoom">
+        <!-- Options will be populated dynamically -->
+      </select>
+    </div>
+    <div>
+      <label for="endBuilding">End Building:</label>
+      <select id="endBuilding" name="endBuilding">
+        <!-- Options will be populated dynamically -->
+      </select>
+    </div>
+    <div>
+      <label for="endPosition">End Position:</label>
+      <input type="text" id="endPosition" name="endPosition">
+    </div>
+    <div>
+      <label for="endRoom">End Room:</label>
+      <select id="endRoom" name="endRoom">
+        <!-- Options will be populated dynamically -->
+      </select>
+    </div>
+    <button type="submit">Search</button>
+  </form>
+</div>
+
+<div class="list-path-between-two-rooms">
+  <br>
+  <table class="path-result">
+    <thead>
+    <tr>
+      <th>Start</th>
+      <th>End</th>
+      <th>Distance</th>
+      <th>Room</th>
+    </tr>
+    </thead>
+    <tbody>
+    <!-- Results will be populated dynamically -->
+    </tbody>
+  </table>
+</div>

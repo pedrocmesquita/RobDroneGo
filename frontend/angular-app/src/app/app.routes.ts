@@ -14,6 +14,7 @@ import { AuthGuard } from "./services/auth.guard";
 import { RobotComponent } from "./component/robot/robot.component";
 import { RobotTypeComponent } from "./component/robot-type/robot-type.component";
 import { LogsComponent } from "./component/logs/logs.component";
+import { PathComponent } from "./component/path/path.component";
 
 export const routes: Routes = [
   { path: '', component: LoginComponent },
@@ -30,6 +31,7 @@ export const routes: Routes = [
   { path: 'role', component: RoleComponent},
   { path: 'unauthorized', component: UnauthorizedComponent},
   { path: 'logs', component: LogsComponent, canActivate: [AuthGuard]},
+  { path: 'path', component: PathComponent, canActivate: [AuthGuard] },
 
   { path: '**', redirectTo: '' },
 

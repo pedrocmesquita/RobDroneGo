@@ -64,6 +64,12 @@
         <span>3D Module</span>
       </a>
     </div>
+    <div class="menu-item" *ngIf="currentUser.role === this.roleGestorDeTarefas.id || currentUser.role === this.roleAdmin.id"  >
+      <a routerLink="/path">
+        <img src="assets/path-icon.png" alt="path"> <!-- Replace with the actual path to your icon -->
+        <span>Paths</span>
+      </a>
+    </div>
   </nav>
 </div>
 

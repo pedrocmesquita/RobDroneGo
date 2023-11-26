@@ -29,6 +29,7 @@ import { ElevatorComponent } from "./component/elevator/elevator.component";
 import { MatMenuModule } from "@angular/material/menu";
 import { BuildingFilterPipe } from "./services/building-filter-pipe.service";
 import { LogsComponent } from "./component/logs/logs.component";
+import { PathComponent } from "./component/path/path.component";
 
 @NgModule({
   declarations: [
@@ -48,7 +49,8 @@ import { LogsComponent } from "./component/logs/logs.component";
     RoomComponent,
     ElevatorComponent,
     BuildingFilterPipe,
-    LogsComponent
+    LogsComponent,
+    PathComponent
   ],
   imports: [
     CommonModule,

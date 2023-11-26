@@ -239,7 +239,7 @@ export default class ThreeDService implements IThreeDService {
         return matrix[0].map((_, i) => matrix.map(row => row[i]));
     }
     toJsonObjectTest(building: Building,floor: Floor, doormap: Number[][],elevatormap: Number[][],connectionmap: Number[][]): any {
-        let transposedMap = this.transpose(floor.map);
+        //let transposedMap = this.transpose(floor.map);
         return {
             "groundTextureUrl": "./textures/floor2.jpg",
             "wallTextureUrl": "./textures/wall3.jpg",

@@ -54,7 +54,8 @@ export class Floor extends AggregateRoot<FloorProps> {
         // Initialize the map with empty strings
         let map = Array.from(Array(this.props.height+1), () => new Array(this.props.width+1).fill(0));
 
-        // Set outer walls
+
+// Set outer walls
         for (let i = 0; i < this.props.height+1; i++) {
             map[i][0] = 1; // West wall
             map[i][this.props.width] = 1; // East wall
@@ -69,25 +70,20 @@ export class Floor extends AggregateRoot<FloorProps> {
         for (let room of this.props.rooms) {
             for (let i = room.originCoordinateY; i <= room.destinationCoordinateY; i++) {
                 for (let j = room.originCoordinateX; j <= room.destinationCoordinateX; j++) {
-                    if ((i === 0 && j === 0) || (i === 0 && j === this.props.width) ||
-                      (i === this.props.height && j === 0) || (i === this.props.height && j === this.props.width)) {
-                        // If it's at a corner position with the outer wall, set it to 3
-                        map[i][j] = 3; // Room wall
-
-                    } else if (i === room.originCoordinateY || i === room.destinationCoordinateY) {
-                        // If it's a north/south wall, mark it as 2
-                        map[i][j] = 2; // Room wall
-
-                    } else if (j === room.originCoordinateX || j === room.destinationCoordinateX) {
-                        // If it's an east/west wall, mark it as 1
-                        map[i][j] = 1; // Room wall
-                    } else
-                    {
-                        map[i][j] = 0
+                    // If it's within the room borders, mark it as 0 (inside the room)
+                    if (i > room.originCoordinateY && i < room.destinationCoordinateY &&
+                      j > room.originCoordinateX && j < room.destinationCoordinateX) {
+                        map[i][j] = 0;
+                    } else {
+                        // If it's on the border, mark it as 1 (room wall)
+                        map[i][j] = 1;
                     }
                 }
             }
         }
+
+
+
 
         // Set the top right cell to 1 and the top left cell to 3
         map[0][this.props.width] = 1; // Top right cell

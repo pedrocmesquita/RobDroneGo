@@ -1,54 +1,41 @@
 <div class="path-search">
-  <form>
+  <form (submit)="onSubmit()">
     <div>
-      <label for="startBuilding">Start Building:</label>
-      <select id="startBuilding" name="startBuilding">
-        <!-- Options will be populated dynamically -->
-      </select>
+      <label for="originB">Origin Building:</label>
+      <input type="text" id="originB" name="originB" [(ngModel)]="originB">
     </div>
     <div>
-      <label for="startPosition">Start Position:</label>
-      <input type="text" id="startPosition" name="startPosition">
+      <label for="destB">Destination Building:</label>
+      <input type="text" id="destB" name="destB" [(ngModel)]="destB">
     </div>
     <div>
-      <label for="startRoom">Start Room:</label>
-      <select id="startRoom" name="startRoom">
-        <!-- Options will be populated dynamically -->
-      </select>
+      <label for="originF">Start Floor:</label>
+      <input type="text" id="originF" name="originF" [(ngModel)]="originF">
     </div>
     <div>
-      <label for="endBuilding">End Building:</label>
-      <select id="endBuilding" name="endBuilding">
-        <!-- Options will be populated dynamically -->
-      </select>
+      <label for="destF">End Floor:</label>
+      <input type="text" id="destF" name="destF" [(ngModel)]="destF">
     </div>
     <div>
-      <label for="endPosition">End Position:</label>
-      <input type="text" id="endPosition" name="endPosition">
+      <label for="originX">Start X:</label>
+      <input type="text" id="originX" name="originX" [(ngModel)]="originX">
     </div>
     <div>
-      <label for="endRoom">End Room:</label>
-      <select id="endRoom" name="endRoom">
-        <!-- Options will be populated dynamically -->
-      </select>
+      <label for="originY">Start Y:</label>
+      <input type="text" id="originY" name="originY" [(ngModel)]="originY">
+    </div>
+    <div>
+      <label for="destX">End X:</label>
+      <input type="text" id="destX" name="destX" [(ngModel)]="destX">
+    </div>
+    <div>
+      <label for="destY">End Y:</label>
+      <input type="text" id="destY" name="destY" [(ngModel)]="destY">
     </div>
     <button type="submit">Search</button>
   </form>
 </div>
-
-<div class="list-path-between-two-rooms">
-  <br>
-  <table class="path-result">
-    <thead>
-    <tr>
-      <th>Start</th>
-      <th>End</th>
-      <th>Distance</th>
-      <th>Room</th>
-    </tr>
-    </thead>
-    <tbody>
-    <!-- Results will be populated dynamically -->
-    </tbody>
-  </table>
-</div>
+      <div class="list-path-between-two-rooms">
+        <h2>Path Result:</h2>
+        <p id="pathResult">{{ pathResult }}</p>
+      </div>

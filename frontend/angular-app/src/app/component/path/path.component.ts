@@ -24,8 +24,10 @@ export class PathComponent {
     this.pathService.getPl(this.originB, this.destB, this.originF, this.destF, this.originX, this.originY, this.destX, this.destY).subscribe(
       (response) => {
         console.log(response);
+        this.pathResult = response;
       },
       (error) => {
+        console.log("ERRO.");
         console.error('Failed to fetch path:', error);
       }
     );

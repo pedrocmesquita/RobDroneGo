@@ -14,8 +14,7 @@ export default class PathController implements IPathController {
 
   public async getPl(req: Request, res: Response, next: NextFunction) {
     try {
-
-      console.log("Inside getPl");
+      console.log("PL CONTROLLER");
       const path = await this.pathServiceInstance.getPl(
         req.params.originB as string,
         req.params.destB as string,
@@ -27,12 +26,14 @@ export default class PathController implements IPathController {
         req.params.destY as string,
       );
 
-      if (path.isFailure) {
+      // Check if path is not an empty string
+      if (path) {
+        // Return the path
+        return res.status(200).json(path);
+      } else {
+        // If path is an empty string, send a 404 response
         return res.status(404).send();
       }
-
-      // Return the Building and also all the floors
-      return res.status(200).json(path.getValue());
     } catch (e) {
       return next(e);
     }

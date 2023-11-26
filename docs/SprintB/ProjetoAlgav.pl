@@ -2006,6 +2006,19 @@ ligacao_edificio(cel(b,2,8,18), cel(d,3,1,8)).
 ligacao_edificio(cel(c,3,14,1), cel(d,3,2,9)).
 ligacao_edificio(cel(b,3,7,17), cel(c,4,7,1)).
 
+m(c,1,10,2,0,e).
+m(d,1,2,2,0,e).
+m(a,1,2,15,0,e).
+m(b,1,8,14,0,e).
+m(c,2,11,2,0,e).
+m(d,2,2,2,0,e).
+m(a,2,2,17,0,e).
+m(b,2,6,18,0,e).
+m(c,3,12,1,0,e).
+m(d,3,2,2,0,e).
+m(b,3,5,16,0,e).
+m(c,4,11,1,0,e).
+
 :- set_prolog_flag(answer_write_options,[max_depth(0)]).
 :- set_prolog_flag(stack_limit,17_179_869_184). %next size stack 17_179_869_184
 
@@ -2157,5 +2170,46 @@ aStar2(Dest, [(_, Ca, LA)|Outros], Visitados, Cam, Custo):-
 
 heuristic(cel(_, _, X1, Y1), cel(_, _, X2, Y2), Estimativa) :-
     Estimativa is abs(X2 - X1) + abs(Y2 - Y1).
+
+
+%aStar com minimização do uso de elevadores
+
+aStarE(Orig, Dest, Cam, Custo, ElevadoresUsados):-
+    aStar2E(Dest, [(_, 0, [], [Orig])], [], Cam, Custo, ElevadoresUsados).
+
+aStar2E(Dest, [(_, Custo, Elevadores, [Dest|T])|_], _, Cam, Custo, ElevadoresUsados):-
+    reverse([Dest|T], Cam),
+    reverse(Elevadores, ElevadoresUsados).
+
+aStar2E(Dest, [(_, Ca, Elevadores, LA)|Outros], Visitados, Cam, Custo, ElevadoresUsados):-
+    LA = [Act|_],
+    findall((CEX, CaX, ElevadoresAtualizados, [X|LA]),
+            (Dest \== Act,
+             ligacel(Act, X),
+             \+ member(X, Visitados),
+             \+ member(X, LA),
+             custoAdicional(Act, X, CustoAdicional, Elevadores, ElevadoresAtualizados),
+             CaX is Ca + 1 + CustoAdicional,
+             heuristicE(X, Dest, EstX),
+             CEX is CaX + EstX),
+            Novos),
+    append(Outros, Novos, Todos),
+    append(Visitados, [Act], VisitadosAtualizados),
+    sort(Todos, TodosOrd),
+    aStar2E(Dest, TodosOrd, VisitadosAtualizados, Cam, Custo, ElevadoresUsados).
+
+custoAdicional(Act, Next, CustoAdicional, Elevadores, ElevadoresAtualizados) :-
+    (elevador(Act), elevador(Next) ->
+        CustoAdicional = 0.1, % Custo mais alto para desencorajar uso do elevador
+        (Act \== Next -> ElevadoresAtualizados = [Next|Elevadores] ; ElevadoresAtualizados = Elevadores)
+    ; 
+        CustoAdicional = 0, ElevadoresAtualizados = Elevadores).
+
+heuristicE(cel(_, _, X1, Y1), cel(_, _, X2, Y2), Estimativa) :-
+    Estimativa is abs(X2 - X1) + abs(Y2 - Y1).
+
+elevador(cel(Edificio, Piso, Col, Lin)) :-
+    m(Edificio, Piso, Col, Lin, _, e).
+
 
     

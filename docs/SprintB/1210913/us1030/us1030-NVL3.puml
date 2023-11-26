@@ -18,10 +18,10 @@ View -> Component: getRobot(data)
 activate Component
 Component -> Service: getRobot(data)
 activate Service
-Service -> MasterData: get(robot)
-activate MasterData
-MasterData -> Service: 201(robot)
-deactivate MasterData
+Service -> MódulodeGestãodeInformação: get(robot)
+activate MódulodeGestãodeInformação
+MódulodeGestãodeInformação -> Service: 201(robot)
+deactivate MódulodeGestãodeInformação
 Service -> Component: 201(robot)
 deactivate Service
 Component -> View: 201(robot)

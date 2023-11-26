@@ -1,53 +1,57 @@
-.path-search {
-  margin: 20px;
-  width: 40%;
-
-}
-
-.path-search form div {
-  margin-bottom: 10px;
-}
-
-.path-search form label {
-  display: block;
-  margin-bottom: 5px;
-}
-
-.path-search form select,
-.path-search form input {
-  width: 100%;
-  padding: 5px;
+/* Reset some default styles for better consistency */
+* {
+  margin: 0;
+  padding: 0;
   box-sizing: border-box;
 }
 
-.path-search form button {
+/* Style the form container */
+.path-search {
+  max-width: 600px;
+  margin: 20px auto;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+}
+
+/* Style form labels */
+.path-search label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: bold;
+}
+
+/* Style form input fields */
+.path-search input {
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 12px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+/* Style the submit button */
+.path-search button {
+  background-color: #007bff;
+  color: #fff;
   padding: 10px 20px;
-  background-color: #007BFF;
-  color: white;
   border: none;
+  border-radius: 4px;
   cursor: pointer;
 }
 
-.path-search form button:hover {
-  background-color: #0056b3;
-}
-
+/* Style the result container */
 .list-path-between-two-rooms {
-  margin: 20px;
+  margin-top: 20px;
 }
 
-.path-result {
-  width: 100%;
-  border-collapse: collapse;
+.list-path-between-two-rooms h2 {
+  font-size: 1.5em;
+  margin-bottom: 10px;
 }
 
-.path-result th,
-.path-result td {
-  border: 1px solid #ddd;
-  padding: 8px;
-}
-
-.path-result th {
-  background-color: #007BFF;
-  color: white;
+.list-path-between-two-rooms p {
+  font-size: 1.2em;
+  color: #333;
 }

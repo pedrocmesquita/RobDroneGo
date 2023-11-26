@@ -14,7 +14,7 @@ export default class PathService implements IPathService{
     console.log(originB,destB,originF,destF,originX,originY,destX,destY);
     console.log("Estou aqui");
     return new Promise<Result<any>>((resolve, reject) => {
-      const prolog = spawn('swipl', ['-s', '/docs/ProjetoAlgav.pl']);
+      const prolog = spawn('swipl', ['-s', '../docs/SprintB/ProjetoAlgav.pl']);
 
       let result = '';
       let error = '';

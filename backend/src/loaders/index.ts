@@ -107,6 +107,11 @@ export default async ({ expressApp }) => {
     path: config.controllers.threeD.path
   }
 
+  const pathController = {
+    name: config.controllers.path.name,
+    path: config.controllers.path.path
+  }
+
   const roleRepo = {
     name: config.repos.role.name,
     path: config.repos.role.path
@@ -196,6 +201,11 @@ export default async ({ expressApp }) => {
     path: config.services.threeD.path
   }
 
+  const pathService = {
+    name: config.services.path.name,
+    path: config.services.path.path
+  }
+
   await dependencyInjectorLoader({
     mongoConnection,
     schemas: [
@@ -219,7 +229,8 @@ export default async ({ expressApp }) => {
       robotController,
       roomController,
       logController,
-      threeDController
+      threeDController,
+      pathController
     ],
     repos: [
       roleRepo,
@@ -242,7 +253,8 @@ export default async ({ expressApp }) => {
       robotService,
       roomService,
       logService,
-      threeDService
+      threeDService,
+      pathService
     ]
   });
   Logger.info('✌️ Schemas, Controllers, Repositories, Services, etc. loaded');

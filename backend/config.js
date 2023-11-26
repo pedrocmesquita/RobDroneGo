@@ -81,6 +81,10 @@ export default {
       name: "threeDController",
       path: "../controllers/threeDController"
     },
+    path: {
+      name: "pathController",
+      path: "../controllers/pathController"
+    },
   },
 
   repos: {
@@ -162,6 +166,10 @@ export default {
     threeD: {
       name: "threeDService",
       path: "../services/threeDService"
+    },
+    path: {
+      name: "pathService",
+      path: "../services/pathService"
     },
   },
 };

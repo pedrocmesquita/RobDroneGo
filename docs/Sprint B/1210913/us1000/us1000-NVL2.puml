@@ -14,10 +14,10 @@ Frontend --> GestorDeFrota: data request
 deactivate Frontend
 GestorDeFrota -> Frontend: data response
 activate Frontend
-Frontend -> MasterData: post(robotType)
-activate MasterData
-MasterData --> Frontend: 201 (Success)
-deactivate MasterData
+Frontend -> ModuloDeGestaoDeInformaçao: post(robotType)
+activate ModuloDeGestaoDeInformaçao
+ModuloDeGestaoDeInformaçao --> Frontend: 201 (Success)
+deactivate ModuloDeGestaoDeInformaçao
 Frontend -> GestorDeFrota: success
 deactivate Frontend
 

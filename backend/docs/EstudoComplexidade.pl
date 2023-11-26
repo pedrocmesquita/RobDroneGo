@@ -27,10 +27,10 @@ ColS is Col+1, ColA is Col-1, LinS is Lin+1,LinA is Lin-1,
 ((m(Col,LinS,0),assertz(ligacel(cel(Col,Lin),cel(Col,LinS)));true)),
 ((m(Col,LinA,0),assertz(ligacel(cel(Col,Lin),cel(Col,LinA)));true)),
 % Movimentos diagonais
-(m(ColS, LinS, 0), assertz(ligacel(cel(Col, Lin), cel(ColS, LinS))); true),
-(m(ColS, LinA, 0), assertz(ligacel(cel(Col, Lin), cel(ColS, LinA))); true),
-(m(ColA, LinS, 0), assertz(ligacel(cel(Col, Lin), cel(ColA, LinS))); true),
-(m(ColA, LinA, 0), assertz(ligacel(cel(Col, Lin), cel(ColA, LinA))); true),
+%(m(ColS, LinS, 0), assertz(ligacel(cel(Col, Lin), cel(ColS, LinS))); true),
+%(m(ColS, LinA, 0), assertz(ligacel(cel(Col, Lin), cel(ColS, LinA))); true),
+%(m(ColA, LinS, 0), assertz(ligacel(cel(Col, Lin), cel(ColA, LinS))); true),
+%(m(ColA, LinA, 0), assertz(ligacel(cel(Col, Lin), cel(ColA, LinA))); true),
 Col1 is Col-1,
 cria_grafo_lin(Col1,Lin).
 cria_grafo_lin(Col,Lin):-Col1 is Col-1,cria_grafo_lin(Col1,Lin).
@@ -63,33 +63,49 @@ bfs_timed(Orig, Dest, Cam, Tempo) :-
     get_time(Tf),       % Finaliza o temporizador
     Tempo is Tf - Ti.   % Calcula o tempo total
 
-bfs(Orig,Dest,Cam):-bfs2(Dest,[[Orig]],Cam).
+bfs(Orig,Dest,Cam) :- bfs2(Dest,[[Orig]],Cam).
+
 bfs2(Dest,[[Dest|T]|_],Cam):-
-reverse([Dest|T],Cam).
+    reverse([Dest|T],Cam).
+
 bfs2(Dest,[LA|Outros],Cam):-
-LA=[Act|_],
-findall([X|LA],
-(Dest\==Act,ligacel(Act,X),\+ member(X,LA)),
-Novos),
-append(Outros,Novos,Todos),
-bfs2(Dest,Todos,Cam).
+    LA=[Act|_],
+    findall([X|LA],
+    (Dest\==Act,ligacel(Act,X),\+ member(X,LA)),
+    Novos),
+    append(Outros,Novos,Todos),
+    bfs2(Dest,Todos,Cam).
 
 
-:-dynamic melhor_sol_dfs/2.
-better_dfs1(Orig,Dest,LCaminho_minlig):-
-get_time(Ti),
-(better_dfs11(Orig,Dest);true),
-retract(melhor_sol_dfs(LCaminho_minlig,_)),
-get_time(Tf),
-T is Tf-Ti,
-write('Tempo de geracao da solucao:'),write(T),nl.
-better_dfs11(Orig,Dest):-
-asserta(melhor_sol_dfs(_,10000)),
-dfs(Orig,Dest,LCaminho),
-atualiza_melhor_dfs(LCaminho),
-fail.
-atualiza_melhor_dfs(LCaminho):-
-melhor_sol_dfs(_,N),
-length(LCaminho,C),
-C<N,retract(melhor_sol_dfs(_,_)),
-asserta(melhor_sol_dfs(LCaminho,C)).
+aStar_timed(Orig, Dest, Cam, Custo, Tempo) :-
+    get_time(Ti),
+    aStar(Orig, Dest, Cam, Custo),
+    get_time(Tf),
+    Tempo is Tf - Ti.
+
+aStar(Orig, Dest, Cam, Custo) :-
+    aStar2(Dest, [(0, 0, Orig, [Orig])], Cam, Custo).
+
+aStar2(Dest, [(Custo, _, Dest, [Dest | T]) | _], Cam, Custo) :-
+    reverse([Dest | T], Cam).
+
+aStar2(Dest, [(Ca, CustoAtual, Act, LA) | Outros], Cam, Custo) :-
+    LA = [Act | _],
+    findall((CEX, CaX, X, [X | LA]),
+        (Dest \== Act, ligacel(Act, X), \+ member(X, LA),
+        CustoX is 1,  % Update this to the appropriate cost for moving from Act to X
+        CaX is CustoX + Ca,
+        estimativa(X, Dest, EstX),
+        CEX is CaX + EstX),
+        Novos),
+    append(Outros, Novos, Todos),
+    sort(Todos, TodosOrd),
+    aStar2(Dest, TodosOrd, Cam, Custo).
+
+
+% Euclidean distance estimation between cells
+estimativa(cel(X1, Y1), cel(X2, Y2), Estimativa) :-
+    Estimativa is sqrt((X1 - X2)^2 + (Y1 - Y2)^2).
+
+
+

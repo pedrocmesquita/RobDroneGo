@@ -150,7 +150,9 @@ import UserInterface from "./user_interface.js";
  */
 
 export default class ThumbRaiser {
-    constructor(generalParameters, mazeParameters, playerParameters, lightsParameters, fogParameters, fixedViewCameraParameters, firstPersonViewCameraParameters, thirdPersonViewCameraParameters, topViewCameraParameters, miniMapCameraParameters) {
+    constructor(generalParameters, mazeParameters, playerParameters, lightsParameters,
+                fogParameters, fixedViewCameraParameters, firstPersonViewCameraParameters,
+                thirdPersonViewCameraParameters, topViewCameraParameters, miniMapCameraParameters) {
         this.generalParameters = merge({}, generalData, generalParameters);
         this.mazeParameters = merge({}, mazeData, mazeParameters);
         this.playerParameters = merge({}, playerData, playerParameters);
@@ -161,6 +163,9 @@ export default class ThumbRaiser {
         this.thirdPersonViewCameraParameters = merge({}, cameraData, thirdPersonViewCameraParameters);
         this.topViewCameraParameters = merge({}, cameraData, topViewCameraParameters);
         this.miniMapCameraParameters = merge({}, cameraData, miniMapCameraParameters);
+
+        // Set the game state
+        this.gameRunning = false;
 
         // Create a 2D scene (the viewports frames)
         this.scene2D = new THREE.Scene();
@@ -485,6 +490,8 @@ export default class ThumbRaiser {
             else if (event.code == this.player.keyCodes.thumbsUp) {
                 this.player.keyStates.thumbsUp = state;
             }
+
+            this.player.shiftKey = event.shiftKey;
         }
     }
 
@@ -673,6 +680,8 @@ export default class ThumbRaiser {
                 // Create model animations (states, emotes and expressions)
                 this.animations = new Animations(this.player.object, this.player.animations);
 
+                this.scene2D.add(this.player);
+
                 // Set the player's position and direction
                 this.player.position = this.maze.initialPosition.clone();
                 this.player.direction = this.maze.initialDirection;
@@ -698,6 +707,12 @@ export default class ThumbRaiser {
                 else {
                     let coveredDistance = this.player.walkingSpeed * deltaT;
                     let directionIncrement = this.player.turningSpeed * deltaT;
+
+                    if (this.player.shiftKey) {
+                        coveredDistance *= this.player.runningFactor;
+                        directionIncrement *= this.player.runningFactor;
+                    }
+
                     if (this.player.keyStates.run) {
                         coveredDistance *= this.player.runningFactor;
                         directionIncrement *= this.player.runningFactor;
@@ -755,10 +770,11 @@ export default class ThumbRaiser {
                             this.animations.fadeToAction("Death", 0.2);
                         }
                         else {
-                            this.animations.fadeToAction(this.player.keyStates.run ? "Running" : "Walking", 0.2);
+                            this.animations.fadeToAction(this.player.shiftKey ? "Running" : "Walking", 0.2);
                             this.player.position = newPosition;
                         }
                     }
+
                     else if (this.player.keyStates.jump) {
                         this.animations.fadeToAction("Jump", 0.2);
                     }

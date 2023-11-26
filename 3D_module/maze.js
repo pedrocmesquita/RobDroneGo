@@ -301,12 +301,66 @@ export default class Maze {
         return closestAcess;
     }
 
-
-
-    //É NESTE METODO QUE A PORTA NAO ESTA A RODAR CORRETAMENTA ESTA A RODAR SOBRE O EIXO Y0 DELA
-    //GRRRRRRR
     openDoor(doorObject) {
-        doorObject.rotation.y += Math.PI / 2;
+        console.log("HEHE: ", doorObject.isOpen);
+
+        if(doorObject.rotation.y == 0){
+            if(doorObject.isOpen == false){
+                doorObject.rotation.y += Math.PI / 2;
+                doorObject.position.x += 0.5;
+                doorObject.position.z -= 0.5;
+                doorObject.isOpen = true;
+                console.log("1");
+            } else {
+                doorObject.rotation.y += Math.PI / 2;
+                doorObject.position.x += 0.5;
+                doorObject.position.z -= 0.5;
+                doorObject.isOpen = false;
+                console.log("2");
+            }
+        } else if(doorObject.rotation.y == Math.PI / 2){
+            if(doorObject.isOpen == false){
+                doorObject.rotation.y += Math.PI / 2;
+                doorObject.position.x += 0.5;
+                doorObject.position.z += 0.5;
+                doorObject.isOpen = true;
+                console.log("3");
+            } else {
+                doorObject.rotation.y -= Math.PI / 2;
+                doorObject.position.x -= 0.5;
+                doorObject.position.z += 0.5;
+                doorObject.isOpen = false;
+                console.log("4");
+            }
+        } else if(doorObject.rotation.y == Math.PI){
+            if(doorObject.isOpen == false){
+                doorObject.rotation.y -= Math.PI / 2;
+                doorObject.position.x -= 0.5;
+                doorObject.position.z += 0.5;
+                doorObject.isOpen = true;
+                console.log("5");
+            } else {
+                doorObject.rotation.y -= Math.PI / 2;
+                doorObject.position.x -= 0.5;
+                doorObject.position.z -= 0.5;
+                doorObject.isOpen = false;
+                console.log("6");
+            }
+        } else if(doorObject.rotation.y == 3 * Math.PI / 2){
+            if(doorObject.isOpen == false){
+                doorObject.rotation.y += Math.PI / 2;
+                doorObject.position.x -= 0.5;
+                doorObject.position.z -= 0.5;
+                doorObject.isOpen = true;
+                console.log("7");
+            } else {
+                doorObject.rotation.y -= Math.PI / 2;
+                doorObject.position.x += 0.5;
+                doorObject.position.z -= 0.5;
+                doorObject.isOpen = false;
+                console.log("8");
+            }
+        }
     }
 
 

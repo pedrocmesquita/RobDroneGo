@@ -1,0 +1,31 @@
+@startuml
+skinparam handwritten false
+skinparam monochrome false
+skinparam packageStyle rect
+skinparam defaultFontName FG Virgil
+skinparam shadowing true
+
+actor GestorDeFrota as GestorDeFrota
+
+activate GestorDeFrota
+GestorDeFrota -> View: getRobot
+activate View
+View --> GestorDeFrota: data request
+deactivate View
+GestorDeFrota -> View: data required
+activate View
+View -> Component: getRobot(data)
+activate Component
+Component -> Service: getRobot(data)
+activate Service
+Service -> MasterData: get(robot)
+activate MasterData
+MasterData -> Service: 201(robot)
+deactivate MasterData
+Service -> Component: 201(robot)
+deactivate Service
+Component -> View: 201(robot)
+deactivate Component
+View -> GestorDeFrota: success
+
+@enduml

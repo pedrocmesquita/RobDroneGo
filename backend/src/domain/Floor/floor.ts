@@ -55,44 +55,7 @@ export class Floor extends AggregateRoot<FloorProps> {
         let map = Array.from(Array(this.props.height+1), () => new Array(this.props.width+1).fill(0));
 
         let counter = 0;
-
-
-        // Set room walls
-        for (let room of this.props.rooms) {
-
-
-            console.log("Room: " + counter);
-            counter++;
-            console.log("Room origin X: " + room.originCoordinateX);
-            console.log("Room origin Y: " + room.originCoordinateY);
-            console.log("Room destination X: " + room.destinationCoordinateX);
-            console.log("Room destination Y: " + room.destinationCoordinateY);
-            for (let i = 0; i <= room.destinationCoordinateX - room.originCoordinateX; i++) {
-                for (let j = 0; j <= room.destinationCoordinateY - room.originCoordinateY; j++) {
-                    // Check if it's a north/south wall
-                    if (j === 0 || j === room.destinationCoordinateY - room.originCoordinateY) {
-                        map[room.originCoordinateX + i][room.originCoordinateY + j] = 1; // Set north/south walls
-                    }
-
-                    // Check if it's a west/east wall
-                    if (i === 0 || i === room.destinationCoordinateX - room.originCoordinateX) {
-                        map[room.originCoordinateX + i][room.originCoordinateY + j] = 2; // Set east/west walls
-                    }
-                }
-            }
-            // ...
-            map[room.originCoordinateX][room.originCoordinateY] = 3;
-            map[room.destinationCoordinateX][room.originCoordinateY] = 2;
-            map[room.originCoordinateX][room.destinationCoordinateY] = 1;
-            map[room.destinationCoordinateX][room.destinationCoordinateY] = 0;
-
-
-            console.log("Door X: " + room.door.doorX);
-            console.log("Door Y: " + room.door.doorY);
-            map[room.door.doorX][room.door.doorY] = 0; // Door
-        }
-
-// Set outer walls
+        // Set outer walls
         for (let i = 0; i < this.props.width+1; i++) {
             map[i][0] = 1; // West wall
             map[i][this.props.height] = 1; // East wall
@@ -103,13 +66,79 @@ export class Floor extends AggregateRoot<FloorProps> {
             map[this.props.width][j] = 2; // South wall
         }
 
+        // Set room walls
+        for (let room of this.props.rooms) {
+
+            let flag = false;
+
+            console.log("Room: " + counter);
+            counter++;
+            console.log("Room origin X: " + room.originCoordinateX);
+            console.log("Room origin Y: " + room.originCoordinateY);
+            console.log("Room destination X: " + room.destinationCoordinateX);
+            console.log("Room destination Y: " + room.destinationCoordinateY);
+            for (let i = 0; i <= room.destinationCoordinateX - room.originCoordinateX; i++) {
+                for (let j = 0; j <= room.destinationCoordinateY - room.originCoordinateY; j++) {
+
+
+
+                    // Check if it's a north/south wall
+                    if (j === 0 || j === room.destinationCoordinateY - room.originCoordinateY) {
+                        map[room.originCoordinateX + i][room.originCoordinateY + j] = 1; // Set north/south walls
+                    }
+
+                    // Check if it's a west/east wall
+                    if (i === 0 || i === room.destinationCoordinateX - room.originCoordinateX) {
+                        map[room.originCoordinateX + i][room.originCoordinateY + j] = 2; // Set east/west walls
+                    }
+
+                    // Check if it's the bottom left corner
+                    if (i === 0 && j === room.destinationCoordinateY - room.originCoordinateY && i !== room.originCoordinateX) {
+
+                        // Check if current position is in the first column
+                        if (room.originCoordinateY === 0) {
+                            flag = true;
+
+                        }
+                        else {
+                            flag = false;
+                        }
+
+                    }
+                }
+            }
+            // ...
+
+
+            map[room.originCoordinateX][room.originCoordinateY] = 3;
+
+            if (flag) {
+                console.log("We are here!");
+                map[room.destinationCoordinateX][room.originCoordinateY] = 3;
+            }
+            else {
+                map[room.destinationCoordinateX][room.originCoordinateY] = 2;
+            }
+            map[room.originCoordinateX][room.destinationCoordinateY] = 1;
+            map[room.destinationCoordinateX][room.destinationCoordinateY] = 0;
+
+
+
+        }
+
+
+
 
         map[0][0] = 3;
         map[this.props.width][0] = 2;
         map[0][this.props.height] = 1;
         map[this.props.width][this.props.height] = 0;
 
-// ...
+        for (let room of this.props.rooms) {
+        console.log("Door X: " + room.door.doorX);
+        console.log("Door Y: " + room.door.doorY);
+        map[room.door.doorX][room.door.doorY] = 0;
+        }
 
         for (let connection of this.props.connections) {
             if (connection.floorfromId === this.floorId) {

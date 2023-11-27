@@ -54,57 +54,79 @@ export class Floor extends AggregateRoot<FloorProps> {
         // Initialize the map with empty strings
         let map = Array.from(Array(this.props.height+1), () => new Array(this.props.width+1).fill(0));
 
+        let counter = 0;
 
-// Set outer walls
-        for (let i = 0; i < this.props.height+1; i++) {
-            map[i][0] = 1; // West wall
-            map[i][this.props.width] = 1; // East wall
-        }
-
-        for (let j = 0; j < this.props.width+1; j++) {
-            map[0][j] = 2; // North wall
-            map[this.props.height][j] = 2; // South wall
-        }
 
         // Set room walls
         for (let room of this.props.rooms) {
-            for (let i = room.originCoordinateY; i <= room.destinationCoordinateY; i++) {
-                for (let j = room.originCoordinateX; j <= room.destinationCoordinateX; j++) {
-                    // If it's within the room borders, mark it as 0 (inside the room)
-                    if (i > room.originCoordinateY && i < room.destinationCoordinateY &&
-                      j > room.originCoordinateX && j < room.destinationCoordinateX) {
-                        map[i][j] = 0;
-                    } else {
-                        // If it's on the border, mark it as 1 (room wall)
-                        map[i][j] = 1;
+
+
+            console.log("Room: " + counter);
+            counter++;
+            console.log("Room origin X: " + room.originCoordinateX);
+            console.log("Room origin Y: " + room.originCoordinateY);
+            console.log("Room destination X: " + room.destinationCoordinateX);
+            console.log("Room destination Y: " + room.destinationCoordinateY);
+            for (let i = 0; i <= room.destinationCoordinateX - room.originCoordinateX; i++) {
+                for (let j = 0; j <= room.destinationCoordinateY - room.originCoordinateY; j++) {
+                    // Check if it's a north/south wall
+                    if (j === 0 || j === room.destinationCoordinateY - room.originCoordinateY) {
+                        map[room.originCoordinateX + i][room.originCoordinateY + j] = 1; // Set north/south walls
+                    }
+
+                    // Check if it's a west/east wall
+                    if (i === 0 || i === room.destinationCoordinateX - room.originCoordinateX) {
+                        map[room.originCoordinateX + i][room.originCoordinateY + j] = 2; // Set east/west walls
                     }
                 }
             }
+            // ...
+            map[room.originCoordinateX][room.originCoordinateY] = 3;
+            map[room.destinationCoordinateX][room.originCoordinateY] = 2;
+            map[room.originCoordinateX][room.destinationCoordinateY] = 1;
+            map[room.destinationCoordinateX][room.destinationCoordinateY] = 0;
+
+
+            console.log("Door X: " + room.door.doorX);
+            console.log("Door Y: " + room.door.doorY);
+            map[room.door.doorX][room.door.doorY] = 0; // Door
+        }
+
+// Set outer walls
+        for (let i = 0; i < this.props.width+1; i++) {
+            map[i][0] = 1; // West wall
+            map[i][this.props.height] = 1; // East wall
+        }
+
+        for (let j = 0; j < this.props.height+1; j++) {
+            map[0][j] = 2; // North wall
+            map[this.props.width][j] = 2; // South wall
         }
 
 
+        map[0][0] = 3;
+        map[this.props.width][0] = 2;
+        map[0][this.props.height] = 1;
+        map[this.props.width][this.props.height] = 0;
 
+// ...
 
-        // Set the top right cell to 1 and the top left cell to 3
-        map[0][this.props.width] = 1; // Top right cell
-        map[0][0] = 3; // Top left cell
-        map[this.props.height][this.props.width] = 0; // Bottom right cell
-        map[this.props.height][0] = 2; // Bottom left cell
-
-        // Loop over connections and mark them on the map
         for (let connection of this.props.connections) {
-            map[connection.locationY][connection.locationX] = 0;
-            map[connection.locationToY][connection.locationToX] = 0;
+            if (connection.floorfromId === this.floorId) {
+                map[connection.locationX][connection.locationY] = 0;
+            }
+
+            if (connection.floortoId === this.floorId) {
+                map[connection.locationToX][connection.locationToY] = 0;
+            }
         }
 
-        // Loop over elevators and mark them on the map
         for (let elevator of this.props.elevators) {
-            map[elevator.locationY.locationY][elevator.locationX.locationX] = 0;
+            map[elevator.locationX.locationX][elevator.locationY.locationY] = 0;
         }
 
-        // Loop over accesses and mark them on the map
         for (let access of this.props.connections) {
-            map[access.locationY][access.locationX] = 0;
+            map[access.locationX][access.locationY] = 0;
         }
 
         return map;

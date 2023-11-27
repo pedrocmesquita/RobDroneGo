@@ -53,46 +53,34 @@ export default class ThreeDService implements IThreeDService {
 
                       const floor = FloorMap.toDomain(floorDTO);
 
-                      console.log("floor.map:");
-                      console.log(floor.map);
-
                         this.getRooms(floorId).then(async (roomsResult) => {
                               if (roomsResult.isFailure) {
-                                  console.log("roomsResult.isFailure");
                                   return Result.fail<any>("Rooms not found");
                               } else {
-                                  console.log("roomsResult.isOk");
                                   const rooms = roomsResult.getValue();
-                                  console.log(rooms);
                                   const doorMap = this.returnDoorMapJsonFromRooms(rooms);
-                                  console.log("doorMap:");
-                                  console.log(doorMap);
-
-
-                                  console.log("elevadores");
 
 
                                   const elevators = floor.elevators;
                                   const elevatorMap = this.returnElevatorMapJsonFromElevators(elevators);
 
-                                  console.log(elevatorMap);
+
 
                                   const connections = floor.connections;
                                   const connectionMap = this.returnConnectionMapJsonFromConnections(connections);
-                                  console.log(connectionMap);
 
                                   //const json = this.toJsonObject(building, floor);
 
                                   const json = this.toJsonObjectTest(building, floor, doorMap, elevatorMap, connectionMap);
-                                  const jsonTest = this.toJsonObjectTest(building, floor, doorMap, elevatorMap, connectionMap);
+                                  //const jsonTest = this.toJsonObjectTest(building, floor, doorMap, elevatorMap, connectionMap);
 
                                   // Use JSON.stringify with a space parameter of 4 to format the JSON
                                   const formattedJson = JSON.stringify(json, );
-                                  const formattedJsonTest = JSON.stringify(jsonTest, null, 4);
+                                  //const formattedJsonTest = JSON.stringify(jsonTest, null, 4);
                                   const finalJson = this.formatJson(formattedJson);
 
                                   fs.writeFile(jsonPath, finalJson);
-                                  fs.writeFile("mazes/mazeTest.json", formattedJsonTest);
+                                  //fs.writeFile("mazes/mazeTest.json", formattedJsonTest);
                                   return Result.ok<any>(json);
                               }
                           }

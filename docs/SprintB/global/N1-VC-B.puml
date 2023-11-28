@@ -1,0 +1,55 @@
+@startuml
+left to right direction
+
+actor "Gestor de Campus" #lightblue
+actor "Gestor de Frota" #lightblue
+
+(Criar um edifício indicando [...]) #lightblue
+(Editar a informação [total ou parcial] de Edifício) #lightblue
+(Listar todos os edifícios) #lightblue
+(Listar edifícios com min e max de pisos) #lightblue
+(Criar um piso indicando [...]) #lightblue
+(Editar a informação [total ou parcial] de Piso) #lightblue
+(Listar todos os pisos) #lightblue
+(Carregar mapa de piso) #lightblue
+(Criar uma passagem entre 2 edifícios) #lightblue
+(Editar a uma passagem entre 2 edifícios) #lightblue
+(Listar todas as passagens entre 2 edifícios) #lightblue
+(Criar um Elevador num Edifício indicando os Pisos que serve) #lightblue
+(Editar Elevador em Edifício)
+(Listar todos os Elevadores) #lightblue
+(Listar Pisos de Edifício servidos por Elevador) #lightblue
+(Criar uma Sala num Piso de Edifício indicando [...]) #lightblue
+(Adicionar um novo tipo de robot indicando a sua designação e que tipos de tarefas pode executar da lista prédefinida de tarefas) #lightblue
+(Adicionar um novo robot à frota indicando o seu tipo, designação, etc.) #lightblue
+(Inibir um robot) #lightblue
+(Consultar todos os robots da frota) #lightblue
+
+(Gestor de Campus) --> (Criar um edifício indicando [...])
+(Gestor de Campus) --> (Editar a informação [total ou parcial] de Edifício)
+(Gestor de Campus) --> (Listar todos os edifícios)
+(Gestor de Campus) --> (Listar edifícios com min e max de pisos)
+(Gestor de Campus) --> (Criar um piso indicando [...])
+(Gestor de Campus) --> (Editar a informação [total ou parcial] de Piso)
+(Gestor de Campus) --> (Listar todos os pisos)
+(Gestor de Campus) --> (Carregar mapa de piso)
+(Gestor de Campus) --> (Criar uma passagem entre 2 edifícios)
+(Gestor de Campus) --> (Editar a uma passagem entre 2 edifícios)
+(Gestor de Campus) --> (Listar todas as passagens entre 2 edifícios)
+(Gestor de Campus) --> (Criar um Elevador num Edifício indicando os Pisos que serve)
+(Gestor de Campus) --> (Editar Elevador em Edifício)
+(Gestor de Campus) --> (Listar todos os Elevadores)
+(Gestor de Campus) --> (Listar Pisos de Edifício servidos por Elevador)
+(Gestor de Campus) --> (Criar uma Sala num Piso de Edifício indicando [...])
+
+(Gestor de Frota) --> (Adicionar um novo tipo de robot indicando a sua designação e que tipos de tarefas pode executar da lista prédefinida de tarefas)
+(Gestor de Frota) --> (Adicionar um novo robot à frota indicando o seu tipo, designação, etc.)
+(Gestor de Frota) --> (Inibir um robot)
+(Gestor de Frota) --> (Consultar todos os robots da frota)
+
+
+
+
+
+@enduml
+

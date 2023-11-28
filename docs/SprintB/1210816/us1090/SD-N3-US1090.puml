@@ -18,6 +18,7 @@ Component -> Service: getBuildings()
 activate Service
 Service -> "<<C4:Container>>\nMódulo de Gestão\nde Informação" : getBuildings()
 activate "<<C4:Container>>\nMódulo de Gestão\nde Informação"
+"<<C4:Container>>\nMódulo de Gestão\nde Informação" -> "<<C4:Container>>\nMódulo de Gestão\nde Informação": middleware.rolecheck\n("Admin" || "Gestor de Campus")
 "<<C4:Container>>\nMódulo de Gestão\nde Informação" --> Service : Lista de edificios
 deactivate "<<C4:Container>>\nMódulo de Gestão\nde Informação"
 Service --> Component : Lista de edificios
@@ -26,6 +27,7 @@ Component -> Service: getFloors()
 activate Service
 Service -> "<<C4:Container>>\nMódulo de Gestão\nde Informação" : getFloors()
 activate "<<C4:Container>>\nMódulo de Gestão\nde Informação"
+"<<C4:Container>>\nMódulo de Gestão\nde Informação" -> "<<C4:Container>>\nMódulo de Gestão\nde Informação": middleware.rolecheck\n("Admin" || "Gestor de Campus")
 "<<C4:Container>>\nMódulo de Gestão\nde Informação" --> Service : Lista de pisos de edificio
 deactivate "<<C4:Container>>\nMódulo de Gestão\nde Informação"
 Service --> Component : Lista de pisos de edificio
@@ -45,9 +47,11 @@ activate Service
 Service -> "<<C4:Container>>\nMódulo de Gestão\nde Informação" : create(floor)
 
 activate "<<C4:Container>>\nMódulo de Gestão\nde Informação"
+"<<C4:Container>>\nMódulo de Gestão\nde Informação" -> "<<C4:Container>>\nMódulo de Gestão\nde Informação": middleware.rolecheck\n("Admin" || "Gestor de Campus")
 "<<C4:Container>>\nMódulo de Gestão\nde Informação" --> Service: 201 OK floor
 
 deactivate "<<C4:Container>>\nMódulo de Gestão\nde Informação"
+note right: Módulo de Gestão de Informação\né a representação do Sprint A
 Service --> Component: 201 OK floor
 deactivate Service
 Component --> "<<C4:Container>>\n:Visualização" : 201 OK floor

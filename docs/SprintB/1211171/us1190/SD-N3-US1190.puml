@@ -19,6 +19,7 @@ Component -> Service : getFloors()
 activate Service
 Service -> "<<C4:Container>>\nMódulo de Gestão\nde Informação" : getFloors()
 activate "<<C4:Container>>\nMódulo de Gestão\nde Informação"
+"<<C4:Container>>\nMódulo de Gestão\nde Informação" -> "<<C4:Container>>\nMódulo de Gestão\nde Informação": middleware.rolecheck\n("Admin" || "Gestor de Campus")
 "<<C4:Container>>\nMódulo de Gestão\nde Informação" --> Service : Lista de pisos
 deactivate "<<C4:Container>>\nMódulo de Gestão\nde Informação"
 Service --> Component : Lista de pisos
@@ -28,7 +29,9 @@ activate Service
 
 Service -> "<<C4:Container>>\nMódulo de Gestão\nde Informação" : getConnections()
 activate "<<C4:Container>>\nMódulo de Gestão\nde Informação"
+"<<C4:Container>>\nMódulo de Gestão\nde Informação" -> "<<C4:Container>>\nMódulo de Gestão\nde Informação": middleware.rolecheck\n("Admin" || "Gestor de Campus")
 "<<C4:Container>>\nMódulo de Gestão\nde Informação" --> Service: Lista de passagens
+note right: Módulo de Gestão de Informação\né a representação do Sprint A
 deactivate "<<C4:Container>>\nMódulo de Gestão\nde Informação"
 Service --> Component: Lista de passagens
 deactivate Service

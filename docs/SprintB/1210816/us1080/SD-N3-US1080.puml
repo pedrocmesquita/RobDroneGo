@@ -20,8 +20,10 @@ activate Service
 
 Service -> "<<C4:Container>>\nMódulo de Gestão\nde Informação" : getBuildings()
 activate "<<C4:Container>>\nMódulo de Gestão\nde Informação"
+"<<C4:Container>>\nMódulo de Gestão\nde Informação" -> "<<C4:Container>>\nMódulo de Gestão\nde Informação": middleware.rolecheck\n("Admin" || "Gestor de Campus")
 "<<C4:Container>>\nMódulo de Gestão\nde Informação" --> Service: Lista de edificios
 deactivate "<<C4:Container>>\nMódulo de Gestão\nde Informação"
+note right: Módulo de Gestão de Informação\né a representação do Sprint A
 Service --> Component: Lista de edificios
 deactivate Service
 Component --> "<<C4:Container>>\n:Visualização" : buildings

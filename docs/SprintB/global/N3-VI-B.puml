@@ -1,0 +1,14 @@
+@startuml
+package "SPA" {
+  [UI]
+  [Component]
+  [Service]
+  [Model]
+
+    [UI] ..> [Component]
+  [Component] ...> [Service]
+  [Component] ...> [Model]
+
+}
+
+@enduml

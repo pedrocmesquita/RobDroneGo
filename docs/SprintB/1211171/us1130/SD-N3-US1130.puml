@@ -17,6 +17,7 @@ Component -> Service: getBuildings()
 activate Service
 Service -> "<<C4:Container>>\nMódulo de Gestão\nde Informação" : getBuildings()
 activate "<<C4:Container>>\nMódulo de Gestão\nde Informação"
+"<<C4:Container>>\nMódulo de Gestão\nde Informação" -> "<<C4:Container>>\nMódulo de Gestão\nde Informação": middleware.rolecheck\n("Admin" || "Gestor de Campus")
 "<<C4:Container>>\nMódulo de Gestão\nde Informação" --> Service : Lista de edifícios
 deactivate "<<C4:Container>>\nMódulo de Gestão\nde Informação"
 Service --> Component : Lista de edifícios
@@ -25,6 +26,7 @@ Component -> Service : getFloors()
 activate Service
 Service -> "<<C4:Container>>\nMódulo de Gestão\nde Informação" : getFloors()
 activate "<<C4:Container>>\nMódulo de Gestão\nde Informação"
+"<<C4:Container>>\nMódulo de Gestão\nde Informação" -> "<<C4:Container>>\nMódulo de Gestão\nde Informação": middleware.rolecheck\n("Admin" || "Gestor de Campus")
 "<<C4:Container>>\nMódulo de Gestão\nde Informação" --> Service : Lista de pisos
 deactivate "<<C4:Container>>\nMódulo de Gestão\nde Informação"
 Service --> Component : Lista de pisos
@@ -34,6 +36,7 @@ activate Service
 
 Service -> "<<C4:Container>>\nMódulo de Gestão\nde Informação" : getElevators()
 activate "<<C4:Container>>\nMódulo de Gestão\nde Informação"
+"<<C4:Container>>\nMódulo de Gestão\nde Informação" -> "<<C4:Container>>\nMódulo de Gestão\nde Informação": middleware.rolecheck\n("Admin" || "Gestor de Campus")
 "<<C4:Container>>\nMódulo de Gestão\nde Informação" --> Service: Lista de elevadores
 deactivate "<<C4:Container>>\nMódulo de Gestão\nde Informação"
 Service --> Component: Lista de elevadores
@@ -56,6 +59,7 @@ activate "<<C4:Container>>\nMódulo de Gestão\nde Informação"
 "<<C4:Container>>\nMódulo de Gestão\nde Informação" --> Service: 201 OK elevator
 
 deactivate "<<C4:Container>>\nMódulo de Gestão\nde Informação"
+note right: Módulo de Gestão de Informação\né a representação do Sprint A
 Service --> Component: 201 OK elevator
 deactivate Service
 Component --> "<<C4:Container>>\n:Visualização" : 201 OK elevator

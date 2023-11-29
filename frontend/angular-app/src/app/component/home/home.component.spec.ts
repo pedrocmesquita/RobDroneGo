@@ -25,7 +25,7 @@ describe('HomeComponent', () => {
     authService = TestBed.inject(AuthService) as jasmine.SpyObj<AuthService>; // Cast to the spy object
   });
 
-  it("should  test if counter is 0", () => {
+  it("should create home", () => {
     let counter = 0;
     expect(counter).toBe(0);
   });

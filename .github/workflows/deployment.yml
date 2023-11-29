@@ -33,9 +33,16 @@ jobs:
         run: ng test --browsers=ChromeHeadless --watch=false
         working-directory: frontend/angular-app
 
-      - name: Deploy and build
+      - name: Build
         if: success()
-        run: |
-          ng build --configuration=production
-          sshpass -p 'eheRVge/wN5hSsZd4D9Y' scp -r dist root@10.9.22.76:/var/www/frontend
+        run: ng build --configuration=production
+        working-directory: frontend/angular-app
+
+      - name: SCP command
+        if: success()
+        run: scp -r dist root@10.9.22.76:/var/www/frontend
+
+      - name: Deploy
+        if: success()
+        run: sshpass -p 'eheRVge/wN5hSsZd4D9Y' ssh root@10.9.22.76 "echo 'Deploy Successful!'"
         working-directory: frontend/angular-app

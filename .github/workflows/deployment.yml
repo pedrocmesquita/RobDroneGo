@@ -41,6 +41,7 @@ jobs:
       - name: SCP command
         if: success()
         run: scp -r dist root@10.9.22.76:/var/www/frontend
+        working-directory: frontend/angular-app
 
       - name: Deploy
         if: success()

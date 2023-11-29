@@ -40,7 +40,9 @@ jobs:
 
       - name: SCP command
         if: success()
-        run: scp -r dist root@10.9.22.76:/var/www/frontend
+        run: |
+            export SSHPASS='eheRVge/wN5hSsZd4D9Y'
+            scp -o StrictHostKeyChecking=no -r dist root@10.9.22.76:/var/www/frontend
         working-directory: frontend/angular-app
 
       - name: Deploy

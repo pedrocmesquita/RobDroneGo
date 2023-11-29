@@ -27,7 +27,7 @@ jobs:
         run: npm install -g @angular/cli
 
       - name: Run tests
-        run: ng test
+        run: ng test --browsers=ChromeHeadless --watch=false
         working-directory: frontend/angular-app
 
       - name: Deploy and build

@@ -1,14 +1,16 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { LogsComponent } from "./logs.component";
+import { HttpClientModule } from "@angular/common/http";
 
-describe('HeaderComponent', () => {
+describe('LogsComponent', () => {
   let component: LogsComponent;
   let fixture: ComponentFixture<LogsComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [LogsComponent]
+      declarations: [LogsComponent],
+      imports: [HttpClientModule],
     })
       .compileComponents();
 

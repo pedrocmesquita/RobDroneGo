@@ -3,7 +3,9 @@ name: deployment schedule
 on:
   schedule:
     - cron: '25 6 * * *'
-
+  workflow_dispatch:
+    # This allows manual triggering
+    
 jobs:
   deploy:
     runs-on: ubuntu-latest

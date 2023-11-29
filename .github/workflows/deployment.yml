@@ -44,5 +44,5 @@ jobs:
 
       - name: Deploy
         if: success()
-        run: sshpass -p 'eheRVge/wN5hSsZd4D9Y' ssh root@10.9.22.76 "echo 'Deploy Successful!'"
+        run: "echo 'Deploy Successful!'"
         working-directory: frontend/angular-app

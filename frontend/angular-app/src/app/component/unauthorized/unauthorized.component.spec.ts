@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { UnauthorizedComponent } from './unauthorized.component';
+import { UnauthorizedComponent } from "./unauthorized.component";
 
 describe('UnauthorizedComponent', () => {
   let component: UnauthorizedComponent;
@@ -8,10 +8,10 @@ describe('UnauthorizedComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [UnauthorizedComponent]
+      declarations: [UnauthorizedComponent]
     })
-    .compileComponents();
-    
+      .compileComponents();
+
     fixture = TestBed.createComponent(UnauthorizedComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
@@ -20,4 +20,6 @@ describe('UnauthorizedComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  // Add more tests for other methods and properties
 });

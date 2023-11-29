@@ -1,17 +1,17 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { LogsComponent } from './logs.component';
+import { LogsComponent } from "./logs.component";
 
-describe('LogsComponent', () => {
+describe('HeaderComponent', () => {
   let component: LogsComponent;
   let fixture: ComponentFixture<LogsComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [LogsComponent]
+      declarations: [LogsComponent]
     })
-    .compileComponents();
-    
+      .compileComponents();
+
     fixture = TestBed.createComponent(LogsComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
@@ -20,4 +20,6 @@ describe('LogsComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  // Add more tests for other methods and properties
 });

@@ -11,6 +11,7 @@ import { AuthService } from "../../services/auth.service";
   styleUrl: './home.component.css'
 })
 export class HomeComponent implements OnInit{
+
   currentUser: any = null;
   roleGestorDeCampus: any = null;
   roleGestorDeFrota: any = null;

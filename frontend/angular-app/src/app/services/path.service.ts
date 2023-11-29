@@ -8,7 +8,7 @@ import { Observable } from "rxjs";
 })
 
 export class PathService {
-  private apiUrl = "http://localhost:4000/api";
+  public apiUrl = "http://localhost:4000/api";
 
   constructor(private http:HttpClient, private authService:AuthService) {}
   getPl(originB: string,destB: string,originF: string,destF:string,originX: string,originY: string,destX: string,destY: string): Observable<any> {

@@ -1,26 +1,33 @@
-
 name: deployment schedule
 
 on:
   schedule:
-    - cron: '0 3 * * *'
+    - cron: '38 5 * * *'
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 14
+
+      - name: Install dependencies
+        run: npm install
+        working-directory: frontend/angular-app
 
       - name: Run tests
-        run: npx test
+        run: ng test
+        working-directory: frontend/angular-app
 
-
-
-      - name: deploy and build
+      - name: Deploy and build
         if: success()
         run: |
           ng build --configuration=production
-          scp –r dist root@10.9.22.76:/var/www/frontend
-
-
-
+          sshpass -p 'eheRVge/wN5hSsZd4D9Y' scp -r dist root@10.9.22.76:/var/www/frontend
+        working-directory: frontend/angular-app

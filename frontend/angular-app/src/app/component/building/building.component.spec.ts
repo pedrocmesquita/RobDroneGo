@@ -22,6 +22,12 @@ describe('BuildingComponent', () => {
     fixture = TestBed.createComponent(BuildingComponent);
     component = fixture.componentInstance;
     buildingService = TestBed.inject(BuildingService);
+
+    // Mock the getBuildings method
+    spyOn(buildingService, 'getBuildings').and.returnValue(of([
+      { buildingId: '1', buildingName: 'Building 1', buildingDescription: '', buildingNumberOfFloors: 0, dimX: 0, dimY: 0, wallHeight: 0, wallWidth: 0 },
+      { buildingId: '2', buildingName: 'Building 2', buildingDescription: '', buildingNumberOfFloors: 0, dimX: 0, dimY: 0, wallHeight: 0, wallWidth: 0 }
+    ]));
   });
 
   it('should create', () => {
@@ -29,13 +35,18 @@ describe('BuildingComponent', () => {
   });
 
   it('should filter buildings', () => {
+    // Arrange
     const buildings: IBuilding[] = [
       { buildingId: '1', buildingName: 'Building 1', buildingDescription: '', buildingNumberOfFloors: 0, dimX: 0, dimY: 0, wallHeight: 0, wallWidth: 0 },
       { buildingId: '2', buildingName: 'Building 2', buildingDescription: '', buildingNumberOfFloors: 0, dimX: 0, dimY: 0, wallHeight: 0, wallWidth: 0 }
     ];
     component.buildings = buildings;
     component.filterText = '1';
+
+    // Act
     component.filterBuildings();
+
+    // Assert
     expect(component.filteredBuildings.length).toBe(1);
     expect(component.filteredBuildings[0].buildingId).toBe('1');
   });

@@ -16,6 +16,7 @@ Component -> Service: getr()
 activate Service
 Service -> MódulodeGestãodeInformação : getRobot()
 activate MódulodeGestãodeInformação
+MódulodeGestãodeInformação -> MódulodeGestãodeInformação: middleware.rolecheck\n("Admin" || "Gestor de Frota")
 MódulodeGestãodeInformação --> Service : Lista de robot
 deactivate MódulodeGestãodeInformação
 Service --> Component : Lista de robot
@@ -37,6 +38,7 @@ Component -> Service: inibRobot(data)
 activate Service
 Service -> MódulodeGestãodeInformação: patch(robot)
 activate MódulodeGestãodeInformação
+MódulodeGestãodeInformação -> MódulodeGestãodeInformação: middleware.rolecheck\n("Admin" || "Gestor de Frota")
 MódulodeGestãodeInformação -> Service: 201(robot)
 deactivate MódulodeGestãodeInformação
 Service -> Component: 201(robot)

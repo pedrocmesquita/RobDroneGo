@@ -22,6 +22,7 @@ Component -> Service: createRobotType(data)
 activate Service
 Service -> MódulodeGestãodeInformação: post(robotType)
 activate MódulodeGestãodeInformação
+MódulodeGestãodeInformação -> MódulodeGestãodeInformação: middleware.rolecheck\n("Admin" || "Gestor de Frota")
 MódulodeGestãodeInformação -> Service: 201(robotType)
 deactivate MódulodeGestãodeInformação
 Service -> Component: 201(robotType)

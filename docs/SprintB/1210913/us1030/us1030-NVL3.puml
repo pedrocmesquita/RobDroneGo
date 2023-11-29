@@ -20,6 +20,7 @@ Component -> Service: getRobot(data)
 activate Service
 Service -> MódulodeGestãodeInformação: get(robot)
 activate MódulodeGestãodeInformação
+MódulodeGestãodeInformação -> MódulodeGestãodeInformação: middleware.rolecheck\n("Admin" || "Gestor de Frota")
 MódulodeGestãodeInformação -> Service: 201(robot)
 deactivate MódulodeGestãodeInformação
 Service -> Component: 201(robot)

@@ -16,6 +16,7 @@ Component -> Service: getr()
 activate Service
 Service -> MódulodeGestãodeInformação : getRobotTypes()
 activate MódulodeGestãodeInformação
+MódulodeGestãodeInformação -> MódulodeGestãodeInformação: middleware.rolecheck\n("Admin" || "Gestor de Frota")
 MódulodeGestãodeInformação --> Service : Lista de robotTypes
 deactivate MódulodeGestãodeInformação
 Service --> Component : Lista de robotTypes
@@ -41,6 +42,7 @@ Component -> Service: createRobot(data)
 activate Service
 Service -> MódulodeGestãodeInformação: post(robot)
 activate MódulodeGestãodeInformação
+MódulodeGestãodeInformação -> MódulodeGestãodeInformação: middleware.rolecheck\n("Admin" || "Gestor de Frota")
 MódulodeGestãodeInformação -> Service: 201(robot)
 deactivate MódulodeGestãodeInformação
 Service -> Component: 201(robot)

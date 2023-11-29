@@ -2,11 +2,13 @@ name: deployment schedule
 
 on:
   schedule:
-    - cron: '38 5 * * *'
-
+    - cron: '25 6 * * *'
+  workflow_dispatch:
+    # This allows manual triggering
+    
 jobs:
   deploy:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
 
     steps:
       - name: Checkout code
@@ -15,19 +17,34 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: 14
-
+          node-version: 18.13
+          
       - name: Install dependencies
         run: npm install
         working-directory: frontend/angular-app
 
+      - name: Install Angular CLI
+        run: npm install -g @angular/cli
+
+      - name: Install sshpass on macOS
+        run: brew install hudochenkov/sshpass/sshpass   
+
       - name: Run tests
-        run: ng test
+        run: ng test --browsers=ChromeHeadless --watch=false
         working-directory: frontend/angular-app
 
-      - name: Deploy and build
+      - name: Build
+        if: success()
+        run: ng build --configuration=production
+        working-directory: frontend/angular-app
+
+      - name: SCP command
         if: success()
         run: |
-          ng build --configuration=production
-          sshpass -p 'eheRVge/wN5hSsZd4D9Y' scp -r dist root@10.9.22.76:/var/www/frontend
+          sshpass -p 'eheRVge/wN5hSsZd4D9Y' scp -o StrictHostKeyChecking=no -r dist root@10.9.22.76:/var/www/frontend
+        working-directory: frontend/angular-app
+
+      - name: Deploy
+        if: success()
+        run: "echo 'Deploy Successful!'"
         working-directory: frontend/angular-app

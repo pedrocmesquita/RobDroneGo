@@ -1,0 +1,57 @@
+@startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+title Container Sequence Diagram (SD) - US1050 (N3)
+
+autonumber
+
+actor "Gestor de Campus"
+
+activate "Gestor de Campus"
+"Gestor de Campus" -> "<<C4:Container>>\n:Visualização": Inicia operação de criar edificio
+activate "<<C4:Container>>\n:Visualização"
+"<<C4:Container>>\n:Visualização" -> Component: ngInit()
+activate Component
+Component -> Service: getBuildings()
+activate Service
+Service -> "<<C4:Container>>\nMódulo de Gestão\nde Informação" : getBuildings()
+activate "<<C4:Container>>\nMódulo de Gestão\nde Informação"
+
+"<<C4:Container>>\nMódulo de Gestão\nde Informação" -> "<<C4:Container>>\nMódulo de Gestão\nde Informação": middleware.rolecheck\n("Admin" || "Gestor de Campus")
+"<<C4:Container>>\nMódulo de Gestão\nde Informação" --> Service : Lista de edifícios
+deactivate "<<C4:Container>>\nMódulo de Gestão\nde Informação"
+Service --> Component : Lista de edifícios
+deactivate Service
+Component --> "<<C4:Container>>\n:Visualização" : buildings
+deactivate Component
+
+"<<C4:Container>>\n:Visualização" --> "Gestor de Campus": Solicita dados que pretende mudar
+deactivate "<<C4:Container>>\n:Visualização"
+
+"Gestor de Campus" -> "<<C4:Container>>\n:Visualização": Introduz dados solicitados
+activate "<<C4:Container>>\n:Visualização"
+"<<C4:Container>>\n:Visualização" -> Component : create(building)
+activate Component
+Component -> Service : create(building)
+activate Service
+Service -> "<<C4:Container>>\nMódulo de Gestão\nde Informação" : create(building)
+
+activate "<<C4:Container>>\nMódulo de Gestão\nde Informação"
+
+"<<C4:Container>>\nMódulo de Gestão\nde Informação" -> "<<C4:Container>>\nMódulo de Gestão\nde Informação": middleware.rolecheck\n("Admin" || "Gestor de Campus")
+"<<C4:Container>>\nMódulo de Gestão\nde Informação" --> Service: 201 OK building
+
+deactivate "<<C4:Container>>\nMódulo de Gestão\nde Informação"
+
+note right: Módulo de Gestão de Informação\né a representação do Sprint A
+Service --> Component: 201 OK building
+deactivate Service
+Component --> "<<C4:Container>>\n:Visualização" : 201 OK building
+deactivate Component
+deactivate "<<C4:Container>>\nMódulo de Gestão\nde Informação"
+"Gestor de Campus" <-- "<<C4:Container>>\n:Visualização": Mensagem de sucesso
+deactivate "<<C4:Container>>\n:Visualização"
+
+@enduml

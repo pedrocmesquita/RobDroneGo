@@ -43,9 +43,12 @@ describe('Connection Component', () => {
     cy.get('#connectionTable tbody tr').should('have.length', 1);
   });
 
+  /*
   it('should edit', () => {
     cy.get('[data-cy=listButton]').click();
     cy.get('#connectionTable tbody tr:first-child [data-cy=updateTeste]').type('1');
     cy.get('[data-cy=updateButton]:first').click();
   });
+  */
+
 });

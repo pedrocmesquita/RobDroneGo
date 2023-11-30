@@ -4,66 +4,66 @@
   <div class="header-container">
   <h1>Connection Component</h1>
   </div>
-  <button (click)="selectOption('create')">Create Connection</button>
-  <button (click)="selectOption('listOrEdit')">List or Edit Connections</button>
+  <button (click)="selectOption('create')" data-cy="createButton">Create Connection</button>
+  <button (click)="selectOption('listOrEdit')" data-cy="listButton" >List or Edit Connections</button>
   <div *ngIf="selectedOption === 'create'">
   <form (ngSubmit)="createConnection()">
     <label>Origin Building ID</label>
-    <select [(ngModel)]="newConnection.buildingfromId" name="buildingfromId">
+    <select [(ngModel)]="newConnection.buildingfromId" name="buildingfromId" data-cy="fromInput">
       <option *ngFor="let building of buildings" [value]="building.buildingId">{{ building.buildingId }}</option>
     </select>
     <label>Destination Building ID</label>
-    <select [(ngModel)]="newConnection.buildingtoId" name="buildingtoId">
+    <select [(ngModel)]="newConnection.buildingtoId" name="buildingtoId" data-cy="toInput">
       <option *ngFor="let building of buildings" [value]="building.buildingId">{{ building.buildingId }}</option>
     </select>
     <label>Origin Floor ID</label>
-    <select [(ngModel)]="newConnection.floorfromId" name="floorfromId">
+    <select [(ngModel)]="newConnection.floorfromId" name="floorfromId" data-cy="ffInput">
       <ng-container *ngFor="let floor of floors">
         <option *ngIf="floor.buildingId === newConnection.buildingfromId" [value]="floor.floorId">{{ floor.floorId }}</option>
       </ng-container>
     </select>
     <label>Destination Floor ID</label>
-    <select [(ngModel)]="newConnection.floortoId" name="floortoId">
+    <select [(ngModel)]="newConnection.floortoId" name="floortoId" data-cy="ftInput">
       <ng-container *ngFor="let floor of floors">
         <option *ngIf="floor.buildingId === newConnection.buildingtoId" [value]="floor.floorId">{{ floor.floorId }}</option>
       </ng-container>
     </select>
       <label>Origin Dimension X</label>
-      <select [(ngModel)]="newConnection.locationX" name="locationX">
+      <select [(ngModel)]="newConnection.locationX" name="locationX" data-cy="x1">
         <option *ngFor="let number of coordinatesOption" [value]="number">{{ number }}</option>
       </select>
       <label>Origin Dimension Y</label>
-      <select [(ngModel)]="newConnection.locationY" name="locationY">
+      <select [(ngModel)]="newConnection.locationY" name="locationY" data-cy="y1">
         <option *ngFor="let number of coordinatesOption" [value]="number">{{ number }}</option>
       </select>
       <label>Destination Dimension X</label>
-      <select [(ngModel)]="newConnection.locationToX" name="locationToX">
+      <select [(ngModel)]="newConnection.locationToX" name="locationToX" data-cy="x2">
         <option *ngFor="let number of coordinatesOption" [value]="number">{{ number }}</option>
       </select>
       <label>Destination Dimension Y</label>
-      <select [(ngModel)]="newConnection.locationToY" name="locationToY">
+      <select [(ngModel)]="newConnection.locationToY" name="locationToY" data-cy="y2">
         <option *ngFor="let number of coordinatesOption" [value]="number">{{ number }}</option>
       </select>
-    <button type="submit">Create Connection</button>
+    <button type="submit" data-cy="createsButton">Create Connection</button>
   </form>
   </div>
   <div *ngIf="selectedOption === 'listOrEdit'" class="list-edit-container">
     <div class="filtercon-id">
   <label>Origin ID</label>
-  <select [(ngModel)]="filterOriginBuildingId">
+  <select [(ngModel)]="filterOriginBuildingId" data-cy="filterA">
     <option *ngFor="let building of buildings" [value]="building.buildingId">{{ building.buildingId }}</option>
   </select>
   <label>Destination ID</label>
-  <select [(ngModel)]="filterDestinationBuildingId">
+  <select [(ngModel)]="filterDestinationBuildingId" data-cy="filterB">
     <option *ngFor="let building of buildings" [value]="building.buildingId">{{ building.buildingId }}</option>
   </select>
-  <button (click)="filterConnectionsByBuildings()">Filter</button>
+  <button (click)="filterConnectionsByBuildings()" data-cy="filterBButton">Filter</button>
     </div>
     <div class="filter-id">
-  <input [(ngModel)]="filterText" placeholder="Filter by ID">
-  <button (click)="filterConnections()">Filter</button>
+  <input [(ngModel)]="filterText" placeholder="Filter by ID" data-cy="filterInput">
+  <button (click)="filterConnections()" data-cy="filterButton">Filter</button>
     </div>
-  <table>
+  <table id="connectionTable">
     <thead>
     <tr>
       <th>Origin Building</th>
@@ -82,11 +82,11 @@
       <td>{{ connections.buildingtoId }}</td>
       <td>{{ connections.floorfromId }}</td>
       <td>{{ connections.floortoId }}</td>
-      <td><input [(ngModel)]="connections.locationX" placeholder = "Location X"></td>
+      <td><input [(ngModel)]="connections.locationX" placeholder = "Location X" data-cy="updateTeste"></td>
       <td><input [(ngModel)]="connections.locationY" placeholder = "Location Y"></td>
       <td><input [(ngModel)]="connections.locationToX" placeholder = "Location To X"></td>
       <td><input [(ngModel)]="connections.locationToY" placeholder = "Location To Y"></td>
-      <td><button (click)="editConnection(connections)">Update</button></td>
+      <td><button (click)="editConnection(connections)" data-cy="updateButton">Update</button></td>
     </tr>
     </tbody>
   </table>

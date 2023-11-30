@@ -2,40 +2,40 @@
   <form (submit)="onSubmit()">
     <div>
       <label for="originB">Origin Building:</label>
-      <input type="text" id="originB" name="originB" [(ngModel)]="originB">
+      <input type="text" id="originB" name="originB" [(ngModel)]="originB" data-cy="originBInput">
     </div>
     <div>
       <label for="destB">Destination Building:</label>
-      <input type="text" id="destB" name="destB" [(ngModel)]="destB">
+      <input type="text" id="destB" name="destB" [(ngModel)]="destB" data-cy="destBInput">
     </div>
     <div>
       <label for="originF">Start Floor:</label>
-      <input type="text" id="originF" name="originF" [(ngModel)]="originF">
+      <input type="text" id="originF" name="originF" [(ngModel)]="originF" data-cy="originFInput">
     </div>
     <div>
       <label for="destF">End Floor:</label>
-      <input type="text" id="destF" name="destF" [(ngModel)]="destF">
+      <input type="text" id="destF" name="destF" [(ngModel)]="destF" data-cy="destFInput">
     </div>
     <div>
       <label for="originX">Start Origin:</label>
-      <input type="text" id="originX" name="originX" [(ngModel)]="originX">
+      <input type="text" id="originX" name="originX" [(ngModel)]="originX" data-cy="originXInput">
     </div>
     <div>
       <label for="originY">Start Destination:</label>
-      <input type="text" id="originY" name="originY" [(ngModel)]="originY">
+      <input type="text" id="originY" name="originY" [(ngModel)]="originY" data-cy="originYInput">
     </div>
     <div>
       <label for="destX">End Origin:</label>
-      <input type="text" id="destX" name="destX" [(ngModel)]="destX">
+      <input type="text" id="destX" name="destX" [(ngModel)]="destX" data-cy="destXInput">
     </div>
     <div>
       <label for="destY">End Destination:</label>
-      <input type="text" id="destY" name="destY" [(ngModel)]="destY">
+      <input type="text" id="destY" name="destY" [(ngModel)]="destY" data-cy="destYInput">
     </div>
-    <button type="submit">Search</button>
+    <button type="submit" data-cy="pathForm">Search</button>
   </form>
 </div>
       <div class="list-path-between-two-rooms">
         <h2>Path Result:</h2>
-        <p id="pathResult">{{ pathResult }}</p>
+        <p id="pathResult" data-cy="pathResult">{{ pathResult }}</p>
       </div>

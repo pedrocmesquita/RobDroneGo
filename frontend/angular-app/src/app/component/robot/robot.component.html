@@ -4,33 +4,33 @@
   <div class="header-container">
   <h1>Robot Component</h1>
   </div>
-  <button (click)="selectOption('create')">Create Robot</button>
-  <button (click)="selectOption('listOrEdit')">List Robots</button>
+  <button (click)="selectOption('create')" data-cy="createButton">Create Robot</button>
+  <button (click)="selectOption('listOrEdit')" data-cy="listButton">List Robots</button>
   <div *ngIf="selectedOption === 'create'">
   <form (ngSubmit)="createRobot()">
-    <input [(ngModel)]="newRobot.idRobot" name="idRobot" placeholder="ID">
-    <input [(ngModel)]="newRobot.robotName" name="robotName" placeholder="Robot Name">
+    <input [(ngModel)]="newRobot.idRobot" name="idRobot" placeholder="ID" data-cy="idInput">
+    <input [(ngModel)]="newRobot.robotName" name="robotName" placeholder="Robot Name" data-cy="nameInput">
 
     <label> Robot Type ID</label>
-    <select [(ngModel)]="newRobot.typeId" name="typeId">
+    <select [(ngModel)]="newRobot.typeId" name="typeId" data-cy="typeButton">
       <option *ngFor="let robotType of robotTypes" [value]="robotType.typeId">{{ robotType.typeId }}</option>
     </select>
 
-    <input [(ngModel)]="newRobot.serialNumber" name="serialNumber" placeholder="Serial Number">
-    <input [(ngModel)]="newRobot.description" name="description" placeholder="Description">
+    <input [(ngModel)]="newRobot.serialNumber" name="serialNumber" placeholder="Serial Number" data-cy="snInput">
+    <input [(ngModel)]="newRobot.description" name="description" placeholder="Description" data-cy="descInput">
     <label>Active</label>
-    <select [(ngModel)]="newRobot.active" name="active">
+    <select [(ngModel)]="newRobot.active" name="active" data-cy="stateButton">
       <option value="true">true</option>
     </select>
-    <button type="submit">Create Robot</button>
+    <button type="submit" data-cy="createsButton">Create Robot</button>
   </form>
 </div>
     <div *ngIf="selectedOption === 'listOrEdit'" class="list-edit-container">
       <div class="filter-id">
-  <input [(ngModel)]="filterText" placeholder="Filter by ID">
-  <button (click)="filterRobots()">Filter</button>
+  <input [(ngModel)]="filterText" placeholder="Filter by ID" data-cy="filterInput">
+  <button (click)="filterRobots()" data-cy="filterButton">Filter</button>
       </div>
-  <table>
+  <table id="robotTable">
     <thead>
     <tr>
       <th>Robot ID</th>
@@ -49,7 +49,7 @@
       <td>{{ robot.serialNumber }}</td>
       <td>{{ robot.description }}</td>
       <td>{{ robot.active }}</td>
-      <td><button (click)="patchRobot(robot)">Patch</button></td>
+      <td><button (click)="patchRobot(robot)" data-cy="patchButton">Patch</button></td>
     </tr>
     </tbody>
   </table>

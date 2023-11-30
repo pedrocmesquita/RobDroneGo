@@ -1,15 +1,15 @@
 <div class="logs-container">
   <h1>Logs</h1>
-  <h2> Found {{logs.length}} users that failed to authenticate three or more times! </h2>
+  <h2 data-cy="logsCount"> Found {{logs.length}} users that failed to authenticate three or more times! </h2>
   <table class="logs-table">
     <thead>
       <tr>
         <th> Email </th>
       </tr>
     </thead>
-    <tbody>
+    <tbody data-cy="logsTableBody">
       <tr *ngFor="let log of logs">
-        <td> {{log}} </td>
+        <td data-cy="logRow"> {{log}} </td>
       </tr>
   </table>
 </div>

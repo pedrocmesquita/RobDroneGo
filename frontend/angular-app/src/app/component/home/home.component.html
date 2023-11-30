@@ -11,61 +11,61 @@
 
   <nav class="home-menu" *ngIf="currentUser">
     <div class="menu-item" *ngIf="currentUser.role === this.roleGestorDeCampus.id || currentUser.role === this.roleAdmin.id">
-      <a routerLink="/building">
+      <a routerLink="/building" data-cy="buildingButton">
         <img src="assets/buildings-icon.png" alt="buildings"> <!-- Replace with the actual path to your icon -->
         <span>Buildings</span>
       </a>
     </div>
     <div class="menu-item" *ngIf="currentUser.role === this.roleGestorDeCampus.id || currentUser.role === this.roleAdmin.id">
-      <a routerLink="/floor">
+      <a routerLink="/floor" data-cy="floorButton">
         <img src="assets/floors-icon.png" alt="floors"> <!-- Replace with the actual path to your icon -->
         <span>Floors</span>
       </a>
     </div>
     <div class="menu-item" *ngIf="currentUser.role === this.roleGestorDeCampus.id || currentUser.role === this.roleAdmin.id">
-      <a routerLink="/room">
+      <a routerLink="/room" data-cy="roomButton">
         <img src="assets/rooms-icon.png" alt="rooms"> <!-- Replace with the actual path to your icon -->
         <span>Rooms</span>
       </a>
     </div>
     <div class="menu-item">
-      <a routerLink="/connection" *ngIf="currentUser.role === this.roleGestorDeCampus.id || currentUser.role === this.roleAdmin.id">
+      <a routerLink="/connection" data-cy="connectionButton" *ngIf="currentUser.role === this.roleGestorDeCampus.id || currentUser.role === this.roleAdmin.id">
         <img src="assets/connections-icon.png" alt="connections"> <!-- Replace with the actual path to your icon -->
         <span>Connections</span>
       </a>
     </div>
     <div class="menu-item">
-      <a routerLink="/elevator" *ngIf="currentUser.role === this.roleGestorDeCampus.id || currentUser.role === this.roleAdmin.id">
+      <a routerLink="/elevator" data-cy="elevatorButton" *ngIf="currentUser.role === this.roleGestorDeCampus.id || currentUser.role === this.roleAdmin.id">
         <img src="assets/elevators-icon.png" alt="elevators"> <!-- Replace with the actual path to your icon -->
         <span>Elevators</span>
       </a>
     </div>
-    <div class="menu-item" *ngIf="currentUser.role === this.roleGestorDeFrota.id || currentUser.role === this.roleAdmin.id">
+    <div class="menu-item" data-cy="robotButton" *ngIf="currentUser.role === this.roleGestorDeFrota.id || currentUser.role === this.roleAdmin.id">
       <a routerLink="/robot">
         <img src="assets/robots-icon.png" alt="robots"> <!-- Replace with the actual path to your icon -->
         <span>Robots</span>
       </a>
     </div>
     <div class="menu-item" *ngIf="currentUser.role === this.roleGestorDeFrota.id || currentUser.role === this.roleAdmin.id">
-      <a routerLink="/robot-type">
+      <a routerLink="/robot-type" data-cy="robot-typeButton">
         <img src="assets/type-icon.png" alt="robotType"> <!-- Replace with the actual path to your icon -->
         <span>Robot Type</span>
       </a>
     </div>
     <div class="menu-item" *ngIf="currentUser.role === this.roleAdmin.id">
-      <a routerLink="/logs">
+      <a routerLink="/logs" data-cy="logsButton">
         <img src="assets/logs-icon.png" alt="logs"> <!-- Replace with the actual path to your icon -->
         <span>Logs</span>
       </a>
     </div>
     <div class="menu-item" >
-      <a href="http://localhost:5500/Thumb_Raiser.html" target="_blank">
+      <a href="http://localhost:5500/Thumb_Raiser.html" target="_blank" data-cy="3DModuleButton">
         <img src="assets/3d-icon.png" alt="3D Module"> <!-- Replace with the actual path to your icon -->
         <span>3D Module</span>
       </a>
     </div>
     <div class="menu-item" *ngIf="currentUser.role === this.roleGestorDeTarefas.id || currentUser.role === this.roleAdmin.id"  >
-      <a routerLink="/path">
+      <a routerLink="/path" data-cy="pathButton">
         <img src="assets/path-icon.png" alt="path"> <!-- Replace with the actual path to your icon -->
         <span>Paths</span>
       </a>

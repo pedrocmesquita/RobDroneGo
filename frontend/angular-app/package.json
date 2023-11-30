@@ -30,6 +30,7 @@
     "@angular-devkit/build-angular": "^17.0.1",
     "@angular/cli": "^17.0.1",
     "@angular/compiler-cli": "^17.0.0",
+    "@cypress/angular": "^2.0.3",
     "@types/jasmine": "~5.1.0",
     "@types/jest": "^29.5.10",
     "cypress": "^13.6.0",

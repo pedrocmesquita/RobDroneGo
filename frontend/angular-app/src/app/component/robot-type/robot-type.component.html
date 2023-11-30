@@ -4,26 +4,26 @@
   <div class="header-container">
     <h1>Robot Type Component</h1>
   </div>
-  <button (click)="selectOption('create')">Create Robot Type</button>
-  <button (click)="selectOption('listOrEdit')">List Robot Types</button>
+  <button (click)="selectOption('create')" data-cy="createButton">Create Robot Type</button>
+  <button (click)="selectOption('listOrEdit')" data-cy="listButton">List Robot Types</button>
   <div *ngIf="selectedOption === 'create'">
   <form (ngSubmit)="createRobotType()">
-    <input [(ngModel)]="newRobotType.typeId" name="typeId" placeholder="Type ID">
-    <input [(ngModel)]="newRobotType.brand" name="brand" placeholder="Brand">
-    <input [(ngModel)]="newRobotType.model" name="model" placeholder="Model Number">
+    <input [(ngModel)]="newRobotType.typeId" name="typeId" placeholder="Type ID" data-cy="nameInput">
+    <input [(ngModel)]="newRobotType.brand" name="brand" placeholder="Brand" data-cy="brandInput">
+    <input [(ngModel)]="newRobotType.model" name="model" placeholder="Model Number" data-cy="modelInput">
     <label>Task Category</label>
-    <select name="taskCategory" [(ngModel)]="newRobotType.taskCategory" >
+    <select name="taskCategory" [(ngModel)]="newRobotType.taskCategory" data-cy="categoryButton">
       <option *ngFor="let taskCategoryType of taskCategoryTypes" [value]="taskCategoryType">{{ taskCategoryType }}</option>
     </select>
-    <button type="submit">Create Robot Type</button>
+    <button type="submit" data-cy="createsButton">Create Robot Type</button>
   </form>
   </div>
   <div *ngIf="selectedOption === 'listOrEdit'" class="list-edit-container">
     <div class="filter-id">
-  <input [(ngModel)]="filterText" placeholder="Filter by Type ID">
-  <button (click)="filterRobotTypes()">Filter</button>
+  <input [(ngModel)]="filterText" placeholder="Filter by Type ID" data-cy="filterInput">
+  <button (click)="filterRobotTypes()" data-cy="filterButton">Filter</button>
       </div>
-  <table>
+  <table id="robotTypeTable">
     <thead>
     <tr>
       <th>Type ID</th>

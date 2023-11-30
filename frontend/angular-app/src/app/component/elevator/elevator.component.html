@@ -4,47 +4,47 @@
   <div class="header-container">
   <h1>Elevator Component</h1>
   </div>
-  <button (click)="selectOption('create')">Create Elevator</button>
-  <button (click)="selectOption('listOrEdit')">List Elevator</button>
+  <button (click)="selectOption('create')" data-cy="createButton">Create Elevator</button>
+  <button (click)="selectOption('listOrEdit')" data-cy="listButton">List Elevator</button>
   <div *ngIf="selectedOption === 'create'">
   <form (ngSubmit)="createElevator()">
-    <input [(ngModel)]="newElevator.elevatorId" name="elevatorId" placeholder="Elevator ID">
+    <input [(ngModel)]="newElevator.elevatorId" name="elevatorId" placeholder="Elevator ID" data-cy="idInput">
     <label>Building</label>
-    <select [(ngModel)]="selectedBuildingId">
+    <select [(ngModel)]="selectedBuildingId" data-cy="buildingInput">
       <option *ngFor="let building of buildings" [value]="building.buildingId">{{ building.buildingId }}</option>
     </select>
     <label>Floors Attended</label>
-    <select [(ngModel)]="selectedFloors" name="Floors Attended" multiple>
+    <select [(ngModel)]="selectedFloors" name="Floors Attended" multiple data-cy="attendedInput">
       <ng-container *ngFor="let floor of floors | buildingFilter: selectedBuildingId">
         <option [value]="floor">{{ floor }}</option>
       </ng-container>
     </select>
     <p>You have selected {{ selectedFloors.length }} floor(s).</p>
-    <input [(ngModel)]="newElevator.elevatorBrand" name="elevatorBrand" placeholder="Elevator Brand">
-    <input [(ngModel)]="newElevator.elevatorModel" name="elevatorModel" placeholder="Elevator Model">
-    <input [(ngModel)]="newElevator.elevatorSerNum" name="elevatorSerNum" placeholder="Elevator Serial Number">
-    <input [(ngModel)]="newElevator.elevatorDesc" name="elevatorDesc" placeholder="Elevator Description">
+    <input [(ngModel)]="newElevator.elevatorBrand" name="elevatorBrand" placeholder="Elevator Brand" data-cy="brandInput">
+    <input [(ngModel)]="newElevator.elevatorModel" name="elevatorModel" placeholder="Elevator Model" data-cy="modelInput">
+    <input [(ngModel)]="newElevator.elevatorSerNum" name="elevatorSerNum" placeholder="Elevator Serial Number" data-cy="snInput">
+    <input [(ngModel)]="newElevator.elevatorDesc" name="elevatorDesc" placeholder="Elevator Description" data-cy="descInput">
     <label>Current Floor</label>
-    <select [(ngModel)]="newElevator.currentFloor" name="currentFloor">
+    <select [(ngModel)]="newElevator.currentFloor" name="currentFloor" data-cy="currentInput">
       <option *ngFor="let floor of selectedFloors" [value]="floor.split('-')[1]">{{ floor.split('-')[1] }}</option>
     </select>
     <label>Pos X</label>
-    <select [(ngModel)]="newElevator.locationX" name="locationX">
+    <select [(ngModel)]="newElevator.locationX" name="locationX" data-cy="XInput">
       <option *ngFor="let locationX of coordinateOptions" [value]="locationX">{{ locationX }}</option>
     </select>
     <label>Pos Y</label>
-    <select [(ngModel)]="newElevator.locationY" name="locationY">
+    <select [(ngModel)]="newElevator.locationY" name="locationY" data-cy="YInput">
       <option *ngFor="let locationY of coordinateOptions" [value]="locationY">{{ locationY }}</option>
     </select>
-    <button type="submit">Create Elevator</button>
+    <button type="submit" data-cy="createsButton">Create Elevator</button>
   </form>
   </div>
   <div *ngIf="selectedOption === 'listOrEdit'" class="list-edit-container">
     <div class="filter-id">
-  <input [(ngModel)]="filterText" placeholder="Filter by ID">
-  <button (click)="filterElevators()">Filter</button>
+  <input [(ngModel)]="filterText" placeholder="Filter by ID" data-cy="filterInput">
+  <button (click)="filterElevators()" data-cy="filterButton">Filter</button>
     </div>
-  <table>
+  <table id="elevatorTable">
     <thead>
     <tr>
       <th>Elevator ID</th>

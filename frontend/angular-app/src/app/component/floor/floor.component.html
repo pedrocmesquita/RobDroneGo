@@ -4,31 +4,31 @@
   <div class="header-container">
     <h1>Floor Component</h1>
   </div>
-  <button (click)="selectOption('create')">Create Floor</button>
-  <button (click)="selectOption('listOrEdit')">List or Edit Floor</button>
+  <button (click)="selectOption('create')" data-cy="createButton">Create Floor</button>
+  <button (click)="selectOption('listOrEdit')" data-cy="listButton">List or Edit Floor</button>
   <div *ngIf="selectedOption === 'create'">
   <form (ngSubmit)="createFloor()">
     <label>Building ID</label>
-    <select [(ngModel)]="newFloor.buildingId" name="Building ID">
+    <select [(ngModel)]="newFloor.buildingId" name="Building ID" data-cy="buildingInput">
       <option *ngFor="let building of buildings" [value]="building.buildingId">{{ building.buildingId }}</option>
     </select>
     <label> Floor Number</label>
-    <select  name="floorNumber" [(ngModel)]="newFloor.floorNumber">
+    <select  name="floorNumber" [(ngModel)]="newFloor.floorNumber" data-cy="numberInput">
       <option *ngFor="let number of floorOptions" [value]="number">{{ number }}</option>
     </select>
-    <input [(ngModel)]="newFloor.floorDescription" name="floorDescription" placeholder="Description">
-    <button type="submit">Create Floor</button>
+    <input [(ngModel)]="newFloor.floorDescription" name="floorDescription" placeholder="Description" data-cy="descInput">
+    <button type="submit" data-cy="createsButton">Create Floor</button>
   </form>
   </div>
   <div *ngIf="selectedOption === 'listOrEdit'" class="list-edit-container">
 <div class="filter-con-buttons">
-  <button (click)="filterFloorsWithConnections()">Filter Floors With Connections</button>
+  <button (click)="filterFloorsWithConnections()" data-cy="filterConnectionsButton">Filter Floors With Connections</button>
 </div>
     <div class="filter-buttons">
-  <input [(ngModel)]="filterText" placeholder="Filter by ID">
-  <button (click)="filterFloors()">Filter</button>
+  <input [(ngModel)]="filterText" placeholder="Filter by ID" data-cy="filterInput">
+  <button (click)="filterFloors()" data-cy="filterButton">Filter</button>
     </div>
-  <table>
+  <table id="floorTable">
     <thead>
     <tr>
       <th>Building ID</th>

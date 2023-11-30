@@ -4,54 +4,54 @@
   <div class="header-container">
   <h1>Room Component</h1>
   </div>
-  <button (click)="selectOption('create')">Create Room</button>
-  <button (click)="selectOption('listOrEdit')">List or Edit Room</button>
+  <button (click)="selectOption('create')" data-cy="createButton">Create Room</button>
+  <button (click)="selectOption('listOrEdit')" data-cy="listButton">List or Edit Room</button>
   <div *ngIf="selectedOption === 'create'">
   <form (ngSubmit)="createRoom()">
     <label>Floor ID</label>
-    <select [(ngModel)]="newRoom.floorId" name="Floor ID">
+    <select [(ngModel)]="newRoom.floorId" name="Floor ID" data-cy="floorInput">
       <option *ngFor="let floor of floors" [value]="floor.floorId">{{ floor.floorId }}</option>
     </select>
-    <input [(ngModel)]="newRoom.roomId" name="roomId" placeholder="Room ID">
-    <input [(ngModel)]="newRoom.roomName" name="roomName" placeholder="Room Name">
-    <input [(ngModel)]="newRoom.roomDescription" name="roomDescription" placeholder="Room Description">
+    <input [(ngModel)]="newRoom.roomId" name="roomId" placeholder="Room ID" data-cy="idInput">
+    <input [(ngModel)]="newRoom.roomName" name="roomName" placeholder="Room Name" data-cy="nameInput">
+    <input [(ngModel)]="newRoom.roomDescription" name="roomDescription" placeholder="Room Description" data-cy="descInput">
     <label>Room Category</label>
-    <select name="roomCategory" [(ngModel)]="newRoom.roomCategory" >
+    <select name="roomCategory" [(ngModel)]="newRoom.roomCategory" data-cy="categoryInput">
       <option *ngFor="let roomCategory of roomCategories" [value]="roomCategory">{{ roomCategory }}</option>
     </select>
     <label>Door X</label>
-    <select name="doorX" [(ngModel)]="newRoom.doorX" >
+    <select name="doorX" [(ngModel)]="newRoom.doorX" data-cy="doorXInput">
       <option *ngFor="let doorX of doorOptions" [value]="doorX">{{ doorX }}</option>
     </select>
     <label>Door Y</label>
-    <select name="doorY" [(ngModel)]="newRoom.doorY" >
+    <select name="doorY" [(ngModel)]="newRoom.doorY" data-cy="doorYInput">
       <option *ngFor="let doorY of doorOptions" [value]="doorY">{{ doorY }}</option>
     </select>
     <label>Origin Coordinate X</label>
-    <select name="originCoordinateX" [(ngModel)]="newRoom.originCoordinateX" >
+    <select name="originCoordinateX" [(ngModel)]="newRoom.originCoordinateX" data-cy="originXInput">
       <option *ngFor="let originCoordinateX of coordinateOptions" [value]="originCoordinateX">{{ originCoordinateX }}</option>
     </select>
     <label>Origin Coordinate Y</label>
-    <select name="originCoordinateY" [(ngModel)]="newRoom.originCoordinateY">
+    <select name="originCoordinateY" [(ngModel)]="newRoom.originCoordinateY" data-cy="originYInput">
       <option *ngFor="let originCoordinateY of coordinateOptions" [value]="originCoordinateY">{{ originCoordinateY }}</option>
     </select>
     <label>Destination Coordinate X</label>
-    <select name="destinationCoordinateX" [(ngModel)]="newRoom.destinationCoordinateX" >
+    <select name="destinationCoordinateX" [(ngModel)]="newRoom.destinationCoordinateX" data-cy="destXInput">
       <option *ngFor="let destinationCoordinateX of coordinateOptions" [value]="destinationCoordinateX">{{ destinationCoordinateX }}</option>
     </select>
     <label>Destination Coordinate Y</label>
-    <select name="destinationCoordinateY" [(ngModel)]="newRoom.destinationCoordinateY" >
+    <select name="destinationCoordinateY" [(ngModel)]="newRoom.destinationCoordinateY" data-cy="destYInput">
       <option *ngFor="let destinationCoordinateY of coordinateOptions" [value]="destinationCoordinateY">{{ destinationCoordinateY }}</option>
     </select>
-    <button type="submit">Create Room</button>
+    <button type="submit" data-cy="createsButton">Create Room</button>
   </form>
   </div>
   <div *ngIf="selectedOption === 'listOrEdit'" class="list-edit-container">
     <div class="filter-id">
-  <input [(ngModel)]="filterText" placeholder="Filter by ID">
-  <button (click)="filterRooms()">Filter</button>
+  <input [(ngModel)]="filterText" placeholder="Filter by ID" data-cy="filterInput">
+  <button (click)="filterRooms()" data-cy="filterButton">Filter</button>
     </div>
-  <table>
+  <table id="roomTable">
     <thead>
     <tr>
       <th>Room ID</th>

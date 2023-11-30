@@ -4,51 +4,51 @@
   <div class="header-container">
     <h1>Building Component</h1>
   </div>
-  <button (click)="selectOption('create')">Create Building</button>
-  <button (click)="selectOption('listOrEdit')">List or Edit Building</button>
+  <button (click)="selectOption('create')" data-cy="createButton">Create Building</button>
+  <button (click)="selectOption('listOrEdit')" data-cy="listButton">List or Edit Building</button>
   <div *ngIf="selectedOption === 'create'">
   <form (ngSubmit)="createBuilding()">
-    <input [(ngModel)]="newBuilding.buildingId" name="buildingId" placeholder="ID">
-    <input [(ngModel)]="newBuilding.buildingName" name="buildingName" placeholder="Name">
-    <input [(ngModel)]="newBuilding.buildingDescription" name="buildingDescription" placeholder="Description">
+    <input [(ngModel)]="newBuilding.buildingId" name="buildingId" placeholder="ID" data-cy="idInput">
+    <input [(ngModel)]="newBuilding.buildingName" name="buildingName" placeholder="Name" data-cy="nameInput">
+    <input [(ngModel)]="newBuilding.buildingDescription" name="buildingDescription" placeholder="Description" data-cy="descInput">
     <label>Number of Floors</label>
-    <select name="buildingNumberOfFloors" [(ngModel)]="newBuilding.buildingNumberOfFloors">
+    <select name="buildingNumberOfFloors" [(ngModel)]="newBuilding.buildingNumberOfFloors" data-cy="numInput">
       <option *ngFor="let number of floorOptions" [value]="number">{{ number }}</option>
     </select>
     <label>Dim X</label>
-    <select name="dimX" [(ngModel)]="newBuilding.dimX">
+    <select name="dimX" [(ngModel)]="newBuilding.dimX" data-cy="x">
       <option *ngFor="let number of dimensionOptions" [value]="number">{{ number }}</option>
     </select>
     <label>Dim Y</label>
-    <select name="dimY" [(ngModel)]="newBuilding.dimY">
+    <select name="dimY" [(ngModel)]="newBuilding.dimY" data-cy="y">
       <option *ngFor="let number of dimensionOptions" [value]="number">{{ number }}</option>
     </select>
     <label>Wall Height</label>
-    <select name="wallHeight" [(ngModel)]="newBuilding.wallHeight">
+    <select name="wallHeight" [(ngModel)]="newBuilding.wallHeight" data-cy="wh">
       <option *ngFor="let number of wallOptions" [value]="number">{{ number }}</option>
     </select>
     <label>Wall Width</label>
-    <select name="wallWidth" [(ngModel)]="newBuilding.wallWidth">
+    <select name="wallWidth" [(ngModel)]="newBuilding.wallWidth" data-cy="ww">
       <option *ngFor="let number of wallOptions" [value]="number">{{ number }}</option>
     </select>
-    <button type="submit">Create Building</button>
+    <button type="submit" data-cy="createsButton">Create Building</button>
   </form>
   </div>
     <div *ngIf="selectedOption === 'listOrEdit'" class="list-edit-container">
       <div class="filter-id">
-      <input [(ngModel)]="filterText" placeholder="Filter by ID">
-      <button (click)="filterBuildings()">Filter</button>
+      <input [(ngModel)]="filterText" placeholder="Filter by ID" data-cy="filterInput">
+      <button (click)="filterBuildings()" data-cy="filterButton">Filter</button>
       </div>
       <div class="filter-floors">
-      <select [(ngModel)]="minFloors">
+      <select [(ngModel)]="minFloors" data-cy="minInput">
         <option *ngFor="let number of floorOptions" [value]="number">{{ number }}</option>
       </select>
-      <select [(ngModel)]="maxFloors">
+      <select [(ngModel)]="maxFloors" data-cy="maxInput">
         <option *ngFor="let number of floorOptions" [value]="number">{{ number }}</option>
       </select>
-      <button (click)="filterBuildingsByFloors()">Filter by Number of Floors</button>
+      <button (click)="filterBuildingsByFloors()" data-cy="filter2Button">Filter by Number of Floors</button>
       </div>
-  <table>
+  <table id="buildingTable">
     <thead>
     <tr>
       <th>ID</th>
@@ -66,7 +66,7 @@
     <tr *ngFor="let building of filteredBuildings">
       <td>{{ building.buildingId }}</td>
       <td><input [(ngModel)]="building.buildingName" placeholder="Name"></td>
-      <td><input [(ngModel)]="building.buildingNumberOfFloors" placeholder="Number of Floors"></td>
+      <td><input [(ngModel)]="building.buildingNumberOfFloors" placeholder="Number of Floors" data-cy="edit"></td>
       <td><input [(ngModel)]="building.buildingDescription" placeholder="Description"></td>
       <td><input [(ngModel)]="building.dimX" placeholder="Dimension X"></td>
       <td><input [(ngModel)]="building.dimY" placeholder="Dimension Y"></td>
@@ -88,7 +88,7 @@
           </div>
         </div>
       </td>
-      <td><button (click)="editBuilding(building)">Edit Building</button></td>
+      <td><button (click)="editBuilding(building)" data-cy="updateButton">Edit Building</button></td>
     </tr>
     </tbody>
   </table>

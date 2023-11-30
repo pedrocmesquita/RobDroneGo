@@ -35,3 +35,30 @@
 //     }
 //   }
 // }
+
+// cypress/support/commands.js
+
+// cypress/support/commands.js
+
+Cypress.Commands.add('customLogin', (email, password) => {
+  // Assuming you have a login form with data-cy attributes
+  cy.visit('localhost:4200'); // Adjust the URL as per your application
+  cy.get('[data-cy=emailInput]').type(email);
+  cy.get('[data-cy=passwordInput]').type(password);
+  cy.get('[data-cy=loginButton]').click();
+
+  // Add any additional logic if needed, e.g., wait for a login confirmation
+  // For example, waiting for a successful login redirect
+  cy.url().should('include', '/home'); // Adjust the URL as per your application
+});
+
+Cypress.Commands.add('directVisit', (name) => {
+  cy.visit('localhost:4200'); // Adjust the URL as per your application
+  cy.get('[data-cy=emailInput]').type('mc@gmail.com');
+  cy.get('[data-cy=passwordInput]').type('123');
+  cy.get('[data-cy=loginButton]').click();
+  cy.wait(2500);
+  cy.visit('localhost:4200/' + name);
+});
+
+

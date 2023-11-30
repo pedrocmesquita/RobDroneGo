@@ -3,16 +3,16 @@
   <form (ngSubmit)="onSubmit(loginForm)" #loginForm="ngForm" class="login-form">
     <div>
       <label for="email">Email</label>
-      <input type="email" id="email" name="email" ngModel required>
+      <input type="email" id="email" name="email" ngModel required data-cy="emailInput">
     </div>
     <div>
       <label for="password">Password</label>
-      <input type="password" id="password" name="password" ngModel required>
+      <input type="password" id="password" name="password" ngModel required data-cy="passwordInput">
     </div>
-    <button type="submit">Login</button>
+    <button type="submit" data-cy="loginButton">Login</button>
   </form>
-  <p *ngIf="errorMessage" class="error-message">{{ errorMessage }}</p>
+  <p *ngIf="errorMessage" class="error-message" data-cy="errorMessage">{{ errorMessage }}</p>
   <p>Don't have an account? <a routerLink="/signup">Signup</a></p>
-  <p *ngIf="successMessage" class="success-message">{{ successMessage }}</p>
-  <p *ngIf="isLoading" class="loading-spinner"></p>
+  <p *ngIf="successMessage" class="success-message" data-cy="successMessage">{{ successMessage }}</p>
+  <p *ngIf="isLoading" class="loading-spinner" data-cy="loadingSpinner"></p>
 </div>

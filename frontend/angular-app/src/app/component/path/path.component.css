@@ -1,3 +1,15 @@
+/* Add the following styles for the two-column layout */
+.form-columns {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.column {
+  flex-basis: calc(50% - 10px); /* Adjust the width as needed, considering margin */
+  margin-bottom: 20px; /* Adjust the margin between columns as needed */
+}
+
 /* Reset some default styles for better consistency */
 * {
   margin: 0;
@@ -13,6 +25,20 @@
   border: 1px solid #ccc;
   border-radius: 8px;
   background-color: #f9f9f9;
+  text-align: center; /* Center text within the container */
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  height: 100vh; /* Set body height to 100% of the viewport height */
+  background-image: url('/assets/path6.avif');
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+  display: flex; /* Use flexbox to align content vertically */
+  flex-direction: column; /* Stack children vertically */
 }
 
 /* Style form labels */
@@ -64,4 +90,19 @@
   white-space: pre-wrap;
   display: inline;
 }
+
+/* Center the h1 element */
+h1 {
+  text-align: center;
+  margin-top: 10px;
+}
+
+/* Center the search button */
+.form-columns .center {
+  flex-basis: 100%; /* Take up the full width of the container */
+  text-align: center;
+}
+
+
+
 

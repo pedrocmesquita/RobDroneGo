@@ -1,41 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="path.component.css">
+  <title>Your Webpage</title>
+</head>
+<body>
+<h1>Search for the shortest path</h1>
 <div class="path-search">
-  <form (submit)="onSubmit()">
-    <div>
+  <form (submit)="onSubmit()" class="form-columns">
+    <div class="column">
       <label for="originB">Origin Building:</label>
       <input type="text" id="originB" name="originB" [(ngModel)]="originB" data-cy="originBInput">
-    </div>
-    <div>
-      <label for="destB">Destination Building:</label>
-      <input type="text" id="destB" name="destB" [(ngModel)]="destB" data-cy="destBInput">
-    </div>
-    <div>
+
       <label for="originF">Start Floor:</label>
       <input type="text" id="originF" name="originF" [(ngModel)]="originF" data-cy="originFInput">
-    </div>
-    <div>
-      <label for="destF">End Floor:</label>
-      <input type="text" id="destF" name="destF" [(ngModel)]="destF" data-cy="destFInput">
-    </div>
-    <div>
+
       <label for="originX">Start Origin:</label>
       <input type="text" id="originX" name="originX" [(ngModel)]="originX" data-cy="originXInput">
-    </div>
-    <div>
+
       <label for="originY">Start Destination:</label>
       <input type="text" id="originY" name="originY" [(ngModel)]="originY" data-cy="originYInput">
+
+
+
+
+
+      <!-- Add other input fields for the first column -->
     </div>
-    <div>
+    <div class="column">
+      <label for="destB">Destination Building:</label>
+      <input type="text" id="destB" name="destB" [(ngModel)]="destB" data-cy="destBInput">
+
+      <label for="destF">End Floor:</label>
+      <input type="text" id="destF" name="destF" [(ngModel)]="destF" data-cy="destFInput">
+
       <label for="destX">End Origin:</label>
       <input type="text" id="destX" name="destX" [(ngModel)]="destX" data-cy="destXInput">
-    </div>
-    <div>
+
       <label for="destY">End Destination:</label>
       <input type="text" id="destY" name="destY" [(ngModel)]="destY" data-cy="destYInput">
+      <!-- Add other input fields for the second column -->
     </div>
-    <button type="submit" data-cy="pathForm">Search</button>
+
+    <!-- Add the rest of your form fields here -->
+    <div class="center">
+      <button type="submit" data-cy="pathForm">Search</button>
+    </div>
   </form>
 </div>
-      <div class="list-path-between-two-rooms">
-        <h2>Path Result:</h2>
-        <p id="pathResult" data-cy="pathResult">{{ pathResult }}</p>
-      </div>
+<div class="list-path-between-two-rooms">
+  <h2>Path Result:</h2>
+  <p id="pathResult" data-cy="pathResult">{{ pathResult }}</p>
+</div>
+</body>
+</html>

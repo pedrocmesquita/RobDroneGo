@@ -83,6 +83,8 @@ export default class PathService implements IPathService {
 
     const buildings = await this.buildingRepo.getBuildings();
 
+    const filePath = 'output.pl';
+
     for (let i = 0; i < buildings.length; i++) {
       const building = buildings.at(i);
       const Floors = building.floors;
@@ -94,12 +96,12 @@ export default class PathService implements IPathService {
         const Connections = floor.connections;
         const Elevators = floor.elevators;
         for (let l = 0; l < buildingSizeX; l++) {
-          console.log("m(" + building.buildingId.buildingId + "," + floor.floorId + "," + l + "," + 0 + "," + "1).");
-          console.log("m(" + building.buildingId.buildingId + "," + floor.floorId + "," + l + "," + buildingSizeY + "," + "1).");
+          fs.appendFileSync(filePath,"m(" + building.buildingId.buildingId + "," + floor.floorId + "," + l + "," + 0 + "," + "1).\n");
+          fs.appendFileSync(filePath,"m(" + building.buildingId.buildingId + "," + floor.floorId + "," + l + "," + buildingSizeY + "," + "1).\n");
         }
         for (let m = 0; m < buildingSizeY; m++) {
-          console.log("m(" + building.buildingId.buildingId + "," + floor.floorId + "," + 0 + "," + m + "," + "1).");
-          console.log("m(" + building.buildingId.buildingId + "," + floor.floorId + "," + buildingSizeX + "," + m + "," + "1).");
+          fs.appendFileSync(filePath,"m(" + building.buildingId.buildingId + "," + floor.floorId + "," + 0 + "," + m + "," + "1).\n");
+          fs.appendFileSync(filePath,"m(" + building.buildingId.buildingId + "," + floor.floorId + "," + buildingSizeX + "," + m + "," + "1).\n");
         }
         for (let k = 0; k < Rooms.length; k++) {
           const room = Rooms.at(k);
@@ -113,31 +115,31 @@ export default class PathService implements IPathService {
           // set north and south walls to 1
           for (let n = Math.min(x, x1); n <= Math.max(x, x1); n++) {
             if (n === doorX && y === doorY) {
-              console.log("m(" + building.buildingId.buildingId + "," + floor.floorId + "," + n + "," + y + "," + "0).");
+              fs.appendFileSync(filePath,"m(" + building.buildingId.buildingId + "," + floor.floorId + "," + n + "," + y + "," + "0).\n");
             } else if (n === doorX && y1 === doorY) {
-              console.log("m(" + building.buildingId.buildingId + "," + floor.floorId + "," + n + "," + y1 + "," + "0).");
+              fs.appendFileSync(filePath,"m(" + building.buildingId.buildingId + "," + floor.floorId + "," + n + "," + y1 + "," + "0).\n");
             } else {
-              console.log("m(" + building.buildingId.buildingId + "," + floor.floorId + "," + n + "," + y + "," + "1).");
-              console.log("m(" + building.buildingId.buildingId + "," + floor.floorId + "," + n + "," + y1 + "," + "1).");
+              fs.appendFileSync(filePath,"m(" + building.buildingId.buildingId + "," + floor.floorId + "," + n + "," + y + "," + "1).\n");
+              fs.appendFileSync(filePath,"m(" + building.buildingId.buildingId + "," + floor.floorId + "," + n + "," + y1 + "," + "1).\n");
             }
           }
 
           // set east and west walls to 1
           for (let p = Math.min(y, y1); p <= Math.max(y, y1); p++) {
             if (p === doorX && x === doorX) {
-              console.log("m(" + building.buildingId.buildingId + "," + floor.floorId + "," + x + "," + p + "," + "0).");
+              fs.appendFileSync(filePath,"m(" + building.buildingId.buildingId + "," + floor.floorId + "," + x + "," + p + "," + "0).\n");
             } else if (p === doorX && x1 === doorX) {
-              console.log("m(" + building.buildingId.buildingId + "," + floor.floorId + "," + x1 + "," + p + "," + "0).");
+              fs.appendFileSync(filePath,"m(" + building.buildingId.buildingId + "," + floor.floorId + "," + x1 + "," + p + "," + "0).\n");
             } else {
-              console.log("m(" + building.buildingId.buildingId + "," + floor.floorId + "," + x + "," + p + "," + "1).");
-              console.log("m(" + building.buildingId.buildingId + "," + floor.floorId + "," + x1 + "," + p + "," + "1).");
+              fs.appendFileSync(filePath,"m(" + building.buildingId.buildingId + "," + floor.floorId + "," + x + "," + p + "," + "1).\n");
+              fs.appendFileSync(filePath,"m(" + building.buildingId.buildingId + "," + floor.floorId + "," + x1 + "," + p + "," + "1).\n");
             }
           }
 
           // set inside of the room to 0
           for (let n = Math.min(x, x1) + 1; n < Math.max(x, x1); n++) {
             for (let p = Math.min(y, y1) + 1; p < Math.max(y, y1); p++) {
-              console.log("m(" + building.buildingId.buildingId + "," + floor.floorId + "," + n + "," + p + "," + "0).");
+              fs.appendFileSync(filePath,"m(" + building.buildingId.buildingId + "," + floor.floorId + "," + n + "," + p + "," + "0).\n");
             }
           }
 
@@ -156,7 +158,7 @@ export default class PathService implements IPathService {
           const x1 = connection.locationToX;
           const y1 = connection.locationToY;
 
-          console.log("ligacao_edificio(cel(" + buildingFrom + "," + floorFrom + "," + x + "," + y + "), cel(" + buildingTo + "," + floorTo + "," + x1 + "," + y1 + ")).")
+          fs.appendFileSync(filePath,"ligacao_edificio(cel(" + buildingFrom + "," + floorFrom + "," + x + "," + y + "), cel(" + buildingTo + "," + floorTo + "," + x1 + "," + y1 + ")).")
 
         }
         /*

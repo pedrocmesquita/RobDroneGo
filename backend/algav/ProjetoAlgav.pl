@@ -1940,13 +1940,6 @@ m(c, 4, 10, 7, 1).
 m(c, 4, 10, 8, 0).
 m(c, 4, 10, 9, 1).
 
-for building
-    for piso
-        matriz = 0
-        bordas = 1
-        for sala 
-            bordassala 1
-
 m(c, 4, 11, 1, 0).
 m(c, 4, 11, 2, 0).
 m(c, 4, 11, 3, 0).

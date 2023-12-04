@@ -39,4 +39,8 @@ export default class PathController implements IPathController {
     }
   }
 
+  public async createPl(req: Request, res: Response, next: NextFunction) {
+    const create = await this.pathServiceInstance.createPl();
+  }
+
 }

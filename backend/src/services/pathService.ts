@@ -1,4 +1,4 @@
-import { Service } from "typedi";
+import { Inject, Service } from "typedi";
 import * as fs from "fs";
 import * as readline from "readline";
 import * as util from "util";
@@ -7,11 +7,23 @@ import IPathService from "./IServices/IPathService";
 import { Result } from "../core/logic/Result";
 import { spawn } from "child_process";
 import * as path from 'path';
+import config from "../../config";
+import IConnectionRepo from "./IRepos/IConnectionRepo";
+import IFloorRepo from "./IRepos/IFloorRepo";
+import IBuildingRepo from "./IRepos/IBuildingRepo";
+import IElevatorRepo from "./IRepos/IElevatorRepo";
 @Service()
 
 
-export default class PathService implements IPathService{
+export default class PathService implements IPathService {
 
+  constructor(
+    @Inject(config.repos.connection.name) private connectionRepo: IConnectionRepo,
+    @Inject(config.repos.floor.name) private floorRepo: IFloorRepo,
+    @Inject(config.repos.building.name) private buildingRepo: IBuildingRepo,
+    @Inject(config.repos.elevator.name) private elevatorRepo: IElevatorRepo
+  ) {
+  }
 
   public async getPl(originB, destB, originF, destF, originX, originY, destX, destY): Promise<String> {
     const { spawn } = require('child_process');
@@ -36,7 +48,7 @@ export default class PathService implements IPathService{
     prolog.stdout.once('data', (data) => {
       console.log(`Prolog Output (Consult): ${data}`);
       // Write the aStar query to the Prolog process's stdin after consult is complete
-        prolog.stdin.write(`${aStarQuery}\n`);
+      prolog.stdin.write(`${aStarQuery}\n`);
 
       setTimeout(() => {
         prolog.stdin.end();
@@ -67,4 +79,96 @@ export default class PathService implements IPathService{
     });
   }
 
+  public async createPl(): Promise<void> {
+
+    const buildings = await this.buildingRepo.getBuildings();
+
+    for (let i = 0; i < buildings.length; i++) {
+      const building = buildings.at(i);
+      const Floors = building.floors;
+      const buildingSizeX = building.dimX;
+      const buildingSizeY = building.dimY;
+      for (let j = 0; j < Floors.length; j++) {
+        const floor = Floors.at(j);
+        const Rooms = floor.rooms;
+        const Connections = floor.connections;
+        const Elevators = floor.elevators;
+        for (let l = 0; l < buildingSizeX; l++) {
+          console.log("m(" + building.buildingId.buildingId + "," + floor.floorId + "," + l + "," + 0 + "," + "1).");
+          console.log("m(" + building.buildingId.buildingId + "," + floor.floorId + "," + l + "," + buildingSizeY + "," + "1).");
+        }
+        for (let m = 0; m < buildingSizeY; m++) {
+          console.log("m(" + building.buildingId.buildingId + "," + floor.floorId + "," + 0 + "," + m + "," + "1).");
+          console.log("m(" + building.buildingId.buildingId + "," + floor.floorId + "," + buildingSizeX + "," + m + "," + "1).");
+        }
+        for (let k = 0; k < Rooms.length; k++) {
+          const room = Rooms.at(k);
+          const x = room.destinationCoordinateX;
+          const y = room.destinationCoordinateY;
+          const x1 = room.originCoordinateX
+          const y1 = room.originCoordinateY;
+          const doorX = room.door.doorX;
+          const doorY = room.door.doorY;
+
+          // set north and south walls to 1
+          for (let n = Math.min(x, x1); n <= Math.max(x, x1); n++) {
+            if (n === doorX && y === doorY) {
+              console.log("m(" + building.buildingId.buildingId + "," + floor.floorId + "," + n + "," + y + "," + "0).");
+            } else if (n === doorX && y1 === doorY) {
+              console.log("m(" + building.buildingId.buildingId + "," + floor.floorId + "," + n + "," + y1 + "," + "0).");
+            } else {
+              console.log("m(" + building.buildingId.buildingId + "," + floor.floorId + "," + n + "," + y + "," + "1).");
+              console.log("m(" + building.buildingId.buildingId + "," + floor.floorId + "," + n + "," + y1 + "," + "1).");
+            }
+          }
+
+          // set east and west walls to 1
+          for (let p = Math.min(y, y1); p <= Math.max(y, y1); p++) {
+            if (p === doorX && x === doorX) {
+              console.log("m(" + building.buildingId.buildingId + "," + floor.floorId + "," + x + "," + p + "," + "0).");
+            } else if (p === doorX && x1 === doorX) {
+              console.log("m(" + building.buildingId.buildingId + "," + floor.floorId + "," + x1 + "," + p + "," + "0).");
+            } else {
+              console.log("m(" + building.buildingId.buildingId + "," + floor.floorId + "," + x + "," + p + "," + "1).");
+              console.log("m(" + building.buildingId.buildingId + "," + floor.floorId + "," + x1 + "," + p + "," + "1).");
+            }
+          }
+
+          // set inside of the room to 0
+          for (let n = Math.min(x, x1) + 1; n < Math.max(x, x1); n++) {
+            for (let p = Math.min(y, y1) + 1; p < Math.max(y, y1); p++) {
+              console.log("m(" + building.buildingId.buildingId + "," + floor.floorId + "," + n + "," + p + "," + "0).");
+            }
+          }
+
+          //set the rest of the building to 0 if not 1
+          // to-do
+
+        }
+        for (let k = 0; k < Connections.length; k++) {
+          const connection = Connections.at(k);
+          const buildingFrom = connection.buildingfromId;
+          const buildingTo = connection.buildingtoId;
+          const floorFrom = connection.floorfromId;
+          const floorTo = connection.floortoId;
+          const x = connection.locationX;
+          const y = connection.locationY;
+          const x1 = connection.locationToX;
+          const y1 = connection.locationToY;
+
+          console.log("ligacao_edificio(cel(" + buildingFrom + "," + floorFrom + "," + x + "," + y + "), cel(" + buildingTo + "," + floorTo + "," + x1 + "," + y1 + ")).")
+
+        }
+        /*
+        PRECISA DE REVISÃO porque não guardamos a localização dos elevadores no piso adjacente
+        for(let k = 0; k < Elevators.length; k++) {
+          const elevator = Elevators.at(k);
+          const x = elevator.locationX;
+          const y = elevator.locationY;
+          console.log("ligacao_piso(" + building.buildingId.buildingId +" cel(c, 1, 10, 2), cel(c, 2, 11, 2)");
+        }
+        */
+      }
+    }
   }
+}

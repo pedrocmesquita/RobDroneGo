@@ -16,5 +16,7 @@ export default (app: Router) => {
   router.get("/:originB/:destB/:originF/:destF/:originX/:originY/:destX/:destY"
     , (req, res, next) => ctrl.getPl(req, res, next));
 
+  router.get("/create", (req, res, next) => ctrl.createPl(req, res, next));
+
 
 }

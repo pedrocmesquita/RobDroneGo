@@ -85,6 +85,64 @@ export default class PathService implements IPathService {
 
     const filePath = 'output.pl';
 
+    fs.appendFileSync(filePath, ":- set_prolog_flag(answer_write_options,[max_depth(0)]).\n" +
+      ":- set_prolog_flag(stack_limit,17_179_869_184). %next size stack 17_179_869_184\n" +
+      "\n" +
+      ":- dynamic ligacel/2.\n" +
+      ":- dynamic ligacao_piso/3.\n" +
+      ":- dynamic ligacao_edificio/2.\n" +
+      "\n" +
+      "% Função para criar os grafos de um piso específico\n" +
+      "\n" +
+      "cria_grafo(Edificio, Piso, _, 0) :- !.\n" +
+      "cria_grafo(Edificio, Piso, Col, Lin) :-\n" +
+      "    cria_grafo_lin(Edificio, Piso, Col, Lin),\n" +
+      "    Lin1 is Lin - 1,\n" +
+      "    cria_grafo(Edificio, Piso, Col, Lin1).\n" +
+      "\n" +
+      "cria_grafo_lin(_, _, 0, _) :- !.\n" +
+      "cria_grafo_lin(Edificio, Piso, Col, Lin) :-\n" +
+      "    m(Edificio, Piso, Col, Lin, 0), !,\n" +
+      "    ColS is Col + 1, ColA is Col - 1, LinS is Lin + 1, LinA is Lin - 1,\n" +
+      "    cria_ligacoes(Edificio, Piso, Col, Lin, ColS, ColA, LinS, LinA),\n" +
+      "    Col1 is Col - 1,\n" +
+      "    cria_grafo_lin(Edificio, Piso, Col1, Lin).\n" +
+      "\n" +
+      "cria_grafo_lin(Edificio, Piso, Col, Lin) :-\n" +
+      "    Col1 is Col - 1,\n" +
+      "    cria_grafo_lin(Edificio, Piso, Col1, Lin).\n" +
+      "\n" +
+      "% Função auxiliar para criar ligações entre células adjacentes\n" +
+      "cria_ligacoes(Edificio, Piso, Col, Lin, ColS, ColA, LinS, LinA) :-\n" +
+      "    ((m(Edificio, Piso, ColS, Lin, 0), assertz(ligacel(cel(Edificio, Piso, Col, Lin), cel(Edificio, Piso, ColS, Lin))); true)),\n" +
+      "    ((m(Edificio, Piso, ColA, Lin, 0), assertz(ligacel(cel(Edificio, Piso, Col, Lin), cel(Edificio, Piso, ColA, Lin))); true)),\n" +
+      "    ((m(Edificio, Piso, Col, LinS, 0), assertz(ligacel(cel(Edificio, Piso, Col, Lin), cel(Edificio, Piso, Col, LinS))); true)),\n" +
+      "    ((m(Edificio, Piso, Col, LinA, 0), assertz(ligacel(cel(Edificio, Piso, Col, Lin), cel(Edificio, Piso, Col, LinA))); true)),\n" +
+      "    % Ligações diagonais\n" +
+      "    ((m(Edificio, Piso, ColS, LinS, 0), assertz(ligacel(cel(Edificio, Piso, Col, Lin), cel(Edificio, Piso, ColS, LinS))); true)),\n" +
+      "    ((m(Edificio, Piso, ColS, LinA, 0), assertz(ligacel(cel(Edificio, Piso, Col, Lin), cel(Edificio, Piso, ColS, LinA))); true)),\n" +
+      "    ((m(Edificio, Piso, ColA, LinS, 0), assertz(ligacel(cel(Edificio, Piso, Col, Lin), cel(Edificio, Piso, ColA, LinS))); true)),\n" +
+      "    ((m(Edificio, Piso, ColA, LinA, 0), assertz(ligacel(cel(Edificio, Piso, Col, Lin), cel(Edificio, Piso, ColA, LinA))); true)).\n" +
+      "\n" +
+      "% Extensão do ligacel para lidar com ligações entre pisos e edifícios\n" +
+      "ligacel(Cel1, Cel2) :-\n" +
+      "    ligacel_piso(Cel1, Cel2);  % Verifica se existe ligação direta\n" +
+      "    ligacel_piso(Cel2, Cel1);  % Verifica se a ligação é bidirecional\n" +
+      "    ligacao_piso(_, Cel1, Cel2);  % Verifica ligações entre pisos\n" +
+      "    ligacao_piso(_, Cel2, Cel1);  % Verifica se a ligação entre pisos é bidirecional\n" +
+      "    ligacao_edificio(Cel1, Cel2);  % Verifica ligações entre edifícios\n" +
+      "    ligacao_edificio(Cel2, Cel1).  % Verifica se a ligação entre edifícios é bidirecional\n" +
+      "\n" +
+      "ligacel_piso(cel(Edificio, Piso, Col, Lin), cel(Edificio, Piso, Col, LinS)) :-\n" +
+      "    m(Edificio, Piso, Col, Lin, 0),\n" +
+      "    m(Edificio, Piso, Col, LinS, 0),\n" +
+      "    LinS is Lin + 1.\n" +
+      "\n" +
+      "ligacel_piso(cel(Edificio, Piso, Col, Lin), cel(Edificio, Piso, ColS, Lin)) :-\n" +
+      "    m(Edificio, Piso, Col, Lin, 0),\n" +
+      "    m(Edificio, Piso, ColS, Lin, 0),\n" +
+      "    ColS is Col + 1.\n");
+
     for (let i = 0; i < buildings.length; i++) {
       const building = buildings.at(i);
       const Floors = building.floors;
@@ -144,7 +202,29 @@ export default class PathService implements IPathService {
           }
 
           //set the rest of the building to 0 if not 1
-          // to-do
+          for (let n = 0; n < buildingSizeX; n++) {
+            for (let p = 0; p < buildingSizeY; p++) {
+              // Check if the position already has a 1 (wall or room)
+              const hasWallOrRoom = Rooms.some(room => {
+                const x = room.destinationCoordinateX;
+                const y = room.destinationCoordinateY;
+                const x1 = room.originCoordinateX;
+                const y1 = room.originCoordinateY;
+                const doorX = room.door.doorX;
+                const doorY = room.door.doorY;
+
+                return (
+                  (n >= Math.min(x, x1) && n <= Math.max(x, x1) && p >= Math.min(y, y1) && p <= Math.max(y, y1)) ||
+                  (p === doorY && ((n === doorX && y === doorY) || (n === doorX && y1 === doorY)))
+                );
+              });
+
+              // If the position doesn't have a wall or room, set it to 0
+              if (!hasWallOrRoom) {
+                fs.appendFileSync(filePath, `m(${building.buildingId.buildingId},${floor.floorId},${n},${p},0).\n`);
+              }
+            }
+          }
 
         }
         for (let k = 0; k < Connections.length; k++) {
@@ -158,19 +238,60 @@ export default class PathService implements IPathService {
           const x1 = connection.locationToX;
           const y1 = connection.locationToY;
 
-          fs.appendFileSync(filePath,"ligacao_edificio(cel(" + buildingFrom + "," + floorFrom + "," + x + "," + y + "), cel(" + buildingTo + "," + floorTo + "," + x1 + "," + y1 + ")).")
+          fs.appendFileSync(filePath,"ligacao_edificio(cel(" + buildingFrom + "," + floorFrom + "," + x + "," + y + "), cel(" + buildingTo + "," + floorTo + "," + x1 + "," + y1 + ")).\n")
 
         }
-        /*
-        PRECISA DE REVISÃO porque não guardamos a localização dos elevadores no piso adjacente
         for(let k = 0; k < Elevators.length; k++) {
           const elevator = Elevators.at(k);
-          const x = elevator.locationX;
-          const y = elevator.locationY;
-          console.log("ligacao_piso(" + building.buildingId.buildingId +" cel(c, 1, 10, 2), cel(c, 2, 11, 2)");
+          const floorsAttended = elevator.floorsAttended;
+          const x = elevator.locationX.locationX;
+          const y = elevator.locationY.locationY;
+          for (let l = 0; l < floorsAttended.length; l++) {
+            fs.appendFileSync(filePath,"ligacao_piso(" + building.buildingId.buildingId +", cel("+ building.buildingId.buildingId + ", "+floor.floorId+", "+x+", "+y+", cel("+ building.buildingId.buildingId + ", "+floor.floorId+", "+x+", "+y+")).\n");
+          }
         }
-        */
       }
     }
+    fs.appendFileSync(filePath,"% Predicado de inicialização\n" +
+      ":- initialization(cria_grafos).\n" +
+      "\n" +
+      "cria_grafos :-\n" +
+      "    cria_grafo(c,1,16,10),\n" +
+      "    cria_grafo(d,1,17,10),\n" +
+      "    cria_grafo(a,1,10,16),\n" +
+      "    cria_grafo(b,1,11,15),\n" +
+      "    cria_grafo(c,2,17,10),\n" +
+      "    cria_grafo(d,2,14,10),\n" +
+      "    cria_grafo(a,2,9,18),\n" +
+      "    cria_grafo(b,2,8,19),\n" +
+      "    cria_grafo(c,3,18,9),\n" +
+      "    cria_grafo(d,3,14,9),\n" +
+      "    cria_grafo(b,3,8,17),\n" +
+      "    cria_grafo(c,4,15,9).\n" +
+      "\n" +
+      "aStar(Orig, Dest, Cam, Custo):-\n" +
+      "    aStar2(Dest, [(_, 0, [Orig])], [], Cam, Custo).\n" +
+      "\n" +
+      "aStar2(Dest, [(_, Custo, [Dest|T])|_], _, Cam, Custo):-\n" +
+      "    reverse([Dest|T], Cam).\n" +
+      "\n" +
+      "aStar2(Dest, [(_, Ca, LA)|Outros], Visitados, Cam, Custo):-\n" +
+      "    LA = [Act|_],\n" +
+      "    findall((CEX, CaX, [X|LA]),\n" +
+      "            (Dest \\== Act,\n" +
+      "             ligacel(Act, X),\n" +
+      "             \\+ member(X, Visitados),\n" +
+      "             \\+ member(X, LA),\n" +
+      "             CaX is Ca + 1,  % Cost from start to current node\n" +
+      "             heuristic(X, Dest, EstX),  % node to goal estimation\n" +
+      "             CEX is CaX + EstX),  % Total cost including heuristic\n" +
+      "            Novos),\n" +
+      "    append(Outros, Novos, Todos),\n" +
+      "    append(Visitados, [Act], VisitadosAtualizados),\n" +
+      "    sort(Todos, TodosOrd),\n" +
+      "    aStar2(Dest, TodosOrd, VisitadosAtualizados, Cam, Custo).\n" +
+      "\n" +
+      "heuristic(cel(_, _, X1, Y1), cel(_, _, X2, Y2), Estimativa) :-\n" +
+      "    Estimativa is abs(X2 - X1) + abs(Y2 - Y1).");
   }
 }

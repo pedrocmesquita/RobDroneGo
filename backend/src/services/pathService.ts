@@ -247,7 +247,7 @@ export default class PathService implements IPathService {
           const x = elevator.locationX.locationX;
           const y = elevator.locationY.locationY;
           for (let l = 0; l < floorsAttended.length; l++) {
-            fs.appendFileSync(filePath,"ligacao_piso(" + building.buildingId.buildingId +", cel("+ building.buildingId.buildingId + ", "+floor.floorId+", "+x+", "+y+", cel("+ building.buildingId.buildingId + ", "+floor.floorId+", "+x+", "+y+")).\n");
+            fs.appendFileSync(filePath,"ligacao_piso(" + building.buildingId.buildingId +"), cel("+ building.buildingId.buildingId + ", "+floor.floorId+", "+x+", "+y+", cel("+ building.buildingId.buildingId + ", "+floor.floorId+", "+x+", "+y+")).\n");
           }
         }
       }

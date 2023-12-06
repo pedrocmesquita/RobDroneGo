@@ -26,6 +26,11 @@ export default class PathService implements IPathService {
   }
 
   public async getPl(originB, destB, originF, destF, originX, originY, destX, destY): Promise<String> {
+
+    // Run createPl method to create the output.pl file
+    //await this.createPl();
+
+
     const { spawn } = require('child_process');
     const path = require('path');
     let prologOutput = '';
@@ -35,6 +40,7 @@ export default class PathService implements IPathService {
 
     const consultQuery = 'consult(\'ProjetoAlgav.pl\').';
     const aStarQuery = `aStar(cel(${originB},${originF},${originX},${destX}), cel(${destB},${destF},${originY},${destY}), Caminho, Custo).`;
+    console.log(aStarQuery);
 
     const prolog = spawn('swipl', ['-s', prologFilePath], { cwd: prologWorkingDirectory, stdio: 'pipe' });
 
@@ -83,7 +89,176 @@ export default class PathService implements IPathService {
 
     const buildings = await this.buildingRepo.getBuildings();
 
-    const filePath = 'output.pl';
+    const filePath = path.join(__dirname, '../services/algav/output.pl');
+
+    // first thing clear the file
+    fs.writeFileSync(filePath, "");
+
+    for (let i = 0; i < buildings.length; i++) {
+      const building = buildings.at(i);
+      const Floors = building.floors;
+      const buildingSizeX = building.dimX;
+      const buildingSizeY = building.dimY;
+      for (let j = 0; j < Floors.length; j++) {
+        const floor = Floors.at(j);
+        const Rooms = floor.rooms;
+        const Connections = floor.connections;
+        const Elevators = floor.elevators;
+        for (let l = 0; l < buildingSizeX; l++) {
+          // Check if already exists a wall
+          if (!fs.readFileSync(filePath).includes("m(" + building.buildingId.buildingId + "," + floor.floorId + "," + l + "," + 0 + "," + "1).\n"))
+          fs.appendFileSync(filePath, "m(" + building.buildingId.buildingId + "," + floor.floorId + "," + l + "," + 0 + "," + "1).\n");
+          // Check if already exists a wall
+          if (!fs.readFileSync(filePath).includes("m(" + building.buildingId.buildingId + "," + floor.floorId + "," + l + "," + buildingSizeY + "," + "1).\n"))
+          fs.appendFileSync(filePath, "m(" + building.buildingId.buildingId + "," + floor.floorId + "," + l + "," + buildingSizeY + "," + "1).\n");
+        }
+        for (let m = 0; m < buildingSizeY; m++) {
+          // Check if already exists a wall
+          if (!fs.readFileSync(filePath).includes("m(" + building.buildingId.buildingId + "," + floor.floorId + "," + 0 + "," + m + "," + "1).\n"))
+          fs.appendFileSync(filePath, "m(" + building.buildingId.buildingId + "," + floor.floorId + "," + 0 + "," + m + "," + "1).\n");
+          // Check if already exists a wall
+          if (!fs.readFileSync(filePath).includes("m(" + building.buildingId.buildingId + "," + floor.floorId + "," + buildingSizeX + "," + m + "," + "1).\n"))
+          fs.appendFileSync(filePath, "m(" + building.buildingId.buildingId + "," + floor.floorId + "," + buildingSizeX + "," + m + "," + "1).\n");
+        }
+        for (let k = 0; k < Rooms.length; k++) {
+          const room = Rooms.at(k);
+          const x = room.destinationCoordinateX;
+          const y = room.destinationCoordinateY;
+          const x1 = room.originCoordinateX
+          const y1 = room.originCoordinateY;
+          const doorX = room.door.doorX;
+          const doorY = room.door.doorY;
+
+          // set north and south walls to 1
+          for (let n = Math.min(x, x1); n <= Math.max(x, x1); n++) {
+            if (n === doorX && y === doorY) {
+              // Check if already exists a wall
+              if (!fs.readFileSync(filePath).includes("m(" + building.buildingId.buildingId + "," + floor.floorId + "," + n + "," + y + "," + "1).\n"))
+              fs.appendFileSync(filePath, "m(" + building.buildingId.buildingId + "," + floor.floorId + "," + n + "," + y + "," + "0).\n");
+            } else if (n === doorX && y1 === doorY) {
+              // Check if already exists a wall
+              if (!fs.readFileSync(filePath).includes("m(" + building.buildingId.buildingId + "," + floor.floorId + "," + n + "," + y1 + "," + "1).\n"))
+              fs.appendFileSync(filePath, "m(" + building.buildingId.buildingId + "," + floor.floorId + "," + n + "," + y1 + "," + "0).\n");
+            } else {
+              // Check if already exists a wall
+              if (!fs.readFileSync(filePath).includes("m(" + building.buildingId.buildingId + "," + floor.floorId + "," + n + "," + y + "," + "1).\n"))
+              fs.appendFileSync(filePath, "m(" + building.buildingId.buildingId + "," + floor.floorId + "," + n + "," + y + "," + "1).\n");
+              // Check if already exists a wall
+              if (!fs.readFileSync(filePath).includes("m(" + building.buildingId.buildingId + "," + floor.floorId + "," + n + "," + y1 + "," + "1).\n"))
+              fs.appendFileSync(filePath, "m(" + building.buildingId.buildingId + "," + floor.floorId + "," + n + "," + y1 + "," + "1).\n");
+            }
+          }
+
+          // set east and west walls to 1
+          for (let p = Math.min(y, y1); p <= Math.max(y, y1); p++) {
+            if (p === doorX && x === doorX) {
+              // Check if already exists a wall
+              if (!fs.readFileSync(filePath).includes("m(" + building.buildingId.buildingId + "," + floor.floorId + "," + x + "," + p + "," + "1).\n"))
+              fs.appendFileSync(filePath, "m(" + building.buildingId.buildingId + "," + floor.floorId + "," + x + "," + p + "," + "0).\n");
+            } else if (p === doorX && x1 === doorX) {
+              // Check if already exists a wall
+              if (!fs.readFileSync(filePath).includes("m(" + building.buildingId.buildingId + "," + floor.floorId + "," + x1 + "," + p + "," + "1).\n"))
+              fs.appendFileSync(filePath, "m(" + building.buildingId.buildingId + "," + floor.floorId + "," + x1 + "," + p + "," + "0).\n");
+            } else {
+              // Check if already exists a wall
+              if (!fs.readFileSync(filePath).includes("m(" + building.buildingId.buildingId + "," + floor.floorId + "," + x + "," + p + "," + "1).\n"))
+              fs.appendFileSync(filePath, "m(" + building.buildingId.buildingId + "," + floor.floorId + "," + x + "," + p + "," + "1).\n");
+              // Check if already exists a wall
+              if (!fs.readFileSync(filePath).includes("m(" + building.buildingId.buildingId + "," + floor.floorId + "," + x1 + "," + p + "," + "1).\n"))
+              fs.appendFileSync(filePath, "m(" + building.buildingId.buildingId + "," + floor.floorId + "," + x1 + "," + p + "," + "1).\n");
+            }
+          }
+
+          // set inside of the room to 0
+          for (let n = Math.min(x, x1) + 1; n < Math.max(x, x1); n++) {
+            for (let p = Math.min(y, y1) + 1; p < Math.max(y, y1); p++) {
+              // Check if already exists a wall
+              if (!fs.readFileSync(filePath).includes("m(" + building.buildingId.buildingId + "," + floor.floorId + "," + n + "," + p + "," + "1).\n"))
+                // Check if its already 1
+                if (!fs.readFileSync(filePath).includes("m(" + building.buildingId.buildingId + "," + floor.floorId + "," + n + "," + p + "," + "0).\n"))
+                fs.appendFileSync(filePath, "m(" + building.buildingId.buildingId + "," + floor.floorId + "," + n + "," + p + "," + "0).\n");
+            }
+          }
+
+          //set the rest of the building to 0 if not 1
+          for (let n = 0; n < buildingSizeX; n++) {
+            for (let p = 0; p < buildingSizeY; p++) {
+              // Check if the position already has a 1 (wall or room)
+              const hasWallOrRoom = Rooms.some(room => {
+                const x = room.destinationCoordinateX;
+                const y = room.destinationCoordinateY;
+                const x1 = room.originCoordinateX;
+                const y1 = room.originCoordinateY;
+                const doorX = room.door.doorX;
+                const doorY = room.door.doorY;
+
+                return (
+                  (n >= Math.min(x, x1) && n <= Math.max(x, x1) && p >= Math.min(y, y1) && p <= Math.max(y, y1)) ||
+                  (p === doorY && ((n === doorX && y === doorY) || (n === doorX && y1 === doorY)))
+                );
+              });
+
+              // If the position doesn't have a wall or room, set it to 0
+              if (!hasWallOrRoom) {
+                // Check if already exists a wall
+                if (!fs.readFileSync(filePath).includes("m(" + building.buildingId.buildingId + "," + floor.floorId + "," + n + "," + p + "," + "1).\n"))
+                fs.appendFileSync(filePath, `m(${building.buildingId.buildingId},${floor.floorId},${n},${p},0).\n`);
+              }
+            }
+          }
+        }
+      }
+    }
+
+    // Set the connections between floors
+    for (let i = 0; i < buildings.length; i++) {
+      const building = buildings.at(i);
+      const Floors = building.floors;
+      for (let j = 0; j < Floors.length; j++) {
+        const floor = Floors.at(j);
+        const Elevators = floor.elevators;
+        for(let k = 0; k < Elevators.length; k++) {
+          const elevator = Elevators.at(k);
+          const floorsAttended = elevator.floorsAttended;
+          const x = elevator.locationX.locationX;
+          const y = elevator.locationY.locationY;
+          for (let l = 0; l < floorsAttended.length; l++) {
+            // The second floor is the one that is connected to the first floor
+            const floorTo = floorsAttended.at(l);
+            const floorFrom = floor.floorId;
+            // Check if it was already wrote to the file
+            if (!fs.readFileSync(filePath).includes("ligacao_piso(" + building.buildingId.buildingId + ", cel(" + building.buildingId.buildingId + "," + floorFrom + "," + x + "," + y + "), cel(" + building.buildingId.buildingId + "," + floorTo + "," + x + "," + y + ")).\n"))
+              fs.appendFileSync(filePath,"ligacao_piso(" + building.buildingId.buildingId + ", cel(" + building.buildingId.buildingId + "," + floorFrom + "," + x + "," + y + "), cel(" + building.buildingId.buildingId + "," + floorTo + "," + x + "," + y + ")).\n");
+          }
+        }
+      }
+    }
+
+    // Set the connections between buildings
+    for (let i = 0; i < buildings.length; i++) {
+      const building = buildings.at(i);
+      const Floors = building.floors;
+      for (let j = 0; j < Floors.length; j++) {
+        const floor = Floors.at(j);
+        const Connections = floor.connections;
+        for (let k = 0; k < Connections.length; k++) {
+          const connection = Connections.at(k);
+          const buildingFrom = connection.buildingfromId;
+          const buildingTo = connection.buildingtoId;
+          const floorFrom = connection.floorfromId;
+          const floorTo = connection.floortoId;
+          const x = connection.locationX;
+          const y = connection.locationY;
+          const x1 = connection.locationToX;
+          const y1 = connection.locationToY;
+
+          fs.appendFileSync(filePath,"ligacao_edificio(cel(" + buildingFrom + "," + floorFrom + "," + x + "," + y + "), cel(" + buildingTo + "," + floorTo + "," + x1 + "," + y1 + ")).\n")
+
+        }
+      }
+    }
+
+
 
     fs.appendFileSync(filePath, ":- set_prolog_flag(answer_write_options,[max_depth(0)]).\n" +
       ":- set_prolog_flag(stack_limit,17_179_869_184). %next size stack 17_179_869_184\n" +
@@ -143,131 +318,25 @@ export default class PathService implements IPathService {
       "    m(Edificio, Piso, ColS, Lin, 0),\n" +
       "    ColS is Col + 1.\n");
 
-    for (let i = 0; i < buildings.length; i++) {
-      const building = buildings.at(i);
-      const Floors = building.floors;
-      const buildingSizeX = building.dimX;
-      const buildingSizeY = building.dimY;
-      for (let j = 0; j < Floors.length; j++) {
-        const floor = Floors.at(j);
-        const Rooms = floor.rooms;
-        const Connections = floor.connections;
-        const Elevators = floor.elevators;
-        for (let l = 0; l < buildingSizeX; l++) {
-          fs.appendFileSync(filePath,"m(" + building.buildingId.buildingId + "," + floor.floorId + "," + l + "," + 0 + "," + "1).\n");
-          fs.appendFileSync(filePath,"m(" + building.buildingId.buildingId + "," + floor.floorId + "," + l + "," + buildingSizeY + "," + "1).\n");
-        }
-        for (let m = 0; m < buildingSizeY; m++) {
-          fs.appendFileSync(filePath,"m(" + building.buildingId.buildingId + "," + floor.floorId + "," + 0 + "," + m + "," + "1).\n");
-          fs.appendFileSync(filePath,"m(" + building.buildingId.buildingId + "," + floor.floorId + "," + buildingSizeX + "," + m + "," + "1).\n");
-        }
-        for (let k = 0; k < Rooms.length; k++) {
-          const room = Rooms.at(k);
-          const x = room.destinationCoordinateX;
-          const y = room.destinationCoordinateY;
-          const x1 = room.originCoordinateX
-          const y1 = room.originCoordinateY;
-          const doorX = room.door.doorX;
-          const doorY = room.door.doorY;
 
-          // set north and south walls to 1
-          for (let n = Math.min(x, x1); n <= Math.max(x, x1); n++) {
-            if (n === doorX && y === doorY) {
-              fs.appendFileSync(filePath,"m(" + building.buildingId.buildingId + "," + floor.floorId + "," + n + "," + y + "," + "0).\n");
-            } else if (n === doorX && y1 === doorY) {
-              fs.appendFileSync(filePath,"m(" + building.buildingId.buildingId + "," + floor.floorId + "," + n + "," + y1 + "," + "0).\n");
-            } else {
-              fs.appendFileSync(filePath,"m(" + building.buildingId.buildingId + "," + floor.floorId + "," + n + "," + y + "," + "1).\n");
-              fs.appendFileSync(filePath,"m(" + building.buildingId.buildingId + "," + floor.floorId + "," + n + "," + y1 + "," + "1).\n");
-            }
-          }
-
-          // set east and west walls to 1
-          for (let p = Math.min(y, y1); p <= Math.max(y, y1); p++) {
-            if (p === doorX && x === doorX) {
-              fs.appendFileSync(filePath,"m(" + building.buildingId.buildingId + "," + floor.floorId + "," + x + "," + p + "," + "0).\n");
-            } else if (p === doorX && x1 === doorX) {
-              fs.appendFileSync(filePath,"m(" + building.buildingId.buildingId + "," + floor.floorId + "," + x1 + "," + p + "," + "0).\n");
-            } else {
-              fs.appendFileSync(filePath,"m(" + building.buildingId.buildingId + "," + floor.floorId + "," + x + "," + p + "," + "1).\n");
-              fs.appendFileSync(filePath,"m(" + building.buildingId.buildingId + "," + floor.floorId + "," + x1 + "," + p + "," + "1).\n");
-            }
-          }
-
-          // set inside of the room to 0
-          for (let n = Math.min(x, x1) + 1; n < Math.max(x, x1); n++) {
-            for (let p = Math.min(y, y1) + 1; p < Math.max(y, y1); p++) {
-              fs.appendFileSync(filePath,"m(" + building.buildingId.buildingId + "," + floor.floorId + "," + n + "," + p + "," + "0).\n");
-            }
-          }
-
-          //set the rest of the building to 0 if not 1
-          for (let n = 0; n < buildingSizeX; n++) {
-            for (let p = 0; p < buildingSizeY; p++) {
-              // Check if the position already has a 1 (wall or room)
-              const hasWallOrRoom = Rooms.some(room => {
-                const x = room.destinationCoordinateX;
-                const y = room.destinationCoordinateY;
-                const x1 = room.originCoordinateX;
-                const y1 = room.originCoordinateY;
-                const doorX = room.door.doorX;
-                const doorY = room.door.doorY;
-
-                return (
-                  (n >= Math.min(x, x1) && n <= Math.max(x, x1) && p >= Math.min(y, y1) && p <= Math.max(y, y1)) ||
-                  (p === doorY && ((n === doorX && y === doorY) || (n === doorX && y1 === doorY)))
-                );
-              });
-
-              // If the position doesn't have a wall or room, set it to 0
-              if (!hasWallOrRoom) {
-                fs.appendFileSync(filePath, `m(${building.buildingId.buildingId},${floor.floorId},${n},${p},0).\n`);
-              }
-            }
-          }
-
-        }
-        for (let k = 0; k < Connections.length; k++) {
-          const connection = Connections.at(k);
-          const buildingFrom = connection.buildingfromId;
-          const buildingTo = connection.buildingtoId;
-          const floorFrom = connection.floorfromId;
-          const floorTo = connection.floortoId;
-          const x = connection.locationX;
-          const y = connection.locationY;
-          const x1 = connection.locationToX;
-          const y1 = connection.locationToY;
-
-          fs.appendFileSync(filePath,"ligacao_edificio(cel(" + buildingFrom + "," + floorFrom + "," + x + "," + y + "), cel(" + buildingTo + "," + floorTo + "," + x1 + "," + y1 + ")).\n")
-
-        }
-        for(let k = 0; k < Elevators.length; k++) {
-          const elevator = Elevators.at(k);
-          const floorsAttended = elevator.floorsAttended;
-          const x = elevator.locationX.locationX;
-          const y = elevator.locationY.locationY;
-          for (let l = 0; l < floorsAttended.length; l++) {
-            fs.appendFileSync(filePath,"ligacao_piso(" + building.buildingId.buildingId +"), cel("+ building.buildingId.buildingId + ", "+floor.floorId+", "+x+", "+y+", cel("+ building.buildingId.buildingId + ", "+floor.floorId+", "+x+", "+y+")).\n");
-          }
-        }
-      }
-    }
     fs.appendFileSync(filePath,"% Predicado de inicialização\n" +
       ":- initialization(cria_grafos).\n" +
       "\n" +
-      "cria_grafos :-\n" +
-      "    cria_grafo(c,1,16,10),\n" +
-      "    cria_grafo(d,1,17,10),\n" +
-      "    cria_grafo(a,1,10,16),\n" +
-      "    cria_grafo(b,1,11,15),\n" +
-      "    cria_grafo(c,2,17,10),\n" +
-      "    cria_grafo(d,2,14,10),\n" +
-      "    cria_grafo(a,2,9,18),\n" +
-      "    cria_grafo(b,2,8,19),\n" +
-      "    cria_grafo(c,3,18,9),\n" +
-      "    cria_grafo(d,3,14,9),\n" +
-      "    cria_grafo(b,3,8,17),\n" +
-      "    cria_grafo(c,4,15,9).\n" +
+      "cria_grafos :-\n");
+      for (let i = 0; i < buildings.length; i++) {
+        const building = buildings.at(i);
+        const Floors = building.floors;
+        for (let j = 0; j < Floors.length; j++) {
+          const floor = Floors.at(j);
+          // If last line
+          if (i === buildings.length - 1 && j === Floors.length - 1) {
+            fs.appendFileSync(filePath, "    cria_grafo(" + building.buildingId.buildingId + "," + floor.floorId + "," + floor.width + "," + floor.height + ").\n");
+            break;
+          }
+          fs.appendFileSync(filePath, "    cria_grafo(" + building.buildingId.buildingId + "," + floor.floorId + "," + floor.width + "," + floor.height + "),\n");
+        }
+      }
+      fs.appendFileSync(filePath,
       "\n" +
       "aStar(Orig, Dest, Cam, Custo):-\n" +
       "    aStar2(Dest, [(_, 0, [Orig])], [], Cam, Custo).\n" +

@@ -3,14 +3,16 @@ using System.Threading.Tasks;
 using DDDSample1.Domain.PickupAndDeliveryTasks;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using DDDSample1.Domain.Shared;
+
 
 namespace DDDSample1.Controllers
 {
     
-    [Microsoft.AspNetCore.Components.Route("api/[controller]")]
+    [Route("api/[controller]")]
     [ApiController]
     
-    public class PickupAndDeliveryTaskController
+    public class PickupAndDeliveryTaskController: ControllerBase
     {
         private readonly PickupAndDeliveryTaskService _service;
         

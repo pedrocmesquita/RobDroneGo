@@ -74,7 +74,7 @@ namespace DDDSample1
             services.AddTransient<IProductRepository,ProductRepository>();
             services.AddTransient<ProductService>();
 
-            services.AddTransient<IFamilyRepository,FamilyRepository>();
+            services.AddTransient<IFamilyRepository,TaskRepository>();
             services.AddTransient<FamilyService>();
         }
     }

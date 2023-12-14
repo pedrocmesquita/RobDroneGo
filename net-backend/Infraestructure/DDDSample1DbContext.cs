@@ -4,6 +4,8 @@ using DDDSample1.Domain.Products;
 using DDDSample1.Domain.Families;
 using DDDSample1.Infrastructure.Categories;
 using DDDSample1.Infrastructure.Products;
+using System.Threading.Tasks;
+using DDDSample1.Domain.PickupAndDeliveryTasks;
 
 namespace DDDSample1.Infrastructure
 {
@@ -14,6 +16,10 @@ namespace DDDSample1.Infrastructure
         public DbSet<Product> Products { get; set; }
 
         public DbSet<Family> Families { get; set; }
+
+        public DbSet<PickupAndDeliveryTask> PickupAndDeliveryTasks { get; set; }
+        
+        public DbSet<SurveillanceTask> SurveillanceTasks { get; set; }
 
         public DDDSample1DbContext(DbContextOptions options) : base(options)
         {

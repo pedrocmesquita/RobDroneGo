@@ -14,6 +14,8 @@ using DDDSample1.Domain.Shared;
 using DDDSample1.Domain.Categories;
 using DDDSample1.Domain.Products;
 using DDDSample1.Domain.Families;
+using DDDSample1.Domain.PickupAndDeliveryTasks;
+using DDDSample1.Infrastructure.PickupAndDeliveryTasks;
 
 namespace DDDSample1
 {
@@ -74,8 +76,11 @@ namespace DDDSample1
             services.AddTransient<IProductRepository,ProductRepository>();
             services.AddTransient<ProductService>();
 
-            services.AddTransient<IFamilyRepository,TaskRepository>();
+            services.AddTransient<IFamilyRepository,FamilyRepository>();
             services.AddTransient<FamilyService>();
+            
+            services.AddTransient<IPickupAndDeliveryTaskRepository,PickupAndDeliveryTaskRepository>();
+            services.AddTransient<PickupAndDeliveryTaskService>();
         }
     }
 }

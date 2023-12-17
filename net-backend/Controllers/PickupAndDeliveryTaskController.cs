@@ -41,5 +41,28 @@ namespace DDDSample1.Controllers
             
             return pickupAndDeliveryTask;
         }
+        
+        // POST: api/PickupAndDeliveryTask
+        [HttpPost]
+        public async Task<ActionResult<PickupAndDeliveryTaskDto>> Create(CreatingPickupAndDeliveryTaskDto dto)
+        {
+            /*var list = await _service.GetAllAsync();
+            foreach (var pickupAndDeliveryTaskDto in list)
+            {
+                if (pickupAndDeliveryTaskDto.PickupAndDeliveryTaskId.Equals(dto.PickupAndDeliveryTaskId))
+                {
+                    return BadRequest(new { Message = "This pickupAndDeliveryTask identifier already exists try another one." });
+                }
+            }*/
+            try
+            {
+                var pickupAndDeliveryTask = await _service.AddAsync(dto);
+                
+                return CreatedAtAction(nameof(GetByPickupAndDeliveryTaskId), new { pickupAndDeliveryTaskIdentifier = pickupAndDeliveryTask.Id }, pickupAndDeliveryTask);            }
+            catch (BusinessRuleValidationException ex)
+            {
+                return BadRequest(new { Message = ex.Message });
+            }
+        }
     }
 }

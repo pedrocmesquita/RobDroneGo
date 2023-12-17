@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace DDDSample1.Infrastructure.PickupAndDeliveryTasks
 {
-    internal class PickupAndDeliveryTypeConfiguration : IEntityTypeConfiguration<PickupAndDeliveryTask>
+    internal class PickupAndDeliveryTaskEntityTypeConfiguration : IEntityTypeConfiguration<PickupAndDeliveryTask>
     {
 
         public void Configure(EntityTypeBuilder<PickupAndDeliveryTask> builder)

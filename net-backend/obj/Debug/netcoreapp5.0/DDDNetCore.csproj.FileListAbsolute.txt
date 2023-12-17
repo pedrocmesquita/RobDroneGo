@@ -29,3 +29,10 @@ C:\Repositories\3DF_SEM_5_PI-2023_2024\net-backend\obj\Debug\netcoreapp5.0\refin
 C:\Repositories\3DF_SEM_5_PI-2023_2024\net-backend\obj\Debug\netcoreapp5.0\DDDNetCore.pdb
 C:\Repositories\3DF_SEM_5_PI-2023_2024\net-backend\obj\Debug\netcoreapp5.0\DDDNetCore.genruntimeconfig.cache
 C:\Repositories\3DF_SEM_5_PI-2023_2024\net-backend\obj\Debug\netcoreapp5.0\ref\DDDNetCore.dll
+C:\Repositories\3DF_SEM_5_PI-2023_2024\net-backend\bin\Debug\netcoreapp5.0\tsconfig.json
+C:\Repositories\3DF_SEM_5_PI-2023_2024\net-backend\bin\Debug\netcoreapp5.0\Microsoft.Extensions.DependencyInjection.dll
+C:\Repositories\3DF_SEM_5_PI-2023_2024\net-backend\bin\Debug\netcoreapp5.0\MySqlConnector.dll
+C:\Repositories\3DF_SEM_5_PI-2023_2024\net-backend\bin\Debug\netcoreapp5.0\Pomelo.EntityFrameworkCore.MySql.dll
+C:\Repositories\3DF_SEM_5_PI-2023_2024\net-backend\bin\Debug\netcoreapp5.0\System.Diagnostics.DiagnosticSource.dll
+C:\Repositories\3DF_SEM_5_PI-2023_2024\net-backend\bin\Debug\netcoreapp5.0\Humanizer.dll
+C:\Repositories\3DF_SEM_5_PI-2023_2024\net-backend\bin\Debug\netcoreapp5.0\Microsoft.EntityFrameworkCore.Design.dll

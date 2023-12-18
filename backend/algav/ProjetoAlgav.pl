@@ -2019,6 +2019,105 @@ m(d,3,2,2,0,e).
 m(b,3,5,16,0,e).
 m(c,4,11,1,0,e).
 
+%Salas C piso 1
+m(c,1,3,5,0,c101).
+m(c,1,3,7,0,c102).
+m(c,1,6,5,0,c103).
+m(c,1,6,7,0,c104).
+m(c,1,15,5,0,c105).
+m(c,1,9,7,0,c106).
+m(c,1,12,7,0,c108).
+m(c,1,15,7,0,c110).
+
+%Salas D piso 1
+m(d,1,5,3,0,d101).
+m(d,1,3,9,0,d102).
+m(d,1,10,4,0,d103).
+m(d,1,8,6,0,d104).
+m(d,1,13,4,0,d105).
+m(d,1,11,6,0,d106).
+m(d,1,15,6,0,d108).
+
+%Salas A piso 1
+m(a,1,6,6,0,auditorio).
+
+%Salas B piso 1
+m(b,1,5,3,0,b101).
+m(b,1,7,3,0,b102).
+m(b,1,5,6,0,b103).
+m(b,1,10,6,0,b104).
+m(b,1,5,10,0,b105).
+m(b,1,7,11,0,b106).
+m(b,1,5,13,0,b107).
+m(b,1,9,13,0,b108).
+
+%Salas C piso 2
+m(c,2,3,4,0,c201).
+m(c,2,4,8,0,c202).
+m(c,2,5,4,0,c203).
+m(c,2,13,6,0,c204).
+m(c,2,9,7,0,c205).
+m(c,2,12,8,0,c206).
+m(c,2,10,3,0,c207).
+m(c,2,14,3,0,c209).
+
+%Salas D piso 2
+m(d,2,4,4,0,d201).
+m(d,2,7,6,0,d202).
+m(d,2,9,4,0,d203).
+m(d,2,9,7,0,d204).
+m(d,2,11,4,0,d205).
+m(d,2,11,5,0,d206).
+
+%Salas A piso 2
+m(a,2,5,3,0,a201).
+m(a,2,6,5,0,a202).
+m(a,2,4,5,0,a203).
+m(a,2,6,7,0,a204).
+m(a,2,4,8,0,a205).
+m(a,2,6,12,0,a206).
+m(a,2,4,11,0,a207).
+m(a,2,7,16,0,a208).
+m(a,2,4,14,0,a209).
+
+%Salas B piso 2
+m(b,2,3,2,0,b201).
+m(b,2,4,11,0,b202).
+m(b,2,5,6,0,b203).
+m(b,2,5,16,0,b205).
+m(b,2,4,17,0,b207).
+
+%Salas C piso 3
+m(c,3,6,4,0,c301).
+m(c,3,4,5,0,c302).
+m(c,3,15,3,0,c303).
+m(c,3,6,6,0,c304).
+m(c,3,15,5,0,c305).
+m(c,3,9,8,0,c306).
+m(c,3,13,8,0,c308).
+m(c,3,15,7,0,c310).
+
+%Salas D piso 3
+m(d,3,6,4,0,d301).
+m(d,3,6,6,0,d302).
+m(d,3,8,4,0,d303).
+m(d,3,8,6,0,d304).
+m(d,3,11,5,0,d305).
+
+%Salas B piso 3
+m(b,3,2,4,0,b301).
+m(b,3,6,12,0,b302).
+m(b,3,2,6,0,b303).
+m(b,3,2,11,0,b305).
+
+%Salas C piso 4
+m(c,4,6,4,0,c401).
+m(c,4,5,8,0,c402).
+m(c,4,12,5,0,c403).
+m(c,4,10,8,0,c404).
+
+
+
 :- set_prolog_flag(answer_write_options,[max_depth(0)]).
 :- set_prolog_flag(stack_limit,17_179_869_184). %next size stack 17_179_869_184
 
@@ -2210,3 +2309,155 @@ heuristicE(cel(_, _, X1, Y1), cel(_, _, X2, Y2), Estimativa) :-
 
 elevador(cel(Edificio, Piso, Col, Lin)) :-
     m(Edificio, Piso, Col, Lin, _, e).
+
+% Função para identificar a localização de uma sala
+identificar_localizacao_sala(Sala, cel(Edificio, Piso, X, Y)) :-
+    m(Edificio, Piso, X, Y, 0, Sala).
+
+
+% Função para limpeza de uma sala
+limparSala(Sala, Origem, CustoTotal) :-
+    % Identificar a localização da sala
+    identificar_localizacao_sala(Sala, Destino),
+
+    % Calcular o caminho e o custo
+    aStar(Origem, Destino, Caminho, CustoBase),
+
+    % Adicionar custo de limpeza
+    CustoTotal is CustoBase + 20,
+
+    % Exibir o caminho e o custo total
+    format('Caminho da limpeza: ~w\n', [Caminho]).
+
+
+
+
+
+% Função para vigilância de um piso
+vigilancia(Edificio, Piso, Origem, CustoTotal) :-
+    % Identificar as células transitáveis
+    findall(cel(Edificio, Piso, X, Y), m(Edificio, Piso, X, Y, 0), CelulasTransitaveis),
+    % Calcular o caminho e o custo da vigilância
+    vigilancia_celulas([Origem|CelulasTransitaveis], [], 0, CustoTotal).
+
+% Função para calcular o caminho e o custo da vigilância
+vigilancia_celulas([Atual|Celulas], CaminhoAcumulado, CustoAcumulado, CustoTotal) :-
+    (   Celulas = [Proxima|Resto]
+    ->  aStar(Atual, Proxima, CaminhoParcial, CustoParcial),
+        append(CaminhoAcumulado, CaminhoParcial, NovoCaminho),
+        NovoCusto is CustoAcumulado + CustoParcial,
+        vigilancia_celulas([Proxima|Resto], NovoCaminho, NovoCusto, CustoTotal)
+    ;   CaminhoAcumulado = CaminhoFinal,  % Caso não haja mais células para visitar
+        CustoTotal is CustoAcumulado
+    ).
+
+
+
+
+
+% Função para pegar e entregar um objeto
+pegar_entregar_objeto(SalaPegar, SalaEntregar, Origem, CustoTotal) :-
+    % Identificar as localizações das salas
+    identificar_localizacao_sala(SalaPegar, LocalizacaoPegar),
+    identificar_localizacao_sala(SalaEntregar, LocalizacaoEntregar),
+
+    % Calcular o caminho e o custo para pegar o objeto
+    aStar(Origem, LocalizacaoPegar, CaminhoPegar, CustoPegar),
+    format('Caminho para pegar o objeto: ~w\n', [CaminhoPegar]),
+    format('Custo para pegar o objeto: ~w\n', [CustoPegar]),
+
+    % Calcular o caminho e o custo para entregar o objeto
+    aStar(LocalizacaoPegar, LocalizacaoEntregar, CaminhoEntregar, CustoEntregar),
+    format('Caminho para entregar o objeto: ~w\n', [CaminhoEntregar]),
+    format('Custo para entregar o objeto: ~w\n', [CustoEntregar]),
+
+    % Calcular o custo total
+    CustoTotal is CustoPegar + CustoEntregar.
+
+
+
+
+
+
+% Pede ao utilizador para inserir as tarefas desejadas
+pedir_tarefas(Tarefas) :-
+    pedir_tarefas_aux([], Tarefas).
+
+pedir_tarefas_aux(Acumulado, Tarefas) :-
+    write('Insira uma tarefa (limparSala, vigilancia ou pegar_entregar_objeto) ou "n" para terminar: '),
+    read(Tarefa),
+    (   Tarefa == n  % Verifica se o usuário digitou "n" para terminar
+    ->  reverse(Acumulado, Tarefas)  % Inverte a lista acumulada e retorna
+    ;   processar_tarefa(Tarefa, Acumulado, Tarefas)  % Processa a tarefa inserida
+    ).
+
+processar_tarefa(limparSala, Acumulado, Tarefas) :-
+    write('Insira o identificador da sala (ex: c101): '), read(Sala),
+    pedir_tarefas_aux([limparSala(Sala)|Acumulado], Tarefas).
+
+processar_tarefa(vigilancia, Acumulado, Tarefas) :-
+    write('Insira o edifício e piso (ex: c, 1): '), read(Edificio), read(Piso),
+    pedir_tarefas_aux([vigilancia(Edificio, Piso)|Acumulado], Tarefas).
+
+processar_tarefa(pegar_entregar_objeto, Acumulado, Tarefas) :-
+    write('Insira a sala de origem e destino (ex: c101, c102): '), read(SalaPegar), read(SalaEntregar),
+    pedir_tarefas_aux([pegar_entregar_objeto(SalaPegar, SalaEntregar)|Acumulado], Tarefas).
+
+
+% Função principal para calcular o melhor plano de tarefas
+tarefas(MelhorSequencia) :-
+    % Perguntar a localização inicial do robô
+    write('Digite a localização inicial do robô (formato: cel(Edifício,Piso,X,Y)): '),
+    read(OrigemInicial),
+    pedir_tarefas(ListaTarefas),
+    findall(Sequencia, permutation(ListaTarefas, Sequencia), Permutacoes),
+    calcular_melhor_sequencia(Permutacoes, OrigemInicial, MelhorSequencia, MenorCusto),
+    format('Melhor sequência de tarefas: ~w\nCusto Total: ~w', [MelhorSequencia, MenorCusto]).
+
+% Calcula a melhor sequência de tarefas com o menor custo
+calcular_melhor_sequencia([Sequencia|Resto], OrigemInicial, MelhorSequencia, MenorCusto) :-
+    calcular_custo_sequencia(Sequencia, OrigemInicial, 0, Custo),
+    calcular_melhor_sequencia(Resto, OrigemInicial, Sequencia, Custo, MelhorSequencia, MenorCusto).
+
+calcular_melhor_sequencia([], _, Melhor, Menor, Melhor, Menor).
+calcular_melhor_sequencia([Sequencia|Resto], OrigemInicial, AtualMelhor, AtualMenor, Melhor, Menor) :-
+    calcular_custo_sequencia(Sequencia, OrigemInicial, 0, CustoSequencia),
+    (   CustoSequencia < AtualMenor
+    ->  calcular_melhor_sequencia(Resto, OrigemInicial, Sequencia, CustoSequencia, Melhor, Menor)
+    ;   calcular_melhor_sequencia(Resto, OrigemInicial, AtualMelhor, AtualMenor, Melhor, Menor)
+    ).
+
+
+calcular_custo_sequencia([], _, Custo, Custo).
+calcular_custo_sequencia([Tarefa|Resto], OrigemAtual, CustoAcumulado, CustoFinal) :-
+    executar_tarefa(Tarefa, OrigemAtual, CustoTarefa),
+    % Atualizar a localização do robô após a tarefa
+    % (assumindo que o robô termina a tarefa na última localização do caminho)
+    atualizar_origem(Tarefa, OrigemAtual, NovaOrigem),
+    NovoCusto is CustoAcumulado + CustoTarefa,
+    calcular_custo_sequencia(Resto, NovaOrigem, NovoCusto, CustoFinal).
+
+% Executa uma tarefa e retorna o seu custo
+executar_tarefa(limparSala(Sala), OrigemAtual, Custo) :-
+    limparSala(Sala, OrigemAtual, Custo).
+
+executar_tarefa(vigilancia(Edificio, Piso), OrigemAtual, Custo) :-
+    vigilancia(Edificio, Piso, OrigemAtual, Custo).
+
+executar_tarefa(pegar_entregar_objeto(SalaPegar, SalaEntregar), OrigemAtual, Custo) :-
+    pegar_entregar_objeto(SalaPegar, SalaEntregar, OrigemAtual, Custo).
+
+% Atualiza a origem do robô após a conclusão de uma tarefa
+atualizar_origem(limparSala(Sala), _, NovaOrigem) :-
+    identificar_localizacao_sala(Sala, NovaOrigem).
+
+atualizar_origem(vigilancia(Edificio, Piso), _, NovaOrigem) :-
+    % Suponha que a vigilância termina na última célula transitável do piso
+    findall(cel(Edificio, Piso, X, Y), m(Edificio, Piso, X, Y, 0), CelulasTransitaveis),
+    last(CelulasTransitaveis, NovaOrigem).
+
+atualizar_origem(pegar_entregar_objeto(_, SalaEntregar), _, NovaOrigem) :-
+    identificar_localizacao_sala(SalaEntregar, NovaOrigem).
+
+
+

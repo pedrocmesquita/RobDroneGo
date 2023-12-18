@@ -14,11 +14,13 @@ namespace DDDSample1.Domain.PickupAndDeliveryTasks
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IPickupAndDeliveryTaskRepository _repo;
-        public PickupAndDeliveryTaskService(IUnitOfWork unitOfWork, IPickupAndDeliveryTaskRepository repo)
+        private readonly IPickUpAndDeliveryTaskMongoRepository _mongoRepo;
+        public PickupAndDeliveryTaskService(IUnitOfWork unitOfWork, IPickupAndDeliveryTaskRepository repo, IPickUpAndDeliveryTaskMongoRepository mongoRepo)
         {
             _unitOfWork = unitOfWork;
             _repo = repo;
-        }
+            _mongoRepo = mongoRepo;
+        }   
         public async Task<List<PickupAndDeliveryTaskDto>> GetAllAsync()
         {
             var list = await this._repo.GetAllAsync();
@@ -51,6 +53,7 @@ namespace DDDSample1.Domain.PickupAndDeliveryTasks
                 dto.Description);
             
             await this._repo.AddAsync(pickupAndDeliveryTask);
+            await this._mongoRepo.AddAsync(pickupAndDeliveryTask);
 
             await this._unitOfWork.CommitAsync();
 

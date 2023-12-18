@@ -14,6 +14,10 @@ using DDDSample1.Infrastructure;
 using DDDSample1.Infrastructure.PickupAndDeliveryTasks;
 using DDDSample1.Infrastructure.Shared;
 using DDDSample1.Infrastructure.SurveillanceTasks;
+using MongoDB.Bson;
+using MongoDB.Bson.Serialization;
+using MongoDB.Bson.Serialization.IdGenerators;
+using MongoDB.Bson.Serialization.Serializers;
 using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
 
 namespace DDDSample1
@@ -35,6 +39,17 @@ namespace DDDSample1
                     new MySqlServerVersion(new Version(8, 0, 22)))
                     .ReplaceService<IValueConverterSelector, StronglyEntityIdValueConverterSelector>().EnableDetailedErrors()
             );
+            
+            BsonSerializer.RegisterSerializer(new IdentifierBsonSerializer());
+            
+            services.AddSingleton<MongoDBContext>(sp =>
+                new MongoDBContext(Configuration.GetConnectionString("MongoDB"), "test"));
+            
+            services.AddScoped<IPickUpAndDeliveryTaskMongoRepository, PickUpAndDeliveryTaskMongoRepository>();
+            services.AddScoped<ISurveillanceTaskMongoRepository, SurveillanceTaskMongoRepository>();
+            
+            
+            
             services.AddCors(options =>
             { 
                 options.AddPolicy("AllowAll", builder => 

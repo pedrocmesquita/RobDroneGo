@@ -24,4 +24,5 @@ namespace DDDSample1.Infrastructure
             modelBuilder.ApplyConfiguration(new SurveillanceTaskEntityTypeConfiguration());
         }
     }
+    
 }

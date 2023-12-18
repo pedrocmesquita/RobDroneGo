@@ -9,10 +9,12 @@ namespace DDDSample1.Domain.SurveillanceTasks
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly ISurveillanceTaskRepository _repo;
-        public SurveillanceTaskService(IUnitOfWork unitOfWork, ISurveillanceTaskRepository repo)
+        private readonly ISurveillanceTaskMongoRepository _mongoRepo;
+        public SurveillanceTaskService(IUnitOfWork unitOfWork, ISurveillanceTaskRepository repo, ISurveillanceTaskMongoRepository mongoRepo)
         {
             _unitOfWork = unitOfWork;
             _repo = repo;
+            _mongoRepo = mongoRepo;
         }
         public async Task<List<SurveillanceTaskDto>> GetAllAsync()
         {
@@ -34,14 +36,16 @@ namespace DDDSample1.Domain.SurveillanceTasks
         }
         
         public async Task<SurveillanceTaskDto> AddAsync(CreatingSurveillanceTaskDto dto)
-        {
+        {   
             var surveillanceTask = new SurveillanceTask(
                 new SurveillanceTaskId(dto.SurveillanceTaskId),
                 dto.ContactNumber, 
                 dto.Building,
                 dto.Floors);
-
+            
             await this._repo.AddAsync(surveillanceTask);
+            await this._mongoRepo.AddAsync(surveillanceTask);
+
 
             await this._unitOfWork.CommitAsync();
 

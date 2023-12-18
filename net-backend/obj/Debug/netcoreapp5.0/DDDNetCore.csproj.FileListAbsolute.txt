@@ -36,3 +36,16 @@ C:\Repositories\3DF_SEM_5_PI-2023_2024\net-backend\bin\Debug\netcoreapp5.0\Pomel
 C:\Repositories\3DF_SEM_5_PI-2023_2024\net-backend\bin\Debug\netcoreapp5.0\System.Diagnostics.DiagnosticSource.dll
 C:\Repositories\3DF_SEM_5_PI-2023_2024\net-backend\bin\Debug\netcoreapp5.0\Humanizer.dll
 C:\Repositories\3DF_SEM_5_PI-2023_2024\net-backend\bin\Debug\netcoreapp5.0\Microsoft.EntityFrameworkCore.Design.dll
+C:\Repositories\3DF_SEM_5_PI-2023_2024\net-backend\bin\Debug\netcoreapp5.0\AWSSDK.Core.dll
+C:\Repositories\3DF_SEM_5_PI-2023_2024\net-backend\bin\Debug\netcoreapp5.0\AWSSDK.SecurityToken.dll
+C:\Repositories\3DF_SEM_5_PI-2023_2024\net-backend\bin\Debug\netcoreapp5.0\DnsClient.dll
+C:\Repositories\3DF_SEM_5_PI-2023_2024\net-backend\bin\Debug\netcoreapp5.0\MongoDB.Bson.dll
+C:\Repositories\3DF_SEM_5_PI-2023_2024\net-backend\bin\Debug\netcoreapp5.0\MongoDB.Driver.dll
+C:\Repositories\3DF_SEM_5_PI-2023_2024\net-backend\bin\Debug\netcoreapp5.0\MongoDB.Driver.Core.dll
+C:\Repositories\3DF_SEM_5_PI-2023_2024\net-backend\bin\Debug\netcoreapp5.0\MongoDB.Libmongocrypt.dll
+C:\Repositories\3DF_SEM_5_PI-2023_2024\net-backend\bin\Debug\netcoreapp5.0\SharpCompress.dll
+C:\Repositories\3DF_SEM_5_PI-2023_2024\net-backend\bin\Debug\netcoreapp5.0\Snappier.dll
+C:\Repositories\3DF_SEM_5_PI-2023_2024\net-backend\bin\Debug\netcoreapp5.0\ZstdSharp.dll
+C:\Repositories\3DF_SEM_5_PI-2023_2024\net-backend\bin\Debug\netcoreapp5.0\runtimes\linux\native\libmongocrypt.so
+C:\Repositories\3DF_SEM_5_PI-2023_2024\net-backend\bin\Debug\netcoreapp5.0\runtimes\osx\native\libmongocrypt.dylib
+C:\Repositories\3DF_SEM_5_PI-2023_2024\net-backend\bin\Debug\netcoreapp5.0\runtimes\win\native\mongocrypt.dll

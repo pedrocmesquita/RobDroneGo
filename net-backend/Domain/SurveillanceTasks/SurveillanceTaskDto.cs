@@ -10,7 +10,7 @@ namespace DDDSample1.Domain.SurveillanceTasks
         public string ContactNumber { get; set; }
         
         public string Building { get; set; }
-        public List<string> Floors { get; set; }
+        public string Floors { get; set; }
         
         
         

@@ -9,6 +9,8 @@ namespace DDDSample1.Infrastructure.SurveillanceTasks
         {
             builder.HasKey(b => b.Id);
             builder.OwnsOne(b => b.SurveillanceTaskId);
+            builder.Property(b => b.Floors);
+
         }
     }
 }

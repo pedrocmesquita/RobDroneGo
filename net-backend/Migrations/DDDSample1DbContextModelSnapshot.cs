@@ -64,6 +64,9 @@ namespace DDDNetCore.Migrations
                     b.Property<string>("ContactNumber")
                         .HasColumnType("longtext");
 
+                    b.Property<string>("Floors")
+                        .HasColumnType("longtext");
+
                     b.HasKey("Id");
 
                     b.ToTable("SurveillanceTasks");

@@ -14,8 +14,9 @@ public class SurveillanceTask : Entity<Identifier>, IAggregateRoot
     public string ContactNumber { get; set; }
 
     public string Building { get; set; }
-    [NotMapped]
-    public List<string> Floors { get; set; }
+        
+    
+    public string Floors { get; set; }
 
     public bool Active{ get;  private set; }
 
@@ -24,7 +25,7 @@ public class SurveillanceTask : Entity<Identifier>, IAggregateRoot
         this.Active = true;
     }
 
-    public SurveillanceTask(SurveillanceTaskId surveillanceTaskId, string contactNumber, string building, List<string> floors)
+    public SurveillanceTask(SurveillanceTaskId surveillanceTaskId, string contactNumber, string building, string floors)
     {   
         this.Id = new Identifier(Guid.NewGuid());
         this.SurveillanceTaskId = surveillanceTaskId;

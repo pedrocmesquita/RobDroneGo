@@ -15,6 +15,7 @@ import { RobotComponent } from "./component/robot/robot.component";
 import { RobotTypeComponent } from "./component/robot-type/robot-type.component";
 import { LogsComponent } from "./component/logs/logs.component";
 import { PathComponent } from "./component/path/path.component";
+import { TaskComponent } from "./component/task/task.component";
 
 export const routes: Routes = [
   { path: '', component: LoginComponent },
@@ -32,6 +33,7 @@ export const routes: Routes = [
   { path: 'unauthorized', component: UnauthorizedComponent},
   { path: 'logs', component: LogsComponent, canActivate: [AuthGuard]},
   { path: 'path', component: PathComponent, canActivate: [AuthGuard] },
+  { path: 'task', component: TaskComponent, canActivate: [AuthGuard]},
 
   { path: '**', redirectTo: '' },
 

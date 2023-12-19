@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using DDDSample1.Domain.PickupAndDeliveryTasks;
 using DDDSample1.Infrastructure.PickupAndDeliveryTasks;
 using DDDSample1.Infrastructure.SurveillanceTasks;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace DDDSample1.Infrastructure
 {

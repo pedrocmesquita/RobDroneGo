@@ -30,6 +30,7 @@ import { MatMenuModule } from "@angular/material/menu";
 import { BuildingFilterPipe } from "./services/building-filter-pipe.service";
 import { LogsComponent } from "./component/logs/logs.component";
 import { PathComponent } from "./component/path/path.component";
+import { TaskComponent } from "./component/task/task.component";
 
 @NgModule({
   declarations: [
@@ -50,7 +51,8 @@ import { PathComponent } from "./component/path/path.component";
     ElevatorComponent,
     BuildingFilterPipe,
     LogsComponent,
-    PathComponent
+    PathComponent,
+    TaskComponent
   ],
   imports: [
     CommonModule,

@@ -51,6 +51,8 @@ namespace DDDNetCore.Migrations
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Building = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
+                    Floors = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     Active = table.Column<bool>(type: "tinyint(1)", nullable: false)
                 },
                 constraints: table =>

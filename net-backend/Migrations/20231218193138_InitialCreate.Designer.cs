@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DDDNetCore.Migrations
 {
     [DbContext(typeof(DDDSample1DbContext))]
-    [Migration("20231217230106_InitialCreate")]
+    [Migration("20231218193138_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -64,6 +64,9 @@ namespace DDDNetCore.Migrations
                         .HasColumnType("longtext");
 
                     b.Property<string>("ContactNumber")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Floors")
                         .HasColumnType("longtext");
 
                     b.HasKey("Id");

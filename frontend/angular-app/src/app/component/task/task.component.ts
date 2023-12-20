@@ -4,6 +4,12 @@ import { SurveillanceTaskService } from "../../services/surveillanceTask.service
 import { PickUpAndDeliveryTaskService } from "../../services/pickUpAndDeliveryTask.service";
 import { IPickupAndDeliveryTask } from "../../models/ipickupanddeliverytask.model";
 import { ISurveillanceTask } from "../../models/isurveillancetask.model";
+import { BuildingService } from "../../services/building.service";
+import { FloorService } from "../../services/floor.service";
+import { RoomService } from "../../services/room.service";
+import { IBuilding } from "../../models/ibuilding.model";
+import { IFloor } from "../../models/ifloor.model";
+import { IRoom } from "../../models/iroom.model";
 
 @Component({
   selector: 'app-task',
@@ -14,6 +20,10 @@ export class TaskComponent implements OnInit{
 
   surveillanceTasks: ISurveillanceTask[] = [];
   pickUpAndDeliveryTasks: IPickupAndDeliveryTask[] = [];
+  buildings: IBuilding[] = [];
+  floors: IFloor[] = [];
+  rooms: IRoom[] = [];
+  filterText: string = '';
   newSurveillanceTask: ISurveillanceTask = {
     surveillanceTaskId: '',
     contactNumber: '',
@@ -35,8 +45,10 @@ export class TaskComponent implements OnInit{
   successMessage: string | null = null;
   errorMessage: string | null = null;
   selectedOption: string = '';
+  filteredFloors: IFloor[] = []; // Initialize to empty array
 
-  constructor(private surveillanceTaskService: SurveillanceTaskService, private pickUpAndDeliveryTaskService: PickUpAndDeliveryTaskService) {}
+  constructor(private surveillanceTaskService: SurveillanceTaskService, private pickUpAndDeliveryTaskService: PickUpAndDeliveryTaskService
+  , private buildingService: BuildingService, private floorService: FloorService, private roomService: RoomService) {}
 
   ngOnInit(): void {
     this.surveillanceTaskService.getTasks().subscribe(
@@ -58,6 +70,48 @@ export class TaskComponent implements OnInit{
         console.error('Failed to fetch pickup and delivery tasks:', error);
       }
     );
+
+    this.buildingService.getBuildings().subscribe(
+      (buildings) => {
+        console.log(buildings);
+        this.buildings = buildings;
+      },
+      (error) => {
+        console.error('Failed to fetch buildings:', error);
+      }
+    );
+
+    this.floorService.getFloors().subscribe(
+      (floors) => {
+        console.log(floors);
+        this.floors = floors;
+      },
+      (error) => {
+        console.error('Failed to fetch floors:', error);
+      }
+    );
+
+    this.roomService.getRooms().subscribe(
+      (rooms) => {
+        console.log(rooms);
+        this.rooms = rooms;
+      },
+      (error) => {
+        console.error('Failed to fetch rooms:', error);
+      }
+    );
+  }
+
+  getFloors() {
+    this.floorService.getFloors().subscribe(data => {
+      this.floors = data;
+      this.filteredFloors = this.floors;
+    });
+  }
+
+  onBuildingChange() {
+    // Update the filteredFloors based on the selected building
+    this.filteredFloors = this.buildings.find(b => b.buildingId === this.newSurveillanceTask.building)?.floors || [];
   }
 
   createSurveillanceTask(): void {

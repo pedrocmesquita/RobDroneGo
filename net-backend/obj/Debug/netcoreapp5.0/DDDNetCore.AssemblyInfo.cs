@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("DDDNetCore")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+17e2f22366d441ca79a618a71c4126d2a6bab91c")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+9fe8ce8be43e3442ce6578c756ebff9f3e929e90")]
 [assembly: System.Reflection.AssemblyProductAttribute("DDDNetCore")]
 [assembly: System.Reflection.AssemblyTitleAttribute("DDDNetCore")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

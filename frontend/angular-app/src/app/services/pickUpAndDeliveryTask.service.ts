@@ -10,7 +10,7 @@ import { IPickupAndDeliveryTask } from "../models/ipickupanddeliverytask.model";
 )
 
 export class PickUpAndDeliveryTaskService {
-  private apiUrl = "http://localhost:5000/api"; // Replace with your actual API URL
+  private apiUrl = "https://localhost:5001/api"; // Replace with your actual API URL
 
   constructor(private http:HttpClient, private authService:AuthService) {}
 
@@ -18,7 +18,7 @@ export class PickUpAndDeliveryTaskService {
     const token = this.authService.getToken();
     const headers = { Authorization: `Bearer ${token}` };
 
-    return this.http.get(`${this.apiUrl}/PickUpAndDeliveryTask`, { headers });
+    return this.http.get(`${this.apiUrl}/PickUpAndDeliveryTask`);
   }
 
   createTask(task: IPickupAndDeliveryTask): Observable<any> {

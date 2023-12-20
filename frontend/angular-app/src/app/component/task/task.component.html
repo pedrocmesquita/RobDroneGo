@@ -1,1 +1,96 @@
-<p>task works!</p>
+<div class="task-container">
+  <p *ngIf="successMessage" class="success-message">{{ successMessage }}</p>
+  <p *ngIf="errorMessage" class="error-message">{{ errorMessage }}</p>
+  <div class="header-container">
+    <h1>Task Component</h1>
+  </div>
+  <button (click)="selectOption('createSurveillance')" data-cy="createSurveillanceButton">Create Surveillance Task</button>
+  <button (click)="selectOption('createPickUpAndDelivery')" data-cy="createPickUpAndDeliveryButton">Create Pick Up And Delivery Task</button>
+  <button (click)="selectOption('list')" data-cy="listButton">List Tasks</button>
+  <div *ngIf="selectedOption === 'createSurveillance'">
+    <form (ngSubmit)="createSurveillanceTask()">
+      <!-- Add your input fields here based on the properties of the surveillance task -->
+      <input [(ngModel)]="newSurveillanceTask.surveillanceTaskId" name="surveillanceTaskId" type="text" placeholder="Surveillance Task Id" data-cy="surveillanceTaskIdInput">
+      <input [(ngModel)]="newSurveillanceTask.contactNumber" name="contactNumber" type="text" placeholder="Contact Number" data-cy="contactNumberInput">
+      <label>Building ID</label>
+      <select [(ngModel)]="newSurveillanceTask.building" name="Building ID" (change)="onBuildingChange()" data-cy="buildingInput">
+        <option *ngFor="let building of buildings" [value]="building.buildingId">{{ building.buildingId }}</option>
+      </select>
+      <label>Floor ID</label>
+      <select [(ngModel)]="newSurveillanceTask.floors" name="Floor ID" data-cy="floorInput">
+        <option *ngFor="let floor of filteredFloors" [value]="floor.floorId">{{ floor.floorId }}</option>
+      </select>
+      <button type="submit" data-cy="createsButton">Create Surveillance Task</button>
+    </form>
+  </div>
+  <div *ngIf="selectedOption === 'createPickUpAndDelivery'">
+    <form (ngSubmit)="createPickUpAndDeliveryTask()">
+      <!-- Add your input fields here based on the properties of the pick up and delivery task -->
+      <input [(ngModel)]="newPickUpAndDeliveryTask.pickupAndDeliveryTaskId" name="pickUpAndDeliveryTaskId" type="text" placeholder="Pick Up And Delivery Task Id" data-cy="pickUpAndDeliveryTaskIdInput">
+      <input [(ngModel)]="newPickUpAndDeliveryTask.contactNumber" name="contactNumber" type="text" placeholder="Contact Number" data-cy="contactNumberInput">
+
+      <label>Pickup Room ID</label>
+      <select [(ngModel)]="newPickUpAndDeliveryTask.pickUpRoom" name="Room ID" data-cy="roomInput">
+        <option *ngFor="let room of rooms" [value]="room.roomId">{{ room.roomId }}</option>
+      </select>
+      <label>Delivery Room ID</label>
+      <select [(ngModel)]="newPickUpAndDeliveryTask.deliveryRoom" name="Room ID" data-cy="roomInput">
+        <option *ngFor="let room of rooms" [value]="room.roomId">{{ room.roomId }}</option>
+      </select>
+      <input [(ngModel)]="newPickUpAndDeliveryTask.pickUpContact" name="Pickup Contact" type="text" placeholder="Pickup Contact" data-cy="pickUpContactInput">
+      <input [(ngModel)]="newPickUpAndDeliveryTask.deliveryContact" name="Delivery Contact" type="text" placeholder="Delivery Contact" data-cy="deliveryContactInput">
+      <input [(ngModel)]="newPickUpAndDeliveryTask.confirmationCode" name="Confirmation Code" type="text" placeholder="Confirmation Code" data-cy="confirmationCodeInput">
+      <input [(ngModel)]="newPickUpAndDeliveryTask.description" name="Description" type="text" placeholder="Description" data-cy="descriptionInput">
+
+      <button type="submit" data-cy="createsButton">Create Pick Up And Delivery Task</button>
+    </form>
+  </div>
+  <div *ngIf="selectedOption === 'list'" class="list-container">
+    <h2>Surveillance Tasks</h2>
+    <table id="surveillanceTaskTable">
+      <!-- Add your table headers and rows here based on the properties of the surveillance task -->
+      <thead>
+        <tr>
+          <th>Surveillance Task Id</th>
+          <th>Contact Number</th>
+          <th>Building</th>
+          <th>Floor</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let surveillanceTask of surveillanceTasks">
+          <td>{{ surveillanceTask.surveillanceTaskId }}</td>
+          <td>{{ surveillanceTask.contactNumber }}</td>
+          <td>{{ surveillanceTask.building }}</td>
+          <td>{{ surveillanceTask.floors }}</td>
+        </tr>
+    </table>
+    <h2>Pick Up And Delivery Tasks</h2>
+    <table id="pickUpAndDeliveryTaskTable">
+      <!-- Add your table headers and rows here based on the properties of the pick up and delivery task -->
+      <thead>
+        <tr>
+          <th>Pick Up And Delivery Task Id</th>
+          <th>Contact Number</th>
+          <th>Pick Up Room</th>
+          <th>Delivery Room</th>
+          <th>Pick Up Contact</th>
+          <th>Delivery Contact</th>
+          <th>Confirmation Code</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let pickUpAndDeliveryTask of pickUpAndDeliveryTasks">
+          <td>{{ pickUpAndDeliveryTask.pickupAndDeliveryTaskId }}</td>
+          <td>{{ pickUpAndDeliveryTask.contactNumber }}</td>
+          <td>{{ pickUpAndDeliveryTask.pickUpRoom }}</td>
+          <td>{{ pickUpAndDeliveryTask.deliveryRoom }}</td>
+          <td>{{ pickUpAndDeliveryTask.pickUpContact }}</td>
+          <td>{{ pickUpAndDeliveryTask.deliveryContact }}</td>
+          <td>{{ pickUpAndDeliveryTask.confirmationCode }}</td>
+          <td>{{ pickUpAndDeliveryTask.description }}</td>
+        </tr>
+    </table>
+  </div>
+</div>

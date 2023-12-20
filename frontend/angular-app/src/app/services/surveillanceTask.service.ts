@@ -8,7 +8,7 @@ import { ISurveillanceTask } from "../models/isurveillancetask.model";
 })
 
 export class SurveillanceTaskService {
-  private apiUrl = "http://localhost:5000/api"; // Replace with your actual API URL
+  private apiUrl = "https://localhost:5001/api"; // Replace with your actual API URL
 
   constructor(private http:HttpClient, private authService:AuthService) {}
 
@@ -16,7 +16,7 @@ export class SurveillanceTaskService {
     const token = this.authService.getToken();
     const headers = { Authorization: `Bearer ${token}` };
 
-    return this.http.get(`${this.apiUrl}/SurveillanceTask`, { headers });
+    return this.http.get(`${this.apiUrl}/SurveillanceTask`);
   }
 
   createTask(task: ISurveillanceTask): Observable<any> {

@@ -11,7 +11,9 @@ namespace DDDSample1.Mappers
                 Id = pdt.Id.AsGuid(),
                 PickupAndDeliveryTaskId = pdt.PickupAndDeliveryTaskId.PickupAndDeliveryTaskIdentifier,
                 ContactNumber = pdt.ContactNumber, PickupRoom = pdt.PickupRoom, DeliveryRoom = pdt.DeliveryRoom,
-                PickupContact = pdt.PickupContact
+                PickupContact = pdt.PickupContact, DeliveryContact = pdt.DeliveryContact,
+                ConfirmationCode = pdt.ConfirmationCode, Description = pdt.Description,
+                Active = pdt.Active
             };
         }
         

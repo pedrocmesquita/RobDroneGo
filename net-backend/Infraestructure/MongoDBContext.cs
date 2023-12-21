@@ -1,4 +1,5 @@
 ﻿using DDDSample1.Domain.PickupAndDeliveryTasks;
+using Microsoft.EntityFrameworkCore;
 using MongoDB.Driver;
 
 public class MongoDBContext
@@ -11,12 +12,17 @@ public class MongoDBContext
         if (client != null)
             _database = client.GetDatabase(databaseName);
     }
+    
 
     public IMongoCollection<SurveillanceTask> SurveillanceTasks
     {
         get
         {
             return _database.GetCollection<SurveillanceTask>("SurveillanceTask");
+        }
+        set
+        {
+            _database.GetCollection<SurveillanceTask>("SurveillanceTask");
         }
     }
     
@@ -26,6 +32,13 @@ public class MongoDBContext
         {
             return _database.GetCollection<PickupAndDeliveryTask>("PickUpAndDeliveryTask");
         }
+        set
+        {
+            _database.GetCollection<PickupAndDeliveryTask>("PickUpAndDeliveryTask");
+        }
     }
+
+    
+    
     
 }

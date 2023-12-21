@@ -27,4 +27,12 @@ export class PickUpAndDeliveryTaskService {
 
     return this.http.post(`${this.apiUrl}/PickUpAndDeliveryTask`, task, { headers });
   }
+
+  updateTask(task: IPickupAndDeliveryTask): Observable<any> {
+
+    const token = this.authService.getToken();
+    const headers = { Authorization: `Bearer ${token}` };
+
+    return this.http.put(`${this.apiUrl}/PickUpAndDeliveryTask`, task, { headers });
+  }
 }

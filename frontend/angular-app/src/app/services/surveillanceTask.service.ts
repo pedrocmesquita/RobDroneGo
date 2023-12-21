@@ -25,4 +25,12 @@ export class SurveillanceTaskService {
 
     return this.http.post(`${this.apiUrl}/SurveillanceTask`, task, { headers });
   }
+
+  updateTask(task: ISurveillanceTask): Observable<any> {
+
+      const token = this.authService.getToken();
+      const headers = { Authorization: `Bearer ${token}` };
+
+      return this.http.put(`${this.apiUrl}/SurveillanceTask`, task, { headers });
+  }
 }

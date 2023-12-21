@@ -1,19 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace DDDSample1.Domain.SurveillanceTasks
+﻿namespace DDDSample1.Domain.SurveillanceTasks
 {
-    public class SurveillanceTaskDto
-    {   
-        public Guid Id { get; set; }
+    public class UpdatingSurveillanceTaskDto
+    {
         public string SurveillanceTaskId { get; set; }
         public string ContactNumber { get; set; }
         
         public string Building { get; set; }
         public string Floors { get; set; }
-        
         public bool Active { get; set; }
-        
-        
     }
 }

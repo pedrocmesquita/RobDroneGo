@@ -21,11 +21,13 @@ namespace DDDSample1.Domain.PickupAndDeliveryTasks
         public string ConfirmationCode { get; set; }
         public string Description { get; set; }
 
-        public bool Active{ get;  private set; }
+        public bool Active{ get;  set; }
+        
+        
 
         public PickupAndDeliveryTask()
         {
-            this.Active = true;
+            this.Active = false;
         }
 
         public PickupAndDeliveryTask(PickupAndDeliveryTaskId pickupAndDeliveryTaskId, string contactNumber, string pickupRoom, string deliveryRoom, string pickupContact, string deliveryContact, string confirmationCode, string description)

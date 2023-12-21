@@ -70,6 +70,12 @@
         <span>Paths</span>
       </a>
     </div>
+    <div class="menu-item" *ngIf="currentUser.role === this.roleGestorDeTarefas.id || currentUser.role === this.roleAdmin.id"  >
+      <a routerLink="/task" data-cy="taskButton">
+        <img src="assets/task-icon.png" alt="task"> <!-- Replace with the actual path to your icon -->
+        <span>Tasks</span>
+      </a>
+    </div>
   </nav>
 </div>
 

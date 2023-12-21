@@ -10,7 +10,8 @@ namespace DDDSample1.Mappers
             {
                 Id = st.Id.AsGuid(),
                 SurveillanceTaskId = st.SurveillanceTaskId.SurveillanceTaskIdentifier,
-                ContactNumber = st.ContactNumber, Building = st.Building, Floors = st.Floors
+                ContactNumber = st.ContactNumber, Building = st.Building, Floors = st.Floors,
+                Active = st.Active
             };
         }
     }

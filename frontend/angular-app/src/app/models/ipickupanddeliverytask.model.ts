@@ -1,9 +1,9 @@
 export interface IPickupAndDeliveryTask {
   pickupAndDeliveryTaskId: string;
   contactNumber: string;
-  pickUpRoom: string;
+  pickupRoom: string;
   deliveryRoom: string;
-  pickUpContact: string;
+  pickupContact: string;
   deliveryContact: string;
   confirmationCode: string;
   description: string;

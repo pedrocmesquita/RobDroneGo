@@ -30,14 +30,14 @@
       <input [(ngModel)]="newPickUpAndDeliveryTask.contactNumber" name="contactNumber" type="text" placeholder="Contact Number" data-cy="contactNumberInput">
 
       <label>Pickup Room ID</label>
-      <select [(ngModel)]="newPickUpAndDeliveryTask.pickUpRoom" name="Room ID" data-cy="roomInput">
+      <select [(ngModel)]="newPickUpAndDeliveryTask.pickupRoom" name="Room ID" data-cy="roomInput">
         <option *ngFor="let room of rooms" [value]="room.roomId">{{ room.roomId }}</option>
       </select>
       <label>Delivery Room ID</label>
       <select [(ngModel)]="newPickUpAndDeliveryTask.deliveryRoom" name="Room ID" data-cy="roomInput">
         <option *ngFor="let room of rooms" [value]="room.roomId">{{ room.roomId }}</option>
       </select>
-      <input [(ngModel)]="newPickUpAndDeliveryTask.pickUpContact" name="Pickup Contact" type="text" placeholder="Pickup Contact" data-cy="pickUpContactInput">
+      <input [(ngModel)]="newPickUpAndDeliveryTask.pickupContact" name="Pickup Contact" type="text" placeholder="Pickup Contact" data-cy="pickUpContactInput">
       <input [(ngModel)]="newPickUpAndDeliveryTask.deliveryContact" name="Delivery Contact" type="text" placeholder="Delivery Contact" data-cy="deliveryContactInput">
       <input [(ngModel)]="newPickUpAndDeliveryTask.confirmationCode" name="Confirmation Code" type="text" placeholder="Confirmation Code" data-cy="confirmationCodeInput">
       <input [(ngModel)]="newPickUpAndDeliveryTask.description" name="Description" type="text" placeholder="Description" data-cy="descriptionInput">
@@ -55,6 +55,7 @@
           <th>Contact Number</th>
           <th>Building</th>
           <th>Floor</th>
+          <th>Active</th>
         </tr>
       </thead>
       <tbody>
@@ -63,6 +64,10 @@
           <td>{{ surveillanceTask.contactNumber }}</td>
           <td>{{ surveillanceTask.building }}</td>
           <td>{{ surveillanceTask.floors }}</td>
+          <td>{{ surveillanceTask.active}}</td>
+          <td>
+            <button (click)="updateBoolSurveillanceTask(surveillanceTask)">Switch</button>
+          </td>
         </tr>
     </table>
     <h2>Pick Up And Delivery Tasks</h2>
@@ -78,18 +83,23 @@
           <th>Delivery Contact</th>
           <th>Confirmation Code</th>
           <th>Description</th>
+          <th>Active</th>
         </tr>
       </thead>
       <tbody>
         <tr *ngFor="let pickUpAndDeliveryTask of pickUpAndDeliveryTasks">
           <td>{{ pickUpAndDeliveryTask.pickupAndDeliveryTaskId }}</td>
           <td>{{ pickUpAndDeliveryTask.contactNumber }}</td>
-          <td>{{ pickUpAndDeliveryTask.pickUpRoom }}</td>
+          <td>{{ pickUpAndDeliveryTask.pickupRoom }}</td>
           <td>{{ pickUpAndDeliveryTask.deliveryRoom }}</td>
-          <td>{{ pickUpAndDeliveryTask.pickUpContact }}</td>
+          <td>{{ pickUpAndDeliveryTask.pickupContact }}</td>
           <td>{{ pickUpAndDeliveryTask.deliveryContact }}</td>
           <td>{{ pickUpAndDeliveryTask.confirmationCode }}</td>
           <td>{{ pickUpAndDeliveryTask.description }}</td>
+          <td>{{ pickUpAndDeliveryTask.active}}</td>
+          <td>
+            <button (click)="updateBoolPickUpAndDeliveryTask(pickUpAndDeliveryTask)">Switch</button>
+          </td>
         </tr>
     </table>
   </div>

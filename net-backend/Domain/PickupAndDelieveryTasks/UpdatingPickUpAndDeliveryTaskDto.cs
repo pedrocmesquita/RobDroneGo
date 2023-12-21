@@ -1,10 +1,9 @@
-using System;
+﻿using System;
 
 namespace DDDSample1.Domain.PickupAndDeliveryTasks
 {
-    public class PickupAndDeliveryTaskDto
-    {   
-        public Guid Id { get; set; }
+    public class UpdatingPickUpAndDeliveryTaskDto
+    {
         public string PickupAndDeliveryTaskId { get; set; }
         public string ContactNumber { get; set; }
         public string PickupRoom { get; set; }
@@ -13,7 +12,6 @@ namespace DDDSample1.Domain.PickupAndDeliveryTasks
         public string DeliveryContact { get; set; }
         public string ConfirmationCode { get; set; }
         public string Description { get; set; }
-        
         public bool Active { get; set; }
     }
 }

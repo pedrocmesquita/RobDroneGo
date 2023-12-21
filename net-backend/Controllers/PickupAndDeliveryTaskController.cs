@@ -46,19 +46,42 @@ namespace DDDSample1.Controllers
         [HttpPost]
         public async Task<ActionResult<PickupAndDeliveryTaskDto>> Create(CreatingPickupAndDeliveryTaskDto dto)
         {
-            /*var list = await _service.GetAllAsync();
+            var list = await _service.GetAllAsync();
             foreach (var pickupAndDeliveryTaskDto in list)
             {
                 if (pickupAndDeliveryTaskDto.PickupAndDeliveryTaskId.Equals(dto.PickupAndDeliveryTaskId))
                 {
                     return BadRequest(new { Message = "This pickupAndDeliveryTask identifier already exists try another one." });
                 }
-            }*/
+            }
             try
             {
                 var pickupAndDeliveryTask = await _service.AddAsync(dto);
                 
                 return CreatedAtAction(nameof(GetByPickupAndDeliveryTaskId), new { pickupAndDeliveryTaskIdentifier = pickupAndDeliveryTask.Id }, pickupAndDeliveryTask);            }
+            catch (BusinessRuleValidationException ex)
+            {
+                return BadRequest(new { Message = ex.Message });
+            }
+        }
+        
+        // PUT: api/PickupAndDeliveryTask/
+        [HttpPut]
+        public async Task<ActionResult<PickupAndDeliveryTaskDto>> Update(UpdatingPickUpAndDeliveryTaskDto dto)
+        {   
+            Console.WriteLine("hello");
+            
+            try
+            {
+                var pickupAndDeliveryTask = await _service.UpdateBoolAsync(dto);
+                
+                if (pickupAndDeliveryTask == null)
+                {
+                    return new NotFoundResult();
+                }
+                
+                return pickupAndDeliveryTask;
+            }
             catch (BusinessRuleValidationException ex)
             {
                 return BadRequest(new { Message = ex.Message });

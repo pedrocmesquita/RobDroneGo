@@ -13,17 +13,15 @@ namespace DDDSample1.Domain.PickupAndDeliveryTasks
     public class PickupAndDeliveryTaskService
     {
         private readonly IUnitOfWork _unitOfWork;
-        private readonly IPickupAndDeliveryTaskRepository _repo;
         private readonly IPickUpAndDeliveryTaskMongoRepository _mongoRepo;
-        public PickupAndDeliveryTaskService(IUnitOfWork unitOfWork, IPickupAndDeliveryTaskRepository repo, IPickUpAndDeliveryTaskMongoRepository mongoRepo)
+        public PickupAndDeliveryTaskService(IUnitOfWork unitOfWork, IPickUpAndDeliveryTaskMongoRepository mongoRepo)
         {
             _unitOfWork = unitOfWork;
-            _repo = repo;
             _mongoRepo = mongoRepo;
         }   
         public async Task<List<PickupAndDeliveryTaskDto>> GetAllAsync()
         {
-            var list = await this._repo.GetAllAsync();
+            var list = await this._mongoRepo.GetAllAsync();
         
             List<PickupAndDeliveryTaskDto> listDto = list.ConvertAll<PickupAndDeliveryTaskDto>(ord => PickupAndDeliveryTaskMapper.domainToDTO(ord));
 
@@ -32,7 +30,7 @@ namespace DDDSample1.Domain.PickupAndDeliveryTasks
         
         public async Task<PickupAndDeliveryTaskDto> GetByPickupAndDeliveryTaskIdAsync(string pickupAndDeliveryTaskIdentifier)
         {
-            var ord = await this._repo.GetByPickupAndDeliveryTaskIdAsync(pickupAndDeliveryTaskIdentifier);
+            var ord = await this._mongoRepo.GetByPickupAndDeliveryTaskIdAsync(pickupAndDeliveryTaskIdentifier);
             
             if(ord == null)
                 return null;
@@ -52,8 +50,47 @@ namespace DDDSample1.Domain.PickupAndDeliveryTasks
                 dto.ConfirmationCode, 
                 dto.Description);
             
-            await this._repo.AddAsync(pickupAndDeliveryTask);
             await this._mongoRepo.AddAsync(pickupAndDeliveryTask);
+
+            await this._unitOfWork.CommitAsync();
+
+            return PickupAndDeliveryTaskMapper.domainToDTO(pickupAndDeliveryTask);
+        }
+        
+        public async Task<PickupAndDeliveryTaskDto> UpdateBoolAsync(UpdatingPickUpAndDeliveryTaskDto dto)
+        {   
+            // Print the dto to the console
+            Console.WriteLine("--------------------");
+            Console.WriteLine(dto.PickupAndDeliveryTaskId);
+            Console.WriteLine(dto.Active);
+            Console.WriteLine("--------------------");
+            
+            var pickupAndDeliveryTask = await this._mongoRepo.GetByPickupAndDeliveryTaskIdAsync(dto.PickupAndDeliveryTaskId);
+            
+            if (pickupAndDeliveryTask == null)
+            {
+                Console.WriteLine("pickupAndDeliveryTask is null");
+                return null;
+            }
+            
+            Console.WriteLine("--------------------");
+            Console.WriteLine(pickupAndDeliveryTask.Active);
+            Console.WriteLine("--------------------");
+
+            
+
+            if (pickupAndDeliveryTask.Active == false)
+            {
+                Console.WriteLine("dto.Active is false");
+                pickupAndDeliveryTask.Active = true;
+            }
+            else if (pickupAndDeliveryTask.Active)
+            {
+                Console.WriteLine("dto.Active is true");
+                pickupAndDeliveryTask.Active = false;
+            }
+
+            await this._mongoRepo.UpdateAsync(pickupAndDeliveryTask);
 
             await this._unitOfWork.CommitAsync();
 

@@ -47,14 +47,16 @@ namespace DDDSample1.Controllers
         [HttpPost]
         public async Task<ActionResult<SurveillanceTaskDto>> Create(CreatingSurveillanceTaskDto dto)
         {
-            /*var list = await _service.GetAllAsync();
+            var list = await _service.GetAllAsync();
             foreach (var surveillanceTaskDto in list)
             {
                 if (surveillanceTaskDto.SurveillanceTaskId.Equals(dto.SurveillanceTaskId))
                 {
-                    return BadRequest(new { Message = "This surveillanceTask identifier already exists try another one." });
+                    return BadRequest(new
+                        { Message = "This surveillanceTask identifier already exists try another one." });
                 }
-            }*/
+            }
+
             try
             {
                 var surveillanceTask = await _service.AddAsync(dto);
@@ -68,5 +70,27 @@ namespace DDDSample1.Controllers
             }
         }
 
+        // PUT: api/SurveillanceTask/
+        [HttpPut]
+        public async Task<ActionResult<SurveillanceTaskDto>> Update(UpdatingSurveillanceTaskDto dto)
+        {
+            try
+            {
+                var surveillanceTask = await _service.UpdateBoolAsync(dto);
+
+                if (surveillanceTask == null)
+                {
+                    return new NotFoundResult();
+                }
+
+                return surveillanceTask;
+
+            }
+            catch (Exception e)
+            {
+                return BadRequest(new { Message = e.Message });
+            }
+
+        }
     }
 }

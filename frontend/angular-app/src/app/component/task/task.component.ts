@@ -34,9 +34,9 @@ export class TaskComponent implements OnInit{
   newPickUpAndDeliveryTask: IPickupAndDeliveryTask = {
     pickupAndDeliveryTaskId: '',
     contactNumber: '',
-    pickUpRoom: '',
+    pickupRoom: '',
     deliveryRoom: '',
-    pickUpContact: '',
+    pickupContact: '',
     deliveryContact: '',
     confirmationCode: '',
     description: '',
@@ -147,9 +147,9 @@ export class TaskComponent implements OnInit{
         this.newPickUpAndDeliveryTask = {
           pickupAndDeliveryTaskId: '',
           contactNumber: '',
-          pickUpRoom: '',
+          pickupRoom: '',
           deliveryRoom: '',
-          pickUpContact: '',
+          pickupContact: '',
           deliveryContact: '',
           confirmationCode: '',
           description: '',
@@ -174,5 +174,33 @@ selectOption(option: string) {
       this.selectedOption = option;
     }
   }
+
+  updateBoolSurveillanceTask(task: ISurveillanceTask): void {
+    this.surveillanceTaskService.updateTask(task).subscribe(
+      () => {
+        console.log('Task approved successfully');
+        // Update local state and display success message
+      },
+      error => {
+        console.error('Failed to approve task:', error);
+        // Display error message
+      }
+    );
+  }
+
+  updateBoolPickUpAndDeliveryTask(task: IPickupAndDeliveryTask): void {
+    this.pickUpAndDeliveryTaskService.updateTask(task).subscribe(
+      () => {
+        console.log('Task approved successfully');
+        // Update local state and display success message
+      },
+      error => {
+        console.error('Failed to approve task:', error);
+        // Display error message
+      }
+    );
+  }
+
+
 
 }

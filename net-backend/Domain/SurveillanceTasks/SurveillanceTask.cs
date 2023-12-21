@@ -18,11 +18,11 @@ public class SurveillanceTask : Entity<Identifier>, IAggregateRoot
     
     public string Floors { get; set; }
 
-    public bool Active{ get;  private set; }
+    public bool Active{ get;  set; }
 
     public SurveillanceTask()
     {
-        this.Active = true;
+        this.Active = false;
     }
 
     public SurveillanceTask(SurveillanceTaskId surveillanceTaskId, string contactNumber, string building, string floors)

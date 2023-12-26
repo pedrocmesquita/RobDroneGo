@@ -10,7 +10,8 @@ namespace DDDSample1.Domain.PickupAndDeliveryTasks
     
 
     public class PickupAndDeliveryTask : Entity<Identifier>, IAggregateRoot
-    {
+    {   
+        public string ClientEmail { get; set; }
         public PickupAndDeliveryTaskId PickupAndDeliveryTaskId{ get; private set; }
         public string ContactNumber { get; set; }
 
@@ -23,6 +24,8 @@ namespace DDDSample1.Domain.PickupAndDeliveryTasks
 
         public bool Active{ get;  set; }
         
+        public DateTime CreatedAt { get; set; }
+        public DateTime UpdatedAt { get; set; }
         
 
         public PickupAndDeliveryTask()
@@ -30,8 +33,9 @@ namespace DDDSample1.Domain.PickupAndDeliveryTasks
             this.Active = false;
         }
 
-        public PickupAndDeliveryTask(PickupAndDeliveryTaskId pickupAndDeliveryTaskId, string contactNumber, string pickupRoom, string deliveryRoom, string pickupContact, string deliveryContact, string confirmationCode, string description)
-        {
+        public PickupAndDeliveryTask(string ClientEmail,PickupAndDeliveryTaskId pickupAndDeliveryTaskId, string contactNumber, string pickupRoom, string deliveryRoom, string pickupContact, string deliveryContact, string confirmationCode, string description)
+        {   
+            this.ClientEmail = ClientEmail;
             this.Id = new Identifier(Guid.NewGuid());
             this.PickupAndDeliveryTaskId = pickupAndDeliveryTaskId;
             this.ContactNumber = contactNumber;
@@ -41,7 +45,18 @@ namespace DDDSample1.Domain.PickupAndDeliveryTasks
             this.DeliveryContact = deliveryContact;
             this.ConfirmationCode = confirmationCode;
             this.Description = description;
-            this.Active = true;
+            this.Active = false;
+            
+            if (this.CreatedAt == DateTime.MinValue && this.UpdatedAt == DateTime.MinValue)
+            {
+                this.CreatedAt = DateTime.UtcNow;
+                this.UpdatedAt = DateTime.UtcNow;
+            }
+            else
+            {
+                this.UpdatedAt = DateTime.UtcNow;
+            }
+            
         }
     }
 

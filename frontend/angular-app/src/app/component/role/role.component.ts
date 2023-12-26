@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { AuthService } from "../../services/auth.service";
 import { Router } from "@angular/router";
 import { NgForm } from "@angular/forms";
+import { IRole } from "../../models/irole.model";
 
 @Component({
   selector: 'app-role',
@@ -15,12 +16,20 @@ export class RoleComponent {
 
   onSubmit(form: NgForm) {
     if (form.invalid) {
+      this.errorMessage = 'Form is invalid!';
       return;
     }
 
     const roleName = form.value.roleName;
 
-    this.authService.createRole(roleName).subscribe(
+    console.log('Role name: ' + roleName);
+
+    const role : IRole = {
+      name: roleName
+    };
+
+
+    this.authService.createRole(role).subscribe(
       // success callback
       () => {
         this.errorMessage = null;
@@ -29,7 +38,9 @@ export class RoleComponent {
         console.log('Role created successfully!');
 
         // Navigate to home page
-        this.router.navigate(['/home']);
+
+        this.router.navigate(['/login']);
+
       },
       // error callback
       (error) => {

@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from "@angular/core";
 import { Observable, tap } from "rxjs";
 import { response } from "express";
+import { IRole } from "../models/irole.model";
 
 @Injectable({
   providedIn: 'root',
@@ -37,11 +38,12 @@ export class AuthService {
     return this.http.get('http://localhost:4000/api/roles', { headers });
   }
 
-  createRole(roleName: string): Observable<any> {
+  createRole(role: IRole): Observable<any> {
 
-    const headers = { Authorization: `Bearer ${this.getToken()}` };
+    const token = this.getToken();
+    const headers = { Authorization: `Bearer ${token}` };
 
-    return this.http.post('http://localhost:4000/api/roles', { roleName }, { headers });
+    return this.http.post('http://localhost:4000/api/roles', role, { headers });
   }
 
   isUserAuthorized(): boolean {
@@ -56,6 +58,11 @@ export class AuthService {
   getCurrentUser(): any {
     const currentUser = localStorage.getItem('currentUser');
     return currentUser ? JSON.parse(currentUser) : null;
+  }
+
+  getCurrentUserEmail(): string {
+    const currentUser = localStorage.getItem('currentUser');
+    return currentUser ? JSON.parse(currentUser).email : null;
   }
 
   logout(): void {

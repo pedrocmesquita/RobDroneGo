@@ -1,7 +1,8 @@
 ﻿namespace DDDSample1.Domain.SurveillanceTasks
 {
     public class UpdatingSurveillanceTaskDto
-    {
+    {   
+        public string ClientEmail { get; set; }
         public string SurveillanceTaskId { get; set; }
         public string ContactNumber { get; set; }
         

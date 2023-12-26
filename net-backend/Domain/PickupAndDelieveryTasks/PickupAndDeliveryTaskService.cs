@@ -41,6 +41,7 @@ namespace DDDSample1.Domain.PickupAndDeliveryTasks
         public async Task<PickupAndDeliveryTaskDto> AddAsync(CreatingPickupAndDeliveryTaskDto dto)
         {
             var pickupAndDeliveryTask = new PickupAndDeliveryTask(
+                dto.ClientEmail,
                 new PickupAndDeliveryTaskId(dto.PickupAndDeliveryTaskId),
                 dto.ContactNumber, 
                 dto.PickupRoom, 
@@ -49,6 +50,8 @@ namespace DDDSample1.Domain.PickupAndDeliveryTasks
                 dto.DeliveryContact, 
                 dto.ConfirmationCode, 
                 dto.Description);
+            
+            
             
             await this._mongoRepo.AddAsync(pickupAndDeliveryTask);
 
@@ -89,6 +92,8 @@ namespace DDDSample1.Domain.PickupAndDeliveryTasks
                 Console.WriteLine("dto.Active is true");
                 pickupAndDeliveryTask.Active = false;
             }
+            
+            pickupAndDeliveryTask.UpdatedAt = DateTime.UtcNow;
 
             await this._mongoRepo.UpdateAsync(pickupAndDeliveryTask);
 

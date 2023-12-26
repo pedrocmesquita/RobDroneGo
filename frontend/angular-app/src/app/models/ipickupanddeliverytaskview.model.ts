@@ -1,4 +1,4 @@
-export interface IPickupAndDeliveryTask {
+export interface IPickupAndDeliveryTaskView {
   clientEmail: string;
   pickupAndDeliveryTaskId: string;
   contactNumber: string;
@@ -9,4 +9,6 @@ export interface IPickupAndDeliveryTask {
   confirmationCode: string;
   description: string;
   active: boolean;
+  createdAt: Date;
+  updatedAt: Date;
 }

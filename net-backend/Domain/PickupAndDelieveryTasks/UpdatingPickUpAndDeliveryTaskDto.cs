@@ -3,7 +3,8 @@
 namespace DDDSample1.Domain.PickupAndDeliveryTasks
 {
     public class UpdatingPickUpAndDeliveryTaskDto
-    {
+    {   
+        public string ClientEmail { get; set; }
         public string PickupAndDeliveryTaskId { get; set; }
         public string ContactNumber { get; set; }
         public string PickupRoom { get; set; }

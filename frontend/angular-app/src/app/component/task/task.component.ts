@@ -10,6 +10,9 @@ import { RoomService } from "../../services/room.service";
 import { IBuilding } from "../../models/ibuilding.model";
 import { IFloor } from "../../models/ifloor.model";
 import { IRoom } from "../../models/iroom.model";
+import { AuthService } from "../../services/auth.service";
+import { ISurveillanceTaskView } from "../../models/isurveillancetaskview.model";
+import { IPickupAndDeliveryTaskView } from "../../models/ipickupanddeliverytaskview.model";
 
 @Component({
   selector: 'app-task',
@@ -20,18 +23,24 @@ export class TaskComponent implements OnInit{
 
   surveillanceTasks: ISurveillanceTask[] = [];
   pickUpAndDeliveryTasks: IPickupAndDeliveryTask[] = [];
+  surveillanceTasksView: ISurveillanceTaskView[] = [];
+  pickUpAndDeliveryTasksView: IPickupAndDeliveryTaskView[] = [];
   buildings: IBuilding[] = [];
   floors: IFloor[] = [];
   rooms: IRoom[] = [];
+  createdAtSortAsc = true;
+  updatedAtSortAsc = true;
   filterText: string = '';
   newSurveillanceTask: ISurveillanceTask = {
+    clientEmail: '',
     surveillanceTaskId: '',
     contactNumber: '',
     building: '',
     floors: '',
-    active: false
+    active: false,
   };
   newPickUpAndDeliveryTask: IPickupAndDeliveryTask = {
+    clientEmail: '',
     pickupAndDeliveryTaskId: '',
     contactNumber: '',
     pickupRoom: '',
@@ -40,7 +49,7 @@ export class TaskComponent implements OnInit{
     deliveryContact: '',
     confirmationCode: '',
     description: '',
-    active: false
+    active: false,
   };
   successMessage: string | null = null;
   errorMessage: string | null = null;
@@ -48,13 +57,14 @@ export class TaskComponent implements OnInit{
   filteredFloors: IFloor[] = []; // Initialize to empty array
 
   constructor(private surveillanceTaskService: SurveillanceTaskService, private pickUpAndDeliveryTaskService: PickUpAndDeliveryTaskService
-  , private buildingService: BuildingService, private floorService: FloorService, private roomService: RoomService) {}
+  , private buildingService: BuildingService, private floorService: FloorService, private roomService: RoomService, private authService: AuthService) {}
 
   ngOnInit(): void {
     this.surveillanceTaskService.getTasks().subscribe(
       (tasks) => {
         console.log(tasks);
-        this.surveillanceTasks = tasks;
+
+        this.surveillanceTasksView = tasks;
       },
       (error) => {
         console.error('Failed to fetch surveillance tasks:', error);
@@ -63,8 +73,10 @@ export class TaskComponent implements OnInit{
 
     this.pickUpAndDeliveryTaskService.getTasks().subscribe(
       (tasks) => {
+        console.log("--------------------");
         console.log(tasks);
-        this.pickUpAndDeliveryTasks = tasks;
+        console.log("--------------------");
+        this.pickUpAndDeliveryTasksView = tasks;
       },
       (error) => {
         console.error('Failed to fetch pickup and delivery tasks:', error);
@@ -114,17 +126,32 @@ export class TaskComponent implements OnInit{
     this.filteredFloors = this.buildings.find(b => b.buildingId === this.newSurveillanceTask.building)?.floors || [];
   }
 
+  sortTasks(sortBy: string): void {
+    if (sortBy === 'createdAt') {
+      this.surveillanceTasksView.sort((a, b) => this.createdAtSortAsc ? a.createdAt.getTime() - b.createdAt.getTime() : b.createdAt.getTime() - a.createdAt.getTime());
+      this.pickUpAndDeliveryTasksView.sort((a, b) => this.createdAtSortAsc ? a.createdAt.getTime() - b.createdAt.getTime() : b.createdAt.getTime() - a.createdAt.getTime());
+      this.createdAtSortAsc = !this.createdAtSortAsc; // Toggle the sort direction
+    } else if (sortBy === 'updatedAt') {
+      this.surveillanceTasksView.sort((a, b) => this.updatedAtSortAsc ? a.updatedAt.getTime() - b.updatedAt.getTime() : b.updatedAt.getTime() - a.updatedAt.getTime());
+      this.pickUpAndDeliveryTasksView.sort((a, b) => this.updatedAtSortAsc ? a.updatedAt.getTime() - b.updatedAt.getTime() : b.updatedAt.getTime() - a.updatedAt.getTime());
+      this.updatedAtSortAsc = !this.updatedAtSortAsc; // Toggle the sort direction
+    }
+  }
+
   createSurveillanceTask(): void {
+    this.newSurveillanceTask.clientEmail = this.authService.getCurrentUserEmail();
+    console.log(this.newSurveillanceTask);
     this.surveillanceTaskService.createTask(this.newSurveillanceTask).subscribe(
       (task) => {
         console.log(task);
         this.surveillanceTasks.push(task);
         this.newSurveillanceTask = {
+          clientEmail: '',
           surveillanceTaskId: '',
           contactNumber: '',
           building: '',
           floors: '',
-          active: false
+          active: false,
         };
 
         this.successMessage = 'Task created successfully.';
@@ -139,12 +166,15 @@ export class TaskComponent implements OnInit{
   }
 
   createPickUpAndDeliveryTask(): void {
+    this.newPickUpAndDeliveryTask.clientEmail = this.authService.getCurrentUserEmail();
+    console.log(this.newPickUpAndDeliveryTask);
     this.pickUpAndDeliveryTaskService.createTask(this.newPickUpAndDeliveryTask).subscribe(
       (task) => {
         console.log(task);
         this.pickUpAndDeliveryTasks.push(task);
 
         this.newPickUpAndDeliveryTask = {
+          clientEmail: '',
           pickupAndDeliveryTaskId: '',
           contactNumber: '',
           pickupRoom: '',
@@ -173,6 +203,14 @@ selectOption(option: string) {
     } else {
       this.selectedOption = option;
     }
+  }
+
+  getInactivePickUpAndDeliveryTasks() {
+    return this.pickUpAndDeliveryTasksView.filter(task => !task.active);
+  }
+
+  getInactiveSurveillanceTasks() {
+    return this.surveillanceTasksView.filter(task => !task.active);
   }
 
   updateBoolSurveillanceTask(task: ISurveillanceTask): void {

@@ -7,6 +7,7 @@
   <button (click)="selectOption('createSurveillance')" data-cy="createSurveillanceButton">Create Surveillance Task</button>
   <button (click)="selectOption('createPickUpAndDelivery')" data-cy="createPickUpAndDeliveryButton">Create Pick Up And Delivery Task</button>
   <button (click)="selectOption('list')" data-cy="listButton">List Tasks</button>
+  <button (click)="selectOption('inactive')" data-cy="inactiveButton">List Inactive Tasks</button>
   <div *ngIf="selectedOption === 'createSurveillance'">
     <form (ngSubmit)="createSurveillanceTask()">
       <!-- Add your input fields here based on the properties of the surveillance task -->
@@ -46,35 +47,48 @@
     </form>
   </div>
   <div *ngIf="selectedOption === 'list'" class="list-container">
+    <div class="filter-sort-container">
+    <input [(ngModel)]="filterText" placeholder="Filter by client email" />
+      <div class="sort-buttons">
+    <button (click)="sortTasks('createdAt')">Sort by Created Date</button>
+    <button (click)="sortTasks('updatedAt')">Sort by Updated Date</button>
+      </div>
+    </div>
     <h2>Surveillance Tasks</h2>
     <table id="surveillanceTaskTable">
-      <!-- Add your table headers and rows here based on the properties of the surveillance task -->
       <thead>
         <tr>
+          <th>Client Email</th>
           <th>Surveillance Task Id</th>
           <th>Contact Number</th>
           <th>Building</th>
           <th>Floor</th>
           <th>Active</th>
+          <th>Created</th>
+          <th>Updated</th>
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let surveillanceTask of surveillanceTasks">
+        <tr *ngFor="let surveillanceTask of surveillanceTasksView | emailFilter: { clientEmail: filterText }">
+          <td>{{ surveillanceTask.clientEmail }}</td>
           <td>{{ surveillanceTask.surveillanceTaskId }}</td>
           <td>{{ surveillanceTask.contactNumber }}</td>
           <td>{{ surveillanceTask.building }}</td>
           <td>{{ surveillanceTask.floors }}</td>
           <td>{{ surveillanceTask.active}}</td>
+          <td>{{ surveillanceTask.createdAt}}</td>
+          <td>{{ surveillanceTask.updatedAt}}</td>
           <td>
-            <button (click)="updateBoolSurveillanceTask(surveillanceTask)">Switch</button>
+            <button (click)="updateBoolSurveillanceTask(surveillanceTask)">Approve/Reject</button>
           </td>
         </tr>
     </table>
     <h2>Pick Up And Delivery Tasks</h2>
     <table id="pickUpAndDeliveryTaskTable">
-      <!-- Add your table headers and rows here based on the properties of the pick up and delivery task -->
+
       <thead>
         <tr>
+          <th>Client Email</th>
           <th>Pick Up And Delivery Task Id</th>
           <th>Contact Number</th>
           <th>Pick Up Room</th>
@@ -84,10 +98,13 @@
           <th>Confirmation Code</th>
           <th>Description</th>
           <th>Active</th>
+          <th>Created</th>
+          <th>Updated</th>
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let pickUpAndDeliveryTask of pickUpAndDeliveryTasks">
+        <tr *ngFor="let pickUpAndDeliveryTask of pickUpAndDeliveryTasksView | emailFilter: { clientEmail: filterText }">
+          <td>{{ pickUpAndDeliveryTask.clientEmail }}</td>
           <td>{{ pickUpAndDeliveryTask.pickupAndDeliveryTaskId }}</td>
           <td>{{ pickUpAndDeliveryTask.contactNumber }}</td>
           <td>{{ pickUpAndDeliveryTask.pickupRoom }}</td>
@@ -97,10 +114,76 @@
           <td>{{ pickUpAndDeliveryTask.confirmationCode }}</td>
           <td>{{ pickUpAndDeliveryTask.description }}</td>
           <td>{{ pickUpAndDeliveryTask.active}}</td>
+          <td>{{ pickUpAndDeliveryTask.createdAt}}</td>
+          <td>{{ pickUpAndDeliveryTask.updatedAt}}</td>
           <td>
-            <button (click)="updateBoolPickUpAndDeliveryTask(pickUpAndDeliveryTask)">Switch</button>
+            <button (click)="updateBoolPickUpAndDeliveryTask(pickUpAndDeliveryTask)">Approve/Reject</button>
           </td>
         </tr>
     </table>
   </div>
+  <div *ngIf="selectedOption === 'inactive'" class="list-container">
+    <h2>Inactive Surveillance Tasks</h2>
+    <table id="inactiveSurveillanceTaskTable">
+
+      <thead>
+        <tr>
+          <th>Client Email</th>
+          <th>Surveillance Task Id</th>
+          <th>Contact Number</th>
+          <th>Building</th>
+          <th>Floor</th>
+          <th>Active</th>
+          <th>Created</th>
+          <th>Updated</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let surveillanceTask of getInactiveSurveillanceTasks()">
+          <td>{{ surveillanceTask.clientEmail }}</td>
+          <td>{{ surveillanceTask.surveillanceTaskId }}</td>
+          <td>{{ surveillanceTask.contactNumber }}</td>
+          <td>{{ surveillanceTask.building }}</td>
+          <td>{{ surveillanceTask.floors }}</td>
+          <td>{{ surveillanceTask.active}}</td>
+          <td>{{ surveillanceTask.createdAt}}</td>
+          <td>{{ surveillanceTask.updatedAt}}</td>
+        </tr>
+    </table>
+    <h2>Inactive Pick Up And Delivery Tasks</h2>
+    <table id="inactivePickUpAndDeliveryTaskTable">
+
+      <thead>
+        <tr>
+          <th>Client Email</th>
+          <th>Pick Up And Delivery Task Id</th>
+          <th>Contact Number</th>
+          <th>Pick Up Room</th>
+          <th>Delivery Room</th>
+          <th>Pick Up Contact</th>
+          <th>Delivery Contact</th>
+          <th>Confirmation Code</th>
+          <th>Description</th>
+          <th>Active</th>
+          <th>Created</th>
+          <th>Updated</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let pickUpAndDeliveryTask of getInactivePickUpAndDeliveryTasks()">
+          <td>{{ pickUpAndDeliveryTask.clientEmail }}</td>
+          <td>{{ pickUpAndDeliveryTask.pickupAndDeliveryTaskId }}</td>
+          <td>{{ pickUpAndDeliveryTask.contactNumber }}</td>
+          <td>{{ pickUpAndDeliveryTask.pickupRoom }}</td>
+          <td>{{ pickUpAndDeliveryTask.deliveryRoom }}</td>
+          <td>{{ pickUpAndDeliveryTask.pickupContact }}</td>
+          <td>{{ pickUpAndDeliveryTask.deliveryContact }}</td>
+          <td>{{ pickUpAndDeliveryTask.confirmationCode }}</td>
+          <td>{{ pickUpAndDeliveryTask.description }}</td>
+          <td>{{ pickUpAndDeliveryTask.active}}</td>
+          <td>{{ pickUpAndDeliveryTask.createdAt}}</td>
+          <td>{{ pickUpAndDeliveryTask.updatedAt}}</td>
+        </tr>
+    </table>
+</div>
 </div>

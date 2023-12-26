@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using DDDSample1.Domain.Shared;
 using DDDSample1.Mappers;
@@ -38,6 +39,7 @@ namespace DDDSample1.Domain.SurveillanceTasks
         public async Task<SurveillanceTaskDto> AddAsync(CreatingSurveillanceTaskDto dto)
         {   
             var surveillanceTask = new SurveillanceTask(
+                dto.ClientEmail,
                 new SurveillanceTaskId(dto.SurveillanceTaskId),
                 dto.ContactNumber, 
                 dto.Building,
@@ -67,6 +69,7 @@ namespace DDDSample1.Domain.SurveillanceTasks
                 surveillanceTask.Active = false;
             }
             
+            surveillanceTask.UpdatedAt = DateTime.UtcNow;
             
             await this._mongoRepo.UpdateAsync(surveillanceTask);
 

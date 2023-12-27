@@ -1,28 +1,29 @@
-<!-- account.component.html -->
-
 <div class="user-info-container" *ngIf="currentUser">
   <div class="user-info">
     <h2>User Information</h2>
     <div>
-      <span class="label">First Name:</span> {{ currentUser.firstName }}
+      <span class="label">First Name:</span>{{ currentUser.firstName }}
     </div>
     <div>
-      <span class="label">Last Name:</span> {{ currentUser.lastName }}
+      <span class="label">Last Name:</span>{{ currentUser.lastName }}
     </div>
     <div>
-      <span class="label">Email:</span> {{ currentUser.email }}
+      <span class="label">Email:</span>{{ currentUser.email }}
     </div>
     <div>
-      <span class="label">Role:</span> {{ currentUser.role }}
+      <span class="label">Role:</span>{{ currentUser.role }}
     </div>
     <!-- Add more fields as needed -->
 
     <div *ngIf="errorMessage" class="error-message">
       {{ errorMessage }}
     </div>
-  </div>
 
-  <!-- account.component.html -->
+    <div class="download-info-container">
+      <button class="download-info-btn" (click)="downloadInfo()">Download info</button>
+    </div>
+
+  </div>
 
   <div class="delete-account">
     <h2>Delete account</h2>
@@ -44,8 +45,6 @@
     </div>
 
   </div>
-
-
 
 </div>
 

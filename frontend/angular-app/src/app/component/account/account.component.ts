@@ -22,6 +22,31 @@ export class AccountComponent implements OnInit{
 
   deleteAccount() {
   }
+
+  downloadInfo() {
+    if (!this.currentUser) {
+      this.errorMessage = 'No user information to download.';
+      return;
+    }
+
+    const userInformation = `
+      User Information:
+      First Name: ${this.currentUser.firstName}
+      Last Name: ${this.currentUser.lastName}
+      Email: ${this.currentUser.email}
+      Role: ${this.currentUser.role}
+    `;
+
+    const blob = new Blob([userInformation], { type: 'text/plain' });
+
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = 'userInfo.txt';
+    link.click();
+
+    // Clean up
+    URL.revokeObjectURL(link.href);
+  }
   ngOnInit() {
     this.currentUser = this.authService.getCurrentUser()
     console.log(this.currentUser);

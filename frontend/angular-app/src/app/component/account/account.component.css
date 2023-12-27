@@ -27,6 +27,46 @@
 }
 
 
+.download-info-btn {
+  background-color: #2aa407;
+  color: #fff;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  margin-top: 20px;
+  font-size: 15px;
+}
+
+.download-info-btn:hover {
+  background-color: #10af03;
+}
+
+.download-info {
+  border: 1px solid #ccc;
+  padding: 15px;
+  margin: 20px;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.download-info h2 {
+  color: #333;
+}
+
+.download-info div {
+  margin-bottom: 10px;
+}
+
+.download-info .label {
+  font-weight: bold;
+  margin-right: 5px;
+}
+
+.download-info p {
+  margin: 0; /* Remove default margin to avoid extra space between paragraphs */
+}
+
 .delete-account-btn {
   background-color: #c00a0a;
   color: #fff;

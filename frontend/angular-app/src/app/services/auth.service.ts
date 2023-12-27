@@ -84,6 +84,16 @@ export class AuthService {
     return this.http.get('http://localhost:4000/api/log/auth', { headers });
   }
 
+  deleteAccount(): Observable<any> {
+    const token = this.getToken();
+    const headers = { Authorization: `Bearer ${token}` };
+    const email = this.getCurrentUserEmail();
+
+    // Replace with your actual backend API endpoint
+    return this.http.post(`http://localhost:4000/api/auth/delete`, { email }, { headers });
+    localStorage.removeItem('authToken');
+    this.currentUser = null;
+  }
 
 
 }

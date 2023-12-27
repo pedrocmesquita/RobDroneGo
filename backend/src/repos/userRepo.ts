@@ -82,4 +82,10 @@ export default class UserRepo implements IUserRepo {
     else
       return null;
   }
+
+  public async deleteById (userId: string): Promise<void> {
+    console.log("está a chegar aqui")
+    const query = { domainId: userId };
+    await this.userSchema.deleteOne(query);
+  }
 }

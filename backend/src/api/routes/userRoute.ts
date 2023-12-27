@@ -7,6 +7,7 @@ import { IUserDTO } from '../../dto/IUserDTO';
 import middlewares from '../middlewares';
 import { celebrate, Joi } from 'celebrate';
 import winston = require('winston');
+import UserRepo from "../../repos/userRepo";
 
 var user_controller = require('../../controllers/userController');
 
@@ -103,4 +104,7 @@ export default (app: Router) => {
   app.use('/users', route);
 
   route.get('/me', middlewares.isAuth, middlewares.attachCurrentUser, user_controller.getMe);
+
+  route.post('/delete', middlewares.isAuth, middlewares.attachCurrentUser, user_controller.deleteMe);
+
 };

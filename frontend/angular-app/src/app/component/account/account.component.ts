@@ -21,6 +21,16 @@ export class AccountComponent implements OnInit{
   }
 
   deleteAccount() {
+    this.authService.deleteAccount().subscribe(
+      () => {
+        console.log('Account deleted successfully');
+        this.authService.logout();
+        this.router.navigate(['/login']);
+      },
+      (error) => {
+        console.error('Failed to delete account:', error);
+      }
+    );
   }
 
   downloadInfo() {

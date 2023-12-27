@@ -2,6 +2,9 @@
   <a routerLink="/home">Home</a>
 
   <mat-menu #settingsMenu="matMenu">
+    <button mat-menu-item (click)="myAccount()">
+      <span class="mat-mdc-menu-item-text">My Account</span>
+    </button>
     <button mat-menu-item (click)="switchUser()">
       <span class="mat-mdc-menu-item-text">Logout</span>
     </button>

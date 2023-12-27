@@ -1,0 +1,68 @@
+/* account.component.css */
+
+.user-info {
+  border: 1px solid #ccc;
+  padding: 15px;
+  margin: 20px;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.user-info h2 {
+  color: #333;
+}
+
+.user-info div {
+  margin-bottom: 10px;
+}
+
+.user-info .label {
+  font-weight: bold;
+  margin-right: 5px;
+}
+
+.error-message {
+  color: #ff0000;
+  margin-top: 10px;
+}
+
+
+.delete-account-btn {
+  background-color: #c00a0a;
+  color: #fff;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  margin-top: 20px;
+  font-size: 15px;
+}
+
+.delete-account-btn:hover {
+  background-color: #cc0000;
+}
+
+.delete-account {
+  border: 1px solid #ccc;
+  padding: 15px;
+  margin: 20px;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.delete-account h2 {
+  color: #333;
+}
+
+.delete-account div {
+  margin-bottom: 10px;
+}
+
+.delete-account .label {
+  font-weight: bold;
+  margin-right: 5px;
+}
+
+.delete-account p {
+  margin: 0; /* Remove default margin to avoid extra space between paragraphs */
+}

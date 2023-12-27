@@ -14,6 +14,9 @@ export class HeaderComponent{
     this.router.navigate(['/login']);
   }
 
+  myAccount(){
+    this.router.navigate(['/account']);
+  }
   isUserAuthorized(): boolean {
     return this.authService.isUserAuthorized();
   }

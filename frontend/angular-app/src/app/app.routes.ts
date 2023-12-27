@@ -16,6 +16,7 @@ import { RobotTypeComponent } from "./component/robot-type/robot-type.component"
 import { LogsComponent } from "./component/logs/logs.component";
 import { PathComponent } from "./component/path/path.component";
 import { TaskComponent } from "./component/task/task.component";
+import { AccountComponent } from "./component/account/account.component";
 
 export const routes: Routes = [
   { path: '', component: LoginComponent },
@@ -34,10 +35,8 @@ export const routes: Routes = [
   { path: 'logs', component: LogsComponent, canActivate: [AuthGuard]},
   { path: 'path', component: PathComponent, canActivate: [AuthGuard] },
   { path: 'task', component: TaskComponent, canActivate: [AuthGuard]},
-
+  { path: 'account', component: AccountComponent, canActivate: [AuthGuard]},
   { path: '**', redirectTo: '' },
-
-
 ];
 
 @NgModule({

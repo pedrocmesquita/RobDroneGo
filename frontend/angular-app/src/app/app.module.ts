@@ -31,6 +31,7 @@ import { BuildingFilterPipe } from "./services/building-filter-pipe.service";
 import { LogsComponent } from "./component/logs/logs.component";
 import { PathComponent } from "./component/path/path.component";
 import { TaskComponent } from "./component/task/task.component";
+import { AccountComponent } from "./component/account/account.component";
 import { EmailFilterPipe } from "./services/email-filter-pipe.service";
 
 @NgModule({
@@ -54,6 +55,7 @@ import { EmailFilterPipe } from "./services/email-filter-pipe.service";
     LogsComponent,
     PathComponent,
     TaskComponent,
+    AccountComponent,
     EmailFilterPipe
   ],
   imports: [

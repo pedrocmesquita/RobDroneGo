@@ -58,19 +58,29 @@ export class AccountComponent implements OnInit{
     URL.revokeObjectURL(link.href);
   }
   ngOnInit() {
-    this.currentUser = this.authService.getCurrentUser()
-    console.log(this.currentUser);
-
-    if (this.currentUser === null) {
-      console.log("User is not logged in");
-      return;
-    }
-
     this.authService.getRoles().subscribe(
       (roles) => {
         this.roles = roles;
 
-        // Loop through the roles array and find the role with name "Gestor de Campus"
+        this.currentUser = this.authService.getCurrentUser();
+        console.log(this.currentUser);
+
+        if (this.currentUser === null) {
+          console.log("User is not logged in");
+          return;
+        }
+
+        // Find the role name based on roleId
+        const userRoleId = this.currentUser.role;
+        const userRole = this.roles.find(role => role.id === userRoleId);
+
+        if (userRole) {
+          this.currentUser.role = userRole.name;
+        } else {
+          console.error('Failed to find user role:', userRoleId);
+        }
+
+        // Loop through the roles array and find the roles you need
         for (let i = 0; i < this.roles.length; i++) {
           if (this.roles[i].name == "Gestor de Campus") {
             this.roleGestorDeCampus = this.roles[i];
@@ -102,13 +112,11 @@ export class AccountComponent implements OnInit{
       }
     );
 
-    this.currentUser = this.authService.getCurrentUser();
-    console.log(this.currentUser);
-
     if (this.currentUser == null) {
-      //this.router.navigate(['/login']);
+      // Handle the case where the user is not logged in
       console.log("User is not logged in");
     }
   }
+
 
 }

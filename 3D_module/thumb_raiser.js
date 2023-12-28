@@ -566,6 +566,10 @@ export default class ThumbRaiser {
         return this.maze.distanceToAcess(this.player.position) < this.player.radius;
     }
 
+    elevator(){
+        return this.maze.distanceToElevator(this.player.position) < this.player.radius;
+    }
+
     update() {
         if (!this.gameRunning) {
             if (this.maze.loaded && this.player.loaded) { // If all resources have been loaded
@@ -641,6 +645,11 @@ export default class ThumbRaiser {
                             window.location.href = window.location.pathname + "?json=" + newJsonFile;
                         }
 
+                        if (this.elevator()){
+                            console.log("Elevator");
+
+                        }
+
                         if (this.collision(newPosition)) {
                             this.animations.fadeToAction("Death", 0.2);
                         }
@@ -708,6 +717,12 @@ export default class ThumbRaiser {
                             });
 
 
+                        }
+
+                        if (this.elevator()){
+
+                            console.log("Elevator found");
+                            window.postMessage({ type: "SHOW_MENU" }, "*");
                         }
 
 

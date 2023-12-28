@@ -116,4 +116,67 @@ async function goToBuilding() {
     }
 }
 
+async function elevatorMenu(selectedBuilding, selectedFloor){
+    const buildingId = selectedBuilding;
+    const floorId = selectedFloor;
+    console.log('FloorId:', floorId);
+
+    const buildings = await getBuildingsFromBackend();
+
+    // Compare buildingId and floorId to the buildings array
+    const building = buildings.find(building => building.buildingId === buildingId);
+
+    // Loop through the floors array
+    const floors = building.floors;
+    const floor = floors.find(floor => floor.floorId === floorId);
+
+    // Loop through the elevators array
+    const elevators = floor.elevators;
+    console.log('Elevators:', elevators);
+
+    // Create a select element for the floors
+    const elevatorSelect = document.createElement('select');
+    elevatorSelect.id = 'elevator';
+    floors.forEach(floor => {
+        const option = document.createElement('option');
+        option.value = floor.floorId;
+        option.text = `Floor ${floor.floorNumber}: ${floor.floorDescription}`;
+        elevatorSelect.appendChild(option);
+    });
+
+    // Create a button that calls the goToElevator function when clicked
+    const goButton = document.createElement('button');
+    goButton.innerText = 'Go';
+    goButton.addEventListener('click', goToElevator);
+
+    // Append the select element and the button to the elevator-container
+    const container = document.getElementById('elevator-container');
+    container.innerHTML = ''; // Clear the container
+    container.appendChild(elevatorSelect);
+    container.appendChild(goButton);
+}
+
+async function goToElevator() {
+    const buildingId = document.getElementById("building").value;
+    const floorId = document.getElementById('elevator').value; // Changed from 'elevator' to 'floor'
+
+    if (!buildingId || !floorId) {
+        alert("Select a valid building and floor option");
+        return;
+    }
+
+    console.log('FloorId:', floorId);
+
+    await createJsonOnBackend(floorId);
+
+    let url = `http://127.0.0.1:5500/Thumb_Raiser.html?buildingId=${encodeURIComponent(buildingId)}&floorId=${encodeURIComponent(floorId)}`;
+    const response = await fetch(url);
+    if (response.status === 200) {
+        // If the status is 200, the file exists. Redirect to the new URL
+        window.location.href = url;
+    } else if (response.status === 404) {
+        // If the status is 404, the file does not exist. Show an alert message
+        alert("The selected building and floor do not exist");
+    }
+}
 

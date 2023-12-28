@@ -28,6 +28,9 @@ export default class Maze {
             // Create an array to store the accesses
             this.accesses = [];
 
+            // Create an array to store the elevators
+            this.elevators = [];
+
             // Store the player's initial position and direction
             this.initialPosition = this.cellToCartesian(description.initialPosition);
             this.initialDirection = description.initialDirection;
@@ -112,7 +115,8 @@ export default class Maze {
             //1: horizontal
             //2: vertical
             for(let i = 0; i < description.elevators.length; i++){
-                elevatorObject = this.elevator.object.clone();
+                const elevator1 = new Elevator({ textureUrl: description.elevatorTextureUrl, scale: new THREE.Vector3(1, 1, 1) });
+                elevatorObject = elevator1.object;
                 let elevatorCoordinates = description.elevators[i];
                 let x = elevatorCoordinates[0];
                 let y = elevatorCoordinates[1];
@@ -122,9 +126,11 @@ export default class Maze {
                     elevatorObject.rotateY(Math.PI / 2.0);
                     elevatorObject.position.set(y - description.size.width / 2.0  , 0.5,x - description.size.height / 2.0 + 0.5);
                     this.object.add(elevatorObject);
+                    this.elevators.push(elevator1);
                 }else{
                     elevatorObject.position.set(y - description.size.width / 2.0 + 0.5 , 0.5,x - description.size.height / 2.0);
                     this.object.add(elevatorObject);
+                    this.elevators.push(elevator1);
                 }
             }
 
@@ -277,6 +283,20 @@ export default class Maze {
             let accessPosition = access.position;
             let dx = position.x - accessPosition.x;
             let dz = position.z - accessPosition.z;
+            let distance = Math.sqrt(dx * dx + dz * dz);
+            if (distance < closestDistance) {
+                closestDistance = distance;
+            }
+        }
+        return closestDistance;
+    }
+
+    distanceToElevator(position) {
+        let closestDistance = Infinity;
+        for (let elevator of this.elevators) {
+            let elevatorPosition = elevator.object.position;
+            let dx = position.x - elevatorPosition.x;
+            let dz = position.z - elevatorPosition.z;
             let distance = Math.sqrt(dx * dx + dz * dz);
             if (distance < closestDistance) {
                 closestDistance = distance;

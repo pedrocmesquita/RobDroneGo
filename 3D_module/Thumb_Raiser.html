@@ -5,6 +5,7 @@
     <meta charset="utf-8">
     <title>Basic Thumb Raiser</title>
     <style>
+
         #building-container {
             position: absolute;
             left: .5vw;
@@ -22,6 +23,32 @@
 
         body {
             margin: 0;
+        }
+
+        #elevator-container {
+            position: absolute;
+            left: .5vw;
+            top: 10vh;
+            color: white;
+        }
+
+        #elevator {
+            background-color: #70707070;
+            color: white;
+            border: 1px solid black;
+            padding: 8px;
+            font-family: Arial, sans-serif;
+            font-size: 1.5vmin;
+        }
+
+        #elevator-container button {
+            background-color: #70707070;
+            color: white;
+            border: 1px solid black;
+            padding: 8px;
+            font-family: Arial, sans-serif;
+            font-size: 1.5vmin;
+            margin-top: 8px;
         }
 
         #parent {
@@ -139,6 +166,7 @@
 <body>
 
 <div id="tooltip" style="position: absolute; display: none; pointer-events: none;"></div>
+
     <script>
         window.onload = function() {
 
@@ -154,11 +182,26 @@
             displaySelectors(selectedBuilding, selectedFloor);
         };
 
+        window.addEventListener("message", (event) => {
+            if (event.data.type === "SHOW_MENU") {
+                console.log("SHOW_MENU");
+
+                const urlParams = new URLSearchParams(window.location.search);
+                const selectedBuilding = urlParams.get('buildingId');
+                const selectedFloor = urlParams.get('floorId');
+
+                elevatorMenu(selectedBuilding, selectedFloor);
+            }
+        });
 
     </script>
     <div id="building-container">
         <select id="building"></select>
         <select id="floor"></select>
+    </div>
+
+    <div id="elevator-container">
+        <div id="elevator"></div>
     </div>
 
     <div id="parent">

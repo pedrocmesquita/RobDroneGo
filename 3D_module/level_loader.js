@@ -44,6 +44,8 @@ async function displaySelectors(selectedBuilding, selectedFloor) {
             buildingSelect.appendChild(option);
         });
 
+        let currentFloor = selectedFloor;
+
         buildingSelect.addEventListener('change', async () => {
             const selectedBuildingId = buildingSelect.value;
             const selectedBuilding = buildings.find(building => building.buildingId === selectedBuildingId);
@@ -59,12 +61,15 @@ async function displaySelectors(selectedBuilding, selectedFloor) {
                 option.selected = floor.floorId === selectedFloor;
                 floorSelect.appendChild(option);
             });
+
+            currentFloor = floorSelect.value;
         });
 
         // Create a button that calls the goToBuilding function when clicked
         const goButton = document.createElement('button');
         goButton.innerText = 'Go';
         goButton.addEventListener('click', goToBuilding);
+
 
         // Create a home button that redirects to the home page
         const homeButton = document.createElement('button');
@@ -98,7 +103,8 @@ async function goToBuilding() {
 
     await createJsonOnBackend(floorId);
 
-    let url = `http://127.0.0.1:5500/Thumb_Raiser.html`;
+    //let url = `http://127.0.0.1:5500/Thumb_Raiser.html`;
+    let url = `http://127.0.0.1:5500/Thumb_Raiser.html?buildingId=${encodeURIComponent(buildingId)}&floorId=${encodeURIComponent(floorId)}`;
 
     const response = await fetch(url);
     if (response.status === 200) {

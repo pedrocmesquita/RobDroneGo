@@ -33,6 +33,7 @@ import { PathComponent } from "./component/path/path.component";
 import { TaskComponent } from "./component/task/task.component";
 import { AccountComponent } from "./component/account/account.component";
 import { EmailFilterPipe } from "./services/email-filter-pipe.service";
+import { ToastrModule } from "ngx-toastr";
 
 @NgModule({
   declarations: [
@@ -71,7 +72,8 @@ import { EmailFilterPipe } from "./services/email-filter-pipe.service";
     HttpClientModule,
     FormsModule,
     RouterModule.forRoot(routes),
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    ToastrModule.forRoot(),
   ],
   providers: [
     AuthService

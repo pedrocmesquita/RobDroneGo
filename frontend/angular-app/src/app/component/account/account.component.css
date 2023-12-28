@@ -1,24 +1,45 @@
 /* account.component.css */
 
-.user-info {
+.user-info,
+.edit-account {
   border: 1px solid #ccc;
   padding: 15px;
-  margin: 20px;
+  margin: 10px; /* Adjusted margin for better spacing */
   border-radius: 5px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  flex: 1; /* Flex property for equal distribution */
+  max-width: calc(50% - 20px); /* 50% width with some margin between sections */
 }
 
-.user-info h2 {
+.user-info h2,
+.edit-account h2 {
   color: #333;
 }
 
-.user-info div {
+.user-info div,
+.edit-account div {
   margin-bottom: 10px;
 }
 
-.user-info .label {
+.user-info .label,
+.edit-account .label {
   font-weight: bold;
   margin-right: 5px;
+}
+
+.edit-account-btn {
+  background-color: #0a6ec0;
+  color: #fff;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  margin-top: 20px;
+  font-size: 15px;
+}
+
+.edit-account-btn:hover {
+  background-color: #0c79d2;
 }
 
 .error-message {
@@ -26,6 +47,10 @@
   margin-top: 10px;
 }
 
+.user-info-container {
+  display: flex;
+  flex-wrap: wrap;
+}
 
 .download-info-btn {
   background-color: #2aa407;
@@ -45,9 +70,11 @@
 .download-info {
   border: 1px solid #ccc;
   padding: 15px;
-  margin: 20px;
+  margin: 10px; /* Adjusted margin for better spacing */
   border-radius: 5px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  flex: 1; /* Flex property for equal distribution */
+  max-width: calc(50% - 20px); /* 50% width with some margin between sections */
 }
 
 .download-info h2 {
@@ -85,9 +112,11 @@
 .delete-account {
   border: 1px solid #ccc;
   padding: 15px;
-  margin: 20px;
+  margin: 10px; /* Adjusted margin for better spacing */
   border-radius: 5px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  flex: 1; /* Flex property for equal distribution */
+  max-width: calc(100% - 20px); /* 100% width with some margin between sections */
 }
 
 .delete-account h2 {

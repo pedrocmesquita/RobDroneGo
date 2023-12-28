@@ -25,6 +25,54 @@
 
   </div>
 
+  <div class="edit-account">
+    <h2>Edit Account</h2>
+    <form [formGroup]="accountForm" (ngSubmit)="updateAccount()">
+      <div>
+        <label for="firstName">First Name: </label>
+        <input type="text" id="firstName" formControlName="firstName" />
+      </div>
+      <div>
+        <label for="lastName">Last Name: </label>
+        <input type="text" id="lastName" formControlName="lastName" />
+      </div>
+      <div>
+        <label for="email">Email: </label>
+        <span>{{ currentUser.email }}</span>
+      </div>
+      <div>
+        <label for="selectedRole">Role: </label>
+        <select id="selectedRole" name="selectedRole" formControlName="selectedRole">
+          <option value="" disabled>Select a role</option>
+          <option *ngFor="let role of roles" [value]="role.id">{{ role.name }}</option>
+        </select>
+      </div>
+      <div>
+        <label for="currentPassword">Current Password: </label>
+        <input type="password" id="currentPassword" formControlName="currentPassword" />
+      </div>
+      <div>
+        <label for="newPassword">New Password: </label>
+        <input type="password" id="newPassword" formControlName="newPassword" />
+      </div>
+      <div>
+        <label for="confirmPassword">Confirm New Password: </label>
+        <input type="password" id="confirmPassword" formControlName="confirmPassword" />
+      </div>
+
+    </form>
+
+    <div *ngIf="errorMessage" class="error-message">
+      {{ errorMessage }}
+    </div>
+
+    <!-- Delete Account Button -->
+    <div class="edit-account-container">
+      <!-- Delete Account Button -->
+      <button class="edit-account-btn" (click)="updateAccount()">Edit account</button>
+    </div>
+  </div>
+
   <div class="delete-account">
     <h2>Delete account</h2>
     <div>
@@ -43,9 +91,7 @@
       <!-- Delete Account Button -->
       <button class="delete-account-btn" (click)="deleteAccount()">Delete account</button>
     </div>
-
   </div>
-
 </div>
 
 <div class="user-not-logged-in" *ngIf="!currentUser">

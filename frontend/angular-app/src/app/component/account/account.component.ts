@@ -1,23 +1,36 @@
 import { Component, OnInit } from "@angular/core";
 import { AuthService } from "../../services/auth.service";
 import { Router } from "@angular/router";
+import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-account',
   templateUrl: './account.component.html',
   styleUrls: ['./account.component.css']
 })
-export class AccountComponent implements OnInit{
+export class AccountComponent implements OnInit {
 
   currentUser: any = null;
+  roles: any[] = [];
   roleGestorDeCampus: any = null;
   roleGestorDeFrota: any = null;
   roleAdmin: any = null;
   roleGestorDeTarefas: any = null;
-  roles: any[] = [];
-
   errorMessage: string | null = null;
-  constructor(private authService: AuthService, private router: Router) {
+  accountForm: FormGroup;
+
+  constructor(
+    private authService: AuthService,
+    private router: Router,
+    private formBuilder: FormBuilder,
+    private toastr: ToastrService
+  ) {
+    this.accountForm = this.formBuilder.group({
+      firstName: ['', Validators.required],
+      lastName: ['', Validators.required],
+      email: ['', [Validators.required, Validators.email]],
+    });
   }
 
   deleteAccount() {
@@ -53,10 +66,37 @@ export class AccountComponent implements OnInit{
     link.href = URL.createObjectURL(blob);
     link.download = 'userInfo.txt';
     link.click();
-
+    this.toastr.success('User information downloaded successfully.', 'Success');
     // Clean up
     URL.revokeObjectURL(link.href);
   }
+
+  updateAccount() {
+    if (this.accountForm.invalid) {
+      this.toastr.error('All fields are required to be filled.', 'Error editing account info');
+      return;
+    }
+
+    const updatedUserData = {
+      firstName: this.accountForm.value.firstName,
+      lastName: this.accountForm.value.lastName,
+      email: this.accountForm.value.email,
+    };
+
+    this.authService.updateAccount().subscribe(
+      () => {
+        console.log('Account updated successfully');
+        // Optionally, update the currentUser object in your component
+        this.currentUser.firstName = updatedUserData.firstName;
+        this.currentUser.lastName = updatedUserData.lastName;
+        this.currentUser.email = updatedUserData.email;
+      },
+      (error) => {
+        console.error('Failed to update account:', error);
+      }
+    );
+  }
+
   ngOnInit() {
     this.authService.getRoles().subscribe(
       (roles) => {
@@ -70,7 +110,6 @@ export class AccountComponent implements OnInit{
           return;
         }
 
-        // Find the role name based on roleId
         const userRoleId = this.currentUser.role;
         const userRole = this.roles.find(role => role.id === userRoleId);
 
@@ -80,7 +119,6 @@ export class AccountComponent implements OnInit{
           console.error('Failed to find user role:', userRoleId);
         }
 
-        // Loop through the roles array and find the roles you need
         for (let i = 0; i < this.roles.length; i++) {
           if (this.roles[i].name == "Gestor de Campus") {
             this.roleGestorDeCampus = this.roles[i];
@@ -96,12 +134,6 @@ export class AccountComponent implements OnInit{
           }
         }
 
-        console.log(this.roleGestorDeCampus);
-        console.log(this.roleGestorDeFrota);
-        console.log(this.roleAdmin);
-        console.log(this.roleGestorDeTarefas);
-
-        // If any is null, then throw an error
         if (this.roleGestorDeCampus == null || this.roleGestorDeFrota == null || this.roleAdmin == null || this.roleGestorDeTarefas == null) {
           this.errorMessage = 'Error while fetching roles';
           return;
@@ -113,10 +145,7 @@ export class AccountComponent implements OnInit{
     );
 
     if (this.currentUser == null) {
-      // Handle the case where the user is not logged in
       console.log("User is not logged in");
     }
   }
-
-
 }

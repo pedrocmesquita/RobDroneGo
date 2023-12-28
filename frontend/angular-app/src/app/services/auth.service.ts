@@ -95,5 +95,9 @@ export class AuthService {
     this.currentUser = null;
   }
 
+  updateAccount() {
+    // Replace with your actual backend API endpoint
+    return this.http.post('http://localhost:4000/api/auth/update', this.currentUser);
+  }
 
 }

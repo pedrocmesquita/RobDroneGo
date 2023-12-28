@@ -63,6 +63,15 @@
             color: white;
         }
 
+        #tooltip {
+            background-color: #fff;
+            border: 1px solid #000;
+            padding: 8px;
+            border-radius: 4px;
+            /* outros estilos conforme necessário */
+        }
+
+
         table {
             margin-left: auto;
             margin-right: auto;
@@ -128,6 +137,8 @@
 </head>
 
 <body>
+
+<div id="tooltip" style="position: absolute; display: none; pointer-events: none;"></div>
     <script>
         window.onload = function() {
 

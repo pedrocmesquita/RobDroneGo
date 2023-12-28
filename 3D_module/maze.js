@@ -364,5 +364,10 @@ export default class Maze {
     }
 
 
+    whatRoom(position) {
+        // Lógica para determinar a sala, gabinete ou elevador com base na posição
+        // Retorna o nome ou identificador do espaço
+    }
+
     
 }

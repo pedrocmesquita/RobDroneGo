@@ -1,15 +1,3 @@
-// Thumb Raiser - JPP 2021, 2022, 2023
-// 3D modeling
-// 3D models importing
-// Perspective and orthographic projections
-// Viewing
-// Linear and affine transformations
-// Lighting and materials
-// Shadow projection
-// Fog
-// Texture mapping
-// User interaction
-
 import * as THREE from "three";
 import Stats from "three/addons/libs/stats.module.js";
 import Orientation from "./orientation.js";
@@ -23,132 +11,6 @@ import Camera from "./camera.js";
 import Animations from "./animations.js";
 import UserInterface from "./user_interface.js";
 
-
-/*
- * generalParameters = {
- *  setDevicePixelRatio: Boolean
- * }
- *
- * mazeParameters = {
- *  url: String,
- *  credits: String,
- *  scale: Vector3
- * }
- *
- * playerParameters = {
- *  url: String,
- *  credits: String,
- *  scale: Vector3,
- *  walkingSpeed: Float,
- *  initialDirection: Float,
- *  turningSpeed: Float,
- *  runningFactor: Float,
- *  keyCodes: { fixedView: String, firstPersonView: String, thirdPersonView: String, topView: String, viewMode: String, userInterface: String, miniMap: String, help: String, statistics: String, run: String, left: String, right: String, backward: String, forward: String, jump: String, yes: String, no: String, wave: String, punch: String, thumbsUp: String }
- * }
- *
- * lightsParameters = {
- *  ambientLight: { color: Integer, intensity: Float },
- *  pointLight1: { color: Integer, intensity: Float, range: Float, position: Vector3 },
- *  pointLight2: { color: Integer, intensity: Float, range: Float, position: Vector3 },
- *  spotLight: { color: Integer, intensity: Float, range: Float, angle: Float, penumbra: Float, position: Vector3, direction: Float }
- * }
- *
- * fogParameters = {
- *  enabled: Boolean,
- *  color: Integer,
- *  near: Float,
- *  far: Float
- * }
- *
- * fixedViewCameraParameters = {
- *  view: String,
- *  multipleViewsViewport: Vector4,
- *  target: Vector3,
- *  initialOrientation: Orientation,
- *  orientationMin: Orientation,
- *  orientationMax: Orientation,
- *  initialDistance: Float,
- *  distanceMin: Float,
- *  distanceMax: Float,
- *  initialZoom: Float,
- *  zoomMin: Float,
- *  zoomMax: Float,
- *  initialFov: Float,
- *  near: Float,
- *  far: Float
- * }
- *
- * firstPersonViewCameraParameters = {
- *  view: String,
- *  multipleViewsViewport: Vector4,
- *  target: Vector3,
- *  initialOrientation: Orientation,
- *  orientationMin: Orientation,
- *  orientationMax: Orientation,
- *  initialDistance: Float,
- *  distanceMin: Float,
- *  distanceMax: Float,
- *  initialZoom: Float,
- *  zoomMin: Float,
- *  zoomMax: Float,
- *  initialFov: Float,
- *  near: Float,
- *  far: Float
- * }
- *
- * thirdPersonViewCameraParameters = {
- *  view: String,
- *  multipleViewsViewport: Vector4,
- *  target: Vector3,
- *  initialOrientation: Orientation,
- *  orientationMin: Orientation,
- *  orientationMax: Orientation,
- *  initialDistance: Float,
- *  distanceMin: Float,
- *  distanceMax: Float,
- *  initialZoom: Float,
- *  zoomMin: Float,
- *  zoomMax: Float,
- *  initialFov: Float,
- *  near: Float,
- *  far: Float
- * }
- *
- * topViewCameraParameters = {
- *  view: String,
- *  multipleViewsViewport: Vector4,
- *  target: Vector3,
- *  initialOrientation: Orientation,
- *  orientationMin: Orientation,
- *  orientationMax: Orientation,
- *  initialDistance: Float,
- *  distanceMin: Float,
- *  distanceMax: Float,
- *  initialZoom: Float,
- *  zoomMin: Float,
- *  zoomMax: Float,
- *  initialFov: Float,
- *  near: Float,
- *  far: Float
- * }
- *
- * miniMapCameraParameters = {
- *  view: String,
- *  multipleViewsViewport: Vector4,
- *  initialOrientation: Orientation,
- *  orientationMin: Orientation,
- *  orientationMax: Orientation,
- *  initialDistance: Float,
- *  distanceMin: Float,
- *  distanceMax: Float,
- *  initialZoom: Float,
- *  zoomMin: Float,
- *  zoomMax: Float,
- *  initialFov: Float,
- *  near: Float,
- *  far: Float
- * }
- */
 
 export default class ThumbRaiser {
     constructor(generalParameters, mazeParameters, playerParameters, lightsParameters,
@@ -164,6 +26,7 @@ export default class ThumbRaiser {
         this.thirdPersonViewCameraParameters = merge({}, cameraData, thirdPersonViewCameraParameters);
         this.topViewCameraParameters = merge({}, cameraData, topViewCameraParameters);
         this.miniMapCameraParameters = merge({}, cameraData, miniMapCameraParameters);
+        this.raycaster = new THREE.Raycaster();
 
         // Set the game state
         this.gameRunning = false;
@@ -530,6 +393,8 @@ export default class ThumbRaiser {
                 const newMousePosition = new THREE.Vector2(event.clientX, window.innerHeight - event.clientY - 1);
                 const mouseIncrement = newMousePosition.clone().sub(this.mousePosition);
                 this.mousePosition = newMousePosition;
+                this.updateRaycaster(event);
+
                 if (event.buttons == 1) { // Primary button down
                     if (this.changeCameraDistance) {
                         this.activeViewCamera.updateDistance(-0.05 * (mouseIncrement.x + mouseIncrement.y));
@@ -550,6 +415,40 @@ export default class ThumbRaiser {
                     }
                 }
             }
+        }
+    }
+
+    updateRaycaster(event) {
+        const mouse = new THREE.Vector2(
+            (event.clientX / window.innerWidth) * 2 - 1,
+            -(event.clientY / window.innerHeight) * 2 + 1
+        );
+
+        this.raycaster.setFromCamera(mouse, this.camera2D);
+
+        const intersects = this.raycaster.intersectObjects(this.maze.object.children);
+
+        const tooltip = document.getElementById('tooltip');
+
+        if (intersects.length > 0) {
+            const pos = intersects[0].point;
+            const roomFound = this.maze.whatRoom(pos);
+            const buildingId = document.getElementById("building").value;
+            const floorId = document.getElementById('floor').value;
+
+            if (roomFound != null) {
+                tooltip.style.display = 'block';
+                tooltip.style.left = `${event.clientX}px`;
+                tooltip.style.top = `${event.clientY}px`;
+                tooltip.innerHTML = `Edifício: ${buildingId}, Andar: ${floorId}, Espaço: ${roomFound}`;
+            } else {
+                tooltip.style.display = 'block';
+                tooltip.style.left = `${event.clientX}px`;
+                tooltip.style.top = `${event.clientY}px`;
+                tooltip.innerHTML = `Edifício: ${buildingId}, Andar: ${floorId}`;
+            }
+        } else {
+            tooltip.style.display = 'none';
         }
     }
 

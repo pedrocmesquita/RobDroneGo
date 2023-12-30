@@ -10,6 +10,7 @@ import Fog from "./fog.js";
 import Camera from "./camera.js";
 import Animations from "./animations.js";
 import UserInterface from "./user_interface.js";
+import {Cache as urlParams} from "three";
 
 
 export default class ThumbRaiser {
@@ -170,6 +171,12 @@ export default class ThumbRaiser {
         this.resetAll.addEventListener("click", event => this.buttonClick(event));
 
         this.activeElement = document.activeElement;
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const buildingId = urlParams.get('buildingId');
+        const floorId = urlParams.get('floorId');
+        //console.log("INTERSECTS.LENGTH: ", intersects.length)
+        this.maze.requestData(buildingId, floorId);
     }
 
     buildHelpPanel() {
@@ -387,6 +394,32 @@ export default class ThumbRaiser {
     }
 
     mouseMove(event) {
+
+        this.activeViewCamera.updateRaycaster();
+
+        if (this.activeViewCamera.intersections(this.maze.object).length > 0){
+            const pos = this.activeViewCamera.intersections(this.maze.object)[0].point;
+            const size = this.maze.sizeToAdd();
+            const newx = size.width / 2;
+            const newz = size.height / 2;
+            const pos2 = {x:pos.x + newx, z: pos.z + newz};
+            const tooltip = document.getElementById('tooltip');
+            const roomFound = this.maze.whatRoom(pos2);
+            if (roomFound != null){
+                const sizeBx = tooltip.offsetWidth;
+                const sizeBy = tooltip.offsetHeight;
+                console.log(roomFound);
+                tooltip.style.display = 'block';
+                tooltip.style.left = (event.clientX - sizeBx) + 'px';
+                tooltip.style.top = (event.clientY - sizeBy) + 'px';
+                tooltip.innerHTML = roomFound;
+            }else {
+                tooltip.style.display = 'none';
+            }
+        }else {
+            tooltip.style.display = 'none';
+        }
+
         if (event.buttons == 1 || event.buttons == 2) { // Primary or secondary button down
             if (this.changeCameraDistance || this.changeCameraOrientation || this.dragMiniMap) { // Mouse action in progress
                 // Compute mouse movement and update mouse position
@@ -418,39 +451,6 @@ export default class ThumbRaiser {
         }
     }
 
-    updateRaycaster(event) {
-        const mouse = new THREE.Vector2(
-            (event.clientX / window.innerWidth) * 2 - 1,
-            -(event.clientY / window.innerHeight) * 2 + 1
-        );
-
-        this.raycaster.setFromCamera(mouse, this.camera2D);
-
-        const intersects = this.raycaster.intersectObjects(this.maze.object.children);
-
-        const tooltip = document.getElementById('tooltip');
-
-        if (intersects.length > 0) {
-            const pos = intersects[0].point;
-            const roomFound = this.maze.whatRoom(pos);
-            const buildingId = document.getElementById("building").value;
-            const floorId = document.getElementById('floor').value;
-
-            if (roomFound != null) {
-                tooltip.style.display = 'block';
-                tooltip.style.left = `${event.clientX}px`;
-                tooltip.style.top = `${event.clientY}px`;
-                tooltip.innerHTML = `Edifício: ${buildingId}, Andar: ${floorId}, Espaço: ${roomFound}`;
-            } else {
-                tooltip.style.display = 'block';
-                tooltip.style.left = `${event.clientX}px`;
-                tooltip.style.top = `${event.clientY}px`;
-                tooltip.innerHTML = `Edifício: ${buildingId}, Andar: ${floorId}`;
-            }
-        } else {
-            tooltip.style.display = 'none';
-        }
-    }
 
     mouseUp(event) {
         // Reset mouse move action
@@ -558,7 +558,6 @@ export default class ThumbRaiser {
     }
 
     openDoor(position) {
-        console.log("ola");
         return this.maze.distanceToNearestDoor(position) < this.player.radius;
     }
 

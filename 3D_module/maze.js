@@ -26,7 +26,7 @@ export default class Maze {
             this.floorData = null;
 
             this.roomsN = [];
-            this.accessesN = [];
+            this.connectionsN = [];
             this.elevatorsN = [];
 
             // Create an array to store the doors
@@ -428,18 +428,16 @@ export default class Maze {
             destinationCoordinateY: room.destinationCoordinateY
         }));
 
-        console.log("Processed rooms:", this.roomsN);
-
-        this.accessesN = floor.connections.map(connection => ({
-            name: connection.connectionId,
-            x: connection.locationX,
-            y: connection.locationY
+        this.connectionsN = floor.connections.map(connection => ({
+            connectionId: connection.connectionId,
+            locationX: connection.locationX,
+            locationY: connection.locationY
         }));
 
         this.elevatorsN = floor.elevators.map(elevator => ({
-            name: elevator.elevatorId,
-            x: elevator.locationX,
-            y: elevator.locationY
+            elevatorId: elevator.elevatorId,
+            locationX: elevator.locationX,
+            locationY: elevator.locationY
         }));
     }
 
@@ -472,32 +470,39 @@ export default class Maze {
             console.log("No rooms data available.");
         }
 
-        if (this.accessesN && this.accessesN.length > 0) {
-            for (const connection of this.accessesN) {
-                if ((position.x >= connection.locationX && position.x <= connection.locationToX &&
-                        position.z >= connection.locationY && position.z <= connection.locationToY) ||
-                    (position.x >= connection.locationToX && position.x <= connection.locationX &&
-                        position.z >= connection.locationToY && position.z <= connection.locationY)) {
+        if (this.connectionsN && this.connectionsN.length > 0) {
+            for (const connection of this.connectionsN) {
+                console.log("Checking connection:", connection);
+                console.log("Mouse Position Z:", position.z, "Mouse Position X:", position.x);
+                console.log("Connection Bounds Z:", connection.locationX, connection.locationToX);
+                console.log("Connection Bounds X:", connection.locationY, connection.locationToY);
+
+
+                // Verificando se a posição do mouse está dentro dos limites da conexão
+                if (position.z >= connection.locationX &&
+                    position.x >= connection.locationToY && position.x <= connection.locationToY) {
                     console.log(`Found Connection: ${connection.connectionId}`);
                     return `Connection: ${connection.connectionId}`;
                 }
             }
+            console.log("No connection found for the given position.");
         }
+
+
 
         if (this.elevatorsN && this.elevatorsN.length > 0) {
             for (const elevator of this.elevatorsN) {
-                if (position.x >= elevator.locationX &&
-                    position.x <= elevator.locationX + 1 &&
-                    position.z >= elevator.locationY &&
-                    position.z <= elevator.locationY + 1) {
-                    console.log(`Found Elevator: ${elevator.elevatorId}`);
+                if (position.z >= elevator.locationX &&
+                    position.z <= elevator.locationX + 1 &&
+                    position.x >= elevator.locationY &&
+                    position.x <= elevator.locationY + 1) {
                     return `Elevator: ${elevator.elevatorId}`;
                 }
             }
         }
 
         const urlParams = new URLSearchParams(window.location.search);
-        const buildingName = urlParams.get('buildingId'); // Ajuste conforme o parâmetro correto
+        const buildingName = urlParams.get('buildingId');
         console.log("Only building found:", buildingName);
         return `Building: ${buildingName}`;
     }

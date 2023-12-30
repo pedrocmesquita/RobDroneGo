@@ -638,8 +638,6 @@ export default class ThumbRaiser {
 
                         if(this.access()){
                             console.log("Access to another floor");
-                            //APARTIR DAQUI DA RELOAD AO HTML COM UM FLOOR NOVO
-                            //SO FALTA E PASSAR O JSON NOVO AINDA TENHO DE VER COMO FAZER ISSO!!!!!!
                             let newJsonFile = "thum_raiser.js";
                             window.location.href = window.location.pathname + "?json=" + newJsonFile;
                         }

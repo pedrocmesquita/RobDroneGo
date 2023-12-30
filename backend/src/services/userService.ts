@@ -21,6 +21,11 @@ import { UserEmail } from '../domain/User/userEmail';
 import { Role } from '../domain/Role/role';
 
 import { Result } from "../core/logic/Result";
+import IBuildingDTO from "../dto/IBuildingDTO";
+import { FloorMap } from "../mappers/FloorMap";
+import IFloorDTO from "../dto/IFloorDTO";
+import { Building } from "../domain/Building/building";
+import { BuildingMap } from "../mappers/BuildingMap";
 
 @Service()
 export default class UserService implements IUserService{
@@ -179,4 +184,57 @@ export default class UserService implements IUserService{
     }
   }
 
+  public async updateUser(userDTO: IUserDTO): Promise<Result<{ userDTO: IUserDTO, token: string }>> {
+    try {
+      const userDocument = await this.userRepo.findByEmail( userDTO.email );
+      const found = !!userDocument;
+      if (!found) {
+        return Result.fail<{userDTO: IUserDTO, token: string}>("User already exists with email=" + userDTO.email);
+      }
+
+      const salt = randomBytes(32);
+      this.logger.silly('Hashing password');
+      const hashedPassword = await argon2.hash(userDTO.password, { salt });
+      this.logger.silly('Creating user db record');
+
+      const password = await UserPassword.create({ value: hashedPassword, hashed: true}).getValue();
+      const email = await UserEmail.create( userDTO.email ).getValue();
+      let role: Role;
+
+      const roleOrError = await this.getRole(userDTO.role);
+      if (roleOrError.isFailure) {
+        return Result.fail<{userDTO: IUserDTO; token: string}>(roleOrError.error);
+      } else {
+        role = roleOrError.getValue();
+      }
+
+      const userOrError = await User.create({
+        firstName: userDTO.firstName,
+        lastName: userDTO.lastName,
+        email: email,
+        role: role,
+        password: password,
+      });
+
+      if (userOrError.isFailure) {
+        throw Result.fail<IUserDTO>(userOrError.errorValue());
+      }
+
+      // Save building entity
+      const userResult = userOrError.getValue();
+
+      this.logger.silly('Generating JWT');
+      const token = this.generateToken(userResult);
+
+      this.logger.silly('Sending welcome email');
+      //await this.mailer.SendWelcomeEmail(userResult);
+
+      //this.eventDispatcher.dispatch(events.user.signUp, { user: userResult });
+      await this.userRepo.update(userResult);
+      const userDTOResult = UserMap.toDTO( userResult ) as IUserDTO;
+      return Result.ok<{userDTO: IUserDTO, token: string}>( {userDTO: userDTOResult, token: token} )
+    } catch (e) {
+      throw e;
+    }
+  }
 }

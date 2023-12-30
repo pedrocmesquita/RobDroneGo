@@ -20,7 +20,7 @@ export class UserMap extends Mapper<User> {
       firstName: user.firstName,
       lastName: user.lastName,
       email: user.email.value,
-      password: "",
+      password: user.password.value || '',
       role: user.role.id.toString()
     } as IUserDTO;
   }

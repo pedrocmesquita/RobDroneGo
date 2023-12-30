@@ -1,7 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import { AuthService } from "../../services/auth.service";
 import { Router } from "@angular/router";
-import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { FormBuilder, FormGroup, NgForm, Validators } from "@angular/forms";
 import { ToastrService } from 'ngx-toastr';
 
 @Component({
@@ -13,6 +13,7 @@ export class AccountComponent implements OnInit {
 
   currentUser: any = null;
   roles: any[] = [];
+  selectedRole: string | null = null;
   roleGestorDeCampus: any = null;
   roleGestorDeFrota: any = null;
   roleAdmin: any = null;
@@ -30,18 +31,22 @@ export class AccountComponent implements OnInit {
       firstName: ['', Validators.required],
       lastName: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
+      currentPassword: ['', Validators.required],
+      newPassword: [''], // Include if applicable
+      confirmPassword: [''], // Include if applicable
+      selectedRole: ['', Validators.required],
     });
   }
 
   deleteAccount() {
     this.authService.deleteAccount().subscribe(
       () => {
-        console.log('Account deleted successfully');
+        this.toastr.success('Account deleted successfully');
         this.authService.logout();
         this.router.navigate(['/login']);
       },
       (error) => {
-        console.error('Failed to delete account:', error);
+        this.toastr.error('Failed to delete account:', error);
       }
     );
   }
@@ -72,27 +77,45 @@ export class AccountComponent implements OnInit {
   }
 
   updateAccount() {
-    if (this.accountForm.invalid) {
-      this.toastr.error('All fields are required to be filled.', 'Error editing account info');
+
+    const updatedUserData = {
+      firstName: this.accountForm.get('firstName')?.value,
+      lastName: this.accountForm.get('lastName')?.value,
+      email: this.currentUser.email,
+      password: this.accountForm.get('currentPassword')?.value,
+      newPassword: this.accountForm.get('newPassword')?.value,
+      confirmPassword: this.accountForm.get('confirmPassword')?.value,
+      role: this.accountForm.get('selectedRole')?.value,
+    };
+
+    if (updatedUserData.newPassword !== updatedUserData.confirmPassword) {
+      this.toastr.error('New password and its confirmation must match.');
       return;
     }
 
-    const updatedUserData = {
-      firstName: this.accountForm.value.firstName,
-      lastName: this.accountForm.value.lastName,
-      email: this.accountForm.value.email,
-    };
+    console.log(updatedUserData);
 
-    this.authService.updateAccount().subscribe(
+    this.authService.updateAccount(
+      updatedUserData.firstName,
+      updatedUserData.lastName,
+      updatedUserData.email,
+      updatedUserData.newPassword,
+      updatedUserData.role
+    ).subscribe(
       () => {
-        console.log('Account updated successfully');
-        // Optionally, update the currentUser object in your component
+        this.toastr.success('Please login again.','Account updated successfully');
+        // If necessary, update the current user object with the new data
         this.currentUser.firstName = updatedUserData.firstName;
         this.currentUser.lastName = updatedUserData.lastName;
         this.currentUser.email = updatedUserData.email;
+        this.currentUser.role = updatedUserData.role;
+        // Add other fields as needed
+        this.accountForm.reset(); // Optionally reset the form
+        this.authService.logout();
+        this.router.navigate(['/login']);
       },
       (error) => {
-        console.error('Failed to update account:', error);
+        this.toastr.error('Failed to update account:', error);
       }
     );
   }

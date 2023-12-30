@@ -8,6 +8,8 @@ import { User } from "../domain/User/user";
 import { UserId } from "../domain/User/userId";
 import { UserEmail } from "../domain/User/userEmail";
 import { UserMap } from "../mappers/UserMap";
+import { Building } from "../domain/Building/building";
+import { BuildingMap } from "../mappers/BuildingMap";
 
 @Service()
 export default class UserRepo implements IUserRepo {
@@ -84,8 +86,14 @@ export default class UserRepo implements IUserRepo {
   }
 
   public async deleteById (userId: string): Promise<void> {
-    console.log("está a chegar aqui")
     const query = { domainId: userId };
     await this.userSchema.deleteOne(query);
+  }
+
+  public async update(user: User): Promise<User> {
+    const userDTO = UserMap.toDTO(user);
+    userDTO.email = user.email.value; // Get the string email from the UserEmail object
+    const updatedUser = await this.userSchema.findOneAndUpdate({ email: user.email.value }, UserMap.toDTO(user), { new: true });
+    return UserMap.toDomain(updatedUser);
   }
 }

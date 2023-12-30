@@ -13,7 +13,6 @@
     <div>
       <span class="label">Role:</span>{{ currentUser.role }}
     </div>
-    <!-- Add more fields as needed -->
 
     <div *ngIf="errorMessage" class="error-message">
       {{ errorMessage }}
@@ -66,9 +65,7 @@
       {{ errorMessage }}
     </div>
 
-    <!-- Delete Account Button -->
     <div class="edit-account-container">
-      <!-- Delete Account Button -->
       <button class="edit-account-btn" (click)="updateAccount()">Edit account</button>
     </div>
   </div>
@@ -80,15 +77,12 @@
       <p>information from our database. This action cannot</p>
       <p>be undone.</p>
     </div>
-    <!-- Add more fields as needed -->
 
     <div *ngIf="errorMessage" class="error-message">
       {{ errorMessage }}
     </div>
 
-    <!-- Delete Account Button -->
     <div class="delete-account-container">
-      <!-- Delete Account Button -->
       <button class="delete-account-btn" (click)="deleteAccount()">Delete account</button>
     </div>
   </div>
@@ -96,6 +90,4 @@
 
 <div class="user-not-logged-in" *ngIf="!currentUser">
   <p>User is not logged in. Please log in to view account information.</p>
-  <!-- You can also navigate to the login page if needed -->
-  <!-- <button (click)="navigateToLogin()">Go to Login</button> -->
 </div>

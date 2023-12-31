@@ -394,7 +394,6 @@ export default class ThumbRaiser {
     }
 
     mouseMove(event) {
-
         this.activeViewCamera.updateRaycaster();
 
         if (this.activeViewCamera.intersections(this.maze.object).length > 0){
@@ -416,7 +415,7 @@ export default class ThumbRaiser {
             }else {
                 tooltip.style.display = 'none';
             }
-        }else {
+        } else {
             tooltip.style.display = 'none';
         }
 
@@ -698,7 +697,6 @@ export default class ThumbRaiser {
                                 if (connection) {
                                     let newFloorId = connection.floorfromId === floorId ? connection.floortoId : connection.floorfromId;
                                     let newBuildingId = connection.buildingfromId === buildingId ? connection.buildingtoId : connection.buildingfromId;
-
 
                                     this.createJsonOnBackend(newFloorId)
 

@@ -312,21 +312,6 @@ export default class Maze {
         return closestDistance;
     }
 
-    closestAcess(position) {
-        let closestAcess = null;
-        let closestDistance = Infinity;
-        for (let access of this.accesses) {
-            let accessPosition = access.position;
-            let dx = position.x - accessPosition.x;
-            let dz = position.z - accessPosition.z;
-            let distance = Math.sqrt(dx * dx + dz * dz);
-            if (distance < closestDistance) {
-                closestDistance = distance;
-                closestAcess = access;
-            }
-        }
-        return closestAcess;
-    }
 
     openDoor(doorObject) {
         if(doorObject.rotation.y == 0){
@@ -431,7 +416,9 @@ export default class Maze {
         this.connectionsN = floor.connections.map(connection => ({
             connectionId: connection.connectionId,
             locationX: connection.locationX,
-            locationY: connection.locationY
+            locationY: connection.locationY,
+            locationToX: connection.locationToX,
+            locationToY: connection.locationToY
         }));
 
         this.elevatorsN = floor.elevators.map(elevator => ({
@@ -450,18 +437,12 @@ export default class Maze {
 
         if (this.roomsN && this.roomsN.length > 0) {
             for (const room of this.roomsN) {
-                console.log("Checking room:", room);
-
-                const roomEndX = room.originCoordinateX + (room.destinationCoordinateX - room.originCoordinateX);
-                const roomEndY = room.originCoordinateY + (room.destinationCoordinateY - room.originCoordinateY);
-
-                console.log("Room bounds X:", room.originCoordinateX, roomEndX);
-                console.log("Room bounds Y:", room.originCoordinateY, roomEndY);
+                //console.log("Checking room:", room);
 
                 if (position.x >= room.originCoordinateX &&
-                    position.x <= roomEndX &&
+                    position.x <= room.destinationCoordinateX &&
                     position.z >= room.originCoordinateY &&
-                    position.z <= roomEndY) {
+                    position.z <= room.destinationCoordinateY) {
                     console.log(`Found Room: ${room.roomName}`);
                     return `Room: ${room.roomName}`;
                 }
@@ -472,16 +453,11 @@ export default class Maze {
 
         if (this.connectionsN && this.connectionsN.length > 0) {
             for (const connection of this.connectionsN) {
-                console.log("Checking connection:", connection);
-                console.log("Mouse Position Z:", position.z, "Mouse Position X:", position.x);
-                console.log("Connection Bounds Z:", connection.locationX, connection.locationToX);
-                console.log("Connection Bounds X:", connection.locationY, connection.locationToY);
-
-
-                // Verificando se a posição do mouse está dentro dos limites da conexão
                 if (position.z >= connection.locationX &&
-                    position.x >= connection.locationToY && position.x <= connection.locationToY) {
-                    console.log(`Found Connection: ${connection.connectionId}`);
+                    position.z <= connection.locationToX &&
+                    position.x >= connection.locationY &&
+                    position.z <= connection.locationToY) {
+                    //console.log(`Found Connection: ${connection.connectionId}`);
                     return `Connection: ${connection.connectionId}`;
                 }
             }

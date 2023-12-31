@@ -17,6 +17,7 @@ import { LogsComponent } from "./component/logs/logs.component";
 import { PathComponent } from "./component/path/path.component";
 import { TaskComponent } from "./component/task/task.component";
 import { AccountComponent } from "./component/account/account.component";
+import { UserComponent } from "./component/user/user.component";
 
 export const routes: Routes = [
   { path: '', component: LoginComponent },
@@ -36,6 +37,7 @@ export const routes: Routes = [
   { path: 'path', component: PathComponent, canActivate: [AuthGuard] },
   { path: 'task', component: TaskComponent, canActivate: [AuthGuard]},
   { path: 'account', component: AccountComponent, canActivate: [AuthGuard]},
+  { path: 'user', component: UserComponent, canActivate: [AuthGuard]},
   { path: '**', redirectTo: '' },
 ];
 

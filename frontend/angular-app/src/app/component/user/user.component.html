@@ -1,0 +1,37 @@
+<button class="create-account-btn" (click)="toggleCreateAccountForm()">Create Account</button>
+
+<div *ngIf="showCreateForm" class="create-account-form-container">
+  <div class="create-account-form">
+    <h2>Create Account</h2>
+    <form (ngSubmit)="onSubmit(signupForm)" #signupForm="ngForm" class="signup-form">
+      <div>
+        <label for="firstName">First Name:</label>
+        <input type="text" id="firstName" name="firstName" ngModel required placeholder="Enter your first name">
+      </div>
+      <div>
+        <label for="lastName">Last Name:</label>
+        <input type="text" id="lastName" name="lastName" ngModel required placeholder="Enter your last name">
+      </div>
+      <div>
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" ngModel required email placeholder="Enter your email address">
+        <p *ngIf="signupForm.controls['email']?.errors?.['email']" class="error-message">Please enter a valid email address.</p>
+      </div>
+      <div>
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" ngModel required pattern="(?=.*[A-Za-z])(?=.*\d).{5,}" placeholder="Enter a password">
+        <p *ngIf="signupForm.controls['password']?.errors?.['pattern']" class="error-message">Password must be at least 5 characters long, contain at least one number and one letter.</p>
+      </div>
+      <div>
+        <label for="role">Role:</label>
+        <select id="role" name="role" [(ngModel)]="selectedRole" required>
+          <option value="" disabled>Select a role</option>
+          <option *ngFor="let role of roles" [value]="role.id">{{ role.name }}</option>
+        </select>
+      </div>
+      <div class="create-account-container">
+        <button type="submit">Signup</button>
+      </div>
+    </form>
+  </div>
+</div>

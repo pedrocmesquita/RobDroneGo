@@ -1,0 +1,65 @@
+/* Add these styles to your component's CSS file or style section */
+
+.create-account-form-container {
+  position: fixed;
+  top: 57%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1000;
+  text-align: center;
+}
+
+
+.create-account-form {
+  background-color: #fff;
+  border: 1px solid #ccc;
+  padding: 30px;
+  border-radius: 15px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.create-account-form label {
+  font-size: 18px;
+  display: block;
+  margin-bottom: 10px;
+}
+
+.create-account-form input,
+.create-account-form select {
+  font-size: 16px;
+  padding: 10px;
+  margin-bottom: 20px;
+  width: 100%;
+  box-sizing: border-box; /* Ensure padding doesn't affect the width */
+}
+
+.create-account-btn {
+  background-color: #0a6ec0;
+  color: #fff;
+  padding: 20px 40px;
+  border: none;
+  border-radius: 15px;
+  cursor: pointer;
+  font-size: 20px;
+  display: block;
+  margin: 20px auto;
+}
+
+.create-account-btn:hover {
+  background-color: #0c79d2;
+}
+
+.create-account-container button {
+  background-color: #0a6ec0;
+  color: #fff;
+  padding: 13px; /* Equal padding for width and height to create a square button */
+  border: none;
+  border-radius: 3px; /* Optional: To keep rounded corners */
+  cursor: pointer;
+  font-size: 20px;
+  display: block;
+  margin: 20px auto;
+}
+

@@ -31,6 +31,7 @@ import { BuildingFilterPipe } from "./services/building-filter-pipe.service";
 import { LogsComponent } from "./component/logs/logs.component";
 import { PathComponent } from "./component/path/path.component";
 import { TaskComponent } from "./component/task/task.component";
+import { UserComponent } from "./component/user/user.component";
 import { AccountComponent } from "./component/account/account.component";
 import { EmailFilterPipe } from "./services/email-filter-pipe.service";
 import { ToastrModule } from "ngx-toastr";
@@ -57,6 +58,7 @@ import { ToastrModule } from "ngx-toastr";
     PathComponent,
     TaskComponent,
     AccountComponent,
+    UserComponent,
     EmailFilterPipe
   ],
   imports: [

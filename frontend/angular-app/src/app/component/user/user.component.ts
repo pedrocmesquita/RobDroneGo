@@ -16,6 +16,7 @@ export class UserComponent implements OnInit {
   successMessage: string | null = null;
   isLoading = false;
   showCreateForm = false; // Add this property
+  showAR = false;
 
   constructor(private authService: AuthService, private router: Router, private toastr: ToastrService) {}
 
@@ -30,6 +31,9 @@ export class UserComponent implements OnInit {
     );
   }
 
+  toggleAR(){
+    this.showAR = !this.showAR;
+  }
   toggleCreateAccountForm() {
     this.showCreateForm = !this.showCreateForm; // Toggle the form's visibility
   }

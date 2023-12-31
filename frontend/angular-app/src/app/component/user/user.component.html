@@ -20,7 +20,6 @@
       <div>
         <label for="password">Password:</label>
         <input type="password" id="password" name="password" ngModel required pattern="(?=.*[A-Za-z])(?=.*\d).{5,}" placeholder="Enter a password">
-        <p *ngIf="signupForm.controls['password']?.errors?.['pattern']" class="error-message">Password must be at least 5 characters long, contain at least one number and one letter.</p>
       </div>
       <div>
         <label for="role">Role:</label>
@@ -30,8 +29,17 @@
         </select>
       </div>
       <div class="create-account-container">
-        <button type="submit">Signup</button>
+        <button type="submit">Create User</button>
       </div>
     </form>
+  </div>
+</div>
+
+<button class="ar-account-btn" (click)="toggleAR()">Approve/Reject User Registrations</button>
+
+<div *ngIf="showAR" class="create-account-form-container">
+  <div class="create-account-form">
+    <h2>Approve/Reject User Registrations</h2>
+    <h1>TBD</h1>
   </div>
 </div>

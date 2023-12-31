@@ -36,19 +36,19 @@
 }
 
 .create-account-btn {
-  background-color: #0a6ec0;
+  background-color: #419af1;
   color: #fff;
-  padding: 20px 40px;
+  padding: 20px 0; /* Adjusted padding to 20px on the top and bottom, and 0 on the left and right */
   border: none;
-  border-radius: 15px;
+  border-radius: 0px;
   cursor: pointer;
   font-size: 20px;
   display: block;
-  margin: 20px auto;
+  width: 100%; /* Make the button fill the width of its container */
 }
 
 .create-account-btn:hover {
-  background-color: #0c79d2;
+  background-color: #6dc1ff;
 }
 
 .create-account-container button {
@@ -63,3 +63,18 @@
   margin: 20px auto;
 }
 
+.ar-account-btn {
+  background-color: #56a4ef;
+  color: #fff;
+  padding: 20px 0; /* Adjusted padding to 20px on the top and bottom, and 0 on the left and right */
+  border: none;
+  border-radius: 0px;
+  cursor: pointer;
+  font-size: 20px;
+  display: block;
+  width: 100%; /* Make the button fill the width of its container */
+}
+
+.ar-account-btn:hover {
+  background-color: #86c7f8;
+}

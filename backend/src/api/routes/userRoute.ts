@@ -39,7 +39,7 @@ export default (app: Router) => {
           logger.debug(userOrError.errorValue())
           return res.status(401).send(userOrError.errorValue());
         }
-    
+
         const {userDTO, token} = userOrError.getValue();
 
         return res.status(201).json({ userDTO, token });
@@ -65,7 +65,7 @@ export default (app: Router) => {
         const { email, password } = req.body;
         const authServiceInstance = Container.get(AuthService);
         const result = await authServiceInstance.SignIn(email, password);
-        
+
         if( result.isFailure )
           return res.json().status(403);
 
@@ -107,4 +107,38 @@ export default (app: Router) => {
 
   route.post('/delete', middlewares.isAuth, middlewares.attachCurrentUser, user_controller.deleteMe);
 
+  route.put(
+    '/updateAccount',
+    celebrate({
+      body: Joi.object({
+        firstName: Joi.string().required(),
+        lastName: Joi.string().required(),
+        email: Joi.string().required(),
+        password: Joi.string().required(),
+        role: Joi.string().required()
+      }),
+    }),
+    async (req: Request, res: Response, next: NextFunction) => {
+      const logger = Container.get('logger') as winston.Logger;
+      logger.debug('Calling Sign-Up endpoint with body: %o', req.body )
+
+      try {
+        const authServiceInstance = Container.get(AuthService);
+        console.log(req.body);
+        const userOrError = await authServiceInstance.updateUser(req.body as IUserDTO);
+
+        if (userOrError.isFailure) {
+          logger.debug(userOrError.errorValue())
+          return res.status(401).send(userOrError.errorValue());
+        }
+
+        const {userDTO, token} = userOrError.getValue();
+
+        return res.status(201).json({ userDTO, token });
+      } catch (e) {
+        //logger.error('🔥 error: %o', e);
+        return next(e);
+      }
+    },
+  );
 };

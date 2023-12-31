@@ -3,6 +3,7 @@ import { Injectable } from "@angular/core";
 import { Observable, tap } from "rxjs";
 import { response } from "express";
 import { IRole } from "../models/irole.model";
+import { IBuilding } from "../models/ibuilding.model";
 
 @Injectable({
   providedIn: 'root',
@@ -27,8 +28,11 @@ export class AuthService {
   }
 
   signup(firstName: string, lastName: string, email: string, password: string, role: string) {
-    // Replace with your actual backend API endpoint
     return this.http.post('http://localhost:4000/api/auth/signup', { firstName, lastName, email, password, role });
+  }
+
+  updateAccount(firstName: string, lastName: string, email: string, password: string, role: string){
+    return this.http.put('http://localhost:4000/api/auth/updateAccount',  { firstName, lastName, email, password, role });
   }
 
   getRoles(): Observable<any> {
@@ -89,15 +93,9 @@ export class AuthService {
     const headers = { Authorization: `Bearer ${token}` };
     const email = this.getCurrentUserEmail();
 
-    // Replace with your actual backend API endpoint
     return this.http.post(`http://localhost:4000/api/auth/delete`, { email }, { headers });
     localStorage.removeItem('authToken');
     this.currentUser = null;
-  }
-
-  updateAccount() {
-    // Replace with your actual backend API endpoint
-    return this.http.post('http://localhost:4000/api/auth/update', this.currentUser);
   }
 
 }

@@ -38,9 +38,26 @@ export default class Camera {
         // Create two cameras (perspective and orthographic projection)
         this.perspective = new THREE.PerspectiveCamera();
         this.orthographic = new THREE.OrthographicCamera();
-
+        this.raycaster = new THREE.Raycaster();
+        this.mouse = new THREE.Vector2();
         this.setWindowSize(windowWidth, windowHeight);
         this.initialize();
+
+        document.addEventListener('mousemove', this.onMouseMove.bind(this), false);
+    }
+
+
+    onMouseMove(event) {
+        this.mouse.x = (event.clientX / this.windowWidth) * 2 - 1;
+        this.mouse.y = -(event.clientY / this.windowHeight) * 2 + 1;
+    }
+
+    updateRaycaster() {
+        this.raycaster.setFromCamera(this.mouse, this.perspective);
+    }
+
+    intersections(object) {
+        return this.raycaster.intersectObject(object);
     }
 
     /*

@@ -22,6 +22,13 @@ export default class Maze {
             this.map = description.map;
             this.size = description.size;
 
+            //this.loadMazeData('http://localhost:4000/api/buildings/');
+            this.floorData = null;
+
+            this.roomsN = [];
+            this.connectionsN = [];
+            this.elevatorsN = [];
+
             // Create an array to store the doors
             this.doors = [];
 
@@ -305,25 +312,8 @@ export default class Maze {
         return closestDistance;
     }
 
-    closestAcess(position) {
-        let closestAcess = null;
-        let closestDistance = Infinity;
-        for (let access of this.accesses) {
-            let accessPosition = access.position;
-            let dx = position.x - accessPosition.x;
-            let dz = position.z - accessPosition.z;
-            let distance = Math.sqrt(dx * dx + dz * dz);
-            if (distance < closestDistance) {
-                closestDistance = distance;
-                closestAcess = access;
-            }
-        }
-        return closestAcess;
-    }
 
     openDoor(doorObject) {
-        console.log("HEHE: ", doorObject.isOpen);
-
         if(doorObject.rotation.y == 0){
             if(doorObject.isOpen == false){
                 doorObject.rotation.y += Math.PI / 2;
@@ -383,11 +373,115 @@ export default class Maze {
         }
     }
 
+    async requestData(buildingId, floorId) {
+        const url = 'http://localhost:4000/api/buildings/';
+        const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Ijg4NjFhNGI0LTU4ZDktNGE4ZC1hZGU0LTAyNzgzZGU4YmVlYyIsImVtYWlsIjoibWNAZ21haWwuY29tIiwicm9sZSI6IjRlZThkYjQ0LWRmZGUtNDcxMi1hZjQ0LTkzMjE0M2JiNzk5NCIsImZpcnN0TmFtZSI6Ik1hcnRhIiwibGFzdE5hbWUiOiJDYW1wb3MiLCJleHAiOjE3MDg5ODY3NjYuODEyLCJpYXQiOjE3MDM4MDI3NjZ9.5BYoDCPWivsxc6vnMG0yJtSg4CyoAusMEf3QG790v_E';
 
-    whatRoom(position) {
-        // Lógica para determinar a sala, gabinete ou elevador com base na posição
-        // Retorna o nome ou identificador do espaço
+        try {
+            const response = await fetch(url, {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+            const jsonData = await response.json();
+            this.processMazeData(jsonData, buildingId, floorId);
+        } catch (error) {
+            console.error('Error fetching data:', error);
+        }
     }
 
-    
+
+    processMazeData(jsonData, buildingId, floorId) {
+        const building = jsonData.find(b => b.buildingId === buildingId);
+        if (!building) {
+            console.error(`Building with ID ${buildingId} not found.`);
+            return;
+        }
+
+        const floor = building.floors.find(f => f.floorId === floorId);
+        if (!floor) {
+            console.error(`Floor with ID ${floorId} not found in building ${buildingId}.`);
+            return;
+        }
+
+        this.roomsN = floor.rooms.map(room => ({
+            roomName: room.roomName,
+            originCoordinateX: room.originCoordinateX,
+            originCoordinateY: room.originCoordinateY,
+            destinationCoordinateX: room.destinationCoordinateX,
+            destinationCoordinateY: room.destinationCoordinateY
+        }));
+
+        this.connectionsN = floor.connections.map(connection => ({
+            connectionId: connection.connectionId,
+            locationX: connection.locationX,
+            locationY: connection.locationY,
+            locationToX: connection.locationToX,
+            locationToY: connection.locationToY
+        }));
+
+        this.elevatorsN = floor.elevators.map(elevator => ({
+            elevatorId: elevator.elevatorId,
+            locationX: elevator.locationX,
+            locationY: elevator.locationY
+        }));
+    }
+
+    sizeToAdd(){
+        return this.size;
+    }
+
+    whatRoom(position) {
+        console.log("Checking position:", position);
+
+        if (this.roomsN && this.roomsN.length > 0) {
+            for (const room of this.roomsN) {
+                //console.log("Checking room:", room);
+
+                if (position.x >= room.originCoordinateX &&
+                    position.x <= room.destinationCoordinateX &&
+                    position.z >= room.originCoordinateY &&
+                    position.z <= room.destinationCoordinateY) {
+                    console.log(`Found Room: ${room.roomName}`);
+                    return `Room: ${room.roomName}`;
+                }
+            }
+        } else {
+            console.log("No rooms data available.");
+        }
+
+        if (this.connectionsN && this.connectionsN.length > 0) {
+            for (const connection of this.connectionsN) {
+                if (position.z >= connection.locationX &&
+                    position.z <= connection.locationToX &&
+                    position.x >= connection.locationY &&
+                    position.z <= connection.locationToY) {
+                    //console.log(`Found Connection: ${connection.connectionId}`);
+                    return `Connection: ${connection.connectionId}`;
+                }
+            }
+            console.log("No connection found for the given position.");
+        }
+
+
+
+        if (this.elevatorsN && this.elevatorsN.length > 0) {
+            for (const elevator of this.elevatorsN) {
+                if (position.z >= elevator.locationX &&
+                    position.z <= elevator.locationX + 1 &&
+                    position.x >= elevator.locationY &&
+                    position.x <= elevator.locationY + 1) {
+                    return `Elevator: ${elevator.elevatorId}`;
+                }
+            }
+        }
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const buildingName = urlParams.get('buildingId');
+        console.log("Only building found:", buildingName);
+        return `Building: ${buildingName}`;
+    }
+
+
 }

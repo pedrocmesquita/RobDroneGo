@@ -32,6 +32,21 @@
             color: white;
         }
 
+        #automatic-container {
+            position: absolute;
+            left: .5vw;
+            top: 20vh;
+            color: white;
+        }
+        #automatic {
+            background-color: #70707070;
+            color: white;
+            border: 1px solid black;
+            padding: 8px;
+            font-family: sans-serif, "Arial Hebrew";
+            font-size: 1.5vmin;
+        }
+
         #elevator {
             background-color: #70707070;
             color: white;
@@ -163,7 +178,6 @@
 </head>
 
 <body>
-
 <div id="tooltip" style="position: absolute; pointer-events: none;"></div>
 
     <script>
@@ -183,7 +197,7 @@
 
         window.addEventListener("message", (event) => {
             if (event.data.type === "SHOW_MENU") {
-                console.log("SHOW_MENU");
+                //console.log("SHOW_MENU");
 
                 const urlParams = new URLSearchParams(window.location.search);
                 const selectedBuilding = urlParams.get('buildingId');
@@ -194,6 +208,10 @@
         });
 
     </script>
+
+<div id="automatic-container">
+    <button id="moveRobotButton">Automatic Robot Travel</button>
+</div>
     <div id="building-container">
         <select id="building"></select>
         <select id="floor"></select>
@@ -389,6 +407,7 @@
                         <input type="checkbox" id="statistics">
                     </td>
                 </tr>
+
             </table>
         </div>
     </div>
@@ -400,7 +419,16 @@
                 "three/addons/": "../three.js-master/examples/jsm/"
             }
         }
+
     </script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            document.getElementById('moveRobotButton').addEventListener('click', moveRobot);
+        });
+    </script>
+
+
     <script src="../lodash/lodash.js"></script>
     <script type="module">
         import * as THREE from "three";

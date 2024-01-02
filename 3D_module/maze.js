@@ -484,4 +484,12 @@ export default class Maze {
     }
 
 
+    getObstacleCoordinates() {
+
+    }
+
+
+
+
+
 }

@@ -3,7 +3,7 @@
 describe('Home Menu', () => {
   beforeEach(() => {
     // Assuming you have a login command to log in before each test
-    cy.customLogin('mc@gmail.com', '123');
+    cy.customLogin('mc@gmail.com', 'mc123');
   });
 
   it('should open the 3D Module in a new tab', () => {

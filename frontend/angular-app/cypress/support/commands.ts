@@ -55,7 +55,7 @@ Cypress.Commands.add('customLogin', (email, password) => {
 Cypress.Commands.add('directVisit', (name) => {
   cy.visit('localhost:4200'); // Adjust the URL as per your application
   cy.get('[data-cy=emailInput]').type('mc@gmail.com');
-  cy.get('[data-cy=passwordInput]').type('123');
+  cy.get('[data-cy=passwordInput]').type('mc123');
   cy.get('[data-cy=loginButton]').click();
   cy.wait(2500);
   cy.visit('localhost:4200/' + name);

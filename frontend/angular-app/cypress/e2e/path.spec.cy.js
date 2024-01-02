@@ -1,7 +1,7 @@
 describe('Path Component', () => {
   it('should submit the form and display the path result', () => {
     // Visit the path component page
-    cy.customLogin('mc@gmail.com', '123');
+    cy.customLogin('mc@gmail.com', 'mc123');
     cy.directVisit('path');
 
     // Type values into form fields

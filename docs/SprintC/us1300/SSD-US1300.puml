@@ -1,0 +1,17 @@
+@startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+title System Sequence Diagram (SSD) - US1300
+
+autonumber
+
+actor "Utente"
+
+"Utente" -> "<<C4:System>>\n:RobDroneGo": Faz login no sistema
+activate "<<C4:System>>\n:RobDroneGo"
+"Utente" <-- "<<C4:System>>\n:RobDroneGo": Mostra o menu com as aplicações a\nque o utilizador tem direito
+deactivate "<<C4:System>>\n:RobDroneGo"
+
+@enduml

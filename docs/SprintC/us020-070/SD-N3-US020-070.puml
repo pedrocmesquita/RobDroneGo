@@ -1,0 +1,52 @@
+@startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+title Container Sequence Diagram (SD) - US020-070 (N3)
+
+autonumber
+
+actor "Potencial Utente"
+
+"Potencial Utente" -> "<<C4:Container>>\n:Visualização": Inicia operação de registro
+activate "<<C4:Container>>\n:Visualização"
+"<<C4:Container>>\n:Visualização" -> Component: ngInit()
+activate Component
+Component -> Service: getRoles()
+activate Service
+Service -> "<<C4:Container>>\nMódulo de Gestão\nde Informação" : getRoles()
+activate "<<C4:Container>>\nMódulo de Gestão\nde Informação"
+"<<C4:Container>>\nMódulo de Gestão\nde Informação" -> "<<C4:Container>>\nMódulo de Gestão\nde Informação": middleware.rolecheck\n("Admin" || "Potencial Utente")
+"<<C4:Container>>\nMódulo de Gestão\nde Informação" --> Service : Lista de roles
+deactivate "<<C4:Container>>\nMódulo de Gestão\nde Informação"
+Service --> Component : Lista de roles
+deactivate Service
+Component --> "<<C4:Container>>\n:Visualização" : roles
+deactivate Component
+
+"<<C4:Container>>\n:Visualização" --> "Potencial Utente": Solicita dados que pretende mudar
+deactivate "<<C4:Container>>\n:Visualização"
+
+"Potencial Utente" -> "<<C4:Container>>\n:Visualização": Introduz dados solicitados
+activate "<<C4:Container>>\n:Visualização"
+"<<C4:Container>>\n:Visualização" -> Component : onSubmit(form: ngForm)
+activate Component
+Component -> Service : signup(firstName, lastName, email, password, role)
+activate Service
+Service -> "<<C4:Container>>\nMódulo de Gestão\nde Informação" : POST /auth/signup\n{firstName, lastName, email,\npassword, role}
+
+activate "<<C4:Container>>\nMódulo de Gestão\nde Informação"
+"<<C4:Container>>\nMódulo de Gestão\nde Informação" --> Service: 201 OK user
+
+deactivate "<<C4:Container>>\nMódulo de Gestão\nde Informação"
+note right: Módulo de Gestão de Informação\né a representação do Sprint A
+Service --> Component: 201 OK user
+deactivate Service
+Component --> "<<C4:Container>>\n:Visualização" : 201 OK user
+deactivate Component
+deactivate "<<C4:Container>>\nMódulo de Gestão\nde Informação"
+"Potencial Utente" <-- "<<C4:Container>>\n:Visualização": Mensagem de sucesso e\nroute para página de login
+deactivate "<<C4:Container>>\n:Visualização"
+
+@enduml

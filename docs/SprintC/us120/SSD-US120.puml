@@ -1,0 +1,17 @@
+@startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+title System Sequence Diagram (SSD) - US120
+
+autonumber
+
+actor "Utente"
+
+"Utente" -> "<<C4:System>>\n:RobDroneGo": Solicita deleção de conta e\ndados pessoais
+activate "<<C4:System>>\n:RobDroneGo"
+"Utente" <-- "<<C4:System>>\n:RobDroneGo": Mensagem de sucesso da operação
+deactivate "<<C4:System>>\n:RobDroneGo"
+
+@enduml

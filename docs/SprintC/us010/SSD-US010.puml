@@ -1,0 +1,22 @@
+@startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+title System Sequence Diagram (SSD) - US010
+
+autonumber
+
+actor "Administrador"
+
+"Administrador" -> "<<C4:System>>\n:RobDroneGo": Solicita criação de utilizador
+activate "<<C4:System>>\n:RobDroneGo"
+"<<C4:System>>\n:RobDroneGo" --> "Administrador": Solicita dados necessários (firstName, lastName, email, \npassword,role)
+deactivate "<<C4:System>>\n:RobDroneGo"
+
+"Administrador" -> "<<C4:System>>\n:RobDroneGo": Introduz dados solicitados
+activate "<<C4:System>>\n:RobDroneGo"
+"Administrador" <-- "<<C4:System>>\n:RobDroneGo": Mensagem de sucesso da operação
+deactivate "<<C4:System>>\n:RobDroneGo"
+
+@enduml

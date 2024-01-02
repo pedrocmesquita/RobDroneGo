@@ -1,0 +1,17 @@
+@startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+title System Sequence Diagram (SSD) - US010 (N2)
+
+autonumber
+
+actor "Utente"
+
+"Utente" -> "<<C4:Container>>\n:Visualização": Solicita cópia dos dados pessoais
+activate "<<C4:Container>>\n:Visualização"
+"Utente" <-- "<<C4:Container>>\n:Visualização": Ficheiro com os dados solicitados
+deactivate "<<C4:Container>>\n:Visualização"
+
+@enduml

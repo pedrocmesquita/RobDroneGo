@@ -1,0 +1,17 @@
+@startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+title System Sequence Diagram (SSD) - US110
+
+autonumber
+
+actor "Utente"
+
+"Utente" -> "<<C4:System>>\n:RobDroneGo": Solicita cópia dos seus dados pessoais
+activate "<<C4:System>>\n:RobDroneGo"
+"Utente" <-- "<<C4:System>>\n:RobDroneGo": Transfere ficheiro com os dados pedidos
+deactivate "<<C4:System>>\n:RobDroneGo"
+
+@enduml

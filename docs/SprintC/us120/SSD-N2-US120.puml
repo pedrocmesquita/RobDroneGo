@@ -1,0 +1,21 @@
+@startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+title Container Sequence Diagram (SSD) - US120 (N2)
+
+autonumber
+
+actor "Utente"
+
+"Utente" -> "<<C4:Container>>\n:Visualização": Solicita deleção da conta e respetivos\ndados pessoais
+activate "<<C4:Container>>\n:Visualização"
+"<<C4:Container>>\n:Visualização" --> "<<C4:Container>>\nMódulo de Gestão\nde Informação": DELETE /auth/delete {email}
+activate "<<C4:Container>>\nMódulo de Gestão\nde Informação"
+"<<C4:Container>>\nMódulo de Gestão\nde Informação" --> "<<C4:Container>>\n:Visualização": 200 OK
+deactivate "<<C4:Container>>\nMódulo de Gestão\nde Informação"
+"Utente" <-- "<<C4:Container>>\n:Visualização": Mensagem de sucesso e logout
+deactivate "<<C4:Container>>\n:Visualização"
+
+@enduml

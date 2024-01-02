@@ -1,0 +1,13 @@
+﻿<wpf:ResourceDictionary xml:space="preserve" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xmlns:ss="urn:shemas-jetbrains-com:settings-storage-xaml" xmlns:wpf="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=510d5e3a_002Dfc12_002D484c_002Da7c2_002D8cb9230904d1/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="All tests from SurveillanceTest.cs" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+  &lt;Or&gt;&#xD;
+    &lt;ProjectFile&gt;8CE36A94-9278-4E66-AEF2-987FAED89B94/d:unitTests/d:Domain/f:SurveillanceTest.cs&lt;/ProjectFile&gt;&#xD;
+    &lt;ProjectFile&gt;8CE36A94-9278-4E66-AEF2-987FAED89B94/d:unitTests/d:Domain/f:PickupTest.cs&lt;/ProjectFile&gt;&#xD;
+    &lt;TestAncestor&gt;&#xD;
+      &lt;TestId&gt;xUnit::8CE36A94-9278-4E66-AEF2-987FAED89B94::net6.0::DDDSample1.unitTests.Controller.SurveillanceController&lt;/TestId&gt;&#xD;
+      &lt;TestId&gt;xUnit::8CE36A94-9278-4E66-AEF2-987FAED89B94::net6.0::DDDSample1.unitTests.Controller.PickupControllerTest&lt;/TestId&gt;&#xD;
+      &lt;TestId&gt;NUnit3x::8CE36A94-9278-4E66-AEF2-987FAED89B94::net6.0::DDDSample1.unitTests.Controller.SurveillanceControllerTest&lt;/TestId&gt;&#xD;
+      &lt;TestId&gt;NUnit3x::8CE36A94-9278-4E66-AEF2-987FAED89B94::net6.0::DDDSample1.unitTests.Controller.PickupControllerTest&lt;/TestId&gt;&#xD;
+    &lt;/TestAncestor&gt;&#xD;
+  &lt;/Or&gt;&#xD;
+&lt;/SessionState&gt;</s:String></wpf:ResourceDictionary>

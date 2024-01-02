@@ -49,3 +49,10 @@ C:\Repositories\3DF_SEM_5_PI-2023_2024\net-backend\bin\Debug\netcoreapp5.0\ZstdS
 C:\Repositories\3DF_SEM_5_PI-2023_2024\net-backend\bin\Debug\netcoreapp5.0\runtimes\linux\native\libmongocrypt.so
 C:\Repositories\3DF_SEM_5_PI-2023_2024\net-backend\bin\Debug\netcoreapp5.0\runtimes\osx\native\libmongocrypt.dylib
 C:\Repositories\3DF_SEM_5_PI-2023_2024\net-backend\bin\Debug\netcoreapp5.0\runtimes\win\native\mongocrypt.dll
+C:\Repositories\3DF_SEM_5_PI-2023_2024\net-backend\bin\Debug\netcoreapp5.0\Castle.Core.dll
+C:\Repositories\3DF_SEM_5_PI-2023_2024\net-backend\bin\Debug\netcoreapp5.0\Moq.dll
+C:\Repositories\3DF_SEM_5_PI-2023_2024\net-backend\bin\Debug\netcoreapp5.0\xunit.abstractions.dll
+C:\Repositories\3DF_SEM_5_PI-2023_2024\net-backend\bin\Debug\netcoreapp5.0\xunit.assert.dll
+C:\Repositories\3DF_SEM_5_PI-2023_2024\net-backend\bin\Debug\netcoreapp5.0\xunit.core.dll
+C:\Repositories\3DF_SEM_5_PI-2023_2024\net-backend\bin\Debug\netcoreapp5.0\xunit.execution.dotnet.dll
+C:\Repositories\3DF_SEM_5_PI-2023_2024\net-backend\bin\Debug\netcoreapp5.0\NuGet.Frameworks.dll

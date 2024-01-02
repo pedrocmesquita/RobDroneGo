@@ -11,13 +11,18 @@ namespace DDDSample1.Domain.SurveillanceTasks
         private readonly IUnitOfWork _unitOfWork;
         
         private readonly ISurveillanceTaskMongoRepository _mongoRepo;
+        
+        // Add a parameterless constructor
+        public SurveillanceTaskService()
+        {
+        }
         public SurveillanceTaskService(IUnitOfWork unitOfWork, ISurveillanceTaskMongoRepository mongoRepo)
         {
             _unitOfWork = unitOfWork;
             
             _mongoRepo = mongoRepo;
         }
-        public async Task<List<SurveillanceTaskDto>> GetAllAsync()
+        public virtual async Task<List<SurveillanceTaskDto>> GetAllAsync()
         {
             var list = await this._mongoRepo.GetAllAsync();
         
@@ -26,7 +31,7 @@ namespace DDDSample1.Domain.SurveillanceTasks
             return listDto;
         }
         
-        public async Task<SurveillanceTaskDto> GetBySurveillanceTaskIdAsync(string surveillanceTaskIdentifier)
+        public virtual async Task<SurveillanceTaskDto> GetBySurveillanceTaskIdAsync(string surveillanceTaskIdentifier)
         {
             var ord = await this._mongoRepo.GetBySurveillanceTaskIdAsync(surveillanceTaskIdentifier);
             

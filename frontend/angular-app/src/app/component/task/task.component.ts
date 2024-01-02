@@ -140,7 +140,12 @@ export class TaskComponent implements OnInit{
       (tasks) => {
         console.log(tasks);
 
-        this.surveillanceTasksView = tasks;
+        // Convert createdAt and updatedAt to Date objects
+        this.surveillanceTasksView = tasks.map((task: { createdAt: string | number | Date; updatedAt: string | number | Date; }) => ({
+          ...task,
+          createdAt: new Date(task.createdAt),
+          updatedAt: new Date(task.updatedAt)
+        }));
       },
       (error) => {
         console.error('Failed to fetch surveillance tasks:', error);
@@ -152,7 +157,12 @@ export class TaskComponent implements OnInit{
         console.log("--------------------");
         console.log(tasks);
         console.log("--------------------");
-        this.pickUpAndDeliveryTasksView = tasks;
+        // Convert createdAt and updatedAt to Date objects
+        this.pickUpAndDeliveryTasksView = tasks.map((task: { createdAt: string | number | Date; updatedAt: string | number | Date; }) => ({
+          ...task,
+          createdAt: new Date(task.createdAt),
+          updatedAt: new Date(task.updatedAt)
+        }));
       },
       (error) => {
         console.error('Failed to fetch pickup and delivery tasks:', error);
@@ -204,12 +214,12 @@ export class TaskComponent implements OnInit{
 
   sortTasks(sortBy: string): void {
     if (sortBy === 'createdAt') {
-      this.surveillanceTasksView.sort((a, b) => this.createdAtSortAsc ? a.createdAt.getTime() - b.createdAt.getTime() : b.createdAt.getTime() - a.createdAt.getTime());
-      this.pickUpAndDeliveryTasksView.sort((a, b) => this.createdAtSortAsc ? a.createdAt.getTime() - b.createdAt.getTime() : b.createdAt.getTime() - a.createdAt.getTime());
+      this.surveillanceTasksView = [...this.surveillanceTasksView.sort((a, b) => this.createdAtSortAsc ? a.createdAt.getTime() - b.createdAt.getTime() : b.createdAt.getTime() - a.createdAt.getTime())];
+      this.pickUpAndDeliveryTasksView = [...this.pickUpAndDeliveryTasksView.sort((a, b) => this.createdAtSortAsc ? a.createdAt.getTime() - b.createdAt.getTime() : b.createdAt.getTime() - a.createdAt.getTime())];
       this.createdAtSortAsc = !this.createdAtSortAsc; // Toggle the sort direction
     } else if (sortBy === 'updatedAt') {
-      this.surveillanceTasksView.sort((a, b) => this.updatedAtSortAsc ? a.updatedAt.getTime() - b.updatedAt.getTime() : b.updatedAt.getTime() - a.updatedAt.getTime());
-      this.pickUpAndDeliveryTasksView.sort((a, b) => this.updatedAtSortAsc ? a.updatedAt.getTime() - b.updatedAt.getTime() : b.updatedAt.getTime() - a.updatedAt.getTime());
+      this.surveillanceTasksView = [...this.surveillanceTasksView.sort((a, b) => this.updatedAtSortAsc ? a.updatedAt.getTime() - b.updatedAt.getTime() : b.updatedAt.getTime() - a.updatedAt.getTime())];
+      this.pickUpAndDeliveryTasksView = [...this.pickUpAndDeliveryTasksView.sort((a, b) => this.updatedAtSortAsc ? a.updatedAt.getTime() - b.updatedAt.getTime() : b.updatedAt.getTime() - a.updatedAt.getTime())];
       this.updatedAtSortAsc = !this.updatedAtSortAsc; // Toggle the sort direction
     }
   }
@@ -294,10 +304,14 @@ selectOption(option: string) {
       () => {
         console.log('Task approved successfully');
         // Update local state and display success message
+        this.successMessage = 'Task approved successfully.';
+        this.errorMessage = null;
       },
       error => {
         console.error('Failed to approve task:', error);
         // Display error message
+        this.errorMessage = 'Failed to approve task.';
+        this.successMessage = null;
       }
     );
   }
@@ -307,10 +321,14 @@ selectOption(option: string) {
       () => {
         console.log('Task approved successfully');
         // Update local state and display success message
+        this.successMessage = 'Task approved successfully.';
+        this.errorMessage = null;
       },
       error => {
         console.error('Failed to approve task:', error);
         // Display error message
+        this.errorMessage = 'Failed to approve task.';
+        this.successMessage = null;
       }
     );
   }

@@ -56,7 +56,7 @@ namespace DDDSample1.unitTests.Domain
                 Assert.Throws<BusinessRuleValidationException>(() =>
                     new SurveillanceTaskId("sasdsd")); // Invalid id with more than 5 characters }
 
-            Assert.Equal("Invalid id", exception.Message);
+            Assert.Equal("The surveillanceTaskId can't have more than 5 characters.", exception.Message);
 
         }
     }

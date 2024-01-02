@@ -1,0 +1,34 @@
+@startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+title Container Sequence Diagram (SD) - US120 (N3)
+
+autonumber
+
+actor "Utente"
+
+"Utente" -> "<<C4:Container>>\n:Visualização": Solicitar deleção de conta e\n dados pessoais
+activate "<<C4:Container>>\n:Visualização"
+"<<C4:Container>>\n:Visualização" -> Component : deleteAccount()
+activate Component
+Component -> Service : deleteAccount()
+activate Service
+Service -> "<<C4:Container>>\nMódulo de Gestão\nde Informação" : POST /auth/delete/\n{email)
+
+activate "<<C4:Container>>\nMódulo de Gestão\nde Informação"
+note right: Módulo de Gestão de Informação\né a representação do Sprint A
+"<<C4:Container>>\nMódulo de Gestão\nde Informação" --> Service: 200 OK
+
+deactivate "<<C4:Container>>\nMódulo de Gestão\nde Informação"
+Service -> Service: logout()
+Service --> Component: 200 OK
+deactivate Service
+Component --> "<<C4:Container>>\n:Visualização" : 200 OK
+deactivate Component
+deactivate "<<C4:Container>>\nMódulo de Gestão\nde Informação"
+"Utente" <-- "<<C4:Container>>\n:Visualização": Mensagem de sucesso
+deactivate "<<C4:Container>>\n:Visualização"
+
+@enduml

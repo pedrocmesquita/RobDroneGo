@@ -450,7 +450,6 @@ export default class ThumbRaiser {
         }
     }
 
-
     mouseUp(event) {
         // Reset mouse move action
         this.dragMiniMap = false;
@@ -823,33 +822,6 @@ export default class ThumbRaiser {
         });
     }
 
-    updateFloorAndReloadPage(buildingId, floorId) {
-        return new Promise((resolve, reject) => {
-
-            const xhr = new XMLHttpRequest();
-            xhr.open('POST', 'http://localhost:4000/api/3d/json/');
-            xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-
-            xhr.onload = () => {
-                if (xhr.status >= 200 && xhr.status < 300) {
-                    console.log('server response:', xhr.responseText);
-                    resolve(JSON.parse(xhr.responseText));
-
-                    let url = `http://127.0.0.1:5500/Thumb_Raiser.html?floorId=${encodeURIComponent(floorId)}`;
-
-                    window.location.href = url;
-                } else {
-                    console.error("Error loading:", xhr.statusText);
-                    reject(xhr.statusText);
-                }
-            };
-            xhr.onerror = () => {
-                console.error("Error communicating w server.");
-                reject(xhr.statusText);
-            };
-            xhr.send(JSON.stringify({ buildingId: buildingId, floorId: floorId }));
-        });
-    }
 
     createJsonOnBackend(floorId) {
         return new Promise((resolve, reject) => {

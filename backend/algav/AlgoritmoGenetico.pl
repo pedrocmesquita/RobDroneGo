@@ -1,12 +1,13 @@
 % tarefa(Id,TempoProcessamento,TempConc,PesoPenalizacao).
-tarefa(t1,2,5,1).
-tarefa(t2,4,7,6).
-tarefa(t3,1,11,2).
-tarefa(t4,3,9,3).
-tarefa(t5,3,8,2).
+tarefa(limparSala, 2, 4, 8).
+tarefa(vigilancia, 8, 10, 2).
+tarefa(pegarEntregarObjeto, 6, 8, 4).
 
 % tarefas(NTarefas).
-tarefas(5).
+tarefas(3).
+
+:- dynamic melhor_global/2.
+:- dynamic estagnacao/1.
 
 % parameterização
 inicializa:-write('Numero de novas Geracoes: '),read(NG),
@@ -18,7 +19,9 @@ PC is P1/100,
 (retract(prob_cruzamento(_));true), asserta(prob_cruzamento(PC)),
 write('Probabilidade de Mutacao (%):'), read(P2),
 PM is P2/100,
-(retract(prob_mutacao(_));true), asserta(prob_mutacao(PM)).
+(retract(prob_mutacao(_));true), asserta(prob_mutacao(PM)),
+write('Número máximo de gerações sem melhoria: '), read(MaxSemMelhoria),
+    (retract(max_sem_melhoria(_)); true), asserta(max_sem_melhoria(MaxSemMelhoria)).
 
 gera:-
 inicializa,
@@ -86,17 +89,57 @@ VX>VY,!,
 btroca([X*VX|L1],L2).
 btroca([X|L1],[X|L2]):-btroca(L1,L2).
 
-gera_geracao(G,G,Pop):-!,
-write('Geração '), write(G), write(':'), nl, write(Pop), nl.
+gera_geracao(G, G, Pop):-!,
+    write('Geração Final '), write(G), write(':'), nl, write(Pop), nl.
 
-gera_geracao(N,G,Pop):-
-write('Geração '), write(N), write(':'), nl, write(Pop), nl,
-cruzamento(Pop,NPop1),
-mutacao(NPop1,NPop),
-avalia_populacao(NPop,NPopAv),
-ordena_populacao(NPopAv,NPopOrd),
-N1 is N+1,
-gera_geracao(N1,G,NPopOrd).
+gera_geracao(N, G, Pop):-
+    write('Geração '), write(N), write(':'), nl, write(Pop), nl,
+    cruzamento(Pop, NPop1),
+    mutacao(NPop1, NPop),
+    avalia_populacao(NPop, NPopAv),
+    ordena_populacao(NPopAv, NPopOrd),
+    
+    append(Pop, NPopOrd, PopTotal),
+    ordena_populacao(PopTotal, PopTotalOrd),
+    elitismo_parcial(PopTotalOrd, Elite, Resto),
+    
+    Elite = [Melhor|_],
+    
+    % Atualiza estagnação e verificar condição de término
+    update_estagnacao(Melhor, Estagnacao),
+    max_sem_melhoria(MaxSemMelhoria),
+    (
+        Estagnacao >= MaxSemMelhoria -> 
+        write('Terminado devido à estagnação após '), write(Estagnacao), write(' gerações.'), nl
+    ;
+        append(Elite, Resto, NovaGeracao),  % Modifique conforme a necessidade de seleção
+        N1 is N+1,
+        gera_geracao(N1, G, NovaGeracao)
+    ).
+
+% Define o elitismo parcial que pega nos 2 melhores indivíduos
+elitismo_parcial(PopTotal, Elite, Resto):- 
+    append(Elite, Resto, PopTotal), 
+    length(Elite, 2).  % Garante que Elite tenha os 2 melhores indivíduos
+
+% Atualiza a contagem de estagnação ou dáreset dependendo da melhoria
+update_estagnacao(MelhorAtual, EstagnacaoAtual):-
+    ( melhor_global(MelhorAntigo, _) -> true ; MelhorAntigo = none), % Considerando nenhuma melhoria inicialmente
+    ( MelhorAtual = MelhorAntigo -> 
+        ( estagnacao(EstagnacaoVelha), EstagnacaoAtual is EstagnacaoVelha + 1,
+          retract(estagnacao(EstagnacaoVelha)), asserta(estagnacao(EstagnacaoAtual))
+        )
+    ;
+        retractall(melhor_global(_,_)), asserta(melhor_global(MelhorAtual, 0)),
+        retractall(estagnacao(_)), asserta(estagnacao(0)), EstagnacaoAtual = 0
+    ).
+
+
+update_estagnacao(MelhorAtual, 0):- % 0 contagem se houver melhoria
+    retractall(melhor_global(_,_)),
+    asserta(melhor_global(MelhorAtual, 0)),
+    retractall(estagnacao(_)),
+    asserta(estagnacao(0)).
 
 gerar_pontos_cruzamento(P1,P2):- gerar_pontos_cruzamento1(P1,P2).
 
@@ -111,17 +154,26 @@ P11\==P21,!,
 gerar_pontos_cruzamento1(P1,P2):-
 gerar_pontos_cruzamento1(P1,P2).
 
-cruzamento([ ],[ ]).
-cruzamento([Ind*_],[Ind]).
-cruzamento([Ind1*_,Ind2*_|Resto],[NInd1,NInd2|Resto1]):-
-gerar_pontos_cruzamento(P1,P2),
-prob_cruzamento(Pcruz),random(0.0,1.0,Pc),
-((Pc =< Pcruz,!,
-cruzar(Ind1,Ind2,P1,P2,NInd1),
-cruzar(Ind2,Ind1,P1,P2,NInd2))
-;
-(NInd1=Ind1,NInd2=Ind2)),
-cruzamento(Resto,Resto1).
+cruzamento([], []).
+cruzamento([Ind*_], [Ind]).
+cruzamento(Pop, [NInd1, NInd2 | RestoNovaPop]):-
+    length(Pop, Len),
+    random(1, Len, Index1),
+    random(1, Len, Index2),
+    nth1(Index1, Pop, Ind1*_),
+    nth1(Index2, Pop, Ind2*_),
+    % O resto permanece o mesmo
+    gerar_pontos_cruzamento(P1, P2),
+    prob_cruzamento(Pcruz), random(0.0, 1.0, Pc),
+    (
+        (Pc =< Pcruz, !,
+         cruzar(Ind1, Ind2, P1, P2, NInd1),
+         cruzar(Ind2, Ind1, P1, P2, NInd2)
+        )
+        ;
+        (NInd1=Ind1, NInd2=Ind2)
+    ),
+    cruzamento(Resto, RestoNovaPop).
 
 preencheh([ ],[ ]).
 preencheh([_|R1],[h|R2]):-

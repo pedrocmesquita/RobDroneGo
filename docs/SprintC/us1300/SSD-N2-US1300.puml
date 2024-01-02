@@ -1,0 +1,22 @@
+@startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+title Container Sequence Diagram (SSD) - US1300 (N2)
+
+autonumber
+
+actor "Utente"
+
+"Utente" -> "<<C4:Container>>\n:Visualização": Faz login no sistema
+activate "<<C4:Container>>\n:Visualização"
+"<<C4:Container>>\n:Visualização" --> "<<C4:Container>>\nMódulo de Gestão\nde Informação": GET /auth/roles
+activate "<<C4:Container>>\nMódulo de Gestão\nde Informação"
+"<<C4:Container>>\nMódulo de Gestão\nde Informação" --> "<<C4:Container>>\n:Visualização": 200 roles
+deactivate "<<C4:Container>>\nMódulo de Gestão\nde Informação"
+"<<C4:Container>>\n:Visualização" -> "<<C4:Container>>\n:Visualização": if (currentUser.role == "Admin")\n| (currentUser.role == "Gestor de Frota")\n| (currentUser.role == "Gestor de Campus")\n(...)
+"Utente" <-- "<<C4:Container>>\n:Visualização": Mostra menu com aplicações\na que o utilizador tem direito
+deactivate "<<C4:Container>>\n:Visualização"
+
+@enduml

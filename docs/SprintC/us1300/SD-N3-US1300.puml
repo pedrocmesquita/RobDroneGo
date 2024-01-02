@@ -1,0 +1,38 @@
+@startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+title Container Sequence Diagram (SD) - US1170 (N3)
+
+autonumber
+
+actor "Utente"
+
+"Utente" -> "<<C4:Container>>\n:Visualização": Faz login no sistema
+activate "<<C4:Container>>\n:Visualização"
+"<<C4:Container>>\n:Visualização" -> Component: ngOnInit()
+activate Component
+Component -> Service: getCurrentUser()
+activate Service
+Service --> Component : user
+deactivate Service
+Component -> Service : getRoles()
+activate Service
+Service -> "<<C4:Container>>\nMódulo de Gestão\nde Informação" : getRoles()
+activate "<<C4:Container>>\nMódulo de Gestão\nde Informação"
+"<<C4:Container>>\nMódulo de Gestão\nde Informação" --> Service : Lista de roles
+deactivate "<<C4:Container>>\nMódulo de Gestão\nde Informação"
+Service --> Component : Lista de roles
+deactivate Service
+Component --> "<<C4:Container>>\n:Visualização": user, roles
+deactivate Component
+"<<C4:Container>>\n:Visualização" -> "<<C4:Container>>\n:Visualização": ngIf(currentUser.role === this.roleGestorDeCampus.id || currentUser.role === this.roleAdmin.id)
+"<<C4:Container>>\n:Visualização" -> "<<C4:Container>>\n:Visualização": ngIf(currentUser.role === this.roleGestorDeFrota.id || currentUser.role === this.roleAdmin.id)
+"<<C4:Container>>\n:Visualização" -> "<<C4:Container>>\n:Visualização": ngIf(currentUser.role === this.roleGestorDeTarefas.id || currentUser.role === this.roleAdmin.id)
+"<<C4:Container>>\n:Visualização" -> "<<C4:Container>>\n:Visualização": ngIf(currentUser.role === this.roleAdmin.id)
+deactivate "<<C4:Container>>\nMódulo de Gestão\nde Informação"
+"Utente" <-- "<<C4:Container>>\n:Visualização": Menu com funções a que\no utilizador tem acesso
+deactivate "<<C4:Container>>\n:Visualização"
+
+@enduml

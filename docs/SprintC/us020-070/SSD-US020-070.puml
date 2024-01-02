@@ -1,0 +1,22 @@
+@startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+title System Sequence Diagram (SSD) - US020-70
+
+autonumber
+
+actor "Potencial Utente"
+
+"Potencial Utente" -> "<<C4:System>>\n:RobDroneGo": Solicita registro como utente
+activate "<<C4:System>>\n:RobDroneGo"
+"<<C4:System>>\n:RobDroneGo" --> "Potencial Utente": Solicita dados necessários (firstName, lastName,\nemail, password, role)
+deactivate "<<C4:System>>\n:RobDroneGo"
+
+"Potencial Utente" -> "<<C4:System>>\n:RobDroneGo": Introduz dados solicitados
+activate "<<C4:System>>\n:RobDroneGo"
+"Potencial Utente" <-- "<<C4:System>>\n:RobDroneGo": Mensagem de sucesso da operação
+deactivate "<<C4:System>>\n:RobDroneGo"
+
+@enduml

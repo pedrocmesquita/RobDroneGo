@@ -1,0 +1,22 @@
+@startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+title System Sequence Diagram (SSD) - US100
+
+autonumber
+
+actor "Utente"
+
+"Utente" -> "<<C4:System>>\n:RobDroneGo": Solicita retificação dos seus dados
+activate "<<C4:System>>\n:RobDroneGo"
+"<<C4:System>>\n:RobDroneGo" --> "Utente": Solicita dados necessários
+deactivate "<<C4:System>>\n:RobDroneGo"
+
+"Utente" -> "<<C4:System>>\n:RobDroneGo": Introduz dados solicitados
+activate "<<C4:System>>\n:RobDroneGo"
+"Utente" <-- "<<C4:System>>\n:RobDroneGo": Mensagem de sucesso da operação
+deactivate "<<C4:System>>\n:RobDroneGo"
+
+@enduml

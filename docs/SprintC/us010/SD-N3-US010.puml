@@ -1,0 +1,53 @@
+@startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+title Container Sequence Diagram (SD) - US010 (N3)
+
+autonumber
+
+actor "Administrador"
+
+"Administrador" -> "<<C4:Container>>\n:Visualização": Inicia operação de criar utilizador
+activate "<<C4:Container>>\n:Visualização"
+"<<C4:Container>>\n:Visualização" -> Component: ngInit()
+activate Component
+Component -> Service: getRoles()
+activate Service
+Service -> "<<C4:Container>>\nMódulo de Gestão\nde Informação" : getRoles()
+activate "<<C4:Container>>\nMódulo de Gestão\nde Informação"
+"<<C4:Container>>\nMódulo de Gestão\nde Informação" -> "<<C4:Container>>\nMódulo de Gestão\nde Informação": middleware.rolecheck\n("Admin" || "Administrador")
+"<<C4:Container>>\nMódulo de Gestão\nde Informação" --> Service : Lista de roles
+deactivate "<<C4:Container>>\nMódulo de Gestão\nde Informação"
+Service --> Component : Lista de roles
+deactivate Service
+deactivate Service
+Component --> "<<C4:Container>>\n:Visualização" : roles
+deactivate Component
+
+"<<C4:Container>>\n:Visualização" --> "Administrador": Solicita dados que pretende mudar
+deactivate "<<C4:Container>>\n:Visualização"
+
+"Administrador" -> "<<C4:Container>>\n:Visualização": Introduz dados solicitados
+activate "<<C4:Container>>\n:Visualização"
+"<<C4:Container>>\n:Visualização" -> Component : onSubmit(form)
+activate Component
+Component -> Service : SignUp(firstName, lastName, \nemail, password, role
+activate Service
+Service -> "<<C4:Container>>\nMódulo de Gestão\nde Informação" : POST /auth/signup/
+
+activate "<<C4:Container>>\nMódulo de Gestão\nde Informação"
+"<<C4:Container>>\nMódulo de Gestão\nde Informação" --> Service: 201 OK user
+
+deactivate "<<C4:Container>>\nMódulo de Gestão\nde Informação"
+note right: Módulo de Gestão de Informação\né a representação do Sprint A
+Service --> Component: 201 OK user
+deactivate Service
+Component --> "<<C4:Container>>\n:Visualização" : 201 OK user
+deactivate Component
+deactivate "<<C4:Container>>\nMódulo de Gestão\nde Informação"
+"Administrador" <-- "<<C4:Container>>\n:Visualização": Mensagem de sucesso
+deactivate "<<C4:Container>>\n:Visualização"
+
+@enduml

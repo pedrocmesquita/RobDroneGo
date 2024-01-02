@@ -1,5 +1,9 @@
 
 
+let roomsN = [];
+let connectionsN = [];
+let elevatorsN = [];
+
 
 function getBuildingsFromBackend() {
     return new Promise((resolve, reject) => {
@@ -155,6 +159,114 @@ async function elevatorMenu(selectedBuilding, selectedFloor){
     container.appendChild(elevatorSelect);
     container.appendChild(goButton);
 }
+
+
+async function moveRobot() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const buildingId = urlParams.get('buildingId');
+    const floorId = urlParams.get('floorId');
+
+    const buildings = await getBuildingsFromBackend();
+    const building = buildings.find(building => building.buildingId === buildingId);
+    const floors = building.floors;
+    const currentFloor = floors.find(floor => floor.floorId === floorId);
+
+    showSelector(floors, currentFloor);
+}
+
+function showSelector(floors, currentFloor) {
+    const floorSelect = document.createElement('select');
+    floorSelect.id = 'floorSelector';
+    floors.forEach(floor => {
+        if (floor.floorId !== currentFloor.floorId) {
+            const option = document.createElement('option');
+            option.value = floor.floorId;
+            option.text = `Floor ${floor.floorNumber}: ${floor.floorDescription}`;
+            floorSelect.appendChild(option);
+        }
+    });
+
+    const moveButton = document.createElement('button');
+    moveButton.innerText = 'Move';
+    moveButton.addEventListener('click', function() {
+        goToFloor(floorSelect.value);
+    });
+
+    const container = document.getElementById('moveRobotButton');
+    container.innerHTML = '';
+    container.appendChild(floorSelect);
+    container.appendChild(moveButton);
+}
+
+async function goToFloor(floorToId) {
+    const urlParams = new URLSearchParams(window.location.search);
+    const buildingFromId = urlParams.get('buildingId');
+    const floorFromId = urlParams.get('floorId');
+
+    let obstacleCoordinates = await requestData(buildingFromId, floorFromId);
+    //let obstacles = parseObstacleData(obstacleCoordinates);
+    console.log("VAMOSSSSSSS: ", obstacleCoordinates)
+
+
+    console.log('Este é o piso de destino:', floorToId);
+}
+
+async function requestData(buildingId, floorId) {
+    const url = 'http://localhost:4000/api/buildings/';
+    const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Ijg4NjFhNGI0LTU4ZDktNGE4ZC1hZGU0LTAyNzgzZGU4YmVlYyIsImVtYWlsIjoibWNAZ21haWwuY29tIiwicm9sZSI6IjRlZThkYjQ0LWRmZGUtNDcxMi1hZjQ0LTkzMjE0M2JiNzk5NCIsImZpcnN0TmFtZSI6Ik1hcnRhIiwibGFzdE5hbWUiOiJDYW1wb3MiLCJleHAiOjE3MDg5ODY3NjYuODEyLCJpYXQiOjE3MDM4MDI3NjZ9.5BYoDCPWivsxc6vnMG0yJtSg4CyoAusMEf3QG790v_E';
+
+    try {
+        const response = await fetch(url, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
+        const jsonData = await response.json();
+        return processMazeData(jsonData, buildingId, floorId); // Return the processed data
+    } catch (error) {
+        console.error('Error fetching data:', error);
+        return null; // Return null in case of an error
+    }
+}
+
+
+
+function processMazeData(jsonData, buildingId, floorId) {
+    const building = jsonData.find(b => b.buildingId === buildingId);
+    if (!building) {
+        console.error(`Building with ID ${buildingId} not found.`);
+        return [];
+    }
+
+    const floor = building.floors.find(f => f.floorId === floorId);
+    if (!floor) {
+        console.error(`Floor with ID ${floorId} not found in building ${buildingId}.`);
+        return [];
+    }
+
+    let combinedData = [];
+
+    // Combine rooms data
+    floor.rooms.forEach(room => {
+        combinedData.push({ x: room.originCoordinateX, y: room.originCoordinateY });
+        combinedData.push({ x: room.destinationCoordinateX, y: room.destinationCoordinateY });
+    });
+
+    // Combine connections data
+    floor.connections.forEach(connection => {
+        combinedData.push({ x: connection.locationX, y: connection.locationY });
+    });
+
+    // Combine elevators data
+    floor.elevators.forEach(elevator => {
+        combinedData.push({ x: elevator.locationX, y: elevator.locationY });
+    });
+
+    return combinedData;
+}
+
+
 
 async function goToElevator() {
     const buildingId = document.getElementById("building").value;

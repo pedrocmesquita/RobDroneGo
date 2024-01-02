@@ -27,6 +27,7 @@ export class SignupComponent {
       }
     );
   }
+
   onSubmit(form: NgForm) {
     if (form.invalid) {
       this.errorMessage = 'Please fill out all fields correctly';

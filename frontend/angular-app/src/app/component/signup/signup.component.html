@@ -19,11 +19,13 @@
   <div class="role-text">No roles? Create a role <a routerLink="/role" class="role-link">here</a></div>
   <div class="privacy-policy-container">
     <label for="privacyPolicy" class="privacy-policy-label">
-      <a href="http://google.com" target="_blank">Accept Privacy Policy</a>
+      <a href="/assets/PrivacyPolicy.pdf" target="_blank">Accept Privacy Policy</a>
     </label>
     <input type="checkbox" id="privacyPolicy" name="privacyPolicy" ngModel required>
     <p *ngIf="signupForm.controls['privacyPolicy']?.errors?.['required']" class="error-message error-message-centered">You must accept the privacy policy to sign up.</p>
   </div>
+
+
   <button type="submit">Signup</button>
   <a routerLink="/login" class="login-link">Back to Login</a>
 </form>

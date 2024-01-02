@@ -76,6 +76,12 @@
         <span> Tasks</span>
       </a>
     </div>
+    <div class="menu-item" *ngIf="currentUser.role === this.roleAdmin.id"  >
+      <a routerLink="/user" data-cy="userButton">
+        <img src="assets/user-icon.png" alt="user"> <!-- Replace with the actual path to your icon -->
+        <span> Users</span>
+      </a>
+    </div>
   </nav>
 </div>
 

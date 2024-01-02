@@ -1,0 +1,72 @@
+@startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+title Container Sequence Diagram (SD) - US480 (N3)
+
+autonumber
+
+actor "Gestor de Tarefas"
+
+"Gestor de Tarefas" -> "<<C4:Container>>\n:Visualização": Inicia operação de listar requisições
+activate "<<C4:Container>>\n:Visualização"
+"<<C4:Container>>\n:Visualização" -> Component: ngInit()
+activate Component
+Component -> Service: getBuildings()
+activate Service
+Service -> "<<C4:Container>>\nMódulo de Gestão\nde Informação" : getBuildings()
+activate "<<C4:Container>>\nMódulo de Gestão\nde Informação"
+"<<C4:Container>>\nMódulo de Gestão\nde Informação" -> "<<C4:Container>>\nMódulo de Gestão\nde Informação": middleware.rolecheck\n("Admin" || "Gestor de Tarefas")
+"<<C4:Container>>\nMódulo de Gestão\nde Informação" --> Service : Lista de edifícios
+deactivate "<<C4:Container>>\nMódulo de Gestão\nde Informação"
+Service --> Component : Lista de edifícios
+deactivate Service
+Component -> Service : getFloors()
+activate Service
+Service -> "<<C4:Container>>\nMódulo de Gestão\nde Informação" : getFloors()
+activate "<<C4:Container>>\nMódulo de Gestão\nde Informação"
+"<<C4:Container>>\nMódulo de Gestão\nde Informação" -> "<<C4:Container>>\nMódulo de Gestão\nde Informação": middleware.rolecheck\n("Admin" || "Gestor de Tarefas")
+"<<C4:Container>>\nMódulo de Gestão\nde Informação" --> Service : Lista de pisos
+deactivate "<<C4:Container>>\nMódulo de Gestão\nde Informação"
+Service --> Component : Lista de pisos
+deactivate Service
+
+Component -> Service : getRooms()
+activate Service
+Service -> "<<C4:Container>>\nMódulo de Gestão\nde Informação" : getRooms()
+activate "<<C4:Container>>\nMódulo de Gestão\nde Informação"
+"<<C4:Container>>\nMódulo de Gestão\nde Informação" -> "<<C4:Container>>\nMódulo de Gestão\nde Informação": middleware.rolecheck\n("Admin" || "Gestor de Tarefas")
+"<<C4:Container>>\nMódulo de Gestão\nde Informação" --> Service : Lista de salas
+deactivate "<<C4:Container>>\nMódulo de Gestão\nde Informação"
+Service --> Component : Lista de salas
+deactivate Service
+
+Component --> "<<C4:Container>>\n:Visualização" : buildings, floors, rooms
+deactivate Component
+
+"<<C4:Container>>\n:Visualização" --> "Gestor de Tarefas": Mostra lista de requisições disponíveis
+deactivate "<<C4:Container>>\n:Visualização"
+
+"Gestor de Tarefas" -> "<<C4:Container>>\n:Visualização": Aceita/Rejeita requisição
+activate "<<C4:Container>>\n:Visualização"
+"<<C4:Container>>\n:Visualização" -> Component : updateTask(task)
+activate Component
+Component -> Service : updateTask(task)
+activate Service
+Service -> "<<C4:Container>>\nMódulo de Gestão\nde Informação" : updateTask(task)
+
+activate "<<C4:Container>>\nMódulo de Gestão\nde Informação"
+"<<C4:Container>>\nMódulo de Gestão\nde Informação" --> Service: 200 OK task
+
+deactivate "<<C4:Container>>\nMódulo de Gestão\nde Informação"
+note right: Módulo de Gestão de Informação\né a representação do Sprint A
+Service --> Component: 200 OK task
+deactivate Service
+Component --> "<<C4:Container>>\n:Visualização" : 200 OK task
+deactivate Component
+deactivate "<<C4:Container>>\nMódulo de Gestão\nde Informação"
+"Gestor de Tarefas" <-- "<<C4:Container>>\n:Visualização": Mensagem de sucesso
+deactivate "<<C4:Container>>\n:Visualização"
+
+@enduml

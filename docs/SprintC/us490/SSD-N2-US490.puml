@@ -1,0 +1,35 @@
+@startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+title System Sequence Diagram (SSD) - US490 (N2)
+
+autonumber
+
+actor "Gestor de Tarefas"
+
+"Gestor de Tarefas" -> "<<C4:Container>>\n:Visualização": Solicita lista de requisições
+activate "<<C4:Container>>\n:Visualização"
+"<<C4:Container>>\n:Visualização" -> "<<C4:Container>>\nMódulo de Gestão\nde Informação": GET /buildings/
+activate "<<C4:Container>>\nMódulo de Gestão\nde Informação"
+"<<C4:Container>>\nMódulo de Gestão\nde Informação" --> "<<C4:Container>>\n:Visualização": 200 OK buildings
+deactivate "<<C4:Container>>\nMódulo de Gestão\nde Informação"
+"<<C4:Container>>\n:Visualização" -> "<<C4:Container>>\nMódulo de Gestão\nde Informação": GET /floors/
+activate "<<C4:Container>>\nMódulo de Gestão\nde Informação"
+"<<C4:Container>>\nMódulo de Gestão\nde Informação" --> "<<C4:Container>>\n:Visualização": 200 OK floors
+deactivate "<<C4:Container>>\nMódulo de Gestão\nde Informação"
+"<<C4:Container>>\n:Visualização" -> "<<C4:Container>>\nMódulo de Gestão\nde Informação": GET /rooms/
+activate "<<C4:Container>>\nMódulo de Gestão\nde Informação"
+"<<C4:Container>>\nMódulo de Gestão\nde Informação" --> "<<C4:Container>>\n:Visualização": 200 OK rooms
+deactivate "<<C4:Container>>\nMódulo de Gestão\nde Informação"
+
+"<<C4:Container>>\n:Visualização" -> "<<C4:Container>>\nMódulo de Gestão\nde Informação": GET /tasks/
+activate "<<C4:Container>>\nMódulo de Gestão\nde Informação"
+"<<C4:Container>>\nMódulo de Gestão\nde Informação" --> "<<C4:Container>>\n:Visualização": 200 OK tasks
+deactivate "<<C4:Container>>\nMódulo de Gestão\nde Informação"
+
+"<<C4:Container>>\n:Visualização" --> "Gestor de Tarefas": Mostra lista de requisições\ndisponiveis com o filtro
+deactivate "<<C4:Container>>\n:Visualização"
+
+@enduml

@@ -1,0 +1,17 @@
+@startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+title System Sequence Diagram (SSD) - US480
+
+autonumber
+
+actor "Gestor de Tarefas"
+
+"Gestor de Tarefas" -> "<<C4:System>>\n:RobDroneGo": Solicita lista de requisições ainda não aprovadas
+activate "<<C4:System>>\n:RobDroneGo"
+"<<C4:System>>\n:RobDroneGo" --> "Gestor de Tarefas": Mostra lista de requisições disponiveis
+deactivate "<<C4:System>>\n:RobDroneGo"
+
+@enduml

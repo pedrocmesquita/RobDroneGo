@@ -1,0 +1,22 @@
+@startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+title System Sequence Diagram (SSD) - US490
+
+autonumber
+
+actor "Gestor de Tarefas"
+
+"Gestor de Tarefas" -> "<<C4:System>>\n:RobDroneGo": Solicita lista de requisições por critério
+activate "<<C4:System>>\n:RobDroneGo"
+"<<C4:System>>\n:RobDroneGo" --> "Gestor de Tarefas": Mostra lista de requisições disponiveis,\ntendo espaços onde aplicar filtros
+deactivate "<<C4:System>>\n:RobDroneGo"
+
+"Gestor de Tarefas" -> "<<C4:System>>\n:RobDroneGo": Digita os filtros que deseja aplicar
+activate "<<C4:System>>\n:RobDroneGo"
+"Gestor de Tarefas" <-- "<<C4:System>>\n:RobDroneGo": Lista de requisições filtradas
+deactivate "<<C4:System>>\n:RobDroneGo"
+
+@enduml

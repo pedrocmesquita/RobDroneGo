@@ -19,7 +19,7 @@ export default (app: Router) => {
 
     const ctrl = Container.get(config.controllers.building.name) as IBuildingController;
 
-    route.use(isAuth,attachCurrentUser,roleCheck(["Admin","Gestor de Campus"]));
+    route.use(isAuth,attachCurrentUser,roleCheck(["Admin","Gestor de Campus","Estudante","Professor"]));
 
     route.post("",
       celebrate({

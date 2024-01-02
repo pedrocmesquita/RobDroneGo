@@ -17,7 +17,7 @@ export default (app: Router) => {
     
     const ctrl = Container.get(config.controllers.floor.name) as IFloorController;
 
-    route.use(isAuth,attachCurrentUser,roleCheck(["Admin","Gestor de Campus"]));
+    route.use(isAuth,attachCurrentUser,roleCheck(["Admin","Gestor de Campus","Estudante","Professor"]));
 
     route.post("",
         celebrate({

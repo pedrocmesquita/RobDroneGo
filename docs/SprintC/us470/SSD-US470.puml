@@ -7,16 +7,16 @@ title System Sequence Diagram (SSD) - US470
 
 autonumber
 
-actor "Gestor de Tarefas"
+actor "Utente"
 
-"Gestor de Tarefas" -> "<<C4:System>>\n:RobDroneGo": Solicita lista de requisições
+"Utente" -> "<<C4:System>>\n:RobDroneGo": Solicita lista de requisições
 activate "<<C4:System>>\n:RobDroneGo"
-"<<C4:System>>\n:RobDroneGo" --> "Gestor de Tarefas": Mostra lista de requisições disponiveis
+"<<C4:System>>\n:RobDroneGo" --> "Utente": Mostra lista de requisições disponiveis
 deactivate "<<C4:System>>\n:RobDroneGo"
 
-"Gestor de Tarefas" -> "<<C4:System>>\n:RobDroneGo": Aprova/Recusa requisição
+"Utente" -> "<<C4:System>>\n:RobDroneGo": Aprova/Recusa requisição
 activate "<<C4:System>>\n:RobDroneGo"
-"Gestor de Tarefas" <-- "<<C4:System>>\n:RobDroneGo": Mensagem de sucesso da operação
+"Utente" <-- "<<C4:System>>\n:RobDroneGo": Mensagem de sucesso da operação
 deactivate "<<C4:System>>\n:RobDroneGo"
 
 @enduml

@@ -7,9 +7,9 @@ title System Sequence Diagram (SSD) - US470 (N2)
 
 autonumber
 
-actor "Gestor de Tarefas"
+actor "Utente"
 
-"Gestor de Tarefas" -> "<<C4:Container>>\n:Visualização": Solicita lista de requisições
+"Utente" -> "<<C4:Container>>\n:Visualização": Solicita lista de requisições
 activate "<<C4:Container>>\n:Visualização"
 "<<C4:Container>>\n:Visualização" -> "<<C4:Container>>\nMódulo de Gestão\nde Informação": GET /buildings/
 activate "<<C4:Container>>\nMódulo de Gestão\nde Informação"
@@ -29,16 +29,16 @@ activate "<<C4:Container>>\nMódulo de Gestão\nde Informação"
 "<<C4:Container>>\nMódulo de Gestão\nde Informação" --> "<<C4:Container>>\n:Visualização": 200 OK tasks
 deactivate "<<C4:Container>>\nMódulo de Gestão\nde Informação"
 
-"<<C4:Container>>\n:Visualização" --> "Gestor de Tarefas": Mostra lista de requisições\ndisponiveis
+"<<C4:Container>>\n:Visualização" --> "Utente": Mostra lista de requisições\ndisponiveis
 deactivate "<<C4:Container>>\n:Visualização"
 
-"Gestor de Tarefas" -> "<<C4:Container>>\n:Visualização": Aprova/Rejeita requisição
+"Utente" -> "<<C4:Container>>\n:Visualização": Aprova/Rejeita requisição
 activate "<<C4:Container>>\n:Visualização"
 "<<C4:Container>>\n:Visualização" -> "<<C4:Container>>\nMódulo de Gestão\nde Informação": PUT /task/
 activate "<<C4:Container>>\nMódulo de Gestão\nde Informação"
 "<<C4:Container>>\nMódulo de Gestão\nde Informação" --> "<<C4:Container>>\n:Visualização": 200 OK task
 deactivate "<<C4:Container>>\nMódulo de Gestão\nde Informação"
-"Gestor de Tarefas" <-- "<<C4:Container>>\n:Visualização": Mensagem de sucesso
+"Utente" <-- "<<C4:Container>>\n:Visualização": Mensagem de sucesso
 deactivate "<<C4:Container>>\n:Visualização"
 
 @enduml

@@ -31,11 +31,11 @@
       <input [(ngModel)]="newPickUpAndDeliveryTask.contactNumber" name="contactNumber" type="text" placeholder="Contact Number" data-cy="contactNumberInput">
 
       <label>Pickup Room ID</label>
-      <select [(ngModel)]="newPickUpAndDeliveryTask.pickupRoom" name="Room ID" data-cy="roomInput">
+      <select [(ngModel)]="newPickUpAndDeliveryTask.pickupRoom" name="Room ID" data-cy="pickupRoomInput">
         <option *ngFor="let room of rooms" [value]="room.roomId">{{ room.roomId }}</option>
       </select>
       <label>Delivery Room ID</label>
-      <select [(ngModel)]="newPickUpAndDeliveryTask.deliveryRoom" name="Room ID" data-cy="roomInput">
+      <select [(ngModel)]="newPickUpAndDeliveryTask.deliveryRoom" name="Room ID" data-cy="deliveryRoomInput">
         <option *ngFor="let room of rooms" [value]="room.roomId">{{ room.roomId }}</option>
       </select>
       <input [(ngModel)]="newPickUpAndDeliveryTask.pickupContact" name="Pickup Contact" type="text" placeholder="Pickup Contact" data-cy="pickUpContactInput">

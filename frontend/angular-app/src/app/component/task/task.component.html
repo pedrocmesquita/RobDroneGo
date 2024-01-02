@@ -6,8 +6,8 @@
   </div>
   <button (click)="selectOption('createSurveillance')" data-cy="createSurveillanceButton">Create Surveillance Task</button>
   <button (click)="selectOption('createPickUpAndDelivery')" data-cy="createPickUpAndDeliveryButton">Create Pick Up And Delivery Task</button>
-  <button (click)="selectOption('list')" data-cy="listButton">List Tasks</button>
-  <button (click)="selectOption('inactive')" data-cy="inactiveButton">List Inactive Tasks</button>
+  <button *ngIf="currentUser.role === roleGestorDeTarefas.id || currentUser.role === roleAdmin.id"  (click)="selectOption('list')" data-cy="listButton">List Tasks</button>
+  <button *ngIf="currentUser.role === roleGestorDeTarefas.id || currentUser.role === roleAdmin.id"  (click)="selectOption('inactive')" data-cy="inactiveButton">List Inactive Tasks</button>
   <div *ngIf="selectedOption === 'createSurveillance'">
     <form (ngSubmit)="createSurveillanceTask()">
       <!-- Add your input fields here based on the properties of the surveillance task -->

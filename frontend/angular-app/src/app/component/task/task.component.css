@@ -61,6 +61,8 @@
 .task-container table {
   width: 100%;
   border-collapse: collapse;
+  background: #f2f2f2;
+
 }
 
 .task-container th, .task-container td {

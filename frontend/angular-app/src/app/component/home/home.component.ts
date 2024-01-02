@@ -17,6 +17,8 @@ export class HomeComponent implements OnInit{
   roleGestorDeFrota: any = null;
   roleAdmin: any = null;
   roleGestorDeTarefas: any = null;
+  roleEstudante: any = null;
+  roleProfessor: any = null;
   roles: any[] = [];
 
   errorMessage: string | null = null;
@@ -50,15 +52,23 @@ export class HomeComponent implements OnInit{
           if (this.roles[i].name == "Gestor de Tarefas") {
             this.roleGestorDeTarefas = this.roles[i];
           }
+          if (this.roles[i].name == "Estudante") {
+            this.roleEstudante = this.roles[i];
+          }
+          if (this.roles[i].name == "Professor") {
+            this.roleProfessor = this.roles[i];
+          }
         }
 
         console.log(this.roleGestorDeCampus);
         console.log(this.roleGestorDeFrota);
         console.log(this.roleAdmin);
         console.log(this.roleGestorDeTarefas);
+        console.log(this.roleEstudante);
+        console.log(this.roleProfessor);
 
         // If any is null, then throw an error
-        if (this.roleGestorDeCampus == null || this.roleGestorDeFrota == null || this.roleAdmin == null || this.roleGestorDeTarefas == null) {
+        if (this.roleGestorDeCampus == null || this.roleGestorDeFrota == null || this.roleAdmin == null || this.roleGestorDeTarefas == null || this.roleEstudante == null || this.roleProfessor == null) {
           this.errorMessage = 'Error while fetching roles';
           return;
         }

@@ -689,7 +689,7 @@ export default class ThumbRaiser {
                                 return;
                             }
 
-                            this.getBuildings().then(buildings => {
+                            this.getBuildings().then(async buildings => {
                                 const building = buildings.find(b => b.buildingId === buildingId);
                                 if (!building) {
                                     console.error("Buildings not found");
@@ -707,11 +707,24 @@ export default class ThumbRaiser {
                                     let newFloorId = connection.floorfromId === floorId ? connection.floortoId : connection.floorfromId;
                                     let newBuildingId = connection.buildingfromId === buildingId ? connection.buildingtoId : connection.buildingfromId;
 
-                                    this.createJsonOnBackend(newFloorId)
+                                    await this.createJsonOnBackend(newFloorId)
+
+                                    console.log("Connection found:", connection);
+                                    console.log("New floor:", newFloorId);
+                                    console.log("New building:", newBuildingId);
+                                    //Old floor
+                                    console.log("Old floor:", floorId);
 
                                     let url = `http://127.0.0.1:5500/Thumb_Raiser.html?buildingId=${encodeURIComponent(newBuildingId)}&floorId=${encodeURIComponent(newFloorId)}`;
 
-                                    const response = fetch(url);
+                                    const response = await fetch(url);
+                                    if (response.status === 200) {
+                                        // If the status is 200, the file exists. Redirect to the new URL
+                                        window.location.href = url;
+                                    } else if (response.status === 404) {
+                                        // If the status is 404, the file does not exist. Show an alert message
+                                        alert("The selected building and floor do not exist");
+                                    }
 
                                 } else {
                                     console.error("No connection in this floor:", floorId);
@@ -862,7 +875,7 @@ export default class ThumbRaiser {
 
         let stringResult = this.canTravel(allBuildings, oldBuildingId, oldFloorId, newFloorId)
 
-        if (stringResult === 'elevator' || stringResult === 'connection') {
+        //if (stringResult === 'elevator' || stringResult === 'connection') {
             console.log('Possible');
 
             const floorJson = this.getJsonFromBackend(oldFloorId)
@@ -885,8 +898,8 @@ export default class ThumbRaiser {
                   const building = allBuildings.find(building => building.buildingId === oldBuildingId);
                   const floor = building.floors.find(floor => floor.floorId === oldFloorId);
 
-                  // If stringResult is elevator, we need to find the elevator that connects the floors
-                  if (stringResult === 'elevator') {
+                  // If we want to change floors
+                  if (oldBuildingId === newBuildingId) {
                       /// Get the elevator of the floor
                       const floorElevators = floor.elevators;
                       console.log("Floor Elevators:", floorElevators);
@@ -945,7 +958,7 @@ export default class ThumbRaiser {
                   }
 
                   // If stringResult is connection, we need to find the connection that connects the floors
-                  if (stringResult === 'connection') {
+                  if (oldBuildingId !== newBuildingId && oldFloorId !== newFloorId) {
 
                       const floorConnections = floor.connections;
                       console.log("Floor Connections:", floorConnections);
@@ -1008,10 +1021,10 @@ export default class ThumbRaiser {
                   console.log('There was a problem with the fetch operation: ' + e.message);
               });
 
-        }
+        /*}
         else {
             console.log('Not possible');
-        }
+        }*/
     }
 
     async createJsonOnBackend(floorId) {

@@ -1,4 +1,5 @@
 
+/*
 
 let roomsN = [];
 let connectionsN = [];
@@ -38,6 +39,9 @@ async function displaySelectors(selectedBuilding, selectedFloor) {
         const buildings = await getBuildingsFromBackend();
         console.log('Buildings:', buildings);
 
+        const oldBuilding = selectedBuilding;
+        const oldFloor = selectedFloor;
+
         const buildingSelect = document.getElementById('building');
         buildingSelect.innerHTML = '';
         buildings.forEach(building => {
@@ -74,6 +78,9 @@ async function displaySelectors(selectedBuilding, selectedFloor) {
         goButton.innerText = 'Go';
         goButton.addEventListener('click', goToBuilding);
 
+        const autoButton = document.createElement('button');
+        autoButton.innerText = 'Auto Travel';
+        autoButton.addEventListener('click', () => window.moveRobot(oldBuildingId,oldFloorId));
 
         // Create a home button that redirects to the home page
         const homeButton = document.createElement('button');
@@ -81,10 +88,18 @@ async function displaySelectors(selectedBuilding, selectedFloor) {
         homeButton.addEventListener('click', () => {
             window.open('http://localhost:4200/home', '_blank');
         });
+
+        // Create a button that starts an automatic path
+        const urlParams = new URLSearchParams(window.location.search);
+        const oldBuildingId = urlParams.get('buildingId');
+        const oldFloorId = urlParams.get('floorId');
+
+
         // Append the button to the building-container div
         const container = document.getElementById('building-container');
         container.appendChild(goButton);
         container.appendChild(homeButton);
+        container.appendChild(autoButton);
 
         // Trigger the change event to populate the floor select element
         buildingSelect.dispatchEvent(new Event('change'));
@@ -161,19 +176,105 @@ async function elevatorMenu(selectedBuilding, selectedFloor){
 }
 
 
-async function moveRobot() {
-    const urlParams = new URLSearchParams(window.location.search);
-    const buildingId = urlParams.get('buildingId');
-    const floorId = urlParams.get('floorId');
+async function moveRobotToPosition(currentPosition, nextPosition) {
+    // Calculate the direction to move based on the current position and the next position
+    let direction;
+    if (nextPosition[0] > currentPosition[0]) {
+        direction = 'right';
+    } else if (nextPosition[0] < currentPosition[0]) {
+        direction = 'left';
+    } else if (nextPosition[1] > currentPosition[1]) {
+        direction = 'forward';
+    } else if (nextPosition[1] < currentPosition[1]) {
+        direction = 'backward';
+    }
 
-    const buildings = await getBuildingsFromBackend();
-    const building = buildings.find(building => building.buildingId === buildingId);
-    const floors = building.floors;
-    const currentFloor = floors.find(floor => floor.floorId === floorId);
-
-    showSelector(floors, currentFloor);
+    // Simulate the key press for the direction
+    await simulateKeyPress(direction);
 }
 
+
+async function simulateKeyPress(direction) {
+    // Import the Player class from thumb_raiser.js
+    let player = window.player;
+
+    // Reset all key states to false
+    player.keyStates.forward = false;
+    player.keyStates.backward = false;
+    player.keyStates.left = false;
+    player.keyStates.right = false;
+
+    // If the direction is 'left' or 'right', simulate pressing the 'forward' key to make the player move
+    if (direction === 'left' || direction === 'right') {
+        player.keyStates.forward = true;
+
+        console.log('Moving forward');
+
+        // print global variable
+        console.log('POSITION: ', window.playerPos.x, window.playerPos.y, window.playerPos.z);
+    }
+
+    // Set the key state for the direction to true
+    player.keyStates[direction] = true;
+}
+
+
+function canTravel(allBuildings, originalBuildingId, originalFloorId, destinationFloorId) {
+    // Find the original and destination buildings
+    const originalBuilding = allBuildings.find(building => building.buildingId === originalBuildingId);
+    const destinationBuilding = allBuildings.find(building => building.floors.some(floor => floor.floorId === destinationFloorId));
+
+    // If the buildings are the same
+    if (originalBuildingId === destinationBuilding.buildingId) {
+        // Find the elevator that connects the original and destination floors
+        const elevator = originalBuilding.floors
+          .flatMap(floor => floor.elevators)
+          .find(elevator => elevator.floorsAttended.includes(originalFloorId) && elevator.floorsAttended.includes(destinationFloorId));
+
+        // If the elevator exists, return true
+        if (elevator) {
+            return 'elevator';
+        }
+    } else {
+        // If the buildings are different, find the connection between the buildings
+        const connection = originalBuilding.floors
+          .flatMap(floor => floor.connections)
+          .find(connection => connection.buildingtoId === destinationBuilding.buildingId);
+
+        // If the connection exists
+        if (connection) {
+
+            return 'connection';
+        }
+    }
+
+    // If no path was found, return false
+    return 'false';
+}
+
+
+
+function getJsonFromBackend(floorId) {
+    return fetch('http://localhost:4000/api/3d/json/' + floorId)
+      .then(response => {
+          if (!response.ok) {
+              throw new Error(`HTTP error! status: ${response.status}`);
+          }
+          return response.json();
+      })
+      .then(json => {
+          console.log(json);
+          return json;
+      })
+      .catch(e => {
+          console.log('There was a problem with the fetch operation: ' + e.message);
+      });
+}
+
+
+
+
+/*
 function showSelector(floors, currentFloor) {
     const floorSelect = document.createElement('select');
     floorSelect.id = 'floorSelector';
@@ -291,4 +392,4 @@ async function goToElevator() {
         alert("The selected building and floor do not exist");
     }
 }
-
+*/

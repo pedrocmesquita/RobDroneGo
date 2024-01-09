@@ -227,8 +227,93 @@ export default class ThreeDService implements IThreeDService {
         return matrix[0].map((_, i) => matrix.map(row => row[i]));
     }
     toJsonObjectTest(building: Building,floor: Floor, doormap: Number[][],elevatormap: Number[][],connectionmap: Number[][]): any {
-        //let transposedMap = this.transpose(floor.map);
+
+
+        // Check if there's no connection or elevator
+        if (elevatormap.length == 0 && connectionmap.length == 0) {
+            return {
+                "groundTextureUrl": "./textures/floor2.jpg",
+                "wallTextureUrl": "./textures/wall3.jpg",
+                "doorTextureUrl": "./textures/door.jpg",
+                "elevatorTextureUrl": "./textures/elevator.jpg",
+                "size": { "width": floor.width, "height": floor.height },
+                "map": floor.map,
+                "doors": doormap,
+                "elevators": elevatormap,
+                "accesses": connectionmap,
+                "initialPosition": [(floor.width/2)+1, (floor.height/2)-1],
+                "initialDirection": 0.0,
+                "exitLocation": [-0.5, 6]
+            };
+        }
+
+        // Check if there's no connection
+        if (connectionmap.length == 0 && elevatormap.length != 0) {
+            // Get X and Y of the first elevator
+            const elevatorX = elevatormap[0][0];
+            const elevatorY = elevatormap[0][1];
+            return {
+                "groundTextureUrl": "./textures/floor2.jpg",
+                "wallTextureUrl": "./textures/wall3.jpg",
+                "doorTextureUrl": "./textures/door.jpg",
+                "elevatorTextureUrl": "./textures/elevator.jpg",
+                "size": { "width": floor.width, "height": floor.height },
+                "map": floor.map,
+                "doors": doormap,
+                "elevators": elevatormap,
+                "accesses": connectionmap,
+                "initialPosition": [elevatorX, elevatorY],
+                "initialDirection": 0.0,
+                "exitLocation": [-0.5, 6]
+            };
+        }
+
+        // Check if there's no elevator
+        if (elevatormap.length == 0 && connectionmap.length != 0) {
+            // Get X and Y of the first connection
+            const connectionX = connectionmap[0][0];
+            const connectionY = connectionmap[0][1];
+            return {
+                "groundTextureUrl": "./textures/floor2.jpg",
+                "wallTextureUrl": "./textures/wall3.jpg",
+                "doorTextureUrl": "./textures/door.jpg",
+                "elevatorTextureUrl": "./textures/elevator.jpg",
+                "size": { "width": floor.width, "height": floor.height },
+                "map": floor.map,
+                "doors": doormap,
+                "elevators": elevatormap,
+                "accesses": connectionmap,
+                "initialPosition": [connectionX, connectionY],
+                "initialDirection": 0.0,
+                "exitLocation": [-0.5, 6]
+            };
+        }
+
+        // If there's both connection and elevator
+
+        // Get X and Y of the first connection
+        const connectionX = connectionmap[0][0];
+        const connectionY = connectionmap[0][1];
+        // Get X and Y of the first elevator
+        const elevatorX = elevatormap[0][0];
+        const elevatorY = elevatormap[0][1];
         return {
+            "groundTextureUrl": "./textures/floor2.jpg",
+            "wallTextureUrl": "./textures/wall3.jpg",
+            "doorTextureUrl": "./textures/door.jpg",
+            "elevatorTextureUrl": "./textures/elevator.jpg",
+            "size": { "width": floor.width, "height": floor.height },
+            "map": floor.map,
+            "doors": doormap,
+            "elevators": elevatormap,
+            "accesses": connectionmap,
+            "initialPosition": [elevatorX, elevatorY],
+            "initialDirection": 0.0,
+            "exitLocation": [-0.5, 6]
+        }
+
+        //let transposedMap = this.transpose(floor.map);
+        /*return {
             "groundTextureUrl": "./textures/floor2.jpg",
             "wallTextureUrl": "./textures/wall3.jpg",
             "doorTextureUrl": "./textures/door.jpg",
@@ -241,7 +326,7 @@ export default class ThreeDService implements IThreeDService {
             "initialPosition": [(floor.width/2)+1, (floor.height/2)-1],
             "initialDirection": 0.0,
             "exitLocation": [-0.5, 6]
-        };
+        };*/
     }
 
     formatJson(json: string): string {

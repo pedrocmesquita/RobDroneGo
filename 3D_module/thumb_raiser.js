@@ -1,7 +1,7 @@
 import * as THREE from "three";
 import Stats from "three/addons/libs/stats.module.js";
 import Orientation from "./orientation.js";
-import { generalData, mazeData, playerData, lightsData, fogData, cameraData } from "./default_data.js";
+import { cameraData, fogData, generalData, lightsData, mazeData, playerData } from "./default_data.js";
 import { merge } from "./merge.js";
 import Maze from "./maze.js";
 import Player from "./player.js";
@@ -10,10 +10,10 @@ import Fog from "./fog.js";
 import Camera from "./camera.js";
 import Animations from "./animations.js";
 import UserInterface from "./user_interface.js";
-import {Cache as urlParams} from "three";
 
 
 export default class ThumbRaiser {
+
     constructor(generalParameters, mazeParameters, playerParameters, lightsParameters,
                 fogParameters, fixedViewCameraParameters, firstPersonViewCameraParameters,
                 thirdPersonViewCameraParameters, topViewCameraParameters, miniMapCameraParameters) {
@@ -28,6 +28,7 @@ export default class ThumbRaiser {
         this.topViewCameraParameters = merge({}, cameraData, topViewCameraParameters);
         this.miniMapCameraParameters = merge({}, cameraData, miniMapCameraParameters);
         this.raycaster = new THREE.Raycaster();
+
 
         // Set the game state
         this.gameRunning = false;
@@ -53,6 +54,10 @@ export default class ThumbRaiser {
 
         // Create the player
         this.player = new Player(this.playerParameters);
+
+        // Export player instance to global scope
+        window.player = this.player;
+
 
         // Create the lights
         this.lights = new Lights(this.lightsParameters);
@@ -398,10 +403,15 @@ export default class ThumbRaiser {
 
         if (this.activeViewCamera.intersections(this.maze.object).length > 0){
             const pos = this.activeViewCamera.intersections(this.maze.object)[0].point;
+            const playerPos = this.activeViewCamera.intersections(this.player.object)
             const size = this.maze.sizeToAdd();
             const newx = size.width / 2;
             const newz = size.height / 2;
             const pos2 = {x:pos.x + newx, z: pos.z + newz};
+
+            // Export player position to global scope
+            window.playerPos = { x: playerPos.x + newx, z: playerPos.z + newz };
+
             const tooltip = document.getElementById('tooltip');
             const roomFound = this.maze.whatRoom(pos2);
             if (roomFound != null){
@@ -837,4 +847,336 @@ export default class ThumbRaiser {
         });
     }
 
+
+    async moveRobot(oldBuildingId,oldFloorId, allBuildings) {
+        console.log('All Buildings:', allBuildings);
+
+        const newBuildingId = document.getElementById("building").value;
+        const newFloorId = document.getElementById("floor").value;
+
+        console.log('Old Building:', oldBuildingId);
+        console.log('Old Floor:', oldFloorId);
+
+        console.log('New Building:', newBuildingId);
+        console.log('New Floor:', newFloorId);
+
+        let stringResult = this.canTravel(allBuildings, oldBuildingId, oldFloorId, newFloorId)
+
+        if (stringResult === 'elevator' || stringResult === 'connection') {
+            console.log('Possible');
+
+            const floorJson = this.getJsonFromBackend(oldFloorId)
+              .then(async data => {
+                  const mapGrid = data.map;
+                  let doors = data.doors;
+                  const elevators = data.elevators;
+                  const connections = data.accesses;
+                  const initialPosition = data.initialPosition;
+
+                  console.log("MapGrid:", mapGrid);
+                  console.log("Doors:", doors);
+                  console.log("Elevators:", elevators);
+                  console.log("Connections:", connections);
+                  console.log("Initial Position:", initialPosition);
+
+                  let goals;
+
+                  // Loop buildings and find the floor with the same id as the one we want to go to
+                  const building = allBuildings.find(building => building.buildingId === oldBuildingId);
+                  const floor = building.floors.find(floor => floor.floorId === oldFloorId);
+
+                  // If stringResult is elevator, we need to find the elevator that connects the floors
+                  if (stringResult === 'elevator') {
+                      /// Get the elevator of the floor
+                      const floorElevators = floor.elevators;
+                      console.log("Floor Elevators:", floorElevators);
+
+                      // Get the elevator that connects the floors
+                      const elevator = floorElevators.find(elevator => elevator.floorsAttended.includes(oldFloorId) && elevator.floorsAttended.includes(newFloorId));
+
+                      const positionGoalX = elevator.locationX;
+                      const positionGoalY = elevator.locationY;
+
+                      let initialPos = initialPosition;
+
+                      // Print mapGrid
+                      console.log('MapGrid:', mapGrid);
+
+                      let playerPosition = this.player.position; // Get the player's position
+                      let playerCellPosition = this.maze.cartesianToCell(playerPosition); // Convert the player's position to cell coordinates
+
+                      console.log('Player cell position:', playerCellPosition);
+
+
+                      // I want to create an array with the path to the goal, we need to read the mapGrid and find the path, we can only move where there is a 0
+
+                      goals = [positionGoalX, positionGoalY];
+
+                      // print goals
+                      console.log('Goals:', goals);
+
+                      let path = this.findPath(mapGrid, playerCellPosition, goals);
+                      console.log('Path:', path);
+
+                      if (path != null) {
+                          // Move the robot along the path
+                          await this.moveRobotAlongPath(path);
+
+                          // PRINT TEST
+                          console.log("TEST1");
+
+                          // Teleport the robot to the other floor
+                          await this.createJsonOnBackend(newFloorId);
+
+                          console.log("TEST2");
+
+                          let url = `http://127.0.0.1:5500/Thumb_Raiser.html?buildingId=${encodeURIComponent(newBuildingId)}&floorId=${encodeURIComponent(newFloorId)}`;
+                          const response = await fetch(url);
+                          if (response.status === 200) {
+                              // If the status is 200, the file exists. Redirect to the new URL
+                              window.location.href = url;
+                          } else if (response.status === 404) {
+                              // If the status is 404, the file does not exist. Show an alert message
+                              alert("The selected building and floor do not exist");
+                          }
+
+
+                      }
+                  }
+
+                  // If stringResult is connection, we need to find the connection that connects the floors
+                  if (stringResult === 'connection') {
+
+                      const floorConnections = floor.connections;
+                      console.log("Floor Connections:", floorConnections);
+
+                      // Get the connection that connects the floors
+                      const connection = floorConnections.find(connection => connection.floorfromId === oldFloorId && connection.floortoId === newFloorId ||
+                        connection.floorfromId === newFloorId && connection.floortoId === oldFloorId);
+
+                      const positionGoalX = connection.locationX;
+                      const positionGoalY = connection.locationY;
+
+                      goals = [positionGoalX, positionGoalY];
+
+                      // Print mapGrid
+                      console.log('MapGrid:', mapGrid);
+
+                      let initialPos = initialPosition;
+
+
+                      let playerPosition = this.player.position; // Get the player's position
+                      let playerCellPosition = this.maze.cartesianToCell(playerPosition); // Convert the player's position to cell coordinates
+
+                      console.log('Player cell position:', playerCellPosition);
+
+
+                      console.log('Goals:', goals);
+                      // I want to create an array with the path to the goal, we need to read the mapGrid and find the path, we can only move where there is a 0
+
+                      let path = this.findPath(mapGrid, playerCellPosition, goals);
+                      console.log('Path:', path);
+
+                      // Move the robot along the path
+                      if (path != null) {
+                          // Move the robot along the path
+                          await this.moveRobotAlongPath(path);
+
+                          // PRINT TEST
+                          console.log("TEST1");
+
+                          // Teleport the robot to the other floor
+                          await this.createJsonOnBackend(newFloorId);
+
+                          console.log("TEST2");
+
+                          let url = `http://127.0.0.1:5500/Thumb_Raiser.html?buildingId=${encodeURIComponent(newBuildingId)}&floorId=${encodeURIComponent(newFloorId)}`;
+                          const response = await fetch(url);
+                          if (response.status === 200) {
+                              // If the status is 200, the file exists. Redirect to the new URL
+                              window.location.href = url;
+                          } else if (response.status === 404) {
+                              // If the status is 404, the file does not exist. Show an alert message
+                              alert("The selected building and floor do not exist");
+                          }
+                      }
+                  }
+
+
+              })
+              .catch(e => {
+                  console.log('There was a problem with the fetch operation: ' + e.message);
+              });
+
+        }
+        else {
+            console.log('Not possible');
+        }
+    }
+
+    async createJsonOnBackend(floorId) {
+        return new Promise((resolve, reject) => {
+            console.log('floorId:', floorId);
+            const xhr = new XMLHttpRequest();
+            xhr.open('POST', 'http://localhost:4000/api/3d/json/' + floorId);
+            xhr.onload = () => {
+                console.log(xhr.responseText);
+                resolve(JSON.parse(xhr.responseText));
+            };
+            xhr.onerror = () => reject(xhr.statusText);
+            xhr.send();
+        });
+    }
+
+    findPath(mapGrid, start, goal) {
+        let queue = [];
+        let visited = {};
+
+        // Start node
+        queue.push({ position: start, path: [start] });
+
+        while (queue.length > 0) {
+            let node = queue.shift();
+            let position = node.position;
+
+            // If this position is the goal, return the path that led to it
+            if (position[0] === goal[0] && position[1] === goal[1]) {
+                return node.path;
+            }
+
+            // Get the valid neighbors of the current position
+            let neighbors = [[position[0], position[1] - 1], [position[0] + 1, position[1]], [position[0], position[1] + 1], [position[0] - 1, position[1]]]; // Up, right, down, left
+
+            for (let neighbor of neighbors) {
+                // Check if the neighbor is valid and if it has not been visited yet
+                if (neighbor[0] >= 0 && neighbor[0] < mapGrid.length && neighbor[1] >= 0 && neighbor[1] < mapGrid[0].length && mapGrid[neighbor[0]][neighbor[1]] === 0 && !visited[neighbor.toString()]) {
+                    // Add the neighbor to the visited set
+                    visited[neighbor.toString()] = true;
+
+                    // Add the path to this neighbor to the queue
+                    queue.push({ position: neighbor, path: [...node.path, neighbor] });
+                }
+            }
+        }
+
+        // No path found
+        return null;
+    }
+
+
+
+
+
+
+     getJsonFromBackend(floorId) {
+        return fetch('http://localhost:4000/api/3d/json/' + floorId)
+          .then(response => {
+              if (!response.ok) {
+                  throw new Error(`HTTP error! status: ${response.status}`);
+              }
+              return response.json();
+          })
+          .then(json => {
+              console.log(json);
+              return json;
+          })
+          .catch(e => {
+              console.log('There was a problem with the fetch operation: ' + e.message);
+          });
+    }
+
+     canTravel(allBuildings, originalBuildingId, originalFloorId, destinationFloorId) {
+        // Find the original and destination buildings
+        const originalBuilding = allBuildings.find(building => building.buildingId === originalBuildingId);
+        const destinationBuilding = allBuildings.find(building => building.floors.some(floor => floor.floorId === destinationFloorId));
+
+        // If the buildings are the same
+        if (originalBuildingId === destinationBuilding.buildingId) {
+            // Find the elevator that connects the original and destination floors
+            const elevator = originalBuilding.floors
+              .flatMap(floor => floor.elevators)
+              .find(elevator => elevator.floorsAttended.includes(originalFloorId) && elevator.floorsAttended.includes(destinationFloorId));
+
+            // If the elevator exists, return true
+            if (elevator) {
+                return 'elevator';
+            }
+        } else {
+            // If the buildings are different, find the connection between the buildings
+            const connection = originalBuilding.floors
+              .flatMap(floor => floor.connections)
+              .find(connection => connection.buildingtoId === destinationBuilding.buildingId);
+
+            // If the connection exists
+            if (connection) {
+
+                return 'connection';
+            }
+        }
+
+        // If no path was found, return false
+        return 'false';
+    }
+
+    async moveRobotAlongPath(path) {
+        // Print path
+        console.log('Path:', path);
+        for (let i = 0; i < path.length; i++) {
+            const y = path[i][0];
+            const x = path[i][1];
+            console.log('Moving to cell', x, y);
+            await this.autoMoveToCell(x, y);
+        }
+    }
+     async autoMoveToCell(targetX, targetY) {
+        //targetY = targetY -1;
+        //targetX = targetX -1;
+        const position = [targetY, targetX];
+        const targetPosition =  this.maze.cellToCartesian(position);
+        const targetDistance = 0.1; // Adjust this value as needed
+
+        return new Promise(resolve => {
+            const movePlayer = () => {
+                const deltaT = this.clock.getDelta();
+                const direction = targetPosition.clone().sub(this.player.position).normalize();
+                const coveredDistance = this.player.walkingSpeed * deltaT;
+                const newPosition = direction.clone().multiplyScalar(coveredDistance).add(this.player.position);
+
+                // Check for collisions and update the player's position
+                if (!this.collision(newPosition)) {
+                    this.player.position = newPosition;
+                }
+
+                // Update player's direction based on the target position
+                this.player.direction = Math.atan2(direction.x, direction.z) * THREE.MathUtils.RAD2DEG;
+
+                // Update animations
+                const animationName = this.player.keyStates.run ? "Running" : "Walking";
+                this.animations.fadeToAction("Walking", 0.2);
+
+                // Update first-person, third-person, and top view cameras parameters
+                this.firstPersonViewCamera.playerDirection = this.player.direction;
+                this.thirdPersonViewCamera.playerDirection = this.player.direction;
+                this.topViewCamera.playerDirection = this.player.direction;
+                const cameraTarget = new THREE.Vector3(targetPosition.x, targetPosition.y + this.player.eyeHeight, targetPosition.z);
+                this.firstPersonViewCamera.setTarget(cameraTarget);
+                this.thirdPersonViewCamera.setTarget(cameraTarget);
+                this.topViewCamera.setTarget(cameraTarget);
+
+                // Check if the player has reached the target cell
+                if (this.player.position.distanceTo(targetPosition) > targetDistance) {
+                    requestAnimationFrame(movePlayer);
+                } else {
+                    console.log("Player reached the target cell!");
+                    resolve();
+                }
+            };
+
+            // Start the animation loop
+            movePlayer();
+        });
+    }
+
+
 }
+

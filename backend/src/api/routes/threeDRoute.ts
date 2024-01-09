@@ -19,4 +19,5 @@ export default (app: Router) => {
 
   router.post("/json/:floorId", (req, res, next) => ctrl3d.postJson(req, res, next));
 
+  router.get("/json/:floorId", (req, res, next) => ctrl3d.getJson(req, res, next));
 }

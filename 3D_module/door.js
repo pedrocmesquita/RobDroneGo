@@ -16,7 +16,7 @@ export default class Door {
         const sideMaterial = new THREE.MeshBasicMaterial({ color: 0xc36e2d });
 
         // Create a texture for the frame front
-        const frameFrontTexture = new THREE.TextureLoader().load("./textures/frame_front.png");
+        const frameFrontTexture = new THREE.TextureLoader().load("./textures/door_front.png");
         frameFrontTexture.colorSpace = THREE.SRGBColorSpace;
 
         // Create a material for the frame front
@@ -24,7 +24,7 @@ export default class Door {
         frameFrontMaterial.transparent = true;
 
         // Create a texture for the frame back
-        const frameBackTexture = new THREE.TextureLoader().load("./textures/frame_back.png");
+        const frameBackTexture = new THREE.TextureLoader().load("./textures/door_back.png");
         frameBackTexture.colorSpace = THREE.SRGBColorSpace;
 
         // Create a material for the frame back

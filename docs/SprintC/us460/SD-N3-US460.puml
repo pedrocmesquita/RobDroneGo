@@ -19,29 +19,28 @@ Service --> Component : currentUser
 deactivate Service
 Component -> Service: getBuildings()
 activate Service
-Service -> "<<C4:Container>>\nMódulo de Gestão\nde Tarefas" : getBuildings()
-activate "<<C4:Container>>\nMódulo de Gestão\nde Tarefas"
-"<<C4:Container>>\nMódulo de Gestão\nde Tarefas" --> Service : Lista de edifícios
-deactivate "<<C4:Container>>\nMódulo de Gestão\nde Tarefas"
+Service -> "<<C4:Container>>\nMódulo de Gestão\nde Informação" : getBuildings()
+activate "<<C4:Container>>\nMódulo de Gestão\nde Informação"
+"<<C4:Container>>\nMódulo de Gestão\nde Informação" --> Service : Lista de edifícios
+deactivate "<<C4:Container>>\nMódulo de Gestão\nde Informação"
 Service --> Component : Lista de edifícios
 deactivate Service
 Component -> Service : getFloors()
 activate Service
-Service -> "<<C4:Container>>\nMódulo de Gestão\nde Tarefas" : getFloors()
-activate "<<C4:Container>>\nMódulo de Gestão\nde Tarefas"
-"<<C4:Container>>\nMódulo de Gestão\nde Tarefas" --> Service : Lista de pisos
-deactivate "<<C4:Container>>\nMódulo de Gestão\nde Tarefas"
+Service -> "<<C4:Container>>\nMódulo de Gestão\nde Informação" : getFloors()
+activate "<<C4:Container>>\nMódulo de Gestão\nde Informação"
+"<<C4:Container>>\nMódulo de Gestão\nde Informação" --> Service : Lista de pisos
+deactivate "<<C4:Container>>\nMódulo de Gestão\nde Informação"
 Service --> Component : Lista de pisos
 deactivate Service
 Component -> Service : getRooms()
 activate Service
 
-Service -> "<<C4:Container>>\nMódulo de Gestão\nde Tarefas" : getRooms()
-activate "<<C4:Container>>\nMódulo de Gestão\nde Tarefas"
+Service -> "<<C4:Container>>\nMódulo de Gestão\nde Informação" : getRooms()
+activate "<<C4:Container>>\nMódulo de Gestão\nde Informação"
 
-note right: Módulo de Gestão de Tarefas\né a representação do Sprint A
-"<<C4:Container>>\nMódulo de Gestão\nde Tarefas" --> Service: Lista de salas
-deactivate "<<C4:Container>>\nMódulo de Gestão\nde Tarefas"
+"<<C4:Container>>\nMódulo de Gestão\nde Informação" --> Service: Lista de salas
+deactivate "<<C4:Container>>\nMódulo de Gestão\nde Informação"
 Service --> Component: Lista de salas
 deactivate Service
 Component --> "<<C4:Container>>\n:Visualização" : buildings, floors, rooms
@@ -56,18 +55,32 @@ activate "<<C4:Container>>\n:Visualização"
 activate Component
 Component -> Service : createSurveillanceTask(task)
 activate Service
-Service -> "<<C4:Container>>\nMódulo de Gestão\nde Tarefas" : POST /SurveillanceTask/ {task}
-activate "<<C4:Container>>\nMódulo de Gestão\nde Tarefas"
-"<<C4:Container>>\nMódulo de Gestão\nde Tarefas" -> Controller: Create(dto)
+Service -> Controller : POST /SurveillanceTask/ {task}
 activate Controller
-Controller -> "<<C4:Container>>\nMódulo de Gestão\nde Tarefas": task
-"<<C4:Container>>\nMódulo de Gestão\nde Tarefas" --> Service: 201 OK task
-deactivate "<<C4:Container>>\nMódulo de Gestão\nde Tarefas"
-Service --> Component: 201 OK task
+Controller -> "DOTNET Service": getAllSync()
+activate "DOTNET Service"
+"DOTNET Service" -> Repository: findAll()
+activate Repository
+Repository --> "DOTNET Service": SurveillanceTask[]
+deactivate Repository
+"DOTNET Service" --> Controller: SurveillanceTask[]
+deactivate "DOTNET Service"
+Controller -> "DOTNET Service": AddSync(dto)
+activate "DOTNET Service"
+"DOTNET Service" -> Repository: save(dto)
+activate Repository
+Repository --> "DOTNET Service": SurveillanceTask
+deactivate Repository
+"DOTNET Service" --> Controller: SurveillanceTask
+deactivate "DOTNET Service"
+Controller --> Service: 201 OK SurveillanceTask
+deactivate Controller
+deactivate "<<C4:Container>>\nMódulo de Gestão\nde Informação"
+Service --> Component: 201 OK SurveillanceTask
 deactivate Service
-Component --> "<<C4:Container>>\n:Visualização" : 201 OK task
+Component --> "<<C4:Container>>\n:Visualização" : 201 OK SurveillanceTask
 deactivate Component
-deactivate "<<C4:Container>>\nMódulo de Gestão\nde Tarefas"
+deactivate "<<C4:Container>>\nMódulo de Gestão\nde Informação"
 "Utente" <-- "<<C4:Container>>\n:Visualização": Mensagem de sucesso
 deactivate "<<C4:Container>>\n:Visualização"
 

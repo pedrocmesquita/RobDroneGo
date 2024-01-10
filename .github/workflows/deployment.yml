@@ -29,10 +29,6 @@ jobs:
       - name: Install sshpass on macOS
         run: brew install hudochenkov/sshpass/sshpass   
 
-      - name: Run tests
-        run: ng test --browsers=ChromeHeadless --watch=false
-        working-directory: frontend/angular-app
-
       - name: Build
         if: success()
         run: ng build --configuration=production

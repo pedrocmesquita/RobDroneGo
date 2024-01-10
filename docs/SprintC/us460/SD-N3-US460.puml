@@ -21,7 +21,6 @@ Component -> Service: getBuildings()
 activate Service
 Service -> "<<C4:Container>>\nMódulo de Gestão\nde Tarefas" : getBuildings()
 activate "<<C4:Container>>\nMódulo de Gestão\nde Tarefas"
-"<<C4:Container>>\nMódulo de Gestão\nde Tarefas" -> "<<C4:Container>>\nMódulo de Gestão\nde Tarefas": middleware.rolecheck\n("Admin" || "Utente")
 "<<C4:Container>>\nMódulo de Gestão\nde Tarefas" --> Service : Lista de edifícios
 deactivate "<<C4:Container>>\nMódulo de Gestão\nde Tarefas"
 Service --> Component : Lista de edifícios
@@ -30,7 +29,6 @@ Component -> Service : getFloors()
 activate Service
 Service -> "<<C4:Container>>\nMódulo de Gestão\nde Tarefas" : getFloors()
 activate "<<C4:Container>>\nMódulo de Gestão\nde Tarefas"
-"<<C4:Container>>\nMódulo de Gestão\nde Tarefas" -> "<<C4:Container>>\nMódulo de Gestão\nde Tarefas": middleware.rolecheck\n("Admin" || "Utente")
 "<<C4:Container>>\nMódulo de Gestão\nde Tarefas" --> Service : Lista de pisos
 deactivate "<<C4:Container>>\nMódulo de Gestão\nde Tarefas"
 Service --> Component : Lista de pisos
@@ -40,7 +38,8 @@ activate Service
 
 Service -> "<<C4:Container>>\nMódulo de Gestão\nde Tarefas" : getRooms()
 activate "<<C4:Container>>\nMódulo de Gestão\nde Tarefas"
-"<<C4:Container>>\nMódulo de Gestão\nde Tarefas" -> "<<C4:Container>>\nMódulo de Gestão\nde Tarefas": middleware.rolecheck\n("Admin" || "Utente")
+
+note right: Módulo de Gestão de Tarefas\né a representação do Sprint A
 "<<C4:Container>>\nMódulo de Gestão\nde Tarefas" --> Service: Lista de salas
 deactivate "<<C4:Container>>\nMódulo de Gestão\nde Tarefas"
 Service --> Component: Lista de salas
@@ -58,15 +57,12 @@ activate Component
 Component -> Service : createSurveillanceTask(task)
 activate Service
 Service -> "<<C4:Container>>\nMódulo de Gestão\nde Tarefas" : POST /SurveillanceTask/ {task}
-
-
-
-
 activate "<<C4:Container>>\nMódulo de Gestão\nde Tarefas"
+"<<C4:Container>>\nMódulo de Gestão\nde Tarefas" -> Controller: Create(dto)
+activate Controller
+Controller -> "<<C4:Container>>\nMódulo de Gestão\nde Tarefas": task
 "<<C4:Container>>\nMódulo de Gestão\nde Tarefas" --> Service: 201 OK task
-
 deactivate "<<C4:Container>>\nMódulo de Gestão\nde Tarefas"
-note right: Módulo de Gestão de Tarefas\né a representação do Sprint A
 Service --> Component: 201 OK task
 deactivate Service
 Component --> "<<C4:Container>>\n:Visualização" : 201 OK task
